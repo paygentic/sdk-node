@@ -1,0 +1,20 @@
+# ListDisputesRequest
+
+## Example Usage
+
+```typescript
+import { ListDisputesRequest } from "@paygentic/sdk/models/operations";
+
+let value: ListDisputesRequest = {};
+```
+
+## Fields
+
+| Field                                                                                                            | Type                                                                                                             | Required                                                                                                         | Description                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `consumerId`                                                                                                     | *string*                                                                                                         | :heavy_minus_sign:                                                                                               | Filter disputes for a specific consumer. At least one of merchantId, customerId, or consumerId must be provided. |
+| `customerId`                                                                                                     | *string*                                                                                                         | :heavy_minus_sign:                                                                                               | Filter disputes for a specific customer. At least one of merchantId, customerId, or consumerId must be provided. |
+| `limit`                                                                                                          | *number*                                                                                                         | :heavy_minus_sign:                                                                                               | Number of disputes to return                                                                                     |
+| `merchantId`                                                                                                     | *string*                                                                                                         | :heavy_minus_sign:                                                                                               | Filter disputes for a specific merchant. At least one of merchantId, customerId, or consumerId must be provided. |
+| `offset`                                                                                                         | *number*                                                                                                         | :heavy_minus_sign:                                                                                               | Number of disputes to skip                                                                                       |
+| `status`                                                                                                         | [operations.ListDisputesStatus](../../models/operations/listdisputesstatus.md)                                   | :heavy_minus_sign:                                                                                               | Filter by dispute status                                                                                         |

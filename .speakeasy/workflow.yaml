@@ -1,0 +1,26 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    Paygentic API:
+        inputs:
+            - location: ../../docs/openapi.json
+        overlays:
+            - location: .speakeasy/speakeasy-modifications-overlay.yaml
+        output: .speakeasy/out.openapi.yaml
+        registry:
+            location: registry.speakeasyapi.dev/paygentic/default/paygentic-api
+targets:
+    typescript:
+        target: typescript
+        source: Paygentic API
+        publish:
+            npm:
+                token: $npm_token
+        codeSamples:
+            registry:
+                location: registry.speakeasyapi.dev/paygentic/default/paygentic-api-typescript-code-samples
+            labelOverride:
+                fixedValue: Typescript (SDK)
+            blocking: false
+        testing:
+            enabled: true

@@ -1,0 +1,2021 @@
+arazzo: 1.0.1
+info:
+  title: Test Suite
+  summary: Created from /Users/priyansh/Desktop/work/paygentic/paygentic-typescript/.speakeasy/temp/overlay_gblhyTzoJl.yaml
+  version: 0.0.1
+sourceDescriptions:
+  - name: /Users/priyansh/Desktop/work/paygentic/paygentic-typescript/.speakeasy/temp/overlay_gblhyTzoJl.yaml
+    url: https://TBD.com
+    type: openapi
+workflows:
+  - workflowId: getMerchant
+    steps:
+      - stepId: test
+        operationId: getMerchant
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "object": "merchant"
+              }
+            type: simple
+    x-speakeasy-test-group: Merchants
+    x-speakeasy-test-rebuild: true
+  - workflowId: listEligibleCountries
+    steps:
+      - stepId: test
+        operationId: listEligibleCountries
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              [
+                "\u003cvalue 1\u003e",
+                "\u003cvalue 2\u003e"
+              ]
+            type: simple
+    x-speakeasy-test-group: Merchants
+    x-speakeasy-test-rebuild: true
+  - workflowId: createBillableMetric
+    steps:
+      - stepId: test
+        operationId: createBillableMetric
+        requestBody:
+          contentType: application/json
+          payload:
+            aggregation: SUM
+            description: other gracefully hold
+            merchantId: <id>
+            name: <value>
+            productId: <id>
+            unit: becquerel
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"billableMetric","aggregation":"SUM","createdAt":"2025-04-10T18:04:21.688Z","description":"unimportant less rare avaricious which after scope inasmuch ick cutlet","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"hertz","updatedAt":"2024-11-16T22:40:17.756Z"}
+            type: simple
+    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: listBillableMetrics
+    steps:
+      - stepId: test
+        operationId: listBillableMetrics
+        parameters:
+          - name: merchantId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{"limit":287317,"offset":448402,"total":222261}}
+            type: simple
+    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: getBillableMetric
+    steps:
+      - stepId: test
+        operationId: getBillableMetric
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"billableMetric","aggregation":"COUNT","createdAt":"2024-04-29T10:20:07.224Z","description":"even weary pine","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"siemens","updatedAt":"2026-12-10T07:52:04.795Z"}
+            type: simple
+    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateBillableMetric
+    steps:
+      - stepId: test
+        operationId: updateBillableMetric
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"billableMetric","aggregation":"MAX","createdAt":"2026-11-02T11:56:44.093Z","description":"self-assured provided fondly questionable","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"weber","updatedAt":"2024-10-02T02:27:52.097Z"}
+            type: simple
+    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: getBillableMetricPrice
+    steps:
+      - stepId: test
+        operationId: getBillableMetricPrice
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: subscriptionId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "object": "price"
+              }
+            type: simple
+    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: getBillableMetricPriceLegacy
+    steps:
+      - stepId: test
+        operationId: getBillableMetricPriceLegacy
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: customerId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "object": "price"
+              }
+            type: simple
+    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: getConsumer
+    steps:
+      - stepId: test
+        operationId: getConsumer
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "object": "consumer",
+                "name": "\u003cvalue\u003e",
+                "email": "Josiane.Fritsch69@gmail.com",
+                "address": {},
+                "metadata": {
+                  "key": "\u003cvalue\u003e"
+                },
+                "phone": "580.992.3689",
+                "createdById": "\u003cid\u003e",
+                "createdAt": "2024-11-05T19:20:33.800Z",
+                "updatedAt": "2023-11-11T06:33:58.532Z",
+                "validTaxAddress": {
+                  "valid": true
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Consumers
+    x-speakeasy-test-rebuild: true
+  - workflowId: listOffSessionPaymentMethods
+    steps:
+      - stepId: test
+        operationId: listOffSessionPaymentMethods
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: includeDetails
+            in: query
+            value: false
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "object": "list",
+                "data": [
+                  {
+                    "id": "\u003cid\u003e",
+                    "consumerId": "\u003cid\u003e",
+                    "stripeId": "\u003cid\u003e",
+                    "stripePaymentMethodId": "\u003cid\u003e",
+                    "createdAt": "2024-01-29T13:16:39.276Z",
+                    "updatedAt": "2025-11-08T12:44:55.307Z"
+                  }
+                ]
+              }
+            type: simple
+    x-speakeasy-test-group: Consumers
+    x-speakeasy-test-rebuild: true
+  - workflowId: listCustomers
+    steps:
+      - stepId: test
+        operationId: listCustomers
+        parameters:
+          - name: organizationId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{}}
+            type: simple
+    x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: createCustomer
+    steps:
+      - stepId: test
+        operationId: createCustomer
+        requestBody:
+          contentType: application/json
+          payload:
+            merchantId: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"customerId":"<id>","validTaxAddress":{"valid":true}}
+            type: simple
+    x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCustomer
+    steps:
+      - stepId: test
+        operationId: getCustomer
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"customer","consumerId":"<id>","createdAt":"2025-01-14T14:35:50.794Z","merchantId":"<id>","updatedAt":"2023-03-04T14:37:04.813Z","validTaxAddress":{"valid":true}}
+            type: simple
+    x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: createAuthorizationSession
+    steps:
+      - stepId: test
+        operationId: createAuthorizationSession
+        requestBody:
+          contentType: application/json
+          payload:
+            email: Guadalupe.McDermott71@yahoo.com
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "status": "expired",
+                "expiresAt": "2023-12-06T02:34:43.623Z",
+                "url": "https://fragrant-step.net/"
+              }
+            type: simple
+    x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: checkAuthorizationSessionStatus
+    steps:
+      - stepId: test
+        operationId: checkAuthorizationSessionStatus
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "status": "completed",
+                "expiresAt": "2025-07-22T03:13:24.842Z",
+                "url": "https://grouchy-meander.org/"
+              }
+            type: simple
+    x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: createDispute
+    steps:
+      - stepId: test
+        operationId: createDispute
+        requestBody:
+          contentType: application/json
+          payload:
+            message: <value>
+            usageEventId: <id>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"dispute","createdAt":"2023-09-05T14:27:32.260Z","customerId":"<id>","customerMessage":"<value>","disputedAmount":"2443.04","merchantId":"<id>","status":"declined","updatedAt":"2025-01-25T06:06:41.064Z","usageEventId":"<id>"}
+            type: simple
+    x-speakeasy-test-group: Disputes
+    x-speakeasy-test-rebuild: true
+  - workflowId: listDisputes
+    steps:
+      - stepId: test
+        operationId: listDisputes
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{"limit":993080,"offset":880210,"total":881794,"hasMore":false}}
+            type: simple
+    x-speakeasy-test-group: Disputes
+    x-speakeasy-test-rebuild: true
+  - workflowId: getActiveEntitlements
+    steps:
+      - stepId: test
+        operationId: getActiveEntitlements
+        parameters:
+          - name: customerId
+            in: query
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list"}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: createEntitlement
+    steps:
+      - stepId: test
+        operationId: createEntitlement
+        requestBody:
+          contentType: application/json
+          payload:
+            customerId: <id>
+            entitlementData: []
+            merchantId: <id>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement"}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: createExternalBankAccount
+    steps:
+      - stepId: test
+        operationId: createExternalBankAccount
+        requestBody:
+          contentType: application/json
+          payload:
+            accountHolderName: <value>
+            accountHolderType: company
+            accountNumber: <value>
+            bankName: <value>
+            countryCode: GB
+            currency: Forint
+            organizationId: <id>
+            routingNumber: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "object": "externalBankAccount",
+                "organizationId": "\u003cid\u003e",
+                "countryCode": "UM",
+                "bankName": "\u003cvalue\u003e",
+                "currency": "Kina",
+                "last4": "\u003cvalue\u003e",
+                "accountHolderName": "\u003cvalue\u003e",
+                "accountHolderType": "individual",
+                "status": "errored",
+                "createdAt": "2023-01-20T15:15:10.018Z",
+                "updatedAt": "2025-01-16T06:14:34.705Z"
+              }
+            type: simple
+    x-speakeasy-test-group: External Bank Accounts
+    x-speakeasy-test-rebuild: true
+  - workflowId: listExternalBankAccounts
+    steps:
+      - stepId: test
+        operationId: listExternalBankAccounts
+        parameters:
+          - name: organizationId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "object": "list",
+                "data": [
+                  {
+                    "id": "\u003cid\u003e",
+                    "object": "externalBankAccount",
+                    "organizationId": "\u003cid\u003e",
+                    "countryCode": "TK",
+                    "bankName": "\u003cvalue\u003e",
+                    "currency": "Zambian Kwacha",
+                    "last4": "\u003cvalue\u003e",
+                    "accountHolderName": "\u003cvalue\u003e",
+                    "accountHolderType": "company",
+                    "status": "verified",
+                    "createdAt": "2023-01-01T02:08:49.016Z",
+                    "updatedAt": "2023-10-13T07:21:34.028Z"
+                  }
+                ],
+                "pagination": {}
+              }
+            type: simple
+    x-speakeasy-test-group: External Bank Accounts
+    x-speakeasy-test-rebuild: true
+  - workflowId: getExternalBankAccount
+    steps:
+      - stepId: test
+        operationId: getExternalBankAccount
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "object": "externalBankAccount",
+                "organizationId": "\u003cid\u003e",
+                "countryCode": "AF",
+                "bankName": "\u003cvalue\u003e",
+                "currency": "Kenyan Shilling",
+                "last4": "\u003cvalue\u003e",
+                "accountHolderName": "\u003cvalue\u003e",
+                "accountHolderType": "individual",
+                "status": "errored",
+                "createdAt": "2025-08-22T08:46:53.352Z",
+                "updatedAt": "2024-08-20T23:40:26.966Z"
+              }
+            type: simple
+    x-speakeasy-test-group: External Bank Accounts
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateExternalBankAccount
+    steps:
+      - stepId: test
+        operationId: updateExternalBankAccount
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "object": "externalBankAccount",
+                "organizationId": "\u003cid\u003e",
+                "countryCode": "BZ",
+                "bankName": "\u003cvalue\u003e",
+                "currency": "Nuevo Sol",
+                "last4": "\u003cvalue\u003e",
+                "accountHolderName": "\u003cvalue\u003e",
+                "accountHolderType": "company",
+                "status": "verified",
+                "createdAt": "2025-01-24T11:07:18.427Z",
+                "updatedAt": "2025-02-18T08:53:00.779Z"
+              }
+            type: simple
+    x-speakeasy-test-group: External Bank Accounts
+    x-speakeasy-test-rebuild: true
+  - workflowId: listPayouts
+    steps:
+      - stepId: test
+        operationId: listPayouts
+        parameters:
+          - name: organizationId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Payouts
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPayoutMethods
+    steps:
+      - stepId: test
+        operationId: getPayoutMethods
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Payouts
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPayoutById
+    steps:
+      - stepId: test
+        operationId: getPayoutById
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Payouts
+    x-speakeasy-test-rebuild: true
+  - workflowId: createPlan
+    steps:
+      - stepId: test
+        operationId: createPlan
+        requestBody:
+          contentType: application/json
+          payload:
+            currency: Won
+            defaultTaxCode: eservice
+            defaultTaxRate: 0
+            merchantId: <id>
+            name: <value>
+            renewalReminderDays: 3
+            renewalReminderEnabled: true
+            taxBehavior: exclusive
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"plan","billingInterval":"<value>","createdAt":"2025-01-04T18:47:28.165Z","currency":"North Korean Won","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-06-07T06:34:20.265Z"}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: listPlans
+    steps:
+      - stepId: test
+        operationId: listPlans
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPlan
+    steps:
+      - stepId: test
+        operationId: getPlan
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"plan","billingInterval":"<value>","createdAt":"2025-11-12T08:13:08.969Z","currency":"Moldovan Leu","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-05-14T02:22:53.032Z"}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: updatePlan
+    steps:
+      - stepId: test
+        operationId: updatePlan
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"plan","billingInterval":"<value>","createdAt":"2025-02-25T08:23:09.829Z","currency":"Lek","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2025-09-29T06:50:28.959Z"}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: createPrice
+    steps:
+      - stepId: test
+        operationId: createPrice
+        requestBody:
+          contentType: application/json
+          payload:
+            invoiceDisplayName: <value>
+            paymentTerm: instant
+            properties:
+              default: <value>
+              parameters:
+                function: linear
+                gradient: <value>
+                max: <value>
+                min: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"price","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z"}
+            type: simple
+    x-speakeasy-test-group: Prices
+    x-speakeasy-test-rebuild: true
+  - workflowId: listPrices
+    steps:
+      - stepId: test
+        operationId: listPrices
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Prices
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPrice
+    steps:
+      - stepId: test
+        operationId: getPrice
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"price","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z"}
+            type: simple
+    x-speakeasy-test-group: Prices
+    x-speakeasy-test-rebuild: true
+  - workflowId: updatePrice
+    steps:
+      - stepId: test
+        operationId: updatePrice
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"price","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z"}
+            type: simple
+    x-speakeasy-test-group: Prices
+    x-speakeasy-test-rebuild: true
+  - workflowId: createProduct
+    steps:
+      - stepId: test
+        operationId: createProduct
+        requestBody:
+          contentType: application/json
+          payload:
+            description: at through very dishearten knife ashamed baa beret amongst
+            merchantId: <id>
+            name: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"product","createdAt":"2024-12-15T10:08:58.673Z","description":"seemingly negotiation ouch","merchantId":"<id>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"name":"<value>","updatedAt":"2023-01-29T22:23:09.159Z"}
+            type: simple
+    x-speakeasy-test-group: Products
+    x-speakeasy-test-rebuild: true
+  - workflowId: listProducts
+    steps:
+      - stepId: test
+        operationId: listProducts
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Products
+    x-speakeasy-test-rebuild: true
+  - workflowId: getProduct
+    steps:
+      - stepId: test
+        operationId: getProduct
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"product","createdAt":"2023-07-28T11:27:42.833Z","description":"or entomb provided pfft before gleaming until from","merchantId":"<id>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"name":"<value>","updatedAt":"2024-08-06T21:17:56.955Z"}
+            type: simple
+    x-speakeasy-test-group: Products
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateProduct
+    steps:
+      - stepId: test
+        operationId: updateProduct
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"product","createdAt":"2023-02-09T19:56:20.732Z","description":"besides stoop understanding rim purse","merchantId":"<id>","metadata":{"key":"<value>"},"name":"<value>","updatedAt":"2024-06-01T08:47:18.598Z"}
+            type: simple
+    x-speakeasy-test-group: Products
+    x-speakeasy-test-rebuild: true
+  - workflowId: createSource
+    steps:
+      - stepId: test
+        operationId: createSource
+        requestBody:
+          contentType: application/json
+          payload:
+            enabled: true
+            name: <value>
+            planId: <id>
+            processingMode: automatic
+            type: stripe_revenue
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"source","createdAt":"2023-05-28T11:06:56.258Z","enabled":false,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2025-04-02T19:22:56.277Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSources
+    steps:
+      - stepId: test
+        operationId: listSources
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: getSource
+    steps:
+      - stepId: test
+        operationId: getSource
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"source","createdAt":"2023-08-05T15:05:11.738Z","enabled":false,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2025-12-21T22:10:45.432Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateSource
+    steps:
+      - stepId: test
+        operationId: updateSource
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"source","createdAt":"2023-12-30T07:21:44.909Z","enabled":false,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2025-09-10T10:01:58.888Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSourceEvents
+    steps:
+      - stepId: test
+        operationId: listSourceEvents
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: approveSourceEvent
+    steps:
+      - stepId: test
+        operationId: approveSourceEvent
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: eventId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","createdAt":"2023-10-04T03:44:38.557Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>","key2":"<value>"},"sourceId":"<id>","status":"processed","updatedAt":"2023-07-24T01:11:13.326Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: rejectSourceEvent
+    steps:
+      - stepId: test
+        operationId: rejectSourceEvent
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: eventId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","createdAt":"2023-12-11T03:45:42.105Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>"},"sourceId":"<id>","status":"pending","updatedAt":"2024-05-21T02:04:37.726Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: bulkApproveSourceEvents
+    steps:
+      - stepId: test
+        operationId: bulkApproveSourceEvents
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            eventIds:
+              - <value 1>
+              - <value 2>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSourceRules
+    steps:
+      - stepId: test
+        operationId: listSourceRules
+        parameters:
+          - name: sourceId
+            in: query
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: createSourceRule
+    steps:
+      - stepId: test
+        operationId: createSourceRule
+        requestBody:
+          contentType: application/json
+          payload:
+            conditions: []
+            enabled: true
+            name: <value>
+            order: 0
+            sourceId: <id>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","conditions":[],"createdAt":"2026-04-23T21:22:31.337Z","description":"mixed readies striking upward kosher","enabled":true,"evaluationCount":606402,"matchCount":632234,"name":"<value>","order":612662,"sourceId":"<id>","updatedAt":"2026-04-10T13:45:02.925Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: getSourceRule
+    steps:
+      - stepId: test
+        operationId: getSourceRule
+        parameters:
+          - name: ruleId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","conditions":[],"createdAt":"2026-05-18T19:00:26.759Z","description":"yippee usefully annually even spherical geez","enabled":true,"evaluationCount":77849,"matchCount":313367,"name":"<value>","order":311509,"sourceId":"<id>","updatedAt":"2024-11-30T05:34:06.432Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateSourceRule
+    steps:
+      - stepId: test
+        operationId: updateSourceRule
+        parameters:
+          - name: ruleId
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","conditions":[],"createdAt":"2025-07-30T23:23:51.722Z","description":"instructor icy oof indolent","enabled":true,"evaluationCount":214110,"matchCount":757504,"name":"<value>","order":293952,"sourceId":"<id>","updatedAt":"2025-05-30T04:39:16.591Z"}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: bulkRejectSourceEvents
+    steps:
+      - stepId: test
+        operationId: bulkRejectSourceEvents
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            eventIds:
+              - <value 1>
+              - <value 2>
+              - <value 3>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Sources
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSubscriptions
+    steps:
+      - stepId: test
+        operationId: listSubscriptions
+        parameters:
+          - name: limit
+            in: query
+            value: "10"
+          - name: offset
+            in: query
+            value: "0"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: getSubscription
+    steps:
+      - stepId: test
+        operationId: getSubscription
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: generatePortalLink
+    steps:
+      - stepId: test
+        operationId: generatePortalLink
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"subscriptionPortal","expiresAt":"2023-07-10T22:00:42.526Z","url":"https://true-advertisement.com"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: createUsageEvent
+    steps:
+      - stepId: test
+        operationId: createUsageEvent
+        requestBody:
+          contentType: application/json
+          payload:
+            customerId: <id>
+            idempotencyKey: <value>
+            merchantId: <id>
+            properties:
+              - billableMetricId: <id>
+                quantity: 6787.65
+            timestamp: "2024-06-20T13:04:13.935Z"
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"usageEvent","createdAt":"2025-06-20T13:04:13.935Z","customerId":"<id>","merchantId":"<id>","properties":[{"billableMetricId":"<id>","quantity":678765}],"subscriptionId":"<id>","timestamp":"2024-04-15T14:37:24.493Z"}
+            type: simple
+    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-rebuild: true
+  - workflowId: listUsageEvents
+    steps:
+      - stepId: test
+        operationId: listUsageEvents
+        parameters:
+          - name: startTime
+            in: query
+            value: "2025-03-29T00:23:32.822Z"
+          - name: endTime
+            in: query
+            value: "2023-02-04T03:47:15.138Z"
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-rebuild: true
+  - workflowId: getUsageEvent
+    steps:
+      - stepId: test
+        operationId: getUsageEvent
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"usageEvent","createdAt":"2025-10-05T17:59:00.494Z","customerId":"<id>","merchantId":"<id>","properties":[],"subscriptionId":"<id>","timestamp":"2025-01-17T17:10:15.810Z"}
+            type: simple
+    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-rebuild: true
+  - workflowId: batchCreateUsageEvents
+    steps:
+      - stepId: test
+        operationId: batchCreateUsageEvents
+        requestBody:
+          contentType: application/json
+          payload:
+            events: []
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"batchUsageEvents","failed":[{"error":"<value>","idempotencyKey":"<value>","index":246491}],"successful":[],"summary":{"failed":605506,"successful":760452,"total":297542}}
+            type: simple
+    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-rebuild: true
+  - workflowId: getUser
+    steps:
+      - stepId: test
+        operationId: getUser
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"user","createdAt":"2023-03-11T00:37:03.383Z","email":"Cortney_Jakubowski@gmail.com","organizations":[],"oryId":"<id>","updatedAt":"2025-05-28T12:10:36.619Z"}
+            type: simple
+    x-speakeasy-test-group: Users
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateUser
+    steps:
+      - stepId: test
+        operationId: updateUser
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"user","createdAt":"2024-10-28T02:07:09.434Z","email":"Joanny.Feeney@gmail.com","organizations":[],"oryId":"<id>","updatedAt":"2025-12-24T10:17:58.569Z"}
+            type: simple
+    x-speakeasy-test-group: Users
+    x-speakeasy-test-rebuild: true
+  - workflowId: listWallets
+    steps:
+      - stepId: test
+        operationId: listWallets
+        parameters:
+          - name: pageSize
+            in: query
+            value: 10
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "object": "list",
+                "data": [],
+                "hasMore": true,
+                "nextPageToken": "\u003cvalue\u003e"
+              }
+            type: simple
+    x-speakeasy-test-group: Wallets
+    x-speakeasy-test-rebuild: true
+  - workflowId: getWallet
+    steps:
+      - stepId: test
+        operationId: getWallet
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "object": "wallet"
+              }
+            type: simple
+    x-speakeasy-test-group: Wallets
+    x-speakeasy-test-rebuild: true
+  - workflowId: createWalletTopup
+    steps:
+      - stepId: test
+        operationId: createWalletTopup
+        parameters:
+          - name: walletId
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: "87.04"
+            method: stripe
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "object": "topup",
+                "walletId": "\u003cid\u003e",
+                "createdAt": "2025-02-11T08:47:30.762Z",
+                "status": "pending",
+                "updatedAt": "2023-05-29T17:31:31.300Z",
+                "amount": "363.15",
+                "currency": "Yemeni Rial",
+                "method": "stripe"
+              }
+            type: simple
+    x-speakeasy-test-group: Wallets
+    x-speakeasy-test-rebuild: true
+  - workflowId: listWalletTopups
+    steps:
+      - stepId: test
+        operationId: listWalletTopups
+        parameters:
+          - name: walletId
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Wallets
+    x-speakeasy-test-rebuild: true
+  - workflowId: getWalletTopup
+    steps:
+      - stepId: test
+        operationId: getWalletTopup
+        parameters:
+          - name: walletId
+            in: path
+            value: <id>
+          - name: topupId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "object": "topup",
+                "walletId": "\u003cid\u003e",
+                "createdAt": "2024-11-07T06:48:43.129Z",
+                "status": "pending",
+                "updatedAt": "2024-10-01T06:53:04.361Z",
+                "amount": "958.24",
+                "currency": "Quetzal",
+                "method": "stripe"
+              }
+            type: simple
+    x-speakeasy-test-group: Wallets
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateCustomer
+    steps:
+      - stepId: test
+        operationId: updateCustomer
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"customer","consumerId":"<id>","createdAt":"2024-05-23T03:16:25.992Z","merchantId":"<id>","updatedAt":"2023-02-08T13:13:55.872Z","validTaxAddress":{"valid":true}}
+            type: simple
+    x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: createSubscription
+    steps:
+      - stepId: test
+        operationId: createSubscription
+        requestBody:
+          contentType: application/json
+          payload:
+            autoCharge: false
+            name: <value>
+            planId: <id>
+            startedAt: "2025-08-09T13:09:26.829Z"
+            taxExempt: false
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2026-08-09T13:09:26.829Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2025-10-04T05:26:12.259Z","status":"terminated","updatedAt":"2024-06-06T16:25:42.484Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateConsumer
+    steps:
+      - stepId: test
+        operationId: updateConsumer
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "id": "\u003cid\u003e",
+                "object": "consumer",
+                "name": "\u003cvalue\u003e",
+                "email": "Fabiola_Becker@hotmail.com",
+                "address": {},
+                "metadata": {
+                  "key": "\u003cvalue\u003e",
+                  "key1": "\u003cvalue\u003e"
+                },
+                "phone": "203.811.6165 x214",
+                "createdById": "\u003cid\u003e",
+                "createdAt": "2024-10-15T03:02:54.711Z",
+                "updatedAt": "2024-09-25T04:34:02.797Z",
+                "validTaxAddress": {
+                  "valid": false
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Consumers
+    x-speakeasy-test-rebuild: true
+  - workflowId: terminateSubscription
+    steps:
+      - stepId: test
+        operationId: terminateSubscription
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            reason: <value>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: listInvoices
+    steps:
+      - stepId: test
+        operationId: listInvoices
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[]}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: getInvoice
+    steps:
+      - stepId: test
+        operationId: getInvoice
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: lineItemsLimit
+            in: query
+            value: 100
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"invoice","autoApprove":true,"billingAnchor":"2024-11-08T23:43:42.730Z","billingCadence":"<value>","createdAt":"2024-12-13T06:54:35.195Z","currency":"Costa Rican Colon","gracePeriodEnd":"2025-09-09T07:32:58.606Z","grandTotal":"<value>","itemCount":983557,"merchantId":"<id>","paidAmount":"<value>","periodEnd":"2025-06-06T22:32:10.024Z","periodStart":"2025-05-07T17:21:44.913Z","sequenceNumber":196780,"status":"WRITTEN_OFF","subscriptionId":"<id>","subtotal":"<value>","totalTax":"<value>","unpaidAmount":"<value>","updatedAt":"2023-02-22T18:30:48.719Z"}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: getInvoiceLineItems
+    steps:
+      - stepId: test
+        operationId: getInvoiceLineItems
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: 100
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"invoiceId":"<id>","lineItems":[],"totalCount":62746}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: listEntitlements
+    steps:
+      - stepId: test
+        operationId: listEntitlements
+        parameters:
+          - name: customerId
+            in: query
+            value: cus_q3r4s5t6u7v8w9x0
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: listEntitlements-multipleEntitlements
+    steps:
+      - stepId: test
+        operationId: listEntitlements
+        parameters:
+          - name: customerId
+            in: query
+            value: cus_q3r4s5t6u7v8w9x0
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"hasAccess":true,"featureKey":"max_users","featureType":"static","config":{"limit":25},"entitlementId":"ent_a7b8c9d0e1f2g3h4","productId":"prod_m5n6o7p8q9r0s1t2","activeFrom":"2024-01-01T00:00:00Z","activeTo":"2025-01-01T00:00:00Z","status":"active"}, {"hasAccess":true,"featureKey":"sso_enabled","featureType":"boolean","config":null,"entitlementId":"ent_b8c9d0e1f2g3h4i5","productId":"prod_m5n6o7p8q9r0s1t2","activeFrom":"2024-01-01T00:00:00Z","activeTo":null,"status":"active"}],"pagination":{"limit":10,"offset":0,"total":2}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: listEntitlements-staticFeatureWithConfig
+    steps:
+      - stepId: test
+        operationId: listEntitlements
+        parameters:
+          - name: customerId
+            in: query
+            value: cus_q3r4s5t6u7v8w9x0
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"hasAccess":true,"featureKey":"storage_quota","featureType":"static","config":{"limitGB":500,"allowedFileTypes":["pdf","doc","xlsx","png","jpg"]},"entitlementId":"ent_d0e1f2g3h4i5j6k7","productId":"prod_storage123456","activeFrom":"2024-03-15T00:00:00Z","activeTo":null,"status":"active"}],"pagination":{"limit":10,"offset":0,"total":1}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: listEntitlements-expiredEntitlement
+    steps:
+      - stepId: test
+        operationId: listEntitlements
+        parameters:
+          - name: customerId
+            in: query
+            value: cus_q3r4s5t6u7v8w9x0
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"hasAccess":false,"featureKey":"premium_support","featureType":"boolean","config":null,"entitlementId":"ent_e1f2g3h4i5j6k7l8","productId":"prod_support789012","activeFrom":"2023-01-01T00:00:00Z","activeTo":"2024-01-01T00:00:00Z","status":"expired"}],"pagination":{"limit":10,"offset":0,"total":1}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: listEntitlements-emptyResult
+    steps:
+      - stepId: test
+        operationId: listEntitlements
+        parameters:
+          - name: customerId
+            in: query
+            value: cus_q3r4s5t6u7v8w9x0
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{"limit":10,"offset":0,"total":0}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: listFeatures
+    steps:
+      - stepId: test
+        operationId: listFeatures
+        parameters:
+          - name: productId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"id":"<id>","object":"feature","key":"<key>","name":"<value>","type":"boolean","merchantId":"<id>","productId":"<id>","metadata":{},"createdAt":"2024-11-22T08:40:39.781Z","updatedAt":"2026-04-15T11:55:08.679Z"}],"pagination":{"limit":879226,"offset":276368,"total":805834}}
+            type: simple
+    x-speakeasy-test-group: Features
+    x-speakeasy-test-rebuild: true
+  - workflowId: createFeature
+    steps:
+      - stepId: test
+        operationId: createFeature
+        requestBody:
+          contentType: application/json
+          payload:
+            key: <key>
+            merchantId: <id>
+            name: <value>
+            productId: <id>
+            type: boolean
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"feature","key":"<key>","name":"<value>","type":"static","merchantId":"<id>","productId":"<id>","metadata":{},"createdAt":"2025-02-01T14:53:46.515Z","updatedAt":"2024-05-24T21:32:18.637Z"}
+            type: simple
+    x-speakeasy-test-group: Features
+    x-speakeasy-test-rebuild: true
+  - workflowId: getFeature
+    steps:
+      - stepId: test
+        operationId: getFeature
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"feature","key":"<key>","name":"<value>","type":"static","merchantId":"<id>","productId":"<id>","metadata":{},"createdAt":"2026-12-15T01:22:19.086Z","updatedAt":"2024-10-19T12:05:55.611Z"}
+            type: simple
+    x-speakeasy-test-group: Features
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateFeature
+    steps:
+      - stepId: test
+        operationId: updateFeature
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"feature","key":"<key>","name":"<value>","type":"boolean","merchantId":"<id>","productId":"<id>","metadata":{},"createdAt":"2025-11-08T21:31:59.197Z","updatedAt":"2024-02-18T13:34:22.297Z"}
+            type: simple
+    x-speakeasy-test-group: Features
+    x-speakeasy-test-rebuild: true
+  - workflowId: createFee
+    steps:
+      - stepId: test
+        operationId: createFee
+        requestBody:
+          contentType: application/json
+          payload:
+            description: obnoxiously boldly that fort as minus bob adventurously
+            merchantId: <id>
+            name: <value>
+            productId: <id>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"fee","name":"<value>","description":"obnoxiously boldly that fort as minus bob adventurously","merchantId":"<id>","productId":"<id>","createdAt":"2025-12-13T01:38:36.298Z","updatedAt":"2024-01-26T06:39:20.634Z"}
+            type: simple
+    x-speakeasy-test-group: Fees
+    x-speakeasy-test-rebuild: true
+  - workflowId: listFees
+    steps:
+      - stepId: test
+        operationId: listFees
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: merchantId
+            in: query
+            value: <id>
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{"limit":49645,"offset":417619,"total":425966}}
+            type: simple
+    x-speakeasy-test-group: Fees
+    x-speakeasy-test-rebuild: true
+  - workflowId: getFee
+    steps:
+      - stepId: test
+        operationId: getFee
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"fee","name":"<value>","description":"oof ham brandish abacus deserted quizzically hopelessly millet by partially","merchantId":"<id>","productId":"<id>","createdAt":"2025-10-05T23:24:29.123Z","updatedAt":"2025-06-01T07:40:57.830Z"}
+            type: simple
+    x-speakeasy-test-group: Fees
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateFee
+    steps:
+      - stepId: test
+        operationId: updateFee
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"fee","name":"<value>","description":"by furiously seriously geez ah apostrophize overfeed","merchantId":"<id>","productId":"<id>","createdAt":"2025-11-25T14:54:19.062Z","updatedAt":"2025-08-23T20:11:48.508Z"}
+            type: simple
+    x-speakeasy-test-group: Fees
+    x-speakeasy-test-rebuild: true
+  - workflowId: getFeePrice
+    steps:
+      - stepId: test
+        operationId: getFeePrice
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: subscriptionId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","feeId":"<id>","model":"standard","paymentTerm":"in_advance","invoiceDisplayName":"<value>","properties":{"unitPrice":"<value>"}}
+            type: simple
+    x-speakeasy-test-group: Fees
+    x-speakeasy-test-rebuild: true
+  - workflowId: listAvailablePlans
+    steps:
+      - stepId: test
+        operationId: listAvailablePlans
+        parameters:
+          - name: customerId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: refundUsageEvent
+    steps:
+      - stepId: test
+        operationId: refundUsageEvent
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            refunded: false
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"usageEvent","createdAt":"2026-03-29T08:53:18.655Z","customerId":"<id>","merchantId":"<id>","properties":[],"subscriptionId":"<id>","timestamp":"2025-10-02T15:09:41.592Z"}
+            type: simple
+    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-rebuild: true
+  - workflowId: getRevenue
+    steps:
+      - stepId: test
+        operationId: getRevenue
+        parameters:
+          - name: startTime
+            in: query
+            value: "2024-07-23T16:05:39.311Z"
+          - name: endTime
+            in: query
+            value: "2026-04-29T18:43:05.586Z"
+          - name: bucketWidth
+            in: query
+            value: hour
+          - name: topN
+            in: query
+            value: 10
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"revenue_time_series","buckets":[]}
+            type: simple
+    x-speakeasy-test-group: Revenue
+    x-speakeasy-test-rebuild: true
+  - workflowId: listTestClocks
+    steps:
+      - stepId: test
+        operationId: listTestClocks
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {}
+            type: simple
+    x-speakeasy-test-group: Test Clocks
+    x-speakeasy-test-rebuild: true
+  - workflowId: createTestClock
+    steps:
+      - stepId: test
+        operationId: createTestClock
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","createdAt":"2026-03-31T07:52:00.722Z","currentTime":"2025-04-14T17:11:26.142Z","merchantId":"<id>","updatedAt":"2026-10-19T01:38:05.768Z"}
+            type: simple
+    x-speakeasy-test-group: Test Clocks
+    x-speakeasy-test-rebuild: true
+  - workflowId: getTestClock
+    steps:
+      - stepId: test
+        operationId: getTestClock
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","createdAt":"2026-05-07T08:26:53.556Z","currentTime":"2024-07-02T06:05:33.363Z","merchantId":"<id>","updatedAt":"2026-04-19T10:08:59.529Z"}
+            type: simple
+    x-speakeasy-test-group: Test Clocks
+    x-speakeasy-test-rebuild: true
+  - workflowId: advanceTestClock
+    steps:
+      - stepId: test
+        operationId: advanceTestClock
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            currentTime: "2025-02-15T07:14:25.507Z"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","createdAt":"2025-04-16T15:52:42.976Z","currentTime":"2025-05-25T19:43:43.746Z","merchantId":"<id>","updatedAt":"2025-05-26T16:41:00.551Z"}
+            type: simple
+    x-speakeasy-test-group: Test Clocks
+    x-speakeasy-test-rebuild: true
+  - workflowId: deleteTestClock
+    steps:
+      - stepId: test
+        operationId: deleteTestClock
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","createdAt":"2025-02-26T13:37:12.131Z","currentTime":"2026-05-10T16:53:00.525Z","merchantId":"<id>","updatedAt":"2024-03-05T06:40:38.576Z"}
+            type: simple
+    x-speakeasy-test-group: Test Clocks
+    x-speakeasy-test-rebuild: true
