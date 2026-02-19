@@ -1,17 +1,17 @@
 # Aggregation
 
-Aggregation calculation method for metric values. Sample values: 'SUM' totals all consumption values within the billing period
+Aggregation calculation method for metric values.
 
 ## Example Usage
 
 ```typescript
 import { Aggregation } from "@paygentic/sdk/models/operations";
 
-let value: Aggregation = "SUM";
+let value: Aggregation = "MAX";
 ```
 
 ## Values
 
 ```typescript
-"SUM"
+"SUM" | "COUNT" | "AVG" | "MIN" | "MAX" | "UNIQUE_COUNT" | "LATEST"
 ```

@@ -6,12 +6,12 @@ A `Customer` is an entity connected to a `Merchant` via a `Subscription`. This r
 
 ### Available Operations
 
-* [listCustomers](#listcustomers) - List by Merchant
-* [createCustomer](#createcustomer) - Create
-* [getCustomer](#getcustomer) - Get
-* [updateCustomer](#updatecustomer) - Update
+* [list](#list) - List by Merchant
+* [create](#create) - Create
+* [get](#get) - Get
+* [update](#update) - Update
 
-## listCustomers
+## list
 
 List by Merchant
 
@@ -26,7 +26,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.customers.listCustomers({
+  const result = await paygentic.customers.list({
     organizationId: "<id>",
   });
 
@@ -42,7 +42,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { customersListCustomers } from "@paygentic/sdk/funcs/customersListCustomers.js";
+import { customersList } from "@paygentic/sdk/funcs/customersList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -51,14 +51,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await customersListCustomers(paygentic, {
+  const res = await customersList(paygentic, {
     organizationId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("customersListCustomers failed:", res.error);
+    console.log("customersList failed:", res.error);
   }
 }
 
@@ -86,7 +86,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## createCustomer
+## create
 
 Create a new customer for a merchant organization. This endpoint is currently only used by the Paygentic platform as part of the subscription flow.
 
@@ -101,7 +101,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.customers.createCustomer({
+  const result = await paygentic.customers.create({
     merchantId: "<id>",
   });
 
@@ -117,7 +117,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { customersCreateCustomer } from "@paygentic/sdk/funcs/customersCreateCustomer.js";
+import { customersCreate } from "@paygentic/sdk/funcs/customersCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -126,14 +126,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await customersCreateCustomer(paygentic, {
+  const res = await customersCreate(paygentic, {
     merchantId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("customersCreateCustomer failed:", res.error);
+    console.log("customersCreate failed:", res.error);
   }
 }
 
@@ -163,7 +163,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getCustomer
+## get
 
 Get
 
@@ -178,7 +178,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.customers.getCustomer({
+  const result = await paygentic.customers.get({
     id: "<id>",
   });
 
@@ -194,7 +194,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { customersGetCustomer } from "@paygentic/sdk/funcs/customersGetCustomer.js";
+import { customersGet } from "@paygentic/sdk/funcs/customersGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -203,14 +203,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await customersGetCustomer(paygentic, {
+  const res = await customersGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("customersGetCustomer failed:", res.error);
+    console.log("customersGet failed:", res.error);
   }
 }
 
@@ -238,7 +238,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## updateCustomer
+## update
 
 Update
 
@@ -253,7 +253,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.customers.updateCustomer({
+  const result = await paygentic.customers.update({
     id: "<id>",
     requestBody: {},
   });
@@ -270,7 +270,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { customersUpdateCustomer } from "@paygentic/sdk/funcs/customersUpdateCustomer.js";
+import { customersUpdate } from "@paygentic/sdk/funcs/customersUpdate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -279,7 +279,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await customersUpdateCustomer(paygentic, {
+  const res = await customersUpdate(paygentic, {
     id: "<id>",
     requestBody: {},
   });
@@ -287,7 +287,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("customersUpdateCustomer failed:", res.error);
+    console.log("customersUpdate failed:", res.error);
   }
 }
 

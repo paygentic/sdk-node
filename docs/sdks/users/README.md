@@ -6,10 +6,10 @@ A `User` is an entity granted access to an Organization's resources. All operati
 
 ### Available Operations
 
-* [getUser](#getuser) - Get
-* [updateUser](#updateuser) - Update
+* [get](#get) - Get
+* [update](#update) - Update
 
-## getUser
+## get
 
 Get
 
@@ -24,7 +24,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.users.getUser({
+  const result = await paygentic.users.get({
     id: "<id>",
   });
 
@@ -40,7 +40,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { usersGetUser } from "@paygentic/sdk/funcs/usersGetUser.js";
+import { usersGet } from "@paygentic/sdk/funcs/usersGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -49,14 +49,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await usersGetUser(paygentic, {
+  const res = await usersGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("usersGetUser failed:", res.error);
+    console.log("usersGet failed:", res.error);
   }
 }
 
@@ -84,7 +84,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## updateUser
+## update
 
 Update
 
@@ -99,7 +99,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.users.updateUser({
+  const result = await paygentic.users.update({
     id: "<id>",
     requestBody: {},
   });
@@ -116,7 +116,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { usersUpdateUser } from "@paygentic/sdk/funcs/usersUpdateUser.js";
+import { usersUpdate } from "@paygentic/sdk/funcs/usersUpdate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -125,7 +125,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await usersUpdateUser(paygentic, {
+  const res = await usersUpdate(paygentic, {
     id: "<id>",
     requestBody: {},
   });
@@ -133,7 +133,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("usersUpdateUser failed:", res.error);
+    console.log("usersUpdate failed:", res.error);
   }
 }
 

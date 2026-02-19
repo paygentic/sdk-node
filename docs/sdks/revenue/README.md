@@ -6,9 +6,9 @@ Time-series revenue data with component breakdown including usage, fees, and ref
 
 ### Available Operations
 
-* [getRevenue](#getrevenue) - Get revenue time series
+* [get](#get) - Get revenue time series
 
-## getRevenue
+## get
 
 Returns time-bucketed revenue data including usage charges, fee charges, and refunds. Data is aggregated by subscription with an optional 'other' bucket for subscriptions outside the top N.
 
@@ -23,7 +23,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.revenue.getRevenue({
+  const result = await paygentic.revenue.get({
     startTime: new Date("2024-07-23T16:05:39.311Z"),
     endTime: new Date("2026-04-29T18:43:05.586Z"),
   });
@@ -40,7 +40,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { revenueGetRevenue } from "@paygentic/sdk/funcs/revenueGetRevenue.js";
+import { revenueGet } from "@paygentic/sdk/funcs/revenueGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -49,7 +49,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await revenueGetRevenue(paygentic, {
+  const res = await revenueGet(paygentic, {
     startTime: new Date("2024-07-23T16:05:39.311Z"),
     endTime: new Date("2026-04-29T18:43:05.586Z"),
   });
@@ -57,7 +57,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("revenueGetRevenue failed:", res.error);
+    console.log("revenueGet failed:", res.error);
   }
 }
 

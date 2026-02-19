@@ -7,7 +7,7 @@ import { BillableMetric } from "@paygentic/sdk/models";
 
 let value: BillableMetric = {
   id: "<id>",
-  aggregation: "COUNT_UNIQUE",
+  aggregation: "UNIQUE_COUNT",
   createdAt: new Date("2025-07-20T23:56:51.292Z"),
   description: "sparse vicinity icebreaker inure gadzooks hunger overload",
   merchantId: "<id>",
@@ -32,3 +32,7 @@ let value: BillableMetric = {
 | `productId`                                                                                   | *string*                                                                                      | :heavy_check_mark:                                                                            | Unique identifier for a product                                                               |
 | `unit`                                                                                        | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `updatedAt`                                                                                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `eventType`                                                                                   | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |
+| `valueProperty`                                                                               | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |
+| `groupBy`                                                                                     | Record<string, *string*>                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |
+| `eventFrom`                                                                                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date) | :heavy_minus_sign:                                                                            | N/A                                                                                           |

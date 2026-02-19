@@ -6,19 +6,25 @@ import * as z from "zod/v3";
 import { ClosedEnum } from "../../types/enums.js";
 
 /**
- * Aggregation calculation method for metric values. Sample values: 'SUM' totals all consumption values within the billing period
+ * Aggregation calculation method for metric values.
  */
 export const Aggregation = {
   Sum: "SUM",
+  Count: "COUNT",
+  Avg: "AVG",
+  Min: "MIN",
+  Max: "MAX",
+  UniqueCount: "UNIQUE_COUNT",
+  Latest: "LATEST",
 } as const;
 /**
- * Aggregation calculation method for metric values. Sample values: 'SUM' totals all consumption values within the billing period
+ * Aggregation calculation method for metric values.
  */
 export type Aggregation = ClosedEnum<typeof Aggregation>;
 
 export type CreateBillableMetricRequest = {
   /**
-   * Aggregation calculation method for metric values. Sample values: 'SUM' totals all consumption values within the billing period
+   * Aggregation calculation method for metric values.
    */
   aggregation: Aggregation;
   /**
@@ -41,6 +47,22 @@ export type CreateBillableMetricRequest = {
    * Measurement unit used when aggregating this metric's values. Common examples: 'tokens', 'GB', 'calls', 'images', 'hours', 'TB', 'queries', 'requests'
    */
   unit: string;
+  /**
+   * CloudEvents type for meter routing. Links this billable metric to the metering service.
+   */
+  eventType?: string | undefined;
+  /**
+   * JSONPath to extract numeric value from event data. Required for SUM/AVG/MIN/MAX/LATEST aggregations.
+   */
+  valueProperty?: string | undefined;
+  /**
+   * Map of dimension name to JSONPath for group-by queries.
+   */
+  groupBy?: { [k: string]: string } | undefined;
+  /**
+   * Only count events after this timestamp. Used for meter versioning.
+   */
+  eventFrom?: Date | undefined;
 };
 
 /** @internal */
@@ -55,6 +77,10 @@ export type CreateBillableMetricRequest$Outbound = {
   name: string;
   productId: string;
   unit: string;
+  eventType?: string | undefined;
+  valueProperty?: string | undefined;
+  groupBy?: { [k: string]: string } | undefined;
+  eventFrom?: string | undefined;
 };
 
 /** @internal */
@@ -69,6 +95,10 @@ export const CreateBillableMetricRequest$outboundSchema: z.ZodType<
   name: z.string(),
   productId: z.string(),
   unit: z.string(),
+  eventType: z.string().optional(),
+  valueProperty: z.string().optional(),
+  groupBy: z.record(z.string()).optional(),
+  eventFrom: z.date().transform(v => v.toISOString()).optional(),
 });
 
 export function createBillableMetricRequestToJSON(

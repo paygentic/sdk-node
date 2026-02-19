@@ -7,7 +7,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.createBillableMetric({
+  const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",

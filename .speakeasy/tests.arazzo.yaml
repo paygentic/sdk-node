@@ -63,7 +63,7 @@ workflows:
             condition: |
               {"id":"<id>","object":"billableMetric","aggregation":"SUM","createdAt":"2025-04-10T18:04:21.688Z","description":"unimportant less rare avaricious which after scope inasmuch ick cutlet","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"hertz","updatedAt":"2024-11-16T22:40:17.756Z"}
             type: simple
-    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
   - workflowId: listBillableMetrics
     steps:
@@ -86,7 +86,7 @@ workflows:
             condition: |
               {"object":"list","data":[],"pagination":{"limit":287317,"offset":448402,"total":222261}}
             type: simple
-    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
   - workflowId: getBillableMetric
     steps:
@@ -103,7 +103,7 @@ workflows:
             condition: |
               {"id":"<id>","object":"billableMetric","aggregation":"COUNT","createdAt":"2024-04-29T10:20:07.224Z","description":"even weary pine","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"siemens","updatedAt":"2026-12-10T07:52:04.795Z"}
             type: simple
-    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
   - workflowId: updateBillableMetric
     steps:
@@ -123,7 +123,7 @@ workflows:
             condition: |
               {"id":"<id>","object":"billableMetric","aggregation":"MAX","createdAt":"2026-11-02T11:56:44.093Z","description":"self-assured provided fondly questionable","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"weber","updatedAt":"2024-10-02T02:27:52.097Z"}
             type: simple
-    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
   - workflowId: getBillableMetricPrice
     steps:
@@ -145,7 +145,7 @@ workflows:
                 "object": "price"
               }
             type: simple
-    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
   - workflowId: getBillableMetricPriceLegacy
     steps:
@@ -167,7 +167,7 @@ workflows:
                 "object": "price"
               }
             type: simple
-    x-speakeasy-test-group: Billable Metrics
+    x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
   - workflowId: getConsumer
     steps:
@@ -942,7 +942,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: events
     x-speakeasy-test-rebuild: true
   - workflowId: approveSourceEvent
     steps:
@@ -962,7 +962,7 @@ workflows:
             condition: |
               {"id":"<id>","createdAt":"2023-10-04T03:44:38.557Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>","key2":"<value>"},"sourceId":"<id>","status":"processed","updatedAt":"2023-07-24T01:11:13.326Z"}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: events
     x-speakeasy-test-rebuild: true
   - workflowId: rejectSourceEvent
     steps:
@@ -982,7 +982,7 @@ workflows:
             condition: |
               {"id":"<id>","createdAt":"2023-12-11T03:45:42.105Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>"},"sourceId":"<id>","status":"pending","updatedAt":"2024-05-21T02:04:37.726Z"}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: events
     x-speakeasy-test-rebuild: true
   - workflowId: bulkApproveSourceEvents
     steps:
@@ -1005,7 +1005,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: events
     x-speakeasy-test-rebuild: true
   - workflowId: listSourceRules
     steps:
@@ -1022,7 +1022,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: rules
     x-speakeasy-test-rebuild: true
   - workflowId: createSourceRule
     steps:
@@ -1043,7 +1043,7 @@ workflows:
             condition: |
               {"id":"<id>","conditions":[],"createdAt":"2026-04-23T21:22:31.337Z","description":"mixed readies striking upward kosher","enabled":true,"evaluationCount":606402,"matchCount":632234,"name":"<value>","order":612662,"sourceId":"<id>","updatedAt":"2026-04-10T13:45:02.925Z"}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: rules
     x-speakeasy-test-rebuild: true
   - workflowId: getSourceRule
     steps:
@@ -1060,7 +1060,7 @@ workflows:
             condition: |
               {"id":"<id>","conditions":[],"createdAt":"2026-05-18T19:00:26.759Z","description":"yippee usefully annually even spherical geez","enabled":true,"evaluationCount":77849,"matchCount":313367,"name":"<value>","order":311509,"sourceId":"<id>","updatedAt":"2024-11-30T05:34:06.432Z"}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: rules
     x-speakeasy-test-rebuild: true
   - workflowId: updateSourceRule
     steps:
@@ -1080,7 +1080,7 @@ workflows:
             condition: |
               {"id":"<id>","conditions":[],"createdAt":"2025-07-30T23:23:51.722Z","description":"instructor icy oof indolent","enabled":true,"evaluationCount":214110,"matchCount":757504,"name":"<value>","order":293952,"sourceId":"<id>","updatedAt":"2025-05-30T04:39:16.591Z"}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: rules
     x-speakeasy-test-rebuild: true
   - workflowId: bulkRejectSourceEvents
     steps:
@@ -1104,7 +1104,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: Sources
+    x-speakeasy-test-group: events
     x-speakeasy-test-rebuild: true
   - workflowId: listSubscriptions
     steps:
@@ -1181,7 +1181,7 @@ workflows:
             condition: |
               {"id":"<id>","object":"usageEvent","createdAt":"2025-06-20T13:04:13.935Z","customerId":"<id>","merchantId":"<id>","properties":[{"billableMetricId":"<id>","quantity":678765}],"subscriptionId":"<id>","timestamp":"2024-04-15T14:37:24.493Z"}
             type: simple
-    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-group: usageEvents
     x-speakeasy-test-rebuild: true
   - workflowId: listUsageEvents
     steps:
@@ -1207,7 +1207,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-group: usageEvents
     x-speakeasy-test-rebuild: true
   - workflowId: getUsageEvent
     steps:
@@ -1224,7 +1224,7 @@ workflows:
             condition: |
               {"id":"<id>","object":"usageEvent","createdAt":"2025-10-05T17:59:00.494Z","customerId":"<id>","merchantId":"<id>","properties":[],"subscriptionId":"<id>","timestamp":"2025-01-17T17:10:15.810Z"}
             type: simple
-    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-group: usageEvents
     x-speakeasy-test-rebuild: true
   - workflowId: batchCreateUsageEvents
     steps:
@@ -1241,7 +1241,7 @@ workflows:
             condition: |
               {"object":"batchUsageEvents","failed":[{"error":"<value>","idempotencyKey":"<value>","index":246491}],"successful":[],"summary":{"failed":605506,"successful":760452,"total":297542}}
             type: simple
-    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-group: usageEvents
     x-speakeasy-test-rebuild: true
   - workflowId: getUser
     steps:
@@ -1900,7 +1900,7 @@ workflows:
             condition: |
               {"id":"<id>","object":"usageEvent","createdAt":"2026-03-29T08:53:18.655Z","customerId":"<id>","merchantId":"<id>","properties":[],"subscriptionId":"<id>","timestamp":"2025-10-02T15:09:41.592Z"}
             type: simple
-    x-speakeasy-test-group: Usage Events
+    x-speakeasy-test-group: usageEvents
     x-speakeasy-test-rebuild: true
   - workflowId: getRevenue
     steps:

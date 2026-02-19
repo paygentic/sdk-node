@@ -6,13 +6,13 @@ A `Subscription` is a customer's commitment to purchase a `Product` following th
 
 ### Available Operations
 
-* [listSubscriptions](#listsubscriptions) - List
-* [createSubscription](#createsubscription) - Create
-* [getSubscription](#getsubscription) - Get
+* [list](#list) - List
+* [create](#create) - Create
+* [get](#get) - Get
 * [generatePortalLink](#generateportallink) - Generate Portal Link
-* [terminateSubscription](#terminatesubscription) - Terminate
+* [terminate](#terminate) - Terminate
 
-## listSubscriptions
+## list
 
 List
 
@@ -27,7 +27,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.subscriptions.listSubscriptions({});
+  const result = await paygentic.subscriptions.list({});
 
   console.log(result);
 }
@@ -41,7 +41,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { subscriptionsListSubscriptions } from "@paygentic/sdk/funcs/subscriptionsListSubscriptions.js";
+import { subscriptionsList } from "@paygentic/sdk/funcs/subscriptionsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -50,12 +50,12 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await subscriptionsListSubscriptions(paygentic, {});
+  const res = await subscriptionsList(paygentic, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("subscriptionsListSubscriptions failed:", res.error);
+    console.log("subscriptionsList failed:", res.error);
   }
 }
 
@@ -85,7 +85,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## createSubscription
+## create
 
 Creates a subscription for an existing customer or creates a new customer as part of the action.
 
@@ -100,7 +100,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.subscriptions.createSubscription({
+  const result = await paygentic.subscriptions.create({
     name: "<value>",
     planId: "<id>",
     startedAt: new Date("2025-08-09T13:09:26.829Z"),
@@ -118,7 +118,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { subscriptionsCreateSubscription } from "@paygentic/sdk/funcs/subscriptionsCreateSubscription.js";
+import { subscriptionsCreate } from "@paygentic/sdk/funcs/subscriptionsCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -127,7 +127,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await subscriptionsCreateSubscription(paygentic, {
+  const res = await subscriptionsCreate(paygentic, {
     name: "<value>",
     planId: "<id>",
     startedAt: new Date("2025-08-09T13:09:26.829Z"),
@@ -136,7 +136,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("subscriptionsCreateSubscription failed:", res.error);
+    console.log("subscriptionsCreate failed:", res.error);
   }
 }
 
@@ -166,7 +166,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getSubscription
+## get
 
 Get
 
@@ -181,7 +181,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.subscriptions.getSubscription({
+  const result = await paygentic.subscriptions.get({
     id: "<id>",
   });
 
@@ -197,7 +197,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { subscriptionsGetSubscription } from "@paygentic/sdk/funcs/subscriptionsGetSubscription.js";
+import { subscriptionsGet } from "@paygentic/sdk/funcs/subscriptionsGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -206,14 +206,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await subscriptionsGetSubscription(paygentic, {
+  const res = await subscriptionsGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("subscriptionsGetSubscription failed:", res.error);
+    console.log("subscriptionsGet failed:", res.error);
   }
 }
 
@@ -316,7 +316,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## terminateSubscription
+## terminate
 
 Terminates a subscription with a required reason. This endpoint is for merchant-initiated termination only.
 
@@ -331,7 +331,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.subscriptions.terminateSubscription({
+  const result = await paygentic.subscriptions.terminate({
     id: "<id>",
     requestBody: {
       reason: "<value>",
@@ -350,7 +350,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { subscriptionsTerminateSubscription } from "@paygentic/sdk/funcs/subscriptionsTerminateSubscription.js";
+import { subscriptionsTerminate } from "@paygentic/sdk/funcs/subscriptionsTerminate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -359,7 +359,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await subscriptionsTerminateSubscription(paygentic, {
+  const res = await subscriptionsTerminate(paygentic, {
     id: "<id>",
     requestBody: {
       reason: "<value>",
@@ -369,7 +369,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("subscriptionsTerminateSubscription failed:", res.error);
+    console.log("subscriptionsTerminate failed:", res.error);
   }
 }
 

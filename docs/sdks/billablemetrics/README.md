@@ -2,16 +2,14 @@
 
 ## Overview
 
-A `Billable Metric` defines a measurable quantity tied to a `Product`'s consumption. Each metric stores details including its label, explanatory text, and measurement units.
-
 ### Available Operations
 
-* [createBillableMetric](#createbillablemetric) - Create
-* [listBillableMetrics](#listbillablemetrics) - List
-* [getBillableMetric](#getbillablemetric) - Get
-* [updateBillableMetric](#updatebillablemetric) - Update
+* [create](#create) - Create
+* [list](#list) - List
+* [get](#get) - Get
+* [update](#update) - Update
 
-## createBillableMetric
+## create
 
 Create a new billable metric for a merchant organization. A `Billable Metric` represents a metric that can be used to measure the usage of a `Product`. It contains information about the metric, such as its name, description, and units.
 
@@ -26,7 +24,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.createBillableMetric({
+  const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",
@@ -47,7 +45,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { billableMetricsCreateBillableMetric } from "@paygentic/sdk/funcs/billableMetricsCreateBillableMetric.js";
+import { billableMetricsCreate } from "@paygentic/sdk/funcs/billableMetricsCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -56,7 +54,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await billableMetricsCreateBillableMetric(paygentic, {
+  const res = await billableMetricsCreate(paygentic, {
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",
@@ -68,7 +66,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("billableMetricsCreateBillableMetric failed:", res.error);
+    console.log("billableMetricsCreate failed:", res.error);
   }
 }
 
@@ -98,7 +96,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listBillableMetrics
+## list
 
 List
 
@@ -113,7 +111,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.listBillableMetrics({
+  const result = await paygentic.billableMetrics.list({
     merchantId: "<id>",
   });
 
@@ -129,7 +127,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { billableMetricsListBillableMetrics } from "@paygentic/sdk/funcs/billableMetricsListBillableMetrics.js";
+import { billableMetricsList } from "@paygentic/sdk/funcs/billableMetricsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -138,14 +136,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await billableMetricsListBillableMetrics(paygentic, {
+  const res = await billableMetricsList(paygentic, {
     merchantId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("billableMetricsListBillableMetrics failed:", res.error);
+    console.log("billableMetricsList failed:", res.error);
   }
 }
 
@@ -173,7 +171,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getBillableMetric
+## get
 
 Get
 
@@ -188,7 +186,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.getBillableMetric({
+  const result = await paygentic.billableMetrics.get({
     id: "<id>",
   });
 
@@ -204,7 +202,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { billableMetricsGetBillableMetric } from "@paygentic/sdk/funcs/billableMetricsGetBillableMetric.js";
+import { billableMetricsGet } from "@paygentic/sdk/funcs/billableMetricsGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -213,14 +211,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await billableMetricsGetBillableMetric(paygentic, {
+  const res = await billableMetricsGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("billableMetricsGetBillableMetric failed:", res.error);
+    console.log("billableMetricsGet failed:", res.error);
   }
 }
 
@@ -248,7 +246,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## updateBillableMetric
+## update
 
 Update
 
@@ -263,7 +261,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.updateBillableMetric({
+  const result = await paygentic.billableMetrics.update({
     id: "<id>",
     requestBody: {},
   });
@@ -280,7 +278,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { billableMetricsUpdateBillableMetric } from "@paygentic/sdk/funcs/billableMetricsUpdateBillableMetric.js";
+import { billableMetricsUpdate } from "@paygentic/sdk/funcs/billableMetricsUpdate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -289,7 +287,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await billableMetricsUpdateBillableMetric(paygentic, {
+  const res = await billableMetricsUpdate(paygentic, {
     id: "<id>",
     requestBody: {},
   });
@@ -297,7 +295,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("billableMetricsUpdateBillableMetric failed:", res.error);
+    console.log("billableMetricsUpdate failed:", res.error);
   }
 }
 

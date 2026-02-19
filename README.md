@@ -104,7 +104,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.createBillableMetric({
+  const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",
@@ -141,7 +141,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.createBillableMetric({
+  const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",
@@ -166,124 +166,130 @@ run();
 
 ### [BillableMetrics](docs/sdks/billablemetrics/README.md)
 
-* [createBillableMetric](docs/sdks/billablemetrics/README.md#createbillablemetric) - Create
-* [listBillableMetrics](docs/sdks/billablemetrics/README.md#listbillablemetrics) - List
-* [getBillableMetric](docs/sdks/billablemetrics/README.md#getbillablemetric) - Get
-* [updateBillableMetric](docs/sdks/billablemetrics/README.md#updatebillablemetric) - Update
+* [create](docs/sdks/billablemetrics/README.md#create) - Create
+* [list](docs/sdks/billablemetrics/README.md#list) - List
+* [get](docs/sdks/billablemetrics/README.md#get) - Get
+* [update](docs/sdks/billablemetrics/README.md#update) - Update
 
 ### [Customers](docs/sdks/customers/README.md)
 
-* [listCustomers](docs/sdks/customers/README.md#listcustomers) - List by Merchant
-* [createCustomer](docs/sdks/customers/README.md#createcustomer) - Create
-* [getCustomer](docs/sdks/customers/README.md#getcustomer) - Get
-* [updateCustomer](docs/sdks/customers/README.md#updatecustomer) - Update
+* [list](docs/sdks/customers/README.md#list) - List by Merchant
+* [create](docs/sdks/customers/README.md#create) - Create
+* [get](docs/sdks/customers/README.md#get) - Get
+* [update](docs/sdks/customers/README.md#update) - Update
 
 ### [Disputes](docs/sdks/disputes/README.md)
 
-* [createDispute](docs/sdks/disputes/README.md#createdispute) - Create
-* [listDisputes](docs/sdks/disputes/README.md#listdisputes) - List
+* [create](docs/sdks/disputes/README.md#create) - Create
+* [list](docs/sdks/disputes/README.md#list) - List
 
 ### [Entitlements](docs/sdks/entitlements/README.md)
 
-* [getActiveEntitlements](docs/sdks/entitlements/README.md#getactiveentitlements) - List by Customer
-* [createEntitlement](docs/sdks/entitlements/README.md#createentitlement) - Create
-* [listEntitlements](docs/sdks/entitlements/README.md#listentitlements) - List Entitlements
+* [listActive](docs/sdks/entitlements/README.md#listactive) - List by Customer
+* [create](docs/sdks/entitlements/README.md#create) - Create
+* [list](docs/sdks/entitlements/README.md#list) - List Entitlements
 
 ### [Features](docs/sdks/features/README.md)
 
-* [listFeatures](docs/sdks/features/README.md#listfeatures) - List
-* [createFeature](docs/sdks/features/README.md#createfeature) - Create
-* [getFeature](docs/sdks/features/README.md#getfeature) - Get
-* [updateFeature](docs/sdks/features/README.md#updatefeature) - Update
-* [deleteFeature](docs/sdks/features/README.md#deletefeature) - Delete
+* [list](docs/sdks/features/README.md#list) - List
+* [create](docs/sdks/features/README.md#create) - Create
+* [get](docs/sdks/features/README.md#get) - Get
+* [update](docs/sdks/features/README.md#update) - Update
+* [delete](docs/sdks/features/README.md#delete) - Delete
 
 ### [Fees](docs/sdks/fees/README.md)
 
-* [createFee](docs/sdks/fees/README.md#createfee) - Create
-* [listFees](docs/sdks/fees/README.md#listfees) - List
-* [getFee](docs/sdks/fees/README.md#getfee) - Get
-* [updateFee](docs/sdks/fees/README.md#updatefee) - Update
-* [deleteFee](docs/sdks/fees/README.md#deletefee) - Delete
-* [getFeePrice](docs/sdks/fees/README.md#getfeeprice) - Get Fee Price
+* [create](docs/sdks/fees/README.md#create) - Create
+* [list](docs/sdks/fees/README.md#list) - List
+* [get](docs/sdks/fees/README.md#get) - Get
+* [update](docs/sdks/fees/README.md#update) - Update
+* [delete](docs/sdks/fees/README.md#delete) - Delete
+* [getPrice](docs/sdks/fees/README.md#getprice) - Get Fee Price
 
 ### [InvoicesV2](docs/sdks/invoicesv2/README.md)
 
-* [listInvoices](docs/sdks/invoicesv2/README.md#listinvoices) - List
-* [getInvoice](docs/sdks/invoicesv2/README.md#getinvoice) - Get
-* [getInvoiceLineItems](docs/sdks/invoicesv2/README.md#getinvoicelineitems) - Get Line Items
+* [list](docs/sdks/invoicesv2/README.md#list) - List
+* [get](docs/sdks/invoicesv2/README.md#get) - Get
+* [getLineItems](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
 
 ### [Plans](docs/sdks/plans/README.md)
 
-* [createPlan](docs/sdks/plans/README.md#createplan) - Create
-* [listPlans](docs/sdks/plans/README.md#listplans) - List
-* [listAvailablePlans](docs/sdks/plans/README.md#listavailableplans) - List Available Plans
-* [getPlan](docs/sdks/plans/README.md#getplan) - Get
-* [updatePlan](docs/sdks/plans/README.md#updateplan) - Update
+* [create](docs/sdks/plans/README.md#create) - Create
+* [list](docs/sdks/plans/README.md#list) - List
+* [listAvailable](docs/sdks/plans/README.md#listavailable) - List Available Plans
+* [get](docs/sdks/plans/README.md#get) - Get
+* [update](docs/sdks/plans/README.md#update) - Update
 
 ### [Prices](docs/sdks/prices/README.md)
 
-* [createPrice](docs/sdks/prices/README.md#createprice) - Create
-* [listPrices](docs/sdks/prices/README.md#listprices) - List
-* [getPrice](docs/sdks/prices/README.md#getprice) - Get
-* [updatePrice](docs/sdks/prices/README.md#updateprice) - Update
-* [deletePrice](docs/sdks/prices/README.md#deleteprice) - Delete
+* [create](docs/sdks/prices/README.md#create) - Create
+* [list](docs/sdks/prices/README.md#list) - List
+* [get](docs/sdks/prices/README.md#get) - Get
+* [update](docs/sdks/prices/README.md#update) - Update
+* [delete](docs/sdks/prices/README.md#delete) - Delete
 
 ### [Products](docs/sdks/products/README.md)
 
-* [createProduct](docs/sdks/products/README.md#createproduct) - Create
-* [listProducts](docs/sdks/products/README.md#listproducts) - List
-* [getProduct](docs/sdks/products/README.md#getproduct) - Get
-* [updateProduct](docs/sdks/products/README.md#updateproduct) - Update
+* [create](docs/sdks/products/README.md#create) - Create
+* [list](docs/sdks/products/README.md#list) - List
+* [get](docs/sdks/products/README.md#get) - Get
+* [update](docs/sdks/products/README.md#update) - Update
 
 ### [Revenue](docs/sdks/revenue/README.md)
 
-* [getRevenue](docs/sdks/revenue/README.md#getrevenue) - Get revenue time series
+* [get](docs/sdks/revenue/README.md#get) - Get revenue time series
 
 ### [Sources](docs/sdks/sources/README.md)
 
-* [createSource](docs/sdks/sources/README.md#createsource) - Create
-* [listSources](docs/sdks/sources/README.md#listsources) - List
-* [getSource](docs/sdks/sources/README.md#getsource) - Get
-* [updateSource](docs/sdks/sources/README.md#updatesource) - Update
-* [listSourceEvents](docs/sdks/sources/README.md#listsourceevents) - List Events
-* [approveSourceEvent](docs/sdks/sources/README.md#approvesourceevent) - Approve
-* [rejectSourceEvent](docs/sdks/sources/README.md#rejectsourceevent) - Reject
-* [bulkApproveSourceEvents](docs/sdks/sources/README.md#bulkapprovesourceevents) - Bulk Approve
-* [bulkRejectSourceEvents](docs/sdks/sources/README.md#bulkrejectsourceevents) - Bulk Reject
-* [listSourceRules](docs/sdks/sources/README.md#listsourcerules) - List Rules
-* [createSourceRule](docs/sdks/sources/README.md#createsourcerule) - Create Rule
-* [getSourceRule](docs/sdks/sources/README.md#getsourcerule) - Get Rule
-* [updateSourceRule](docs/sdks/sources/README.md#updatesourcerule) - Update Rule
-* [deleteSourceRule](docs/sdks/sources/README.md#deletesourcerule) - Delete Rule
+* [create](docs/sdks/sources/README.md#create) - Create
+* [list](docs/sdks/sources/README.md#list) - List
+* [get](docs/sdks/sources/README.md#get) - Get
+* [update](docs/sdks/sources/README.md#update) - Update
+
+### [Sources.Events](docs/sdks/events/README.md)
+
+* [list](docs/sdks/events/README.md#list) - List Events
+* [approve](docs/sdks/events/README.md#approve) - Approve
+* [reject](docs/sdks/events/README.md#reject) - Reject
+* [bulkApprove](docs/sdks/events/README.md#bulkapprove) - Bulk Approve
+* [bulkReject](docs/sdks/events/README.md#bulkreject) - Bulk Reject
+
+### [Sources.Rules](docs/sdks/rules/README.md)
+
+* [list](docs/sdks/rules/README.md#list) - List Rules
+* [create](docs/sdks/rules/README.md#create) - Create Rule
+* [get](docs/sdks/rules/README.md#get) - Get Rule
+* [update](docs/sdks/rules/README.md#update) - Update Rule
+* [delete](docs/sdks/rules/README.md#delete) - Delete Rule
 
 ### [Subscriptions](docs/sdks/subscriptions/README.md)
 
-* [listSubscriptions](docs/sdks/subscriptions/README.md#listsubscriptions) - List
-* [createSubscription](docs/sdks/subscriptions/README.md#createsubscription) - Create
-* [getSubscription](docs/sdks/subscriptions/README.md#getsubscription) - Get
+* [list](docs/sdks/subscriptions/README.md#list) - List
+* [create](docs/sdks/subscriptions/README.md#create) - Create
+* [get](docs/sdks/subscriptions/README.md#get) - Get
 * [generatePortalLink](docs/sdks/subscriptions/README.md#generateportallink) - Generate Portal Link
-* [terminateSubscription](docs/sdks/subscriptions/README.md#terminatesubscription) - Terminate
+* [terminate](docs/sdks/subscriptions/README.md#terminate) - Terminate
 
 ### [TestClocks](docs/sdks/testclocks/README.md)
 
-* [listTestClocks](docs/sdks/testclocks/README.md#listtestclocks) - List
-* [createTestClock](docs/sdks/testclocks/README.md#createtestclock) - Create
-* [getTestClock](docs/sdks/testclocks/README.md#gettestclock) - Get
-* [advanceTestClock](docs/sdks/testclocks/README.md#advancetestclock) - Advance
-* [deleteTestClock](docs/sdks/testclocks/README.md#deletetestclock) - Delete
+* [list](docs/sdks/testclocks/README.md#list) - List
+* [create](docs/sdks/testclocks/README.md#create) - Create
+* [get](docs/sdks/testclocks/README.md#get) - Get
+* [advance](docs/sdks/testclocks/README.md#advance) - Advance
+* [delete](docs/sdks/testclocks/README.md#delete) - Delete
 
 ### [UsageEvents](docs/sdks/usageevents/README.md)
 
-* [createUsageEvent](docs/sdks/usageevents/README.md#createusageevent) - Create
-* [listUsageEvents](docs/sdks/usageevents/README.md#listusageevents) - List
-* [getUsageEvent](docs/sdks/usageevents/README.md#getusageevent) - Get
-* [refundUsageEvent](docs/sdks/usageevents/README.md#refundusageevent) - Refund
-* [batchCreateUsageEvents](docs/sdks/usageevents/README.md#batchcreateusageevents) - Batch Create
+* [create](docs/sdks/usageevents/README.md#create) - Create
+* [list](docs/sdks/usageevents/README.md#list) - List
+* [get](docs/sdks/usageevents/README.md#get) - Get
+* [refund](docs/sdks/usageevents/README.md#refund) - Refund
+* [batchCreate](docs/sdks/usageevents/README.md#batchcreate) - Batch Create
 
 ### [Users](docs/sdks/users/README.md)
 
-* [getUser](docs/sdks/users/README.md#getuser) - Get
-* [updateUser](docs/sdks/users/README.md#updateuser) - Update
+* [get](docs/sdks/users/README.md#get) - Get
+* [update](docs/sdks/users/README.md#update) - Update
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
@@ -303,79 +309,79 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 
 <summary>Available standalone functions</summary>
 
-- [`billableMetricsCreateBillableMetric`](docs/sdks/billablemetrics/README.md#createbillablemetric) - Create
-- [`billableMetricsGetBillableMetric`](docs/sdks/billablemetrics/README.md#getbillablemetric) - Get
-- [`billableMetricsListBillableMetrics`](docs/sdks/billablemetrics/README.md#listbillablemetrics) - List
-- [`billableMetricsUpdateBillableMetric`](docs/sdks/billablemetrics/README.md#updatebillablemetric) - Update
-- [`customersCreateCustomer`](docs/sdks/customers/README.md#createcustomer) - Create
-- [`customersGetCustomer`](docs/sdks/customers/README.md#getcustomer) - Get
-- [`customersListCustomers`](docs/sdks/customers/README.md#listcustomers) - List by Merchant
-- [`customersUpdateCustomer`](docs/sdks/customers/README.md#updatecustomer) - Update
-- [`disputesCreateDispute`](docs/sdks/disputes/README.md#createdispute) - Create
-- [`disputesListDisputes`](docs/sdks/disputes/README.md#listdisputes) - List
-- [`entitlementsCreateEntitlement`](docs/sdks/entitlements/README.md#createentitlement) - Create
-- [`entitlementsGetActiveEntitlements`](docs/sdks/entitlements/README.md#getactiveentitlements) - List by Customer
-- [`entitlementsListEntitlements`](docs/sdks/entitlements/README.md#listentitlements) - List Entitlements
-- [`featuresCreateFeature`](docs/sdks/features/README.md#createfeature) - Create
-- [`featuresDeleteFeature`](docs/sdks/features/README.md#deletefeature) - Delete
-- [`featuresGetFeature`](docs/sdks/features/README.md#getfeature) - Get
-- [`featuresListFeatures`](docs/sdks/features/README.md#listfeatures) - List
-- [`featuresUpdateFeature`](docs/sdks/features/README.md#updatefeature) - Update
-- [`feesCreateFee`](docs/sdks/fees/README.md#createfee) - Create
-- [`feesDeleteFee`](docs/sdks/fees/README.md#deletefee) - Delete
-- [`feesGetFee`](docs/sdks/fees/README.md#getfee) - Get
-- [`feesGetFeePrice`](docs/sdks/fees/README.md#getfeeprice) - Get Fee Price
-- [`feesListFees`](docs/sdks/fees/README.md#listfees) - List
-- [`feesUpdateFee`](docs/sdks/fees/README.md#updatefee) - Update
-- [`invoicesV2GetInvoice`](docs/sdks/invoicesv2/README.md#getinvoice) - Get
-- [`invoicesV2GetInvoiceLineItems`](docs/sdks/invoicesv2/README.md#getinvoicelineitems) - Get Line Items
-- [`invoicesV2ListInvoices`](docs/sdks/invoicesv2/README.md#listinvoices) - List
-- [`plansCreatePlan`](docs/sdks/plans/README.md#createplan) - Create
-- [`plansGetPlan`](docs/sdks/plans/README.md#getplan) - Get
-- [`plansListAvailablePlans`](docs/sdks/plans/README.md#listavailableplans) - List Available Plans
-- [`plansListPlans`](docs/sdks/plans/README.md#listplans) - List
-- [`plansUpdatePlan`](docs/sdks/plans/README.md#updateplan) - Update
-- [`pricesCreatePrice`](docs/sdks/prices/README.md#createprice) - Create
-- [`pricesDeletePrice`](docs/sdks/prices/README.md#deleteprice) - Delete
-- [`pricesGetPrice`](docs/sdks/prices/README.md#getprice) - Get
-- [`pricesListPrices`](docs/sdks/prices/README.md#listprices) - List
-- [`pricesUpdatePrice`](docs/sdks/prices/README.md#updateprice) - Update
-- [`productsCreateProduct`](docs/sdks/products/README.md#createproduct) - Create
-- [`productsGetProduct`](docs/sdks/products/README.md#getproduct) - Get
-- [`productsListProducts`](docs/sdks/products/README.md#listproducts) - List
-- [`productsUpdateProduct`](docs/sdks/products/README.md#updateproduct) - Update
-- [`revenueGetRevenue`](docs/sdks/revenue/README.md#getrevenue) - Get revenue time series
-- [`sourcesApproveSourceEvent`](docs/sdks/sources/README.md#approvesourceevent) - Approve
-- [`sourcesBulkApproveSourceEvents`](docs/sdks/sources/README.md#bulkapprovesourceevents) - Bulk Approve
-- [`sourcesBulkRejectSourceEvents`](docs/sdks/sources/README.md#bulkrejectsourceevents) - Bulk Reject
-- [`sourcesCreateSource`](docs/sdks/sources/README.md#createsource) - Create
-- [`sourcesCreateSourceRule`](docs/sdks/sources/README.md#createsourcerule) - Create Rule
-- [`sourcesDeleteSourceRule`](docs/sdks/sources/README.md#deletesourcerule) - Delete Rule
-- [`sourcesGetSource`](docs/sdks/sources/README.md#getsource) - Get
-- [`sourcesGetSourceRule`](docs/sdks/sources/README.md#getsourcerule) - Get Rule
-- [`sourcesListSourceEvents`](docs/sdks/sources/README.md#listsourceevents) - List Events
-- [`sourcesListSourceRules`](docs/sdks/sources/README.md#listsourcerules) - List Rules
-- [`sourcesListSources`](docs/sdks/sources/README.md#listsources) - List
-- [`sourcesRejectSourceEvent`](docs/sdks/sources/README.md#rejectsourceevent) - Reject
-- [`sourcesUpdateSource`](docs/sdks/sources/README.md#updatesource) - Update
-- [`sourcesUpdateSourceRule`](docs/sdks/sources/README.md#updatesourcerule) - Update Rule
-- [`subscriptionsCreateSubscription`](docs/sdks/subscriptions/README.md#createsubscription) - Create
+- [`billableMetricsCreate`](docs/sdks/billablemetrics/README.md#create) - Create
+- [`billableMetricsGet`](docs/sdks/billablemetrics/README.md#get) - Get
+- [`billableMetricsList`](docs/sdks/billablemetrics/README.md#list) - List
+- [`billableMetricsUpdate`](docs/sdks/billablemetrics/README.md#update) - Update
+- [`customersCreate`](docs/sdks/customers/README.md#create) - Create
+- [`customersGet`](docs/sdks/customers/README.md#get) - Get
+- [`customersList`](docs/sdks/customers/README.md#list) - List by Merchant
+- [`customersUpdate`](docs/sdks/customers/README.md#update) - Update
+- [`disputesCreate`](docs/sdks/disputes/README.md#create) - Create
+- [`disputesList`](docs/sdks/disputes/README.md#list) - List
+- [`entitlementsCreate`](docs/sdks/entitlements/README.md#create) - Create
+- [`entitlementsList`](docs/sdks/entitlements/README.md#list) - List Entitlements
+- [`entitlementsListActive`](docs/sdks/entitlements/README.md#listactive) - List by Customer
+- [`featuresCreate`](docs/sdks/features/README.md#create) - Create
+- [`featuresDelete`](docs/sdks/features/README.md#delete) - Delete
+- [`featuresGet`](docs/sdks/features/README.md#get) - Get
+- [`featuresList`](docs/sdks/features/README.md#list) - List
+- [`featuresUpdate`](docs/sdks/features/README.md#update) - Update
+- [`feesCreate`](docs/sdks/fees/README.md#create) - Create
+- [`feesDelete`](docs/sdks/fees/README.md#delete) - Delete
+- [`feesGet`](docs/sdks/fees/README.md#get) - Get
+- [`feesGetPrice`](docs/sdks/fees/README.md#getprice) - Get Fee Price
+- [`feesList`](docs/sdks/fees/README.md#list) - List
+- [`feesUpdate`](docs/sdks/fees/README.md#update) - Update
+- [`invoicesV2Get`](docs/sdks/invoicesv2/README.md#get) - Get
+- [`invoicesV2GetLineItems`](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
+- [`invoicesV2List`](docs/sdks/invoicesv2/README.md#list) - List
+- [`plansCreate`](docs/sdks/plans/README.md#create) - Create
+- [`plansGet`](docs/sdks/plans/README.md#get) - Get
+- [`plansList`](docs/sdks/plans/README.md#list) - List
+- [`plansListAvailable`](docs/sdks/plans/README.md#listavailable) - List Available Plans
+- [`plansUpdate`](docs/sdks/plans/README.md#update) - Update
+- [`pricesCreate`](docs/sdks/prices/README.md#create) - Create
+- [`pricesDelete`](docs/sdks/prices/README.md#delete) - Delete
+- [`pricesGet`](docs/sdks/prices/README.md#get) - Get
+- [`pricesList`](docs/sdks/prices/README.md#list) - List
+- [`pricesUpdate`](docs/sdks/prices/README.md#update) - Update
+- [`productsCreate`](docs/sdks/products/README.md#create) - Create
+- [`productsGet`](docs/sdks/products/README.md#get) - Get
+- [`productsList`](docs/sdks/products/README.md#list) - List
+- [`productsUpdate`](docs/sdks/products/README.md#update) - Update
+- [`revenueGet`](docs/sdks/revenue/README.md#get) - Get revenue time series
+- [`sourcesCreate`](docs/sdks/sources/README.md#create) - Create
+- [`sourcesEventsApprove`](docs/sdks/events/README.md#approve) - Approve
+- [`sourcesEventsBulkApprove`](docs/sdks/events/README.md#bulkapprove) - Bulk Approve
+- [`sourcesEventsBulkReject`](docs/sdks/events/README.md#bulkreject) - Bulk Reject
+- [`sourcesEventsList`](docs/sdks/events/README.md#list) - List Events
+- [`sourcesEventsReject`](docs/sdks/events/README.md#reject) - Reject
+- [`sourcesGet`](docs/sdks/sources/README.md#get) - Get
+- [`sourcesList`](docs/sdks/sources/README.md#list) - List
+- [`sourcesRulesCreate`](docs/sdks/rules/README.md#create) - Create Rule
+- [`sourcesRulesDelete`](docs/sdks/rules/README.md#delete) - Delete Rule
+- [`sourcesRulesGet`](docs/sdks/rules/README.md#get) - Get Rule
+- [`sourcesRulesList`](docs/sdks/rules/README.md#list) - List Rules
+- [`sourcesRulesUpdate`](docs/sdks/rules/README.md#update) - Update Rule
+- [`sourcesUpdate`](docs/sdks/sources/README.md#update) - Update
+- [`subscriptionsCreate`](docs/sdks/subscriptions/README.md#create) - Create
 - [`subscriptionsGeneratePortalLink`](docs/sdks/subscriptions/README.md#generateportallink) - Generate Portal Link
-- [`subscriptionsGetSubscription`](docs/sdks/subscriptions/README.md#getsubscription) - Get
-- [`subscriptionsListSubscriptions`](docs/sdks/subscriptions/README.md#listsubscriptions) - List
-- [`subscriptionsTerminateSubscription`](docs/sdks/subscriptions/README.md#terminatesubscription) - Terminate
-- [`testClocksAdvanceTestClock`](docs/sdks/testclocks/README.md#advancetestclock) - Advance
-- [`testClocksCreateTestClock`](docs/sdks/testclocks/README.md#createtestclock) - Create
-- [`testClocksDeleteTestClock`](docs/sdks/testclocks/README.md#deletetestclock) - Delete
-- [`testClocksGetTestClock`](docs/sdks/testclocks/README.md#gettestclock) - Get
-- [`testClocksListTestClocks`](docs/sdks/testclocks/README.md#listtestclocks) - List
-- [`usageEventsBatchCreateUsageEvents`](docs/sdks/usageevents/README.md#batchcreateusageevents) - Batch Create
-- [`usageEventsCreateUsageEvent`](docs/sdks/usageevents/README.md#createusageevent) - Create
-- [`usageEventsGetUsageEvent`](docs/sdks/usageevents/README.md#getusageevent) - Get
-- [`usageEventsListUsageEvents`](docs/sdks/usageevents/README.md#listusageevents) - List
-- [`usageEventsRefundUsageEvent`](docs/sdks/usageevents/README.md#refundusageevent) - Refund
-- [`usersGetUser`](docs/sdks/users/README.md#getuser) - Get
-- [`usersUpdateUser`](docs/sdks/users/README.md#updateuser) - Update
+- [`subscriptionsGet`](docs/sdks/subscriptions/README.md#get) - Get
+- [`subscriptionsList`](docs/sdks/subscriptions/README.md#list) - List
+- [`subscriptionsTerminate`](docs/sdks/subscriptions/README.md#terminate) - Terminate
+- [`testClocksAdvance`](docs/sdks/testclocks/README.md#advance) - Advance
+- [`testClocksCreate`](docs/sdks/testclocks/README.md#create) - Create
+- [`testClocksDelete`](docs/sdks/testclocks/README.md#delete) - Delete
+- [`testClocksGet`](docs/sdks/testclocks/README.md#get) - Get
+- [`testClocksList`](docs/sdks/testclocks/README.md#list) - List
+- [`usageEventsBatchCreate`](docs/sdks/usageevents/README.md#batchcreate) - Batch Create
+- [`usageEventsCreate`](docs/sdks/usageevents/README.md#create) - Create
+- [`usageEventsGet`](docs/sdks/usageevents/README.md#get) - Get
+- [`usageEventsList`](docs/sdks/usageevents/README.md#list) - List
+- [`usageEventsRefund`](docs/sdks/usageevents/README.md#refund) - Refund
+- [`usersGet`](docs/sdks/users/README.md#get) - Get
+- [`usersUpdate`](docs/sdks/users/README.md#update) - Update
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->
@@ -394,7 +400,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.createBillableMetric({
+  const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",
@@ -440,7 +446,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.createBillableMetric({
+  const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",
@@ -482,7 +488,7 @@ const paygentic = new Paygentic({
 
 async function run() {
   try {
-    const result = await paygentic.billableMetrics.createBillableMetric({
+    const result = await paygentic.billableMetrics.create({
       aggregation: "SUM",
       description: "other gracefully hold",
       merchantId: "<id>",
@@ -556,7 +562,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.billableMetrics.createBillableMetric({
+  const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",

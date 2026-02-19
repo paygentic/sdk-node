@@ -6,13 +6,13 @@ Test clocks provide programmable time control to simulate subscription and billi
 
 ### Available Operations
 
-* [listTestClocks](#listtestclocks) - List
-* [createTestClock](#createtestclock) - Create
-* [getTestClock](#gettestclock) - Get
-* [advanceTestClock](#advancetestclock) - Advance
-* [deleteTestClock](#deletetestclock) - Delete
+* [list](#list) - List
+* [create](#create) - Create
+* [get](#get) - Get
+* [advance](#advance) - Advance
+* [delete](#delete) - Delete
 
-## listTestClocks
+## list
 
 Retrieves a paginated list of test clocks
 
@@ -27,7 +27,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.testClocks.listTestClocks({});
+  const result = await paygentic.testClocks.list({});
 
   console.log(result);
 }
@@ -41,7 +41,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { testClocksListTestClocks } from "@paygentic/sdk/funcs/testClocksListTestClocks.js";
+import { testClocksList } from "@paygentic/sdk/funcs/testClocksList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -50,12 +50,12 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await testClocksListTestClocks(paygentic, {});
+  const res = await testClocksList(paygentic, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("testClocksListTestClocks failed:", res.error);
+    console.log("testClocksList failed:", res.error);
   }
 }
 
@@ -82,7 +82,7 @@ run();
 | errors.ErrorT                | 401, 403                     | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## createTestClock
+## create
 
 Creates a new test clock with an optional initial time. If no time is provided, uses the current time.
 
@@ -97,7 +97,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.testClocks.createTestClock({});
+  const result = await paygentic.testClocks.create({});
 
   console.log(result);
 }
@@ -111,7 +111,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { testClocksCreateTestClock } from "@paygentic/sdk/funcs/testClocksCreateTestClock.js";
+import { testClocksCreate } from "@paygentic/sdk/funcs/testClocksCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -120,12 +120,12 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await testClocksCreateTestClock(paygentic, {});
+  const res = await testClocksCreate(paygentic, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("testClocksCreateTestClock failed:", res.error);
+    console.log("testClocksCreate failed:", res.error);
   }
 }
 
@@ -152,7 +152,7 @@ run();
 | errors.ErrorT                | 400, 401, 403                | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getTestClock
+## get
 
 Retrieves details of a specific test clock
 
@@ -167,7 +167,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.testClocks.getTestClock({
+  const result = await paygentic.testClocks.get({
     id: "<id>",
   });
 
@@ -183,7 +183,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { testClocksGetTestClock } from "@paygentic/sdk/funcs/testClocksGetTestClock.js";
+import { testClocksGet } from "@paygentic/sdk/funcs/testClocksGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -192,14 +192,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await testClocksGetTestClock(paygentic, {
+  const res = await testClocksGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("testClocksGetTestClock failed:", res.error);
+    console.log("testClocksGet failed:", res.error);
   }
 }
 
@@ -226,7 +226,7 @@ run();
 | errors.ErrorT                | 401, 403, 404                | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## advanceTestClock
+## advance
 
 Advances the test clock's current time. You can either specify a new absolute time or advance by a duration.
 
@@ -241,7 +241,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.testClocks.advanceTestClock({
+  const result = await paygentic.testClocks.advance({
     id: "<id>",
     requestBody: {
       currentTime: new Date("2025-02-15T07:14:25.507Z"),
@@ -260,7 +260,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { testClocksAdvanceTestClock } from "@paygentic/sdk/funcs/testClocksAdvanceTestClock.js";
+import { testClocksAdvance } from "@paygentic/sdk/funcs/testClocksAdvance.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -269,7 +269,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await testClocksAdvanceTestClock(paygentic, {
+  const res = await testClocksAdvance(paygentic, {
     id: "<id>",
     requestBody: {
       currentTime: new Date("2025-02-15T07:14:25.507Z"),
@@ -279,7 +279,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("testClocksAdvanceTestClock failed:", res.error);
+    console.log("testClocksAdvance failed:", res.error);
   }
 }
 
@@ -306,7 +306,7 @@ run();
 | errors.ErrorT                | 400, 401, 403, 404           | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## deleteTestClock
+## delete
 
 Soft deletes a test clock. The clock will be marked as deleted but not removed from the database.
 
@@ -321,7 +321,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.testClocks.deleteTestClock({
+  const result = await paygentic.testClocks.delete({
     id: "<id>",
   });
 
@@ -337,7 +337,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { testClocksDeleteTestClock } from "@paygentic/sdk/funcs/testClocksDeleteTestClock.js";
+import { testClocksDelete } from "@paygentic/sdk/funcs/testClocksDelete.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -346,14 +346,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await testClocksDeleteTestClock(paygentic, {
+  const res = await testClocksDelete(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("testClocksDeleteTestClock failed:", res.error);
+    console.log("testClocksDelete failed:", res.error);
   }
 }
 

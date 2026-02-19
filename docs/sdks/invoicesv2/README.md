@@ -6,11 +6,11 @@ Invoice V2 operations supporting billing cycles organized by time periods. Warni
 
 ### Available Operations
 
-* [listInvoices](#listinvoices) - List
-* [getInvoice](#getinvoice) - Get
-* [getInvoiceLineItems](#getinvoicelineitems) - Get Line Items
+* [list](#list) - List
+* [get](#get) - Get
+* [getLineItems](#getlineitems) - Get Line Items
 
-## listInvoices
+## list
 
 List invoices with optional filters. Platform users can use nextActionAt=ready to get invoices ready for processing.
 
@@ -25,7 +25,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.invoicesV2.listInvoices({});
+  const result = await paygentic.invoicesV2.list({});
 
   console.log(result);
 }
@@ -39,7 +39,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { invoicesV2ListInvoices } from "@paygentic/sdk/funcs/invoicesV2ListInvoices.js";
+import { invoicesV2List } from "@paygentic/sdk/funcs/invoicesV2List.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -48,12 +48,12 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await invoicesV2ListInvoices(paygentic, {});
+  const res = await invoicesV2List(paygentic, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("invoicesV2ListInvoices failed:", res.error);
+    console.log("invoicesV2List failed:", res.error);
   }
 }
 
@@ -81,7 +81,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getInvoice
+## get
 
 Retrieve a single invoice with real-time aggregates (for ACTIVE/CLOSING/CLOSED) or cached aggregates (for finalized invoices). Optionally include line items with expand=lineItems.
 
@@ -96,7 +96,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.invoicesV2.getInvoice({
+  const result = await paygentic.invoicesV2.get({
     id: "<id>",
   });
 
@@ -112,7 +112,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { invoicesV2GetInvoice } from "@paygentic/sdk/funcs/invoicesV2GetInvoice.js";
+import { invoicesV2Get } from "@paygentic/sdk/funcs/invoicesV2Get.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -121,14 +121,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await invoicesV2GetInvoice(paygentic, {
+  const res = await invoicesV2Get(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("invoicesV2GetInvoice failed:", res.error);
+    console.log("invoicesV2Get failed:", res.error);
   }
 }
 
@@ -156,7 +156,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getInvoiceLineItems
+## getLineItems
 
 Get paginated line items for an invoice from the analytics service
 
@@ -171,7 +171,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.invoicesV2.getInvoiceLineItems({
+  const result = await paygentic.invoicesV2.getLineItems({
     id: "<id>",
   });
 
@@ -187,7 +187,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { invoicesV2GetInvoiceLineItems } from "@paygentic/sdk/funcs/invoicesV2GetInvoiceLineItems.js";
+import { invoicesV2GetLineItems } from "@paygentic/sdk/funcs/invoicesV2GetLineItems.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -196,14 +196,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await invoicesV2GetInvoiceLineItems(paygentic, {
+  const res = await invoicesV2GetLineItems(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("invoicesV2GetInvoiceLineItems failed:", res.error);
+    console.log("invoicesV2GetLineItems failed:", res.error);
   }
 }
 

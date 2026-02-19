@@ -6,10 +6,10 @@ A `Dispute` enables customers to contest usage events that they consider to be i
 
 ### Available Operations
 
-* [createDispute](#createdispute) - Create
-* [listDisputes](#listdisputes) - List
+* [create](#create) - Create
+* [list](#list) - List
 
-## createDispute
+## create
 
 Create a dispute for a usage event. Only one dispute can be created per usage event.
 
@@ -24,7 +24,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.disputes.createDispute({
+  const result = await paygentic.disputes.create({
     message: "<value>",
     usageEventId: "<id>",
   });
@@ -41,7 +41,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { disputesCreateDispute } from "@paygentic/sdk/funcs/disputesCreateDispute.js";
+import { disputesCreate } from "@paygentic/sdk/funcs/disputesCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -50,7 +50,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await disputesCreateDispute(paygentic, {
+  const res = await disputesCreate(paygentic, {
     message: "<value>",
     usageEventId: "<id>",
   });
@@ -58,7 +58,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("disputesCreateDispute failed:", res.error);
+    console.log("disputesCreate failed:", res.error);
   }
 }
 
@@ -88,7 +88,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listDisputes
+## list
 
 List disputes for a merchant, customer, or consumer. At least one of merchantId, customerId, or consumerId must be provided.
 
@@ -103,7 +103,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.disputes.listDisputes({});
+  const result = await paygentic.disputes.list({});
 
   console.log(result);
 }
@@ -117,7 +117,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { disputesListDisputes } from "@paygentic/sdk/funcs/disputesListDisputes.js";
+import { disputesList } from "@paygentic/sdk/funcs/disputesList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -126,12 +126,12 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await disputesListDisputes(paygentic, {});
+  const res = await disputesList(paygentic, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("disputesListDisputes failed:", res.error);
+    console.log("disputesList failed:", res.error);
   }
 }
 

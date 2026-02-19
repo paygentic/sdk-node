@@ -6,13 +6,13 @@ A `Feature` represents a specific capability or functionality provided by a `Pro
 
 ### Available Operations
 
-* [listFeatures](#listfeatures) - List
-* [createFeature](#createfeature) - Create
-* [getFeature](#getfeature) - Get
-* [updateFeature](#updatefeature) - Update
-* [deleteFeature](#deletefeature) - Delete
+* [list](#list) - List
+* [create](#create) - Create
+* [get](#get) - Get
+* [update](#update) - Update
+* [delete](#delete) - Delete
 
-## listFeatures
+## list
 
 List features by productId, optionally filtered by key
 
@@ -27,7 +27,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.features.listFeatures({
+  const result = await paygentic.features.list({
     productId: "<id>",
   });
 
@@ -43,7 +43,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { featuresListFeatures } from "@paygentic/sdk/funcs/featuresListFeatures.js";
+import { featuresList } from "@paygentic/sdk/funcs/featuresList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -52,14 +52,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await featuresListFeatures(paygentic, {
+  const res = await featuresList(paygentic, {
     productId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("featuresListFeatures failed:", res.error);
+    console.log("featuresList failed:", res.error);
   }
 }
 
@@ -89,7 +89,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## createFeature
+## create
 
 Create
 
@@ -104,7 +104,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.features.createFeature({
+  const result = await paygentic.features.create({
     key: "<key>",
     name: "<value>",
     merchantId: "<id>",
@@ -123,7 +123,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { featuresCreateFeature } from "@paygentic/sdk/funcs/featuresCreateFeature.js";
+import { featuresCreate } from "@paygentic/sdk/funcs/featuresCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -132,7 +132,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await featuresCreateFeature(paygentic, {
+  const res = await featuresCreate(paygentic, {
     key: "<key>",
     name: "<value>",
     merchantId: "<id>",
@@ -142,7 +142,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("featuresCreateFeature failed:", res.error);
+    console.log("featuresCreate failed:", res.error);
   }
 }
 
@@ -172,7 +172,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getFeature
+## get
 
 Get
 
@@ -187,7 +187,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.features.getFeature({
+  const result = await paygentic.features.get({
     id: "<id>",
   });
 
@@ -203,7 +203,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { featuresGetFeature } from "@paygentic/sdk/funcs/featuresGetFeature.js";
+import { featuresGet } from "@paygentic/sdk/funcs/featuresGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -212,14 +212,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await featuresGetFeature(paygentic, {
+  const res = await featuresGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("featuresGetFeature failed:", res.error);
+    console.log("featuresGet failed:", res.error);
   }
 }
 
@@ -247,7 +247,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## updateFeature
+## update
 
 Update
 
@@ -262,7 +262,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.features.updateFeature({
+  const result = await paygentic.features.update({
     id: "<id>",
     requestBody: {},
   });
@@ -279,7 +279,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { featuresUpdateFeature } from "@paygentic/sdk/funcs/featuresUpdateFeature.js";
+import { featuresUpdate } from "@paygentic/sdk/funcs/featuresUpdate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -288,7 +288,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await featuresUpdateFeature(paygentic, {
+  const res = await featuresUpdate(paygentic, {
     id: "<id>",
     requestBody: {},
   });
@@ -296,7 +296,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("featuresUpdateFeature failed:", res.error);
+    console.log("featuresUpdate failed:", res.error);
   }
 }
 
@@ -326,7 +326,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## deleteFeature
+## delete
 
 Delete
 
@@ -341,7 +341,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  await paygentic.features.deleteFeature({
+  await paygentic.features.delete({
     id: "<id>",
   });
 
@@ -357,7 +357,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { featuresDeleteFeature } from "@paygentic/sdk/funcs/featuresDeleteFeature.js";
+import { featuresDelete } from "@paygentic/sdk/funcs/featuresDelete.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -366,14 +366,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await featuresDeleteFeature(paygentic, {
+  const res = await featuresDelete(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     
   } else {
-    console.log("featuresDeleteFeature failed:", res.error);
+    console.log("featuresDelete failed:", res.error);
   }
 }
 

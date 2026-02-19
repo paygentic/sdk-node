@@ -6,12 +6,12 @@ A `Product` is an offering sold by a `Merchant`. It includes product metadata li
 
 ### Available Operations
 
-* [createProduct](#createproduct) - Create
-* [listProducts](#listproducts) - List
-* [getProduct](#getproduct) - Get
-* [updateProduct](#updateproduct) - Update
+* [create](#create) - Create
+* [list](#list) - List
+* [get](#get) - Get
+* [update](#update) - Update
 
-## createProduct
+## create
 
 Create
 
@@ -26,7 +26,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.products.createProduct({
+  const result = await paygentic.products.create({
     description: "at through very dishearten knife ashamed baa beret amongst",
     merchantId: "<id>",
     name: "<value>",
@@ -44,7 +44,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { productsCreateProduct } from "@paygentic/sdk/funcs/productsCreateProduct.js";
+import { productsCreate } from "@paygentic/sdk/funcs/productsCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -53,7 +53,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await productsCreateProduct(paygentic, {
+  const res = await productsCreate(paygentic, {
     description: "at through very dishearten knife ashamed baa beret amongst",
     merchantId: "<id>",
     name: "<value>",
@@ -62,7 +62,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("productsCreateProduct failed:", res.error);
+    console.log("productsCreate failed:", res.error);
   }
 }
 
@@ -92,7 +92,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listProducts
+## list
 
 List
 
@@ -107,7 +107,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.products.listProducts({});
+  const result = await paygentic.products.list({});
 
   console.log(result);
 }
@@ -121,7 +121,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { productsListProducts } from "@paygentic/sdk/funcs/productsListProducts.js";
+import { productsList } from "@paygentic/sdk/funcs/productsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -130,12 +130,12 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await productsListProducts(paygentic, {});
+  const res = await productsList(paygentic, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("productsListProducts failed:", res.error);
+    console.log("productsList failed:", res.error);
   }
 }
 
@@ -165,7 +165,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getProduct
+## get
 
 Get
 
@@ -180,7 +180,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.products.getProduct({
+  const result = await paygentic.products.get({
     id: "<id>",
   });
 
@@ -196,7 +196,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { productsGetProduct } from "@paygentic/sdk/funcs/productsGetProduct.js";
+import { productsGet } from "@paygentic/sdk/funcs/productsGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -205,14 +205,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await productsGetProduct(paygentic, {
+  const res = await productsGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("productsGetProduct failed:", res.error);
+    console.log("productsGet failed:", res.error);
   }
 }
 
@@ -240,7 +240,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## updateProduct
+## update
 
 Update
 
@@ -255,7 +255,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.products.updateProduct({
+  const result = await paygentic.products.update({
     id: "<id>",
     requestBody: {},
   });
@@ -272,7 +272,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { productsUpdateProduct } from "@paygentic/sdk/funcs/productsUpdateProduct.js";
+import { productsUpdate } from "@paygentic/sdk/funcs/productsUpdate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -281,7 +281,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await productsUpdateProduct(paygentic, {
+  const res = await productsUpdate(paygentic, {
     id: "<id>",
     requestBody: {},
   });
@@ -289,7 +289,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("productsUpdateProduct failed:", res.error);
+    console.log("productsUpdate failed:", res.error);
   }
 }
 

@@ -18,6 +18,22 @@ export type UpdateBillableMetricRequestBody = {
    * Updated measurement unit. Common examples: 'tokens', 'GB', 'requests', 'items', 'hours'
    */
   unit?: string | undefined;
+  /**
+   * CloudEvents type for meter routing.
+   */
+  eventType?: string | null | undefined;
+  /**
+   * JSONPath to extract numeric value from event data.
+   */
+  valueProperty?: string | null | undefined;
+  /**
+   * Map of dimension name to JSONPath for group-by queries.
+   */
+  groupBy?: { [k: string]: string } | null | undefined;
+  /**
+   * Only count events after this timestamp.
+   */
+  eventFrom?: Date | null | undefined;
 };
 
 export type UpdateBillableMetricRequest = {
@@ -30,6 +46,10 @@ export type UpdateBillableMetricRequestBody$Outbound = {
   description?: string | undefined;
   name?: string | undefined;
   unit?: string | undefined;
+  eventType?: string | null | undefined;
+  valueProperty?: string | null | undefined;
+  groupBy?: { [k: string]: string } | null | undefined;
+  eventFrom?: string | null | undefined;
 };
 
 /** @internal */
@@ -41,6 +61,10 @@ export const UpdateBillableMetricRequestBody$outboundSchema: z.ZodType<
   description: z.string().optional(),
   name: z.string().optional(),
   unit: z.string().optional(),
+  eventType: z.nullable(z.string()).optional(),
+  valueProperty: z.nullable(z.string()).optional(),
+  groupBy: z.nullable(z.record(z.string())).optional(),
+  eventFrom: z.nullable(z.date().transform(v => v.toISOString())).optional(),
 });
 
 export function updateBillableMetricRequestBodyToJSON(

@@ -6,13 +6,13 @@ A `Plan` links a collection of `Prices` to a `Product`. It functions as a pricin
 
 ### Available Operations
 
-* [createPlan](#createplan) - Create
-* [listPlans](#listplans) - List
-* [listAvailablePlans](#listavailableplans) - List Available Plans
-* [getPlan](#getplan) - Get
-* [updatePlan](#updateplan) - Update
+* [create](#create) - Create
+* [list](#list) - List
+* [listAvailable](#listavailable) - List Available Plans
+* [get](#get) - Get
+* [update](#update) - Update
 
-## createPlan
+## create
 
 Create
 
@@ -27,7 +27,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.plans.createPlan({
+  const result = await paygentic.plans.create({
     currency: "Won",
     merchantId: "<id>",
     name: "<value>",
@@ -45,7 +45,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { plansCreatePlan } from "@paygentic/sdk/funcs/plansCreatePlan.js";
+import { plansCreate } from "@paygentic/sdk/funcs/plansCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -54,7 +54,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await plansCreatePlan(paygentic, {
+  const res = await plansCreate(paygentic, {
     currency: "Won",
     merchantId: "<id>",
     name: "<value>",
@@ -63,7 +63,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("plansCreatePlan failed:", res.error);
+    console.log("plansCreate failed:", res.error);
   }
 }
 
@@ -93,7 +93,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listPlans
+## list
 
 List
 
@@ -108,7 +108,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.plans.listPlans({});
+  const result = await paygentic.plans.list({});
 
   console.log(result);
 }
@@ -122,7 +122,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { plansListPlans } from "@paygentic/sdk/funcs/plansListPlans.js";
+import { plansList } from "@paygentic/sdk/funcs/plansList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -131,12 +131,12 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await plansListPlans(paygentic, {});
+  const res = await plansList(paygentic, {});
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("plansListPlans failed:", res.error);
+    console.log("plansList failed:", res.error);
   }
 }
 
@@ -166,7 +166,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listAvailablePlans
+## listAvailable
 
 Retrieves all plans for a merchant that the customer does not have an active or pending subscription for. When a customer has a subscription for any plan within a product, all plans from that product are excluded.
 
@@ -181,7 +181,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.plans.listAvailablePlans({
+  const result = await paygentic.plans.listAvailable({
     customerId: "<id>",
   });
 
@@ -197,7 +197,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { plansListAvailablePlans } from "@paygentic/sdk/funcs/plansListAvailablePlans.js";
+import { plansListAvailable } from "@paygentic/sdk/funcs/plansListAvailable.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -206,14 +206,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await plansListAvailablePlans(paygentic, {
+  const res = await plansListAvailable(paygentic, {
     customerId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("plansListAvailablePlans failed:", res.error);
+    console.log("plansListAvailable failed:", res.error);
   }
 }
 
@@ -243,7 +243,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getPlan
+## get
 
 Get
 
@@ -258,7 +258,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.plans.getPlan({
+  const result = await paygentic.plans.get({
     id: "<id>",
   });
 
@@ -274,7 +274,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { plansGetPlan } from "@paygentic/sdk/funcs/plansGetPlan.js";
+import { plansGet } from "@paygentic/sdk/funcs/plansGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -283,14 +283,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await plansGetPlan(paygentic, {
+  const res = await plansGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("plansGetPlan failed:", res.error);
+    console.log("plansGet failed:", res.error);
   }
 }
 
@@ -320,7 +320,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## updatePlan
+## update
 
 Update
 
@@ -335,7 +335,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.plans.updatePlan({
+  const result = await paygentic.plans.update({
     id: "<id>",
     requestBody: {},
   });
@@ -352,7 +352,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { plansUpdatePlan } from "@paygentic/sdk/funcs/plansUpdatePlan.js";
+import { plansUpdate } from "@paygentic/sdk/funcs/plansUpdate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -361,7 +361,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await plansUpdatePlan(paygentic, {
+  const res = await plansUpdate(paygentic, {
     id: "<id>",
     requestBody: {},
   });
@@ -369,7 +369,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("plansUpdatePlan failed:", res.error);
+    console.log("plansUpdate failed:", res.error);
   }
 }
 

@@ -15,9 +15,12 @@ export type BillableMetricObject = ClosedEnum<typeof BillableMetricObject>;
 
 export const Aggregation = {
   Sum: "SUM",
-  Max: "MAX",
   Count: "COUNT",
-  CountUnique: "COUNT_UNIQUE",
+  Avg: "AVG",
+  Min: "MIN",
+  Max: "MAX",
+  UniqueCount: "UNIQUE_COUNT",
+  Latest: "LATEST",
 } as const;
 export type Aggregation = ClosedEnum<typeof Aggregation>;
 
@@ -41,6 +44,10 @@ export type BillableMetric = {
   productId: string;
   unit: string;
   updatedAt: Date;
+  eventType?: string | null | undefined;
+  valueProperty?: string | null | undefined;
+  groupBy?: { [k: string]: string } | null | undefined;
+  eventFrom?: Date | null | undefined;
 };
 
 /** @internal */
@@ -68,6 +75,12 @@ export const BillableMetric$inboundSchema: z.ZodType<
   productId: z.string(),
   unit: z.string(),
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  eventType: z.nullable(z.string()).optional(),
+  valueProperty: z.nullable(z.string()).optional(),
+  groupBy: z.nullable(z.record(z.string())).optional(),
+  eventFrom: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ).optional(),
 });
 
 export function billableMetricFromJSON(

@@ -6,14 +6,14 @@ A `Fee` defines a recurring or one-time charge tied to a `Product`. Fees are lin
 
 ### Available Operations
 
-* [createFee](#createfee) - Create
-* [listFees](#listfees) - List
-* [getFee](#getfee) - Get
-* [updateFee](#updatefee) - Update
-* [deleteFee](#deletefee) - Delete
-* [getFeePrice](#getfeeprice) - Get Fee Price
+* [create](#create) - Create
+* [list](#list) - List
+* [get](#get) - Get
+* [update](#update) - Update
+* [delete](#delete) - Delete
+* [getPrice](#getprice) - Get Fee Price
 
-## createFee
+## create
 
 Create a new fee for a merchant organization. A `Fee` represents a charge that can be applied to subscriptions. Cadence is defined when creating a Price for the fee.
 
@@ -28,7 +28,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.fees.createFee({
+  const result = await paygentic.fees.create({
     name: "<value>",
     description: "obnoxiously boldly that fort as minus bob adventurously",
     merchantId: "<id>",
@@ -47,7 +47,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { feesCreateFee } from "@paygentic/sdk/funcs/feesCreateFee.js";
+import { feesCreate } from "@paygentic/sdk/funcs/feesCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -56,7 +56,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await feesCreateFee(paygentic, {
+  const res = await feesCreate(paygentic, {
     name: "<value>",
     description: "obnoxiously boldly that fort as minus bob adventurously",
     merchantId: "<id>",
@@ -66,7 +66,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("feesCreateFee failed:", res.error);
+    console.log("feesCreate failed:", res.error);
   }
 }
 
@@ -96,7 +96,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listFees
+## list
 
 List
 
@@ -111,7 +111,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.fees.listFees({
+  const result = await paygentic.fees.list({
     merchantId: "<id>",
   });
 
@@ -127,7 +127,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { feesListFees } from "@paygentic/sdk/funcs/feesListFees.js";
+import { feesList } from "@paygentic/sdk/funcs/feesList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -136,14 +136,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await feesListFees(paygentic, {
+  const res = await feesList(paygentic, {
     merchantId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("feesListFees failed:", res.error);
+    console.log("feesList failed:", res.error);
   }
 }
 
@@ -171,7 +171,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getFee
+## get
 
 Get
 
@@ -186,7 +186,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.fees.getFee({
+  const result = await paygentic.fees.get({
     id: "<id>",
   });
 
@@ -202,7 +202,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { feesGetFee } from "@paygentic/sdk/funcs/feesGetFee.js";
+import { feesGet } from "@paygentic/sdk/funcs/feesGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -211,14 +211,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await feesGetFee(paygentic, {
+  const res = await feesGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("feesGetFee failed:", res.error);
+    console.log("feesGet failed:", res.error);
   }
 }
 
@@ -246,7 +246,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## updateFee
+## update
 
 Update
 
@@ -261,7 +261,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.fees.updateFee({
+  const result = await paygentic.fees.update({
     id: "<id>",
     requestBody: {},
   });
@@ -278,7 +278,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { feesUpdateFee } from "@paygentic/sdk/funcs/feesUpdateFee.js";
+import { feesUpdate } from "@paygentic/sdk/funcs/feesUpdate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -287,7 +287,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await feesUpdateFee(paygentic, {
+  const res = await feesUpdate(paygentic, {
     id: "<id>",
     requestBody: {},
   });
@@ -295,7 +295,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("feesUpdateFee failed:", res.error);
+    console.log("feesUpdate failed:", res.error);
   }
 }
 
@@ -323,7 +323,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## deleteFee
+## delete
 
 Delete
 
@@ -338,7 +338,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  await paygentic.fees.deleteFee({
+  await paygentic.fees.delete({
     id: "<id>",
   });
 
@@ -354,7 +354,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { feesDeleteFee } from "@paygentic/sdk/funcs/feesDeleteFee.js";
+import { feesDelete } from "@paygentic/sdk/funcs/feesDelete.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -363,14 +363,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await feesDeleteFee(paygentic, {
+  const res = await feesDelete(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     
   } else {
-    console.log("feesDeleteFee failed:", res.error);
+    console.log("feesDelete failed:", res.error);
   }
 }
 
@@ -399,7 +399,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getFeePrice
+## getPrice
 
 Get the price for a fee in the context of a subscription. This returns the price configured for the fee in the subscription's plan, including the tax rate.
 
@@ -414,7 +414,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.fees.getFeePrice({
+  const result = await paygentic.fees.getPrice({
     id: "<id>",
     subscriptionId: "<id>",
   });
@@ -431,7 +431,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { feesGetFeePrice } from "@paygentic/sdk/funcs/feesGetFeePrice.js";
+import { feesGetPrice } from "@paygentic/sdk/funcs/feesGetPrice.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -440,7 +440,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await feesGetFeePrice(paygentic, {
+  const res = await feesGetPrice(paygentic, {
     id: "<id>",
     subscriptionId: "<id>",
   });
@@ -448,7 +448,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("feesGetFeePrice failed:", res.error);
+    console.log("feesGetPrice failed:", res.error);
   }
 }
 

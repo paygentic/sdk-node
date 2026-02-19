@@ -2,106 +2,284 @@ overlay: 1.0.0
 x-speakeasy-jsonpath: rfc9535
 info:
   title: Speakeasy Modifications
-  version: 0.0.2
+  version: 0.0.3
   x-speakeasy-metadata:
     after: ""
     before: ""
     type: speakeasy-modifications
 actions:
-  - target: $["paths"]["/sources/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.sources.get()
-      before: sdk.Sources.getSource()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/billableMetrics/{id}/price/{subscriptionId}"]["get"]
+  # ── billableMetrics ──────────────────────────────────────────────────
+  - target: $["paths"]["/v0/billableMetrics"]["get"]
     update:
       x-speakeasy-group: billableMetrics
-      x-speakeasy-name-override: getPrice
+      x-speakeasy-name-override: list
     x-speakeasy-metadata:
-      after: sdk.billableMetrics.getPrice()
-      before: sdk.Billable Metrics.getBillableMetricPrice()
+      after: sdk.billableMetrics.list()
+      before: sdk.BillableMetrics.listBillableMetrics()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/subscriptions/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.subscriptions.get()
-      before: sdk.Subscriptions.getSubscription()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/prices/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.prices.get()
-      before: sdk.Prices.getPrice()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sourceRules/{ruleId}"]["patch"]
-    update:
-      x-speakeasy-name-override: updateRule
-    x-speakeasy-metadata:
-      after: sdk.sources.updateRule()
-      before: sdk.Sources.updateSourceRule()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/billableMetrics/{id}/priceByCustomer/{customerId}"]["get"]
+  - target: $["paths"]["/v0/billableMetrics"]["post"]
     update:
       x-speakeasy-group: billableMetrics
-      x-speakeasy-name-override: getPriceLegacy
+      x-speakeasy-name-override: create
     x-speakeasy-metadata:
-      after: sdk.billableMetrics.getPriceLegacy()
-      before: sdk.Billable Metrics.getBillableMetricPriceLegacy()
+      after: sdk.billableMetrics.create()
+      before: sdk.BillableMetrics.createBillableMetric()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/sources/{id}/events/{eventId}/reject"]["post"]
-    update:
-      x-speakeasy-name-override: rejectEvent
-    x-speakeasy-metadata:
-      after: sdk.sources.rejectEvent()
-      before: sdk.Sources.rejectSourceEvent()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/billableMetrics/{id}"]["get"]
+  - target: $["paths"]["/v0/billableMetrics/{id}"]["get"]
     update:
       x-speakeasy-group: billableMetrics
       x-speakeasy-name-override: get
     x-speakeasy-metadata:
       after: sdk.billableMetrics.get()
-      before: sdk.Billable Metrics.getBillableMetric()
+      before: sdk.BillableMetrics.getBillableMetric()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/sourceRules"]["get"]
+  - target: $["paths"]["/v0/billableMetrics/{id}"]["patch"]
     update:
-      x-speakeasy-name-override: listRules
+      x-speakeasy-group: billableMetrics
+      x-speakeasy-name-override: update
     x-speakeasy-metadata:
-      after: sdk.sources.listRules()
-      before: sdk.Sources.listSourceRules()
+      after: sdk.billableMetrics.update()
+      before: sdk.BillableMetrics.updateBillableMetric()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/prices/{id}"]["patch"]
+
+  # ── customers ────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/customers"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.customers.list()
+      before: sdk.Customers.listCustomers()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/customers"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.customers.create()
+      before: sdk.Customers.createCustomer()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/customers/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.customers.get()
+      before: sdk.Customers.getCustomer()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/customers/{id}"]["patch"]
     update:
       x-speakeasy-name-override: update
     x-speakeasy-metadata:
-      after: sdk.prices.update()
-      before: sdk.Prices.updatePrice()
+      after: sdk.customers.update()
+      before: sdk.Customers.updateCustomer()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── disputes ─────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/disputes"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.disputes.list()
+      before: sdk.Disputes.listDisputes()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/plans"]["post"]
+  - target: $["paths"]["/v0/disputes"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.disputes.create()
+      before: sdk.Disputes.createDispute()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+
+  # ── entitlements ─────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/entitlements"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.entitlements.create()
+      before: sdk.Entitlements.createEntitlement()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/entitlements/activeEntitlements"]["get"]
+    update:
+      x-speakeasy-name-override: listActive
+    x-speakeasy-metadata:
+      after: sdk.entitlements.listActive()
+      before: sdk.Entitlements.getActiveEntitlements()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v1/entitlements"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.entitlements.list()
+      before: sdk.Entitlements.listEntitlements()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── features ─────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/features"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.features.list()
+      before: sdk.Features.listFeatures()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/features"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.features.create()
+      before: sdk.Features.createFeature()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/features/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.features.get()
+      before: sdk.Features.getFeature()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/features/{id}"]["patch"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.features.update()
+      before: sdk.Features.updateFeature()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/features/{id}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.features.delete()
+      before: sdk.Features.deleteFeature()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── fees ─────────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/fees"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.fees.create()
+      before: sdk.Fees.createFee()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/fees"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.fees.list()
+      before: sdk.Fees.listFees()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/fees/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.fees.get()
+      before: sdk.Fees.getFee()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/fees/{id}"]["patch"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.fees.update()
+      before: sdk.Fees.updateFee()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/fees/{id}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.fees.delete()
+      before: sdk.Fees.deleteFee()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/fees/{id}/price/{subscriptionId}"]["get"]
+    update:
+      x-speakeasy-name-override: getPrice
+    x-speakeasy-metadata:
+      after: sdk.fees.getPrice()
+      before: sdk.Fees.getFeePrice()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── invoicesV2 ───────────────────────────────────────────────────────
+  - target: $["paths"]["/v2/invoices"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.invoicesV2.list()
+      before: sdk.InvoicesV2.listInvoices()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v2/invoices/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.invoicesV2.get()
+      before: sdk.InvoicesV2.getInvoice()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v2/invoices/{id}/lineItems"]["get"]
+    update:
+      x-speakeasy-name-override: getLineItems
+    x-speakeasy-metadata:
+      after: sdk.invoicesV2.getLineItems()
+      before: sdk.InvoicesV2.getInvoiceLineItems()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── plans ────────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/plans"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.plans.list()
+      before: sdk.Plans.listPlans()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/plans"]["post"]
     update:
       x-speakeasy-name-override: create
     x-speakeasy-metadata:
@@ -110,43 +288,210 @@ actions:
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/payouts/config/methods"]["get"]
-    update:
-      x-speakeasy-name-override: listMethods
-    x-speakeasy-metadata:
-      after: sdk.payouts.listMethods()
-      before: sdk.Payouts.getPayoutMethods()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/payouts/{id}"]["get"]
+  - target: $["paths"]["/v0/plans/{id}"]["get"]
     update:
       x-speakeasy-name-override: get
     x-speakeasy-metadata:
-      after: sdk.payouts.get()
-      before: sdk.Payouts.getPayoutById()
+      after: sdk.plans.get()
+      before: sdk.Plans.getPlan()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/sources/{id}/events/bulk-approve"]["post"]
+  - target: $["paths"]["/v0/plans/{id}"]["patch"]
     update:
-      x-speakeasy-name-override: bulkApproveEvents
+      x-speakeasy-name-override: update
     x-speakeasy-metadata:
-      after: sdk.sources.bulkApproveEvents()
+      after: sdk.plans.update()
+      before: sdk.Plans.updatePlan()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/plans/available"]["get"]
+    update:
+      x-speakeasy-name-override: listAvailable
+    x-speakeasy-metadata:
+      after: sdk.plans.listAvailable()
+      before: sdk.Plans.listAvailablePlans()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── prices ───────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/prices"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.prices.list()
+      before: sdk.Prices.listPrices()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/prices"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.prices.create()
+      before: sdk.Prices.createPrice()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/prices/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.prices.get()
+      before: sdk.Prices.getPrice()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/prices/{id}"]["patch"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.prices.update()
+      before: sdk.Prices.updatePrice()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/prices/{id}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.prices.delete()
+      before: sdk.Prices.deletePrice()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── products ─────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/products"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.products.list()
+      before: sdk.Products.listProducts()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/products"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.products.create()
+      before: sdk.Products.createProduct()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/products/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.products.get()
+      before: sdk.Products.getProduct()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/products/{id}"]["patch"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.products.update()
+      before: sdk.Products.updateProduct()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+
+  # ── revenue ──────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/revenue"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.revenue.get()
+      before: sdk.Revenue.getRevenue()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── sources ──────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/sources"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.sources.list()
+      before: sdk.Sources.listSources()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sources"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.sources.create()
+      before: sdk.Sources.createSource()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sources/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.sources.get()
+      before: sdk.Sources.getSource()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sources/{id}"]["patch"]
+    update:
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.sources.update()
+      before: sdk.Sources.updateSource()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+
+  # ── sources.events ───────────────────────────────────────────────────
+  - target: $["paths"]["/v0/sources/{id}/events"]["get"]
+    update:
+      x-speakeasy-group: sources.events
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.sources.events.list()
+      before: sdk.Sources.listSourceEvents()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sources/{id}/events/{eventId}/approve"]["post"]
+    update:
+      x-speakeasy-group: sources.events
+      x-speakeasy-name-override: approve
+    x-speakeasy-metadata:
+      after: sdk.sources.events.approve()
+      before: sdk.Sources.approveSourceEvent()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sources/{id}/events/{eventId}/reject"]["post"]
+    update:
+      x-speakeasy-group: sources.events
+      x-speakeasy-name-override: reject
+    x-speakeasy-metadata:
+      after: sdk.sources.events.reject()
+      before: sdk.Sources.rejectSourceEvent()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sources/{id}/events/bulk-approve"]["post"]
+    update:
+      x-speakeasy-group: sources.events
+      x-speakeasy-name-override: bulkApprove
+    x-speakeasy-metadata:
+      after: sdk.sources.events.bulkApprove()
       before: sdk.Sources.bulkApproveSourceEvents()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/subscriptions"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.subscriptions.list()
-      before: sdk.Subscriptions.listSubscriptions()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sources/{id}/events/bulk-reject"]["post"]
+  - target: $["paths"]["/v0/sources/{id}/events/bulk-reject"]["post"]
     update:
       x-speakeasy-group: sources.events
       x-speakeasy-name-override: bulkReject
@@ -156,35 +501,198 @@ actions:
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/disputes"]["get"]
+
+  # ── sources.rules ────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/sourceRules"]["get"]
+    update:
+      x-speakeasy-group: sources.rules
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.sources.rules.list()
+      before: sdk.Sources.listSourceRules()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sourceRules"]["post"]
+    update:
+      x-speakeasy-group: sources.rules
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.sources.rules.create()
+      before: sdk.Sources.createSourceRule()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sourceRules/{ruleId}"]["get"]
+    update:
+      x-speakeasy-group: sources.rules
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.sources.rules.get()
+      before: sdk.Sources.getSourceRule()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sourceRules/{ruleId}"]["patch"]
+    update:
+      x-speakeasy-group: sources.rules
+      x-speakeasy-name-override: update
+    x-speakeasy-metadata:
+      after: sdk.sources.rules.update()
+      before: sdk.Sources.updateSourceRule()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/sourceRules/{ruleId}"]["delete"]
+    update:
+      x-speakeasy-group: sources.rules
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.sources.rules.delete()
+      before: sdk.Sources.deleteSourceRule()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+
+  # ── subscriptions ────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/subscriptions"]["get"]
     update:
       x-speakeasy-name-override: list
     x-speakeasy-metadata:
-      after: sdk.disputes.list()
-      before: sdk.Disputes.listDisputes()
+      after: sdk.subscriptions.list()
+      before: sdk.Subscriptions.listSubscriptions()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/sources/{id}/events"]["get"]
+  - target: $["paths"]["/v0/subscriptions"]["post"]
     update:
-      x-speakeasy-name-override: listEvents
+      x-speakeasy-name-override: create
     x-speakeasy-metadata:
-      after: sdk.sources.listEvents()
-      before: sdk.Sources.listSourceEvents()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
+      after: sdk.subscriptions.create()
+      before: sdk.Subscriptions.createSubscription()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
       type: method-name
-  - target: $["paths"]["/externalAccounts/{id}"]["patch"]
+  - target: $["paths"]["/v0/subscriptions/{id}"]["get"]
     update:
-      x-speakeasy-group: externalBankAccounts
-      x-speakeasy-name-override: update
+      x-speakeasy-name-override: get
     x-speakeasy-metadata:
-      after: sdk.externalBankAccounts.update()
-      before: sdk.External Bank Accounts.updateExternalBankAccount()
+      after: sdk.subscriptions.get()
+      before: sdk.Subscriptions.getSubscription()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/users/{id}"]["get"]
+  - target: $["paths"]["/v0/subscriptions/{id}/termination"]["post"]
+    update:
+      x-speakeasy-name-override: terminate
+    x-speakeasy-metadata:
+      after: sdk.subscriptions.terminate()
+      before: sdk.Subscriptions.terminateSubscription()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── testClocks ───────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/testClocks"]["get"]
+    update:
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.testClocks.list()
+      before: sdk.TestClocks.listTestClocks()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/testClocks"]["post"]
+    update:
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.testClocks.create()
+      before: sdk.TestClocks.createTestClock()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/testClocks/{id}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.testClocks.get()
+      before: sdk.TestClocks.getTestClock()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/testClocks/{id}"]["patch"]
+    update:
+      x-speakeasy-name-override: advance
+    x-speakeasy-metadata:
+      after: sdk.testClocks.advance()
+      before: sdk.TestClocks.advanceTestClock()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/testClocks/{id}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.testClocks.delete()
+      before: sdk.TestClocks.deleteTestClock()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+
+  # ── usageEvents ──────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/usage"]["get"]
+    update:
+      x-speakeasy-group: usageEvents
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.usageEvents.list()
+      before: sdk.UsageEvents.listUsageEvents()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/usage"]["post"]
+    update:
+      x-speakeasy-group: usageEvents
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.usageEvents.create()
+      before: sdk.UsageEvents.createUsageEvent()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/usage/{id}"]["get"]
+    update:
+      x-speakeasy-group: usageEvents
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.usageEvents.get()
+      before: sdk.UsageEvents.getUsageEvent()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+  - target: $["paths"]["/v0/usage/{id}"]["patch"]
+    update:
+      x-speakeasy-group: usageEvents
+      x-speakeasy-name-override: refund
+    x-speakeasy-metadata:
+      after: sdk.usageEvents.refund()
+      before: sdk.UsageEvents.refundUsageEvent()
+      created_at: 1739148565008
+      reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v0/usage/batch"]["post"]
+    update:
+      x-speakeasy-group: usageEvents
+      x-speakeasy-name-override: batchCreate
+    x-speakeasy-metadata:
+      after: sdk.usageEvents.batchCreate()
+      before: sdk.UsageEvents.batchCreateUsageEvents()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
+
+  # ── users ────────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/users/{id}"]["get"]
     update:
       x-speakeasy-name-override: get
     x-speakeasy-metadata:
@@ -193,392 +701,12 @@ actions:
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
-  - target: $["paths"]["/billableMetrics"]["post"]
-    update:
-      x-speakeasy-group: billableMetrics
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.billableMetrics.create()
-      before: sdk.Billable Metrics.createBillableMetric()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/merchants/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.merchants.get()
-      before: sdk.Merchants.getMerchant()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/plans/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.plans.get()
-      before: sdk.Plans.getPlan()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sources/{id}/events/{eventId}/approve"]["post"]
-    update:
-      x-speakeasy-name-override: approveEvent
-    x-speakeasy-metadata:
-      after: sdk.sources.approveEvent()
-      before: sdk.Sources.approveSourceEvent()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/usage"]["get"]
-    update:
-      x-speakeasy-group: usageEvents
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.usageEvents.list()
-      before: sdk.Usage Events.listUsageEvents()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/consumers/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.consumers.get()
-      before: sdk.Consumers.getConsumer()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/products"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.products.list()
-      before: sdk.Products.listProducts()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/prices"]["post"]
-    update:
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.prices.create()
-      before: sdk.Prices.createPrice()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/products"]["post"]
-    update:
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.products.create()
-      before: sdk.Products.createProduct()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/usage/batch"]["post"]
-    update:
-      x-speakeasy-group: usageEvents
-      x-speakeasy-name-override: batchCreate
-    x-speakeasy-metadata:
-      after: sdk.usageEvents.batchCreate()
-      before: sdk.Usage Events.batchCreateUsageEvents()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/wallets/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.wallets.get()
-      before: sdk.Wallets.getWallet()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/wallets"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.wallets.list()
-      before: sdk.Wallets.listWallets()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/products/{id}"]["patch"]
-    update:
-      x-speakeasy-name-override: update
-    x-speakeasy-metadata:
-      after: sdk.products.update()
-      before: sdk.Products.updateProduct()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/prices"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.prices.list()
-      before: sdk.Prices.listPrices()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/wallets/{walletId}/topups/{topupId}"]["get"]
-    update:
-      x-speakeasy-name-override: getTopup
-    x-speakeasy-metadata:
-      after: sdk.wallets.getTopup()
-      before: sdk.Wallets.getWalletTopup()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/plans"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.plans.list()
-      before: sdk.Plans.listPlans()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/billableMetrics"]["get"]
-    update:
-      x-speakeasy-group: billableMetrics
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.billableMetrics.list()
-      before: sdk.Billable Metrics.listBillableMetrics()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sourceRules"]["post"]
-    update:
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.sources.create()
-      before: sdk.Sources.createSourceRule()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/payouts"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.payouts.list()
-      before: sdk.Payouts.listPayouts()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/customers"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.customers.list()
-      before: sdk.Customers.listCustomers()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/externalAccounts/{id}"]["get"]
-    update:
-      x-speakeasy-group: externalBankAccounts
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.externalBankAccounts.get()
-      before: sdk.External Bank Accounts.getExternalBankAccount()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/disputes"]["post"]
-    update:
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.disputes.create()
-      before: sdk.Disputes.createDispute()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sources/{id}"]["patch"]
-    update:
-      x-speakeasy-name-override: update
-    x-speakeasy-metadata:
-      after: sdk.sources.update()
-      before: sdk.Sources.updateSource()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/externalAccounts/{id}"]["delete"]
-    update:
-      x-speakeasy-group: externalBankAccounts
-      x-speakeasy-name-override: delete
-    x-speakeasy-metadata:
-      after: sdk.externalBankAccounts.delete()
-      before: sdk.External Bank Accounts.deleteExternalBankAccount()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/users/{id}"]["patch"]
+  - target: $["paths"]["/v0/users/{id}"]["patch"]
     update:
       x-speakeasy-name-override: update
     x-speakeasy-metadata:
       after: sdk.users.update()
       before: sdk.Users.updateUser()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sources"]["post"]
-    update:
-      x-speakeasy-name-override: add
-    x-speakeasy-metadata:
-      after: sdk.sources.add()
-      before: sdk.Sources.createSource()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sources"]["get"]
-    update:
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.sources.list()
-      before: sdk.Sources.listSources()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/billableMetrics/{id}"]["patch"]
-    update:
-      x-speakeasy-group: billableMetrics
-      x-speakeasy-name-override: update
-    x-speakeasy-metadata:
-      after: sdk.billableMetrics.update()
-      before: sdk.Billable Metrics.updateBillableMetric()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/customers"]["post"]
-    update:
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.customers.create()
-      before: sdk.Customers.createCustomer()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/usage"]["post"]
-    update:
-      x-speakeasy-group: usageEvents
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.usageEvents.create()
-      before: sdk.Usage Events.createUsageEvent()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/usage/{id}"]["get"]
-    update:
-      x-speakeasy-group: usageEvents
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.usageEvents.get()
-      before: sdk.Usage Events.getUsageEvent()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/wallets/{walletId}/topups"]["get"]
-    update:
-      x-speakeasy-name-override: listTopups
-    x-speakeasy-metadata:
-      after: sdk.wallets.listTopups()
-      before: sdk.Wallets.listWalletTopups()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/customers/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.customers.get()
-      before: sdk.Customers.getCustomer()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/plans/{id}"]["patch"]
-    update:
-      x-speakeasy-name-override: update
-    x-speakeasy-metadata:
-      after: sdk.plans.update()
-      before: sdk.Plans.updatePlan()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/entitlements"]["post"]
-    update:
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.entitlements.create()
-      before: sdk.Entitlements.createEntitlement()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/wallets/{walletId}/topups"]["post"]
-    update:
-      x-speakeasy-name-override: createTopup
-    x-speakeasy-metadata:
-      after: sdk.wallets.createTopup()
-      before: sdk.Wallets.createWalletTopup()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/products/{id}"]["get"]
-    update:
-      x-speakeasy-name-override: get
-    x-speakeasy-metadata:
-      after: sdk.products.get()
-      before: sdk.Products.getProduct()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/entitlements/activeEntitlements"]["get"]
-    update:
-      x-speakeasy-name-override: listActive
-    x-speakeasy-metadata:
-      after: sdk.entitlements.listActive()
-      before: sdk.Entitlements.getActiveEntitlements()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sourceRules/{ruleId}"]["delete"]
-    update:
-      x-speakeasy-name-override: delete
-    x-speakeasy-metadata:
-      after: sdk.sources.delete()
-      before: sdk.Sources.deleteSourceRule()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/externalAccounts"]["post"]
-    update:
-      x-speakeasy-group: externalBankAccounts
-      x-speakeasy-name-override: create
-    x-speakeasy-metadata:
-      after: sdk.externalBankAccounts.create()
-      before: sdk.External Bank Accounts.createExternalBankAccount()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/externalAccounts"]["get"]
-    update:
-      x-speakeasy-group: externalBankAccounts
-      x-speakeasy-name-override: list
-    x-speakeasy-metadata:
-      after: sdk.externalBankAccounts.list()
-      before: sdk.External Bank Accounts.listExternalBankAccounts()
-      created_at: 1759148565008
-      reviewed_at: 1759148608352
-      type: method-name
-  - target: $["paths"]["/sourceRules/{ruleId}"]["get"]
-    update:
-      x-speakeasy-name-override: getRule
-    x-speakeasy-metadata:
-      after: sdk.sources.getRule()
-      before: sdk.Sources.getSourceRule()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name

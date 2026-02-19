@@ -6,11 +6,11 @@ An `Entitlement` grants a customer the right to access and use a specific produc
 
 ### Available Operations
 
-* [getActiveEntitlements](#getactiveentitlements) - List by Customer
-* [createEntitlement](#createentitlement) - Create
-* [listEntitlements](#listentitlements) - List Entitlements
+* [listActive](#listactive) - List by Customer
+* [create](#create) - Create
+* [list](#list) - List Entitlements
 
-## getActiveEntitlements
+## listActive
 
 List by Customer
 
@@ -25,7 +25,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.entitlements.getActiveEntitlements({
+  const result = await paygentic.entitlements.listActive({
     customerId: "<id>",
   });
 
@@ -41,7 +41,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { entitlementsGetActiveEntitlements } from "@paygentic/sdk/funcs/entitlementsGetActiveEntitlements.js";
+import { entitlementsListActive } from "@paygentic/sdk/funcs/entitlementsListActive.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -50,14 +50,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await entitlementsGetActiveEntitlements(paygentic, {
+  const res = await entitlementsListActive(paygentic, {
     customerId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("entitlementsGetActiveEntitlements failed:", res.error);
+    console.log("entitlementsListActive failed:", res.error);
   }
 }
 
@@ -87,7 +87,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## createEntitlement
+## create
 
 Create an entitlement for a customer. This temporarily reserves funds in the customer's wallet to guarantee payment for future usage.
 
@@ -102,7 +102,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.entitlements.createEntitlement({
+  const result = await paygentic.entitlements.create({
     customerId: "<id>",
     entitlementData: [],
     merchantId: "<id>",
@@ -120,7 +120,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { entitlementsCreateEntitlement } from "@paygentic/sdk/funcs/entitlementsCreateEntitlement.js";
+import { entitlementsCreate } from "@paygentic/sdk/funcs/entitlementsCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -129,7 +129,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await entitlementsCreateEntitlement(paygentic, {
+  const res = await entitlementsCreate(paygentic, {
     customerId: "<id>",
     entitlementData: [],
     merchantId: "<id>",
@@ -138,7 +138,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("entitlementsCreateEntitlement failed:", res.error);
+    console.log("entitlementsCreate failed:", res.error);
   }
 }
 
@@ -168,7 +168,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listEntitlements
+## list
 
 Retrieve all entitlements for a customer, optionally filtered by feature or product.
 
@@ -183,7 +183,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.entitlements.listEntitlements({
+  const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
 
@@ -199,7 +199,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { entitlementsListEntitlements } from "@paygentic/sdk/funcs/entitlementsListEntitlements.js";
+import { entitlementsList } from "@paygentic/sdk/funcs/entitlementsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -208,14 +208,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await entitlementsListEntitlements(paygentic, {
+  const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("entitlementsListEntitlements failed:", res.error);
+    console.log("entitlementsList failed:", res.error);
   }
 }
 
@@ -232,7 +232,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.entitlements.listEntitlements({
+  const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
 
@@ -248,7 +248,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { entitlementsListEntitlements } from "@paygentic/sdk/funcs/entitlementsListEntitlements.js";
+import { entitlementsList } from "@paygentic/sdk/funcs/entitlementsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -257,14 +257,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await entitlementsListEntitlements(paygentic, {
+  const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("entitlementsListEntitlements failed:", res.error);
+    console.log("entitlementsList failed:", res.error);
   }
 }
 
@@ -281,7 +281,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.entitlements.listEntitlements({
+  const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
 
@@ -297,7 +297,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { entitlementsListEntitlements } from "@paygentic/sdk/funcs/entitlementsListEntitlements.js";
+import { entitlementsList } from "@paygentic/sdk/funcs/entitlementsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -306,14 +306,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await entitlementsListEntitlements(paygentic, {
+  const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("entitlementsListEntitlements failed:", res.error);
+    console.log("entitlementsList failed:", res.error);
   }
 }
 
@@ -330,7 +330,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.entitlements.listEntitlements({
+  const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
 
@@ -346,7 +346,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { entitlementsListEntitlements } from "@paygentic/sdk/funcs/entitlementsListEntitlements.js";
+import { entitlementsList } from "@paygentic/sdk/funcs/entitlementsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -355,14 +355,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await entitlementsListEntitlements(paygentic, {
+  const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("entitlementsListEntitlements failed:", res.error);
+    console.log("entitlementsList failed:", res.error);
   }
 }
 

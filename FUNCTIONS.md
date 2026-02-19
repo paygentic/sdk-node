@@ -20,7 +20,7 @@ specific category of applications.
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { billableMetricsCreateBillableMetric } from "@paygentic/sdk/funcs/billableMetricsCreateBillableMetric.js";
+import { billableMetricsCreate } from "@paygentic/sdk/funcs/billableMetricsCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -29,7 +29,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await billableMetricsCreateBillableMetric(paygentic, {
+  const res = await billableMetricsCreate(paygentic, {
     aggregation: "SUM",
     description: "other gracefully hold",
     merchantId: "<id>",
@@ -41,7 +41,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("billableMetricsCreateBillableMetric failed:", res.error);
+    console.log("billableMetricsCreate failed:", res.error);
   }
 }
 

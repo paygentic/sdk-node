@@ -1,6 +1,6 @@
 
 <div align="center">
-    <a href="https://codespaces.new/paygentic/paygentic.git/tree/main"><img src="https://github.com/codespaces/badge.svg" /></a>
+    <a href="https://codespaces.new/paygentic/sdk-node.git/tree/main"><img src="https://github.com/codespaces/badge.svg" /></a>
 </div>
 <br>
 

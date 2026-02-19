@@ -2,17 +2,15 @@
 
 ## Overview
 
-A `Usage Event` records consumption activity for one or more `Billable Metrics`. It captures event details including consumption quantity and when it occurred.
-
 ### Available Operations
 
-* [createUsageEvent](#createusageevent) - Create
-* [listUsageEvents](#listusageevents) - List
-* [getUsageEvent](#getusageevent) - Get
-* [refundUsageEvent](#refundusageevent) - Refund
-* [batchCreateUsageEvents](#batchcreateusageevents) - Batch Create
+* [create](#create) - Create
+* [list](#list) - List
+* [get](#get) - Get
+* [refund](#refund) - Refund
+* [batchCreate](#batchcreate) - Batch Create
 
-## createUsageEvent
+## create
 
 Creates a usage event. The idempotencyKey is used to ensure the event is processed only once by downstream consumers, even if the same event is submitted multiple times. Duplicate submissions will be accepted and return the same response.
 
@@ -27,7 +25,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.usageEvents.createUsageEvent({
+  const result = await paygentic.usageEvents.create({
     customerId: "<id>",
     idempotencyKey: "<value>",
     merchantId: "<id>",
@@ -52,7 +50,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { usageEventsCreateUsageEvent } from "@paygentic/sdk/funcs/usageEventsCreateUsageEvent.js";
+import { usageEventsCreate } from "@paygentic/sdk/funcs/usageEventsCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -61,7 +59,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await usageEventsCreateUsageEvent(paygentic, {
+  const res = await usageEventsCreate(paygentic, {
     customerId: "<id>",
     idempotencyKey: "<value>",
     merchantId: "<id>",
@@ -77,7 +75,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("usageEventsCreateUsageEvent failed:", res.error);
+    console.log("usageEventsCreate failed:", res.error);
   }
 }
 
@@ -107,7 +105,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## listUsageEvents
+## list
 
 List
 
@@ -122,7 +120,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.usageEvents.listUsageEvents({
+  const result = await paygentic.usageEvents.list({
     endTime: new Date("2023-02-04T03:47:15.138Z"),
     startTime: new Date("2025-03-29T00:23:32.822Z"),
   });
@@ -139,7 +137,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { usageEventsListUsageEvents } from "@paygentic/sdk/funcs/usageEventsListUsageEvents.js";
+import { usageEventsList } from "@paygentic/sdk/funcs/usageEventsList.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -148,7 +146,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await usageEventsListUsageEvents(paygentic, {
+  const res = await usageEventsList(paygentic, {
     endTime: new Date("2023-02-04T03:47:15.138Z"),
     startTime: new Date("2025-03-29T00:23:32.822Z"),
   });
@@ -156,7 +154,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("usageEventsListUsageEvents failed:", res.error);
+    console.log("usageEventsList failed:", res.error);
   }
 }
 
@@ -186,7 +184,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## getUsageEvent
+## get
 
 Get
 
@@ -201,7 +199,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.usageEvents.getUsageEvent({
+  const result = await paygentic.usageEvents.get({
     id: "<id>",
   });
 
@@ -217,7 +215,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { usageEventsGetUsageEvent } from "@paygentic/sdk/funcs/usageEventsGetUsageEvent.js";
+import { usageEventsGet } from "@paygentic/sdk/funcs/usageEventsGet.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -226,14 +224,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await usageEventsGetUsageEvent(paygentic, {
+  const res = await usageEventsGet(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("usageEventsGetUsageEvent failed:", res.error);
+    console.log("usageEventsGet failed:", res.error);
   }
 }
 
@@ -261,7 +259,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## refundUsageEvent
+## refund
 
 Marks a usage event as refunded. This reverts the consumption recorded by the usage event and creates a corresponding refund billing event if the usage event was already billed.
 
@@ -276,7 +274,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.usageEvents.refundUsageEvent({
+  const result = await paygentic.usageEvents.refund({
     id: "<id>",
     requestBody: {
       refunded: false,
@@ -295,7 +293,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { usageEventsRefundUsageEvent } from "@paygentic/sdk/funcs/usageEventsRefundUsageEvent.js";
+import { usageEventsRefund } from "@paygentic/sdk/funcs/usageEventsRefund.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -304,7 +302,7 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await usageEventsRefundUsageEvent(paygentic, {
+  const res = await usageEventsRefund(paygentic, {
     id: "<id>",
     requestBody: {
       refunded: false,
@@ -314,7 +312,7 @@ async function run() {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("usageEventsRefundUsageEvent failed:", res.error);
+    console.log("usageEventsRefund failed:", res.error);
   }
 }
 
@@ -344,7 +342,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## batchCreateUsageEvents
+## batchCreate
 
 Creates multiple usage events in a single request. The idempotencyKey for each event is used to ensure the event is processed only once by downstream consumers, even if the same event is submitted multiple times. Duplicate submissions will be accepted and return the same response.
 
@@ -359,7 +357,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  const result = await paygentic.usageEvents.batchCreateUsageEvents({
+  const result = await paygentic.usageEvents.batchCreate({
     events: [],
   });
 
@@ -375,7 +373,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { usageEventsBatchCreateUsageEvents } from "@paygentic/sdk/funcs/usageEventsBatchCreateUsageEvents.js";
+import { usageEventsBatchCreate } from "@paygentic/sdk/funcs/usageEventsBatchCreate.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -384,14 +382,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await usageEventsBatchCreateUsageEvents(paygentic, {
+  const res = await usageEventsBatchCreate(paygentic, {
     events: [],
   });
   if (res.ok) {
     const { value: result } = res;
     console.log(result);
   } else {
-    console.log("usageEventsBatchCreateUsageEvents failed:", res.error);
+    console.log("usageEventsBatchCreate failed:", res.error);
   }
 }
 

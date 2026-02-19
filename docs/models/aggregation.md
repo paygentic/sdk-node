@@ -5,11 +5,11 @@
 ```typescript
 import { Aggregation } from "@paygentic/sdk/models";
 
-let value: Aggregation = "COUNT";
+let value: Aggregation = "MAX";
 ```
 
 ## Values
 
 ```typescript
-"SUM" | "MAX" | "COUNT" | "COUNT_UNIQUE"
+"SUM" | "COUNT" | "AVG" | "MIN" | "MAX" | "UNIQUE_COUNT" | "LATEST"
 ```
