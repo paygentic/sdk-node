@@ -80,6 +80,10 @@ export type Plan = {
    * Number of days before renewal to send the reminder email
    */
   renewalReminderDays?: number | undefined;
+  /**
+   * Billing engine version. Managed by Paygentic support.
+   */
+  billingVersion?: number | undefined;
 };
 
 /** @internal */
@@ -142,6 +146,7 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
     walletNamespaceId: z.string().optional(),
     renewalReminderEnabled: z.boolean().optional(),
     renewalReminderDays: z.number().int().optional(),
+    billingVersion: z.number().int().optional(),
   });
 
 export function planFromJSON(

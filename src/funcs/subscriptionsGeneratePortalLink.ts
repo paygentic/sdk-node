@@ -3,7 +3,7 @@
  */
 
 import { PaygenticCore } from "../core.js";
-import { encodeSimple } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -87,7 +87,7 @@ async function $do(
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = null;
+  const body = encodeJSON("body", payload.RequestBody, { explode: true });
 
   const pathParams = {
     id: encodeSimple("id", payload.id, {
@@ -99,6 +99,7 @@ async function $do(
   const path = pathToFunc("/v0/subscriptions/{id}/portal")(pathParams);
 
   const headers = new Headers(compactMap({
+    "Content-Type": "application/json",
     Accept: "application/json",
   }));
 

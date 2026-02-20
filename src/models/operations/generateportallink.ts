@@ -3,17 +3,51 @@
  */
 
 import * as z from "zod/v3";
+import { remap as remap$ } from "../../lib/primitives.js";
+
+export type GeneratePortalLinkRequestBody = {
+  /**
+   * Token lifetime as an ISO 8601 duration. Defaults to PT10M (10 minutes). Maximum is P7D (7 days). Examples: PT10M, PT1H, P1D, P7D.
+   */
+  expiresIn?: string | undefined;
+};
 
 export type GeneratePortalLinkRequest = {
   /**
    * The subscription ID
    */
   id: string;
+  requestBody?: GeneratePortalLinkRequestBody | undefined;
 };
+
+/** @internal */
+export type GeneratePortalLinkRequestBody$Outbound = {
+  expiresIn?: string | undefined;
+};
+
+/** @internal */
+export const GeneratePortalLinkRequestBody$outboundSchema: z.ZodType<
+  GeneratePortalLinkRequestBody$Outbound,
+  z.ZodTypeDef,
+  GeneratePortalLinkRequestBody
+> = z.object({
+  expiresIn: z.string().optional(),
+});
+
+export function generatePortalLinkRequestBodyToJSON(
+  generatePortalLinkRequestBody: GeneratePortalLinkRequestBody,
+): string {
+  return JSON.stringify(
+    GeneratePortalLinkRequestBody$outboundSchema.parse(
+      generatePortalLinkRequestBody,
+    ),
+  );
+}
 
 /** @internal */
 export type GeneratePortalLinkRequest$Outbound = {
   id: string;
+  RequestBody?: GeneratePortalLinkRequestBody$Outbound | undefined;
 };
 
 /** @internal */
@@ -23,6 +57,12 @@ export const GeneratePortalLinkRequest$outboundSchema: z.ZodType<
   GeneratePortalLinkRequest
 > = z.object({
   id: z.string(),
+  requestBody: z.lazy(() => GeneratePortalLinkRequestBody$outboundSchema)
+    .optional(),
+}).transform((v) => {
+  return remap$(v, {
+    requestBody: "RequestBody",
+  });
 });
 
 export function generatePortalLinkRequestToJSON(
