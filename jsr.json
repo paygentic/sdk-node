@@ -1,6 +1,6 @@
 {
   "name": "@paygentic/sdk",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "exports": {
     ".": "./src/index.ts",
     "./models/errors": "./src/models/errors/index.ts",
