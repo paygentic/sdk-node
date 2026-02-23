@@ -7,6 +7,8 @@ import { BillableMetrics } from "./billablemetrics.js";
 import { Customers } from "./customers.js";
 import { Disputes } from "./disputes.js";
 import { Entitlements } from "./entitlements.js";
+import { EntitlementsV0 } from "./entitlementsv0.js";
+import { Events } from "./events.js";
 import { Features } from "./features.js";
 import { Fees } from "./fees.js";
 import { InvoicesV2 } from "./invoicesv2.js";
@@ -34,6 +36,11 @@ export class Paygentic extends ClientSDK {
   private _disputes?: Disputes;
   get disputes(): Disputes {
     return (this._disputes ??= new Disputes(this._options));
+  }
+
+  private _entitlementsV0?: EntitlementsV0;
+  get entitlementsV0(): EntitlementsV0 {
+    return (this._entitlementsV0 ??= new EntitlementsV0(this._options));
   }
 
   private _entitlements?: Entitlements;
@@ -89,6 +96,11 @@ export class Paygentic extends ClientSDK {
   private _invoicesV2?: InvoicesV2;
   get invoicesV2(): InvoicesV2 {
     return (this._invoicesV2 ??= new InvoicesV2(this._options));
+  }
+
+  private _events?: Events;
+  get events(): Events {
+    return (this._events ??= new Events(this._options));
   }
 
   private _revenue?: Revenue;

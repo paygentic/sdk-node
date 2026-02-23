@@ -31,7 +31,7 @@ import { Result } from "../types/fp.js";
  * @remarks
  * Create an entitlement for a customer. This temporarily reserves funds in the customer's wallet to guarantee payment for future usage.
  */
-export function entitlementsCreate(
+export function entitlementsV0Create(
   client: PaygenticCore,
   request: models.CreateEntitlementRequest,
   options?: RequestOptions,

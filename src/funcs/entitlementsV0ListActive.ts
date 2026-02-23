@@ -28,7 +28,7 @@ import { Result } from "../types/fp.js";
 /**
  * List by Customer
  */
-export function entitlementsListActive(
+export function entitlementsV0ListActive(
   client: PaygenticCore,
   request: operations.GetActiveEntitlementsRequest,
   options?: RequestOptions,

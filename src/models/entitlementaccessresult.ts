@@ -11,7 +11,7 @@ import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 /**
  * The type of feature: `boolean` (on/off), `static` (with config), or `metered` (usage-based).
  */
-export const EntitlementAccessResultFeatureType = {
+export const FeatureTypeEnum = {
   Boolean: "boolean",
   Static: "static",
   Metered: "metered",
@@ -19,9 +19,7 @@ export const EntitlementAccessResultFeatureType = {
 /**
  * The type of feature: `boolean` (on/off), `static` (with config), or `metered` (usage-based).
  */
-export type EntitlementAccessResultFeatureType = ClosedEnum<
-  typeof EntitlementAccessResultFeatureType
->;
+export type FeatureTypeEnum = ClosedEnum<typeof FeatureTypeEnum>;
 
 /**
  * Current status of the entitlement.
@@ -53,7 +51,7 @@ export type EntitlementAccessResult = {
   /**
    * The type of feature: `boolean` (on/off), `static` (with config), or `metered` (usage-based).
    */
-  featureType: EntitlementAccessResultFeatureType;
+  featureType: FeatureTypeEnum;
   /**
    * Configuration values for `static` features. Null for other types.
    */
@@ -81,9 +79,9 @@ export type EntitlementAccessResult = {
 };
 
 /** @internal */
-export const EntitlementAccessResultFeatureType$inboundSchema: z.ZodNativeEnum<
-  typeof EntitlementAccessResultFeatureType
-> = z.nativeEnum(EntitlementAccessResultFeatureType);
+export const FeatureTypeEnum$inboundSchema: z.ZodNativeEnum<
+  typeof FeatureTypeEnum
+> = z.nativeEnum(FeatureTypeEnum);
 
 /** @internal */
 export const EntitlementAccessResultStatus$inboundSchema: z.ZodNativeEnum<
@@ -98,7 +96,7 @@ export const EntitlementAccessResult$inboundSchema: z.ZodType<
 > = z.object({
   hasAccess: z.boolean(),
   featureKey: z.string(),
-  featureType: EntitlementAccessResultFeatureType$inboundSchema,
+  featureType: FeatureTypeEnum$inboundSchema,
   config: z.nullable(z.record(z.any())).optional(),
   entitlementId: z.string(),
   productId: z.string(),

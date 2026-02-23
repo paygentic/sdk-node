@@ -388,7 +388,7 @@ workflows:
             condition: |
               {"object":"list"}
             type: simple
-    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-group: entitlementsV0
     x-speakeasy-test-rebuild: true
   - workflowId: createEntitlement
     steps:
@@ -407,7 +407,7 @@ workflows:
             condition: |
               {"object":"entitlement"}
             type: simple
-    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-group: entitlementsV0
     x-speakeasy-test-rebuild: true
   - workflowId: createExternalBankAccount
     steps:
@@ -942,7 +942,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: events
+    x-speakeasy-test-group: Sources_events
     x-speakeasy-test-rebuild: true
   - workflowId: approveSourceEvent
     steps:
@@ -962,7 +962,7 @@ workflows:
             condition: |
               {"id":"<id>","createdAt":"2023-10-04T03:44:38.557Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>","key2":"<value>"},"sourceId":"<id>","status":"processed","updatedAt":"2023-07-24T01:11:13.326Z"}
             type: simple
-    x-speakeasy-test-group: events
+    x-speakeasy-test-group: Sources_events
     x-speakeasy-test-rebuild: true
   - workflowId: rejectSourceEvent
     steps:
@@ -982,7 +982,7 @@ workflows:
             condition: |
               {"id":"<id>","createdAt":"2023-12-11T03:45:42.105Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>"},"sourceId":"<id>","status":"pending","updatedAt":"2024-05-21T02:04:37.726Z"}
             type: simple
-    x-speakeasy-test-group: events
+    x-speakeasy-test-group: Sources_events
     x-speakeasy-test-rebuild: true
   - workflowId: bulkApproveSourceEvents
     steps:
@@ -1005,7 +1005,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: events
+    x-speakeasy-test-group: Sources_events
     x-speakeasy-test-rebuild: true
   - workflowId: listSourceRules
     steps:
@@ -1104,7 +1104,7 @@ workflows:
             condition: |
               {}
             type: simple
-    x-speakeasy-test-group: events
+    x-speakeasy-test-group: Sources_events
     x-speakeasy-test-rebuild: true
   - workflowId: listSubscriptions
     steps:
@@ -2018,4 +2018,179 @@ workflows:
               {"id":"<id>","createdAt":"2025-02-26T13:37:12.131Z","currentTime":"2026-05-10T16:53:00.525Z","merchantId":"<id>","updatedAt":"2024-03-05T06:40:38.576Z"}
             type: simple
     x-speakeasy-test-group: Test Clocks
+    x-speakeasy-test-rebuild: true
+  - workflowId: issueEntitlement-booleanEntitlement
+    steps:
+      - stepId: test
+        operationId: issueEntitlement
+        requestBody:
+          contentType: application/json
+          payload:
+            customerId: cus_q3r4s5t6u7v8w9x0
+            featureId: feat_a1b2c3d4e5f6g7h8
+            template:
+              type: boolean
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement","id":"<id>","customerId":"<id>","featureId":"<id>","status":"canceled","activeFrom":"2024-11-13T14:25:53.398Z","config":{}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: issueEntitlement-staticEntitlement
+    steps:
+      - stepId: test
+        operationId: issueEntitlement
+        requestBody:
+          contentType: application/json
+          payload:
+            customerId: cus_q3r4s5t6u7v8w9x0
+            featureId: feat_a1b2c3d4e5f6g7h8
+            template:
+              config:
+                limit: 25
+                tier: pro
+              type: static
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement","id":"<id>","customerId":"<id>","featureId":"<id>","status":"canceled","activeFrom":"2024-11-13T14:25:53.398Z","config":{}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: issueEntitlement-timedEntitlement
+    steps:
+      - stepId: test
+        operationId: issueEntitlement
+        requestBody:
+          contentType: application/json
+          payload:
+            activeFrom: "2024-01-01T00:00:00Z"
+            activeTo: "2025-01-01T00:00:00Z"
+            customerId: cus_q3r4s5t6u7v8w9x0
+            featureId: feat_a1b2c3d4e5f6g7h8
+            template:
+              type: boolean
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement","id":"<id>","customerId":"<id>","featureId":"<id>","status":"canceled","activeFrom":"2024-11-13T14:25:53.398Z","config":{}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: issueEntitlement
+    steps:
+      - stepId: test
+        operationId: issueEntitlement
+        requestBody:
+          contentType: application/json
+          payload:
+            customerId: <id>
+            featureId: <id>
+            template:
+              type: boolean
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement","id":"<id>","customerId":"<id>","featureId":"<id>","status":"canceled","activeFrom":"2024-11-13T14:25:53.398Z","config":{}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: getEntitlementBalance
+    steps:
+      - stepId: test
+        operationId: getEntitlementBalance
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"entitlementId":"<id>","featureKey":"<value>","balance":2802.48,"usageInPeriod":4095.87,"overage":5696.17,"hasAccess":false}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: ingestEvent
+    steps:
+      - stepId: test
+        operationId: ingestEvent
+        requestBody:
+          contentType: application/json
+          payload:
+            data:
+              key: <value>
+              key1: <value>
+            source: <value>
+            subject: <value>
+            type: <value>
+        successCriteria:
+          - condition: $statusCode == 202
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"event"}
+            type: simple
+    x-speakeasy-test-group: Events
+    x-speakeasy-test-rebuild: true
+  - workflowId: getEntitlement-booleanEntitlement
+    steps:
+      - stepId: test
+        operationId: getEntitlement
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement","id":"ent_a7b8c9d0e1f2g3h4","customerId":"cus_x1y2z3a4b5c6d7e8","featureId":"feat_p1q2r3s4t5u6v7w8","featureKey":"sso_enabled","featureType":"boolean","subscriptionId":"sub_m1n2o3p4q5r6s7t8","status":"active","activeFrom":"2024-01-01T00:00:00Z","activeTo":null,"hasAccess":true,"metadata":{}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: getEntitlement-staticEntitlement
+    steps:
+      - stepId: test
+        operationId: getEntitlement
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement","id":"ent_b8c9d0e1f2g3h4i5","customerId":"cus_x1y2z3a4b5c6d7e8","featureId":"feat_q2r3s4t5u6v7w8x9","featureKey":"storage_limit","featureType":"static","subscriptionId":"sub_m1n2o3p4q5r6s7t8","status":"active","activeFrom":"2024-01-01T00:00:00Z","activeTo":null,"hasAccess":true,"metadata":{},"config":{"limitGB":500,"allowedFileTypes":["pdf","doc","png"]}}
+            type: simple
+    x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: getEntitlement-meteredEntitlement
+    steps:
+      - stepId: test
+        operationId: getEntitlement
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"entitlement","id":"ent_c9d0e1f2g3h4i5j6","customerId":"cus_x1y2z3a4b5c6d7e8","featureId":"feat_r3s4t5u6v7w8x9y0","featureKey":"api_calls","featureType":"metered","subscriptionId":"sub_m1n2o3p4q5r6s7t8","status":"active","activeFrom":"2024-01-01T00:00:00Z","activeTo":null,"hasAccess":true,"metadata":{},"balance":8340,"usageInPeriod":1660,"overage":0,"currentPeriodStart":"2024-03-01T00:00:00Z","currentPeriodEnd":"2024-04-01T00:00:00Z"}
+            type: simple
+    x-speakeasy-test-group: Entitlements
     x-speakeasy-test-rebuild: true

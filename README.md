@@ -185,9 +185,18 @@ run();
 
 ### [Entitlements](docs/sdks/entitlements/README.md)
 
-* [listActive](docs/sdks/entitlements/README.md#listactive) - List by Customer
-* [create](docs/sdks/entitlements/README.md#create) - Create
 * [list](docs/sdks/entitlements/README.md#list) - List Entitlements
+* [issue](docs/sdks/entitlements/README.md#issue) - Issue Entitlement
+* [get](docs/sdks/entitlements/README.md#get) - Get Entitlement
+
+### [EntitlementsV0](docs/sdks/entitlementsv0/README.md)
+
+* [listActive](docs/sdks/entitlementsv0/README.md#listactive) - List by Customer
+* [create](docs/sdks/entitlementsv0/README.md#create) - Create
+
+### [Events](docs/sdks/events/README.md)
+
+* [ingest](docs/sdks/events/README.md#ingest) - Ingest Event
 
 ### [Features](docs/sdks/features/README.md)
 
@@ -246,13 +255,13 @@ run();
 * [get](docs/sdks/sources/README.md#get) - Get
 * [update](docs/sdks/sources/README.md#update) - Update
 
-### [Sources.Events](docs/sdks/events/README.md)
+### [Sources.Events](docs/sdks/sourcesevents/README.md)
 
-* [list](docs/sdks/events/README.md#list) - List Events
-* [approve](docs/sdks/events/README.md#approve) - Approve
-* [reject](docs/sdks/events/README.md#reject) - Reject
-* [bulkApprove](docs/sdks/events/README.md#bulkapprove) - Bulk Approve
-* [bulkReject](docs/sdks/events/README.md#bulkreject) - Bulk Reject
+* [list](docs/sdks/sourcesevents/README.md#list) - List Events
+* [approve](docs/sdks/sourcesevents/README.md#approve) - Approve
+* [reject](docs/sdks/sourcesevents/README.md#reject) - Reject
+* [bulkApprove](docs/sdks/sourcesevents/README.md#bulkapprove) - Bulk Approve
+* [bulkReject](docs/sdks/sourcesevents/README.md#bulkreject) - Bulk Reject
 
 ### [Sources.Rules](docs/sdks/rules/README.md)
 
@@ -319,9 +328,12 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`customersUpdate`](docs/sdks/customers/README.md#update) - Update
 - [`disputesCreate`](docs/sdks/disputes/README.md#create) - Create
 - [`disputesList`](docs/sdks/disputes/README.md#list) - List
-- [`entitlementsCreate`](docs/sdks/entitlements/README.md#create) - Create
+- [`entitlementsGet`](docs/sdks/entitlements/README.md#get) - Get Entitlement
+- [`entitlementsIssue`](docs/sdks/entitlements/README.md#issue) - Issue Entitlement
 - [`entitlementsList`](docs/sdks/entitlements/README.md#list) - List Entitlements
-- [`entitlementsListActive`](docs/sdks/entitlements/README.md#listactive) - List by Customer
+- [`entitlementsV0Create`](docs/sdks/entitlementsv0/README.md#create) - Create
+- [`entitlementsV0ListActive`](docs/sdks/entitlementsv0/README.md#listactive) - List by Customer
+- [`eventsIngest`](docs/sdks/events/README.md#ingest) - Ingest Event
 - [`featuresCreate`](docs/sdks/features/README.md#create) - Create
 - [`featuresDelete`](docs/sdks/features/README.md#delete) - Delete
 - [`featuresGet`](docs/sdks/features/README.md#get) - Get
@@ -352,11 +364,11 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`productsUpdate`](docs/sdks/products/README.md#update) - Update
 - [`revenueGet`](docs/sdks/revenue/README.md#get) - Get revenue time series
 - [`sourcesCreate`](docs/sdks/sources/README.md#create) - Create
-- [`sourcesEventsApprove`](docs/sdks/events/README.md#approve) - Approve
-- [`sourcesEventsBulkApprove`](docs/sdks/events/README.md#bulkapprove) - Bulk Approve
-- [`sourcesEventsBulkReject`](docs/sdks/events/README.md#bulkreject) - Bulk Reject
-- [`sourcesEventsList`](docs/sdks/events/README.md#list) - List Events
-- [`sourcesEventsReject`](docs/sdks/events/README.md#reject) - Reject
+- [`sourcesEventsApprove`](docs/sdks/sourcesevents/README.md#approve) - Approve
+- [`sourcesEventsBulkApprove`](docs/sdks/sourcesevents/README.md#bulkapprove) - Bulk Approve
+- [`sourcesEventsBulkReject`](docs/sdks/sourcesevents/README.md#bulkreject) - Bulk Reject
+- [`sourcesEventsList`](docs/sdks/sourcesevents/README.md#list) - List Events
+- [`sourcesEventsReject`](docs/sdks/sourcesevents/README.md#reject) - Reject
 - [`sourcesGet`](docs/sdks/sources/README.md#get) - Get
 - [`sourcesList`](docs/sdks/sources/README.md#list) - List
 - [`sourcesRulesCreate`](docs/sdks/rules/README.md#create) - Create Rule
@@ -538,8 +550,8 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 43 of 73 methods.*
-* [`ConflictError`](./src/models/errors/conflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 73 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 46 of 76 methods.*
+* [`ConflictError`](./src/models/errors/conflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 76 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

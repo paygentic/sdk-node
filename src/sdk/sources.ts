@@ -10,13 +10,13 @@ import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
-import { Events } from "./events.js";
 import { Rules } from "./rules.js";
+import { SourcesEvents } from "./sourcesevents.js";
 
 export class Sources extends ClientSDK {
-  private _events?: Events;
-  get events(): Events {
-    return (this._events ??= new Events(this._options));
+  private _events?: SourcesEvents;
+  get events(): SourcesEvents {
+    return (this._events ??= new SourcesEvents(this._options));
   }
 
   private _rules?: Rules;

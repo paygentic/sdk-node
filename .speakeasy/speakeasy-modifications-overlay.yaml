@@ -111,18 +111,20 @@ actions:
   # ── entitlements ─────────────────────────────────────────────────────
   - target: $["paths"]["/v0/entitlements"]["post"]
     update:
+      x-speakeasy-group: entitlementsV0
       x-speakeasy-name-override: create
     x-speakeasy-metadata:
-      after: sdk.entitlements.create()
+      after: sdk.entitlementsV0.create()
       before: sdk.Entitlements.createEntitlement()
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
   - target: $["paths"]["/v0/entitlements/activeEntitlements"]["get"]
     update:
+      x-speakeasy-group: entitlementsV0
       x-speakeasy-name-override: listActive
     x-speakeasy-metadata:
-      after: sdk.entitlements.listActive()
+      after: sdk.entitlementsV0.listActive()
       before: sdk.Entitlements.getActiveEntitlements()
       created_at: 1759148565008
       reviewed_at: 1759148608352
@@ -135,6 +137,24 @@ actions:
       before: sdk.Entitlements.listEntitlements()
       created_at: 1739148565008
       reviewed_at: 1739148608352
+      type: method-name
+  - target: $["paths"]["/v1/entitlements"]["post"]
+    update:
+      x-speakeasy-name-override: issue
+    x-speakeasy-metadata:
+      after: sdk.entitlements.issue()
+      before: sdk.Entitlements.issueEntitlement()
+      created_at: 1740009600000
+      reviewed_at: 1740009600000
+      type: method-name
+  - target: $["paths"]["/v1/entitlements/{entitlementId}"]["get"]
+    update:
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.entitlements.get()
+      before: sdk.Entitlements.getEntitlement()
+      created_at: 1740009600000
+      reviewed_at: 1740009600000
       type: method-name
 
   # ── features ─────────────────────────────────────────────────────────
@@ -637,6 +657,17 @@ actions:
       before: sdk.TestClocks.deleteTestClock()
       created_at: 1739148565008
       reviewed_at: 1739148608352
+      type: method-name
+
+  # ── events ───────────────────────────────────────────────────────────
+  - target: $["paths"]["/v0/events"]["post"]
+    update:
+      x-speakeasy-name-override: ingest
+    x-speakeasy-metadata:
+      after: sdk.events.ingest()
+      before: sdk.Events.ingestEvent()
+      created_at: 1740009600000
+      reviewed_at: 1740009600000
       type: method-name
 
   # ── usageEvents ──────────────────────────────────────────────────────
