@@ -14,13 +14,13 @@ export type DeleteFeeRequest = {
   id: string;
 };
 
-export type Blocker = {
+export type DeleteFeeBlocker = {
   type?: string | undefined;
   count?: number | undefined;
 };
 
 export type DeleteFeeDetails = {
-  blockers?: Array<Blocker> | undefined;
+  blockers?: Array<DeleteFeeBlocker> | undefined;
 };
 
 /** @internal */
@@ -46,19 +46,22 @@ export function deleteFeeRequestToJSON(
 }
 
 /** @internal */
-export const Blocker$inboundSchema: z.ZodType<Blocker, z.ZodTypeDef, unknown> =
-  z.object({
-    type: z.string().optional(),
-    count: z.number().int().optional(),
-  });
+export const DeleteFeeBlocker$inboundSchema: z.ZodType<
+  DeleteFeeBlocker,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  type: z.string().optional(),
+  count: z.number().int().optional(),
+});
 
-export function blockerFromJSON(
+export function deleteFeeBlockerFromJSON(
   jsonString: string,
-): SafeParseResult<Blocker, SDKValidationError> {
+): SafeParseResult<DeleteFeeBlocker, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Blocker$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Blocker' from JSON`,
+    (x) => DeleteFeeBlocker$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteFeeBlocker' from JSON`,
   );
 }
 
@@ -68,7 +71,7 @@ export const DeleteFeeDetails$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  blockers: z.array(z.lazy(() => Blocker$inboundSchema)).optional(),
+  blockers: z.array(z.lazy(() => DeleteFeeBlocker$inboundSchema)).optional(),
 });
 
 export function deleteFeeDetailsFromJSON(

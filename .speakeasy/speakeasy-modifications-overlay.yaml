@@ -87,6 +87,15 @@ actions:
       created_at: 1739148565008
       reviewed_at: 1739148608352
       type: method-name
+  - target: $["paths"]["/v0/customers/{id}"]["delete"]
+    update:
+      x-speakeasy-name-override: delete
+    x-speakeasy-metadata:
+      after: sdk.customers.delete()
+      before: sdk.Customers.deleteCustomer()
+      created_at: 1740009600000
+      reviewed_at: 1740009600000
+      type: method-name
 
   # ── disputes ─────────────────────────────────────────────────────────
   - target: $["paths"]["/v0/disputes"]["get"]

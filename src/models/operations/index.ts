@@ -17,6 +17,7 @@ export * from "./createproduct.js";
 export * from "./createsource.js";
 export * from "./createsubscription.js";
 export * from "./createtestclock.js";
+export * from "./deletecustomer.js";
 export * from "./deletefeature.js";
 export * from "./deletefee.js";
 export * from "./deleteprice.js";

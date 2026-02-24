@@ -7,26 +7,26 @@ import * as operations from "../operations/index.js";
 import { PaygenticError } from "./paygenticerror.js";
 
 /**
- * Fee cannot be deleted because it has associated prices
+ * Customer cannot be deleted due to active dependencies
  */
-export type DeleteFeeConflictErrorData = {
-  error?: string | undefined;
+export type DeleteCustomerConflictErrorData = {
+  error?: operations.ErrorT | undefined;
   message?: string | undefined;
-  details?: operations.DeleteFeeDetails | undefined;
+  details?: operations.DeleteCustomerDetails | undefined;
 };
 
 /**
- * Fee cannot be deleted because it has associated prices
+ * Customer cannot be deleted due to active dependencies
  */
-export class DeleteFeeConflictError extends PaygenticError {
-  error?: string | undefined;
-  details?: operations.DeleteFeeDetails | undefined;
+export class DeleteCustomerConflictError extends PaygenticError {
+  error?: operations.ErrorT | undefined;
+  details?: operations.DeleteCustomerDetails | undefined;
 
   /** The original data that was passed to this error instance. */
-  data$: DeleteFeeConflictErrorData;
+  data$: DeleteCustomerConflictErrorData;
 
   constructor(
-    err: DeleteFeeConflictErrorData,
+    err: DeleteCustomerConflictErrorData,
     httpMeta: { response: Response; request: Request; body: string },
   ) {
     const message = err.message || `API error occurred: ${JSON.stringify(err)}`;
@@ -35,25 +35,26 @@ export class DeleteFeeConflictError extends PaygenticError {
     if (err.error != null) this.error = err.error;
     if (err.details != null) this.details = err.details;
 
-    this.name = "DeleteFeeConflictError";
+    this.name = "DeleteCustomerConflictError";
   }
 }
 
 /** @internal */
-export const DeleteFeeConflictError$inboundSchema: z.ZodType<
-  DeleteFeeConflictError,
+export const DeleteCustomerConflictError$inboundSchema: z.ZodType<
+  DeleteCustomerConflictError,
   z.ZodTypeDef,
   unknown
 > = z.object({
-  error: z.string().optional(),
+  error: operations.ErrorT$inboundSchema.optional(),
   message: z.string().optional(),
-  details: z.lazy(() => operations.DeleteFeeDetails$inboundSchema).optional(),
+  details: z.lazy(() => operations.DeleteCustomerDetails$inboundSchema)
+    .optional(),
   request$: z.instanceof(Request),
   response$: z.instanceof(Response),
   body$: z.string(),
 })
   .transform((v) => {
-    return new DeleteFeeConflictError(v, {
+    return new DeleteCustomerConflictError(v, {
       request: v.request$,
       response: v.response$,
       body: v.body$,

@@ -1,11 +1,11 @@
-# Blocker
+# DeleteFeeBlocker
 
 ## Example Usage
 
 ```typescript
-import { Blocker } from "@paygentic/sdk/models/operations";
+import { DeleteFeeBlocker } from "@paygentic/sdk/models/operations";
 
-let value: Blocker = {};
+let value: DeleteFeeBlocker = {};
 ```
 
 ## Fields

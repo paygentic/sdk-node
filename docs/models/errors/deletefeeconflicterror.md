@@ -1,11 +1,11 @@
-# ConflictError
+# DeleteFeeConflictError
 
 Fee cannot be deleted because it has associated prices
 
 ## Example Usage
 
 ```typescript
-import { ConflictError } from "@paygentic/sdk/models/errors";
+import { DeleteFeeConflictError } from "@paygentic/sdk/models/errors";
 
 // No examples available for this model
 ```

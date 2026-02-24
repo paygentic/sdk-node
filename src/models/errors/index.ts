@@ -3,6 +3,7 @@
  */
 
 export * from "./badrequest.js";
+export * from "./deletecustomer.js";
 export * from "./deletefee.js";
 export * from "./error.js";
 export * from "./httpclienterrors.js";

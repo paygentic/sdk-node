@@ -392,12 +392,12 @@ run();
 
 ### Errors
 
-| Error Type                   | Status Code                  | Content Type                 |
-| ---------------------------- | ---------------------------- | ---------------------------- |
-| errors.ErrorT                | 403, 404                     | application/json             |
-| errors.ConflictError         | 409                          | application/json             |
-| errors.ErrorT                | 500                          | application/json             |
-| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+| Error Type                    | Status Code                   | Content Type                  |
+| ----------------------------- | ----------------------------- | ----------------------------- |
+| errors.ErrorT                 | 403, 404                      | application/json              |
+| errors.DeleteFeeConflictError | 409                           | application/json              |
+| errors.ErrorT                 | 500                           | application/json              |
+| errors.PaygenticDefaultError  | 4XX, 5XX                      | \*/\*                         |
 
 ## getPrice
 

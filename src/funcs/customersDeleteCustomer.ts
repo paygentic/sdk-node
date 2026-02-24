@@ -29,15 +29,15 @@ import { Result } from "../types/fp.js";
 /**
  * Delete
  */
-export function feesDelete(
+export function customersDeleteCustomer(
   client: PaygenticCore,
-  request: operations.DeleteFeeRequest,
+  request: operations.DeleteCustomerRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
     void,
     | errors.ErrorT
-    | errors.DeleteFeeConflictError
+    | errors.DeleteCustomerConflictError
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -57,14 +57,14 @@ export function feesDelete(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.DeleteFeeRequest,
+  request: operations.DeleteCustomerRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
       void,
       | errors.ErrorT
-      | errors.DeleteFeeConflictError
+      | errors.DeleteCustomerConflictError
       | PaygenticError
       | ResponseValidationError
       | ConnectionError
@@ -79,7 +79,7 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.DeleteFeeRequest$outboundSchema.parse(value),
+    (value) => operations.DeleteCustomerRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -95,7 +95,7 @@ async function $do(
     }),
   };
 
-  const path = pathToFunc("/v0/fees/{id}")(pathParams);
+  const path = pathToFunc("/v0/customers/{id}")(pathParams);
 
   const headers = new Headers(compactMap({
     Accept: "application/json",
@@ -108,7 +108,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "deleteFee",
+    operationID: "deleteCustomer",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -137,7 +137,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["403", "404", "409", "4XX", "500", "5XX"],
+    errorCodes: ["401", "403", "404", "409", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -153,7 +153,7 @@ async function $do(
   const [result] = await M.match<
     void,
     | errors.ErrorT
-    | errors.DeleteFeeConflictError
+    | errors.DeleteCustomerConflictError
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -164,8 +164,8 @@ async function $do(
     | SDKValidationError
   >(
     M.nil(204, z.void()),
-    M.jsonErr([403, 404], errors.ErrorT$inboundSchema),
-    M.jsonErr(409, errors.DeleteFeeConflictError$inboundSchema),
+    M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
+    M.jsonErr(409, errors.DeleteCustomerConflictError$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

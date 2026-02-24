@@ -176,6 +176,7 @@ run();
 * [list](docs/sdks/customers/README.md#list) - List by Merchant
 * [create](docs/sdks/customers/README.md#create) - Create
 * [get](docs/sdks/customers/README.md#get) - Get
+* [deleteCustomer](docs/sdks/customers/README.md#deletecustomer) - Delete
 * [update](docs/sdks/customers/README.md#update) - Update
 
 ### [Disputes](docs/sdks/disputes/README.md)
@@ -323,6 +324,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`billableMetricsList`](docs/sdks/billablemetrics/README.md#list) - List
 - [`billableMetricsUpdate`](docs/sdks/billablemetrics/README.md#update) - Update
 - [`customersCreate`](docs/sdks/customers/README.md#create) - Create
+- [`customersDeleteCustomer`](docs/sdks/customers/README.md#deletecustomer) - Delete
 - [`customersGet`](docs/sdks/customers/README.md#get) - Get
 - [`customersList`](docs/sdks/customers/README.md#list) - List by Merchant
 - [`customersUpdate`](docs/sdks/customers/README.md#update) - Update
@@ -537,7 +539,7 @@ run();
 * [`PaygenticError`](./src/models/errors/paygenticerror.ts): The base class for HTTP error responses.
   * [`ErrorT`](./src/models/errors/errort.ts): Generic error.
 
-<details><summary>Less common errors (8)</summary>
+<details><summary>Less common errors (9)</summary>
 
 <br />
 
@@ -550,8 +552,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 46 of 76 methods.*
-* [`ConflictError`](./src/models/errors/conflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 76 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 46 of 77 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 77 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 77 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
