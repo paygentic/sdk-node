@@ -3,7 +3,7 @@
  */
 
 import { customersCreate } from "../funcs/customersCreate.js";
-import { customersDeleteCustomer } from "../funcs/customersDeleteCustomer.js";
+import { customersDelete } from "../funcs/customersDelete.js";
 import { customersGet } from "../funcs/customersGet.js";
 import { customersList } from "../funcs/customersList.js";
 import { customersUpdate } from "../funcs/customersUpdate.js";
@@ -61,11 +61,11 @@ export class Customers extends ClientSDK {
   /**
    * Delete
    */
-  async deleteCustomer(
+  async delete(
     request: operations.DeleteCustomerRequest,
     options?: RequestOptions,
   ): Promise<void> {
-    return unwrapAsync(customersDeleteCustomer(
+    return unwrapAsync(customersDelete(
       this,
       request,
       options,

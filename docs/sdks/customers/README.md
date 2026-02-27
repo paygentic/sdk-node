@@ -9,7 +9,7 @@ A `Customer` is an entity connected to a `Merchant` via a `Subscription`. This r
 * [list](#list) - List by Merchant
 * [create](#create) - Create
 * [get](#get) - Get
-* [deleteCustomer](#deletecustomer) - Delete
+* [delete](#delete) - Delete
 * [update](#update) - Update
 
 ## list
@@ -239,7 +239,7 @@ run();
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
-## deleteCustomer
+## delete
 
 Delete
 
@@ -254,7 +254,7 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  await paygentic.customers.deleteCustomer({
+  await paygentic.customers.delete({
     id: "<id>",
   });
 
@@ -270,7 +270,7 @@ The standalone function version of this method:
 
 ```typescript
 import { PaygenticCore } from "@paygentic/sdk/core.js";
-import { customersDeleteCustomer } from "@paygentic/sdk/funcs/customersDeleteCustomer.js";
+import { customersDelete } from "@paygentic/sdk/funcs/customersDelete.js";
 
 // Use `PaygenticCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -279,14 +279,14 @@ const paygentic = new PaygenticCore({
 });
 
 async function run() {
-  const res = await customersDeleteCustomer(paygentic, {
+  const res = await customersDelete(paygentic, {
     id: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;
     
   } else {
-    console.log("customersDeleteCustomer failed:", res.error);
+    console.log("customersDelete failed:", res.error);
   }
 }
 

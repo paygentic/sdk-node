@@ -49,6 +49,16 @@ actions:
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
+  - target: $["paths"]["/v0/billableMetrics/{id}/meter"]["get"]
+    update:
+      x-speakeasy-group: billableMetrics
+      x-speakeasy-name-override: meter
+    x-speakeasy-metadata:
+      after: sdk.billableMetrics.meter()
+      before: sdk.BillableMetrics.getBillableMetricMeter()
+      created_at: 1759148565008
+      reviewed_at: 1759148608352
+      type: method-name
 
   # ── customers ────────────────────────────────────────────────────────
   - target: $["paths"]["/v0/customers"]["get"]

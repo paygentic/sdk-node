@@ -50,6 +50,7 @@ export * from "./subscriptionportal.js";
 export * from "./testclock.js";
 export * from "./updaterulerequest.js";
 export * from "./usageevent.js";
+export * from "./usageresponse.js";
 export * from "./user.js";
 export * from "./validationerror.js";
 export * from "./validtaxaddress.js";

@@ -2194,3 +2194,26 @@ workflows:
             type: simple
     x-speakeasy-test-group: Entitlements
     x-speakeasy-test-rebuild: true
+  - workflowId: getBillableMetricMeter
+    steps:
+      - stepId: test
+        operationId: getBillableMetricMeter
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: from
+            in: query
+            value: "2024-12-02T03:30:12.536Z"
+          - name: to
+            in: query
+            value: "2024-06-19T00:01:21.924Z"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"meter","billableMetricId":"<id>","totalValue":9039.21}
+            type: simple
+    x-speakeasy-test-group: billableMetrics
+    x-speakeasy-test-rebuild: true

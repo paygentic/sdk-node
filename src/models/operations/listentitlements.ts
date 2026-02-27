@@ -23,6 +23,10 @@ export type ListEntitlementsRequest = {
    */
   productId?: string | undefined;
   /**
+   * Filter results to entitlements for a specific subscription.
+   */
+  subscriptionId?: string | undefined;
+  /**
    * Maximum number of entitlements to return per page. Use with `offset` for pagination.
    */
   limit?: number | undefined;
@@ -57,6 +61,7 @@ export type ListEntitlementsRequest$Outbound = {
   customerId: string;
   featureKey?: string | undefined;
   productId?: string | undefined;
+  subscriptionId?: string | undefined;
   limit: number;
   offset: number;
 };
@@ -70,6 +75,7 @@ export const ListEntitlementsRequest$outboundSchema: z.ZodType<
   customerId: z.string(),
   featureKey: z.string().optional(),
   productId: z.string().optional(),
+  subscriptionId: z.string().optional(),
   limit: z.number().int().default(10),
   offset: z.number().int().default(0),
 });

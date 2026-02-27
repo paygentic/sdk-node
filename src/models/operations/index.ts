@@ -26,6 +26,7 @@ export * from "./deletetestclock.js";
 export * from "./generateportallink.js";
 export * from "./getactiveentitlements.js";
 export * from "./getbillablemetric.js";
+export * from "./getbillablemetricmeter.js";
 export * from "./getcustomer.js";
 export * from "./getentitlement.js";
 export * from "./getfeature.js";

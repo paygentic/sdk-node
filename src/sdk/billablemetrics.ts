@@ -5,6 +5,7 @@
 import { billableMetricsCreate } from "../funcs/billableMetricsCreate.js";
 import { billableMetricsGet } from "../funcs/billableMetricsGet.js";
 import { billableMetricsList } from "../funcs/billableMetricsList.js";
+import { billableMetricsMeter } from "../funcs/billableMetricsMeter.js";
 import { billableMetricsUpdate } from "../funcs/billableMetricsUpdate.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
@@ -65,6 +66,23 @@ export class BillableMetrics extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.BillableMetric> {
     return unwrapAsync(billableMetricsUpdate(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Query Meter Usage
+   *
+   * @remarks
+   * Query aggregated usage data for a billable metric from the metering service.
+   */
+  async meter(
+    request: operations.GetBillableMetricMeterRequest,
+    options?: RequestOptions,
+  ): Promise<models.UsageResponse> {
+    return unwrapAsync(billableMetricsMeter(
       this,
       request,
       options,

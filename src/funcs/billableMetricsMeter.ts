@@ -3,7 +3,7 @@
  */
 
 import { PaygenticCore } from "../core.js";
-import { encodeFormQuery } from "../lib/encodings.js";
+import { encodeFormQuery, encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -21,23 +21,24 @@ import * as errors from "../models/errors/index.js";
 import { PaygenticError } from "../models/errors/paygenticerror.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
+import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * List Entitlements
+ * Query Meter Usage
  *
  * @remarks
- * Retrieve all entitlements for a customer, optionally filtered by feature or product.
+ * Query aggregated usage data for a billable metric from the metering service.
  */
-export function entitlementsList(
+export function billableMetricsMeter(
   client: PaygenticCore,
-  request: operations.ListEntitlementsRequest,
+  request: operations.GetBillableMetricMeterRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.ListEntitlementsResponse,
+    models.UsageResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -59,12 +60,12 @@ export function entitlementsList(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.ListEntitlementsRequest,
+  request: operations.GetBillableMetricMeterRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.ListEntitlementsResponse,
+      models.UsageResponse,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -81,7 +82,8 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.ListEntitlementsRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.GetBillableMetricMeterRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -90,15 +92,22 @@ async function $do(
   const payload = parsed.value;
   const body = null;
 
-  const path = pathToFunc("/v1/entitlements")();
+  const pathParams = {
+    id: encodeSimple("id", payload.id, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+
+  const path = pathToFunc("/v0/billableMetrics/{id}/meter")(pathParams);
 
   const query = encodeFormQuery({
-    "customerId": payload.customerId,
-    "featureKey": payload.featureKey,
-    "limit": payload.limit,
-    "offset": payload.offset,
-    "productId": payload.productId,
-    "subscriptionId": payload.subscriptionId,
+    "filterGroupBy": payload.filterGroupBy,
+    "from": payload.from,
+    "groupBy": payload.groupBy,
+    "subject": payload.subject,
+    "to": payload.to,
+    "windowSize": payload.windowSize,
   });
 
   const headers = new Headers(compactMap({
@@ -112,7 +121,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "listEntitlements",
+    operationID: "getBillableMetricMeter",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -156,7 +165,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.ListEntitlementsResponse,
+    models.UsageResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -168,7 +177,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.ListEntitlementsResponse$inboundSchema),
+    M.json(200, models.UsageResponse$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr(403, errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
