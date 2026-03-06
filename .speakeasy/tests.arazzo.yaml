@@ -611,6 +611,7 @@ workflows:
         requestBody:
           contentType: application/json
           payload:
+            billingVersion: 0
             currency: Won
             defaultTaxCode: eservice
             defaultTaxRate: 0
@@ -2216,4 +2217,116 @@ workflows:
               {"object":"meter","billableMetricId":"<id>","totalValue":9039.21}
             type: simple
     x-speakeasy-test-group: billableMetrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: listPaymentSessions
+    steps:
+      - stepId: test
+        operationId: listPaymentSessions
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"id":"<id>","object":"payment","amount":"151.87","currency":"Ethiopian Birr","paymentUrl":"https://noteworthy-curl.org/","status":"expired","expiresAt":"2025-02-22T19:40:52.805Z","createdAt":"2026-03-23T13:38:58.468Z"}],"pagination":{}}
+            type: simple
+    x-speakeasy-test-group: Payments
+    x-speakeasy-test-rebuild: true
+  - workflowId: createPaymentSession
+    steps:
+      - stepId: test
+        operationId: createPaymentSession
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: "467.11"
+            currency: EUR
+            savePaymentMethod: false
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"payment","amount":"423.69","currency":"Seychelles Rupee","status":"expired","createdAt":"2026-11-09T04:19:59.760Z"}
+            type: simple
+    x-speakeasy-test-group: Payments
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPaymentSession
+    steps:
+      - stepId: test
+        operationId: getPaymentSession
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"payment","amount":"117.42","currency":"Libyan Dinar","status":"pending","createdAt":"2024-01-30T00:44:04.678Z"}
+            type: simple
+    x-speakeasy-test-group: Payments
+    x-speakeasy-test-rebuild: true
+  - workflowId: listPayments
+    steps:
+      - stepId: test
+        operationId: listPayments
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{}}
+            type: simple
+    x-speakeasy-test-group: Payments
+    x-speakeasy-test-rebuild: true
+  - workflowId: createPayment
+    steps:
+      - stepId: test
+        operationId: createPayment
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: "883.46"
+            currency: AUD
+            savePaymentMethod: false
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"payment","amount":"550.39","currency":"Lempira","status":"processing","createdAt":"2024-03-25T13:20:35.733Z"}
+            type: simple
+    x-speakeasy-test-group: Payments
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPayment
+    steps:
+      - stepId: test
+        operationId: getPayment
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"payment","amount":"422.94","currency":"Hryvnia","status":"completed","createdAt":"2024-05-23T18:07:00.521Z"}
+            type: simple
+    x-speakeasy-test-group: Payments
     x-speakeasy-test-rebuild: true

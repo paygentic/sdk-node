@@ -17,6 +17,18 @@ export const CreatePlanTaxBehavior = {
  */
 export type CreatePlanTaxBehavior = ClosedEnum<typeof CreatePlanTaxBehavior>;
 
+/**
+ * Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard).
+ */
+export const BillingVersion = {
+  Zero: 0,
+  One: 1,
+} as const;
+/**
+ * Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard).
+ */
+export type BillingVersion = ClosedEnum<typeof BillingVersion>;
+
 export type CreatePlanRequest = {
   /**
    * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'yearly' for annual billing, 'weekly' for weekly billing
@@ -70,12 +82,21 @@ export type CreatePlanRequest = {
    * Number of days before renewal to send the reminder email
    */
   renewalReminderDays?: number | undefined;
+  /**
+   * Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard).
+   */
+  billingVersion?: BillingVersion | undefined;
 };
 
 /** @internal */
 export const CreatePlanTaxBehavior$outboundSchema: z.ZodNativeEnum<
   typeof CreatePlanTaxBehavior
 > = z.nativeEnum(CreatePlanTaxBehavior);
+
+/** @internal */
+export const BillingVersion$outboundSchema: z.ZodNativeEnum<
+  typeof BillingVersion
+> = z.nativeEnum(BillingVersion);
 
 /** @internal */
 export type CreatePlanRequest$Outbound = {
@@ -92,6 +113,7 @@ export type CreatePlanRequest$Outbound = {
   taxBehavior: string;
   renewalReminderEnabled: boolean;
   renewalReminderDays: number;
+  billingVersion: number;
 };
 
 /** @internal */
@@ -113,6 +135,7 @@ export const CreatePlanRequest$outboundSchema: z.ZodType<
   taxBehavior: CreatePlanTaxBehavior$outboundSchema.default("exclusive"),
   renewalReminderEnabled: z.boolean().default(true),
   renewalReminderDays: z.number().int().default(3),
+  billingVersion: BillingVersion$outboundSchema.default(0),
 });
 
 export function createPlanRequestToJSON(

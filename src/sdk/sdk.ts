@@ -12,6 +12,7 @@ import { Events } from "./events.js";
 import { Features } from "./features.js";
 import { Fees } from "./fees.js";
 import { InvoicesV2 } from "./invoicesv2.js";
+import { Payments } from "./payments.js";
 import { Plans } from "./plans.js";
 import { Prices } from "./prices.js";
 import { Products } from "./products.js";
@@ -96,6 +97,11 @@ export class Paygentic extends ClientSDK {
   private _invoicesV2?: InvoicesV2;
   get invoicesV2(): InvoicesV2 {
     return (this._invoicesV2 ??= new InvoicesV2(this._options));
+  }
+
+  private _payments?: Payments;
+  get payments(): Payments {
+    return (this._payments ??= new Payments(this._options));
   }
 
   private _events?: Events;

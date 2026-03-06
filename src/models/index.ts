@@ -28,6 +28,7 @@ export * from "./invoicelineitemsresponse.js";
 export * from "./issueentitlementrequest.js";
 export * from "./meteredentitlementdetail.js";
 export * from "./offsetpagination.js";
+export * from "./payment.js";
 export * from "./plan.js";
 export * from "./price.js";
 export * from "./pricefeature.js";
