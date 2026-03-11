@@ -13,7 +13,7 @@ export const PaymentObject = {
 } as const;
 export type PaymentObject = ClosedEnum<typeof PaymentObject>;
 
-export type LineItem = {
+export type PaymentLineItem = {
   description?: string | undefined;
   amount?: string | undefined;
   quantity?: number | undefined;
@@ -71,7 +71,7 @@ export type Payment = {
   /**
    * Breakdown of what the customer is being charged for.
    */
-  lineItems?: Array<LineItem> | undefined;
+  lineItems?: Array<PaymentLineItem> | undefined;
   /**
    * Current status of the payment.
    */
@@ -92,8 +92,8 @@ export const PaymentObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(PaymentObject);
 
 /** @internal */
-export const LineItem$inboundSchema: z.ZodType<
-  LineItem,
+export const PaymentLineItem$inboundSchema: z.ZodType<
+  PaymentLineItem,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -102,13 +102,13 @@ export const LineItem$inboundSchema: z.ZodType<
   quantity: z.number().int().optional(),
 });
 
-export function lineItemFromJSON(
+export function paymentLineItemFromJSON(
   jsonString: string,
-): SafeParseResult<LineItem, SDKValidationError> {
+): SafeParseResult<PaymentLineItem, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => LineItem$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'LineItem' from JSON`,
+    (x) => PaymentLineItem$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PaymentLineItem' from JSON`,
   );
 }
 
@@ -129,7 +129,7 @@ export const Payment$inboundSchema: z.ZodType<Payment, z.ZodTypeDef, unknown> =
     idempotencyKey: z.string().optional(),
     reference: z.string().optional(),
     metadata: z.record(z.string()).optional(),
-    lineItems: z.array(z.lazy(() => LineItem$inboundSchema)).optional(),
+    lineItems: z.array(z.lazy(() => PaymentLineItem$inboundSchema)).optional(),
     status: PaymentStatus$inboundSchema,
     expiresAt: z.string().datetime({ offset: true }).transform(v => new Date(v))
       .optional(),

@@ -2330,3 +2330,43 @@ workflows:
             type: simple
     x-speakeasy-test-group: Payments
     x-speakeasy-test-rebuild: true
+  - workflowId: listLineItems
+    steps:
+      - stepId: test
+        operationId: listLineItems
+        parameters:
+          - name: limit
+            in: query
+            value: 100
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"id":"<id>","subscriptionId":"<id>","type":"metered","status":"invoiced","displayName":"Ruthe20","currency":"Tenge","periodStart":"2026-09-04T02:49:10.376Z","periodEnd":"2026-09-15T08:12:34.337Z","invoiceAt":"2024-10-05T12:55:27.688Z","unitPrice":"<value>","createdAt":"2024-05-18T12:29:19.850Z","updatedAt":"2024-07-26T23:40:10.281Z"}],"totalCount":585166,"summary":{"feeSubtotal":"<value>","meteredEstimatedSubtotal":"<value>","currency":"Swedish Krona"}}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: createLineItem
+    steps:
+      - stepId: test
+        operationId: createLineItem
+        requestBody:
+          contentType: application/json
+          payload:
+            currency: Rwanda Franc
+            displayName: Nathan54
+            quantity: 6214.31
+            unitPrice: 740813
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","subscriptionId":"<id>","type":"manual","status":"pending","displayName":"Roscoe_Haag","currency":"Belize Dollar","periodStart":"2025-06-18T03:33:03.362Z","periodEnd":"2025-11-09T02:25:51.382Z","invoiceAt":"2024-04-26T04:27:52.258Z","unitPrice":"<value>","createdAt":"2025-10-18T18:51:06.413Z","updatedAt":"2025-04-29T04:46:04.080Z"}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true

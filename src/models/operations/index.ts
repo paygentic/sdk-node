@@ -55,6 +55,7 @@ export * from "./listentitlements.js";
 export * from "./listfeatures.js";
 export * from "./listfees.js";
 export * from "./listinvoices.js";
+export * from "./listlineitems.js";
 export * from "./listpayments.js";
 export * from "./listplans.js";
 export * from "./listprices.js";

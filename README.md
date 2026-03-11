@@ -220,6 +220,8 @@ run();
 ### [InvoicesV2](docs/sdks/invoicesv2/README.md)
 
 * [list](docs/sdks/invoicesv2/README.md#list) - List
+* [listLineItems](docs/sdks/invoicesv2/README.md#listlineitems) - List Line Items
+* [createLineItem](docs/sdks/invoicesv2/README.md#createlineitem) - Create Manual Line Item
 * [get](docs/sdks/invoicesv2/README.md#get) - Get
 * [getLineItems](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
 
@@ -355,9 +357,11 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`feesGetPrice`](docs/sdks/fees/README.md#getprice) - Get Fee Price
 - [`feesList`](docs/sdks/fees/README.md#list) - List
 - [`feesUpdate`](docs/sdks/fees/README.md#update) - Update
+- [`invoicesV2CreateLineItem`](docs/sdks/invoicesv2/README.md#createlineitem) - Create Manual Line Item
 - [`invoicesV2Get`](docs/sdks/invoicesv2/README.md#get) - Get
 - [`invoicesV2GetLineItems`](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
 - [`invoicesV2List`](docs/sdks/invoicesv2/README.md#list) - List
+- [`invoicesV2ListLineItems`](docs/sdks/invoicesv2/README.md#listlineitems) - List Line Items
 - [`paymentsCreate`](docs/sdks/payments/README.md#create) - Create Payment
 - [`paymentsGet`](docs/sdks/payments/README.md#get) - Get Payment
 - [`paymentsList`](docs/sdks/payments/README.md#list) - List Payments
@@ -563,9 +567,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 48 of 81 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 81 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 81 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 50 of 83 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 83 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 83 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

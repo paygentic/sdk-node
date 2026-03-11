@@ -23,14 +23,16 @@ export type EventType = ClosedEnum<typeof EventType>;
 /**
  * Type of line item: 'charge' for regular billing, 'refund' for refunded items (amounts are negated)
  */
-export const LineItemType = {
+export const InvoiceLineItemLineItemType = {
   Charge: "charge",
   Refund: "refund",
 } as const;
 /**
  * Type of line item: 'charge' for regular billing, 'refund' for refunded items (amounts are negated)
  */
-export type LineItemType = ClosedEnum<typeof LineItemType>;
+export type InvoiceLineItemLineItemType = ClosedEnum<
+  typeof InvoiceLineItemLineItemType
+>;
 
 export type InvoiceLineItem = {
   /**
@@ -56,7 +58,7 @@ export type InvoiceLineItem = {
   /**
    * Type of line item: 'charge' for regular billing, 'refund' for refunded items (amounts are negated)
    */
-  lineItemType: LineItemType;
+  lineItemType: InvoiceLineItemLineItemType;
   /**
    * The meter event ID (usage events only)
    */
@@ -104,8 +106,9 @@ export const EventType$inboundSchema: z.ZodNativeEnum<typeof EventType> = z
   .nativeEnum(EventType);
 
 /** @internal */
-export const LineItemType$inboundSchema: z.ZodNativeEnum<typeof LineItemType> =
-  z.nativeEnum(LineItemType);
+export const InvoiceLineItemLineItemType$inboundSchema: z.ZodNativeEnum<
+  typeof InvoiceLineItemLineItemType
+> = z.nativeEnum(InvoiceLineItemLineItemType);
 
 /** @internal */
 export const InvoiceLineItem$inboundSchema: z.ZodType<
@@ -118,7 +121,7 @@ export const InvoiceLineItem$inboundSchema: z.ZodType<
   eventSourceId: z.string(),
   billableMetricId: z.string(),
   invoiceDisplayName: z.string(),
-  lineItemType: LineItemType$inboundSchema,
+  lineItemType: InvoiceLineItemLineItemType$inboundSchema,
   meterEventId: z.string(),
   metricDescription: z.string(),
   metricName: z.string(),
