@@ -88,7 +88,9 @@ async function $do(
   const path = pathToFunc("/v0/customers")();
 
   const query = encodeFormQuery({
+    "email": payload.email,
     "limit": payload.limit,
+    "name": payload.name,
     "offset": payload.offset,
     "organizationId": payload.organizationId,
   });

@@ -277,7 +277,7 @@ async function run() {
   const result = await paygentic.usageEvents.refund({
     id: "<id>",
     requestBody: {
-      refunded: false,
+      refunded: true,
     },
   });
 
@@ -305,7 +305,7 @@ async function run() {
   const res = await usageEventsRefund(paygentic, {
     id: "<id>",
     requestBody: {
-      refunded: false,
+      refunded: true,
     },
   });
   if (res.ok) {

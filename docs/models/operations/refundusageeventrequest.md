@@ -8,7 +8,7 @@ import { RefundUsageEventRequest } from "@paygentic/sdk/models/operations";
 let value: RefundUsageEventRequest = {
   id: "<id>",
   requestBody: {
-    refunded: false,
+    refunded: true,
   },
 };
 ```

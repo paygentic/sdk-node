@@ -1893,7 +1893,7 @@ workflows:
         requestBody:
           contentType: application/json
           payload:
-            refunded: false
+            refunded: true
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json

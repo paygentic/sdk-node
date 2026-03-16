@@ -9,7 +9,7 @@ export type RefundUsageEventRequestBody = {
   /**
    * Set to true to mark the usage event as refunded. Once refunded, the event cannot be un-refunded.
    */
-  refunded: boolean;
+  refunded: true;
   /**
    * Optional reason for the refund. Sample values: 'Customer request', 'Billing error', 'Service credit', 'System error correction'
    */
@@ -23,7 +23,7 @@ export type RefundUsageEventRequest = {
 
 /** @internal */
 export type RefundUsageEventRequestBody$Outbound = {
-  refunded: boolean;
+  refunded: true;
   reason?: string | undefined;
 };
 
@@ -33,7 +33,7 @@ export const RefundUsageEventRequestBody$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   RefundUsageEventRequestBody
 > = z.object({
-  refunded: z.boolean(),
+  refunded: z.literal(true),
   reason: z.string().optional(),
 });
 

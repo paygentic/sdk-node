@@ -19,6 +19,14 @@ export type ListCustomersRequest = {
    */
   offset?: number | undefined;
   /**
+   * Filter customers by consumer name (case-insensitive substring match)
+   */
+  name?: string | undefined;
+  /**
+   * Filter customers by billing email (case-insensitive substring match). Accepts partial values — e.g. a domain ("acme.com") or local part ("billing").
+   */
+  email?: string | undefined;
+  /**
    * ID of the merchant organization to filter customers by
    */
   organizationId: string;
@@ -45,6 +53,8 @@ export type ListCustomersResponse = {
 export type ListCustomersRequest$Outbound = {
   limit: number;
   offset: number;
+  name?: string | undefined;
+  email?: string | undefined;
   organizationId: string;
 };
 
@@ -56,6 +66,8 @@ export const ListCustomersRequest$outboundSchema: z.ZodType<
 > = z.object({
   limit: z.number().int().default(10),
   offset: z.number().int().default(0),
+  name: z.string().optional(),
+  email: z.string().optional(),
   organizationId: z.string(),
 });
 
