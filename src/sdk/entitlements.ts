@@ -9,8 +9,14 @@ import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
+import { Grants } from "./grants.js";
 
 export class Entitlements extends ClientSDK {
+  private _grants?: Grants;
+  get grants(): Grants {
+    return (this._grants ??= new Grants(this._options));
+  }
+
   /**
    * List Entitlements
    *

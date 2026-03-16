@@ -19,11 +19,11 @@ export type ListCustomersRequest = {
    */
   offset?: number | undefined;
   /**
-   * Filter customers by consumer name (case-insensitive substring match)
+   * Filter customers by consumer name (case-insensitive substring match). Minimum 3 characters required for efficient index usage.
    */
   name?: string | undefined;
   /**
-   * Filter customers by billing email (case-insensitive substring match). Accepts partial values — e.g. a domain ("acme.com") or local part ("billing").
+   * Filter customers by billing email (case-insensitive substring match). Minimum 3 characters required for efficient index usage. Accepts partial values — e.g. a domain ("acme.com") or local part ("billing").
    */
   email?: string | undefined;
   /**

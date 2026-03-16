@@ -10,15 +10,15 @@ import { unwrapAsync } from "../types/fp.js";
 
 export class Revenue extends ClientSDK {
   /**
-   * Get revenue time series
+   * Get revenue summary
    *
    * @remarks
-   * Returns time-bucketed revenue data including usage charges, fee charges, and refunds. Data is aggregated by subscription with an optional 'other' bucket for subscriptions outside the top N.
+   * Returns revenue summary with invoice and payment breakdowns (outstanding/paid/writtenOff), plus a time-series trend. Revenue is sourced from all issued invoices (v0 + v1) and completed payments.
    */
   async get(
     request: operations.GetRevenueRequest,
     options?: RequestOptions,
-  ): Promise<models.RevenueTimeSeriesResponse> {
+  ): Promise<models.RevenueSummaryResponse> {
     return unwrapAsync(revenueGet(
       this,
       request,

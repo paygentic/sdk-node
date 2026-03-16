@@ -2,15 +2,15 @@
 
 ## Overview
 
-Time-series revenue data with component breakdown including usage, fees, and refunds
+Revenue data from invoices and payments
 
 ### Available Operations
 
-* [get](#get) - Get revenue time series
+* [get](#get) - Get revenue summary
 
 ## get
 
-Returns time-bucketed revenue data including usage charges, fee charges, and refunds. Data is aggregated by subscription with an optional 'other' bucket for subscriptions outside the top N.
+Returns revenue summary with invoice and payment breakdowns (outstanding/paid/writtenOff), plus a time-series trend. Revenue is sourced from all issued invoices (v0 + v1) and completed payments.
 
 ### Example Usage
 
@@ -75,7 +75,7 @@ run();
 
 ### Response
 
-**Promise\<[models.RevenueTimeSeriesResponse](../../models/revenuetimeseriesresponse.md)\>**
+**Promise\<[models.RevenueSummaryResponse](../../models/revenuesummaryresponse.md)\>**
 
 ### Errors
 

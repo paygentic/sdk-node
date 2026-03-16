@@ -1,17 +1,17 @@
 # BucketWidth
 
-Time bucket granularity
+Time bucket granularity for trend data
 
 ## Example Usage
 
 ```typescript
 import { BucketWidth } from "@paygentic/sdk/models/operations";
 
-let value: BucketWidth = "hour";
+let value: BucketWidth = "day";
 ```
 
 ## Values
 
 ```typescript
-"minute" | "hour" | "day"
+"hour" | "day" | "week"
 ```

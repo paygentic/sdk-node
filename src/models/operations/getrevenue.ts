@@ -6,17 +6,28 @@ import * as z from "zod/v3";
 import { ClosedEnum } from "../../types/enums.js";
 
 /**
- * Time bucket granularity
+ * Time bucket granularity for trend data
  */
 export const BucketWidth = {
-  Minute: "minute",
   Hour: "hour",
   Day: "day",
+  Week: "week",
 } as const;
 /**
- * Time bucket granularity
+ * Time bucket granularity for trend data
  */
 export type BucketWidth = ClosedEnum<typeof BucketWidth>;
+
+/**
+ * Group invoice data by dimension. Max 5 groups (top 4 + 'other' when exceeding).
+ */
+export const GroupBy = {
+  Plan: "plan",
+} as const;
+/**
+ * Group invoice data by dimension. Max 5 groups (top 4 + 'other' when exceeding).
+ */
+export type GroupBy = ClosedEnum<typeof GroupBy>;
 
 export type GetRevenueRequest = {
   /**
@@ -28,7 +39,7 @@ export type GetRevenueRequest = {
    */
   endTime: Date;
   /**
-   * Time bucket granularity
+   * Time bucket granularity for trend data
    */
   bucketWidth?: BucketWidth | undefined;
   /**
@@ -44,14 +55,18 @@ export type GetRevenueRequest = {
    */
   subscriptionIds?: Array<string> | undefined;
   /**
-   * Limit to top N subscriptions by net revenue. Remaining subscriptions are aggregated into 'other'.
+   * Group invoice data by dimension. Max 5 groups (top 4 + 'other' when exceeding).
    */
-  topN?: number | undefined;
+  groupBy?: GroupBy | undefined;
 };
 
 /** @internal */
 export const BucketWidth$outboundSchema: z.ZodNativeEnum<typeof BucketWidth> = z
   .nativeEnum(BucketWidth);
+
+/** @internal */
+export const GroupBy$outboundSchema: z.ZodNativeEnum<typeof GroupBy> = z
+  .nativeEnum(GroupBy);
 
 /** @internal */
 export type GetRevenueRequest$Outbound = {
@@ -61,7 +76,7 @@ export type GetRevenueRequest$Outbound = {
   merchantId?: string | undefined;
   customerId?: string | undefined;
   subscriptionIds?: Array<string> | undefined;
-  topN: number;
+  groupBy?: string | undefined;
 };
 
 /** @internal */
@@ -72,11 +87,11 @@ export const GetRevenueRequest$outboundSchema: z.ZodType<
 > = z.object({
   startTime: z.date().transform(v => v.toISOString()),
   endTime: z.date().transform(v => v.toISOString()),
-  bucketWidth: BucketWidth$outboundSchema.default("hour"),
+  bucketWidth: BucketWidth$outboundSchema.default("day"),
   merchantId: z.string().optional(),
   customerId: z.string().optional(),
   subscriptionIds: z.array(z.string()).optional(),
-  topN: z.number().int().default(10),
+  groupBy: GroupBy$outboundSchema.optional(),
 });
 
 export function getRevenueRequestToJSON(

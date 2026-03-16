@@ -27,10 +27,10 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get revenue time series
+ * Get revenue summary
  *
  * @remarks
- * Returns time-bucketed revenue data including usage charges, fee charges, and refunds. Data is aggregated by subscription with an optional 'other' bucket for subscriptions outside the top N.
+ * Returns revenue summary with invoice and payment breakdowns (outstanding/paid/writtenOff), plus a time-series trend. Revenue is sourced from all issued invoices (v0 + v1) and completed payments.
  */
 export function revenueGet(
   client: PaygenticCore,
@@ -38,7 +38,7 @@ export function revenueGet(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.RevenueTimeSeriesResponse,
+    models.RevenueSummaryResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -65,7 +65,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.RevenueTimeSeriesResponse,
+      models.RevenueSummaryResponse,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -97,10 +97,10 @@ async function $do(
     "bucketWidth": payload.bucketWidth,
     "customerId": payload.customerId,
     "endTime": payload.endTime,
+    "groupBy": payload.groupBy,
     "merchantId": payload.merchantId,
     "startTime": payload.startTime,
     "subscriptionIds": payload.subscriptionIds,
-    "topN": payload.topN,
   });
 
   const headers = new Headers(compactMap({
@@ -158,7 +158,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.RevenueTimeSeriesResponse,
+    models.RevenueSummaryResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -170,7 +170,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.RevenueTimeSeriesResponse$inboundSchema),
+    M.json(200, models.RevenueSummaryResponse$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),

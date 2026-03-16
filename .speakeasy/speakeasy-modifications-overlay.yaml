@@ -176,6 +176,58 @@ actions:
       reviewed_at: 1740009600000
       type: method-name
 
+  # ── entitlements.grants ───────────────────────────────────────────────
+  - target: $["paths"]["/v1/entitlements/{entitlementId}/grants"]["get"]
+    update:
+      x-speakeasy-group: entitlements.grants
+      x-speakeasy-name-override: list
+    x-speakeasy-metadata:
+      after: sdk.entitlements.grants.list()
+      before: sdk.Entitlements.listEntitlementGrants()
+      created_at: 1742083200000
+      reviewed_at: 1742083200000
+      type: method-name
+  - target: $["paths"]["/v1/entitlements/{entitlementId}/grants"]["post"]
+    update:
+      x-speakeasy-group: entitlements.grants
+      x-speakeasy-name-override: create
+    x-speakeasy-metadata:
+      after: sdk.entitlements.grants.create()
+      before: sdk.Entitlements.createEntitlementGrant()
+      created_at: 1742083200000
+      reviewed_at: 1742083200000
+      type: method-name
+  - target: $["paths"]["/v1/entitlements/{entitlementId}/grants/purchase"]["post"]
+    update:
+      x-speakeasy-group: entitlements.grants
+      x-speakeasy-name-override: purchase
+    x-speakeasy-metadata:
+      after: sdk.entitlements.grants.purchase()
+      before: sdk.Entitlements.purchaseEntitlementGrant()
+      created_at: 1742083200000
+      reviewed_at: 1742083200000
+      type: method-name
+  - target: $["paths"]["/v1/entitlements/{entitlementId}/grants/{grantId}"]["get"]
+    update:
+      x-speakeasy-group: entitlements.grants
+      x-speakeasy-name-override: get
+    x-speakeasy-metadata:
+      after: sdk.entitlements.grants.get()
+      before: sdk.Entitlements.getEntitlementGrant()
+      created_at: 1742083200000
+      reviewed_at: 1742083200000
+      type: method-name
+  - target: $["paths"]["/v1/entitlements/{entitlementId}/grants/{grantId}"]["delete"]
+    update:
+      x-speakeasy-group: entitlements.grants
+      x-speakeasy-name-override: void
+    x-speakeasy-metadata:
+      after: sdk.entitlements.grants.void()
+      before: sdk.Entitlements.voidEntitlementGrant()
+      created_at: 1742083200000
+      reviewed_at: 1742083200000
+      type: method-name
+
   # ── features ─────────────────────────────────────────────────────────
   - target: $["paths"]["/v0/features"]["get"]
     update:

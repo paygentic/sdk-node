@@ -1916,16 +1916,13 @@ workflows:
             value: "2026-04-29T18:43:05.586Z"
           - name: bucketWidth
             in: query
-            value: hour
-          - name: topN
-            in: query
-            value: 10
+            value: day
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"revenue_time_series","buckets":[]}
+              {"object":"revenue_summary","netRevenue":"<value>","invoices":{"issued":{"count":186743,"amount":"775.35"},"outstanding":{"count":186743,"amount":"775.35"},"paid":{"count":290758,"amount":"20.75"},"writtenOff":{"count":86320,"amount":"735.88"}},"payments":{"completedCount":290758,"completedAmount":"<value>","pendingCount":186743,"pendingAmount":"<value>","expiredCount":186743,"expiredAmount":"<value>"},"trend":[]}
             type: simple
     x-speakeasy-test-group: Revenue
     x-speakeasy-test-rebuild: true
@@ -2330,43 +2327,237 @@ workflows:
             type: simple
     x-speakeasy-test-group: Payments
     x-speakeasy-test-rebuild: true
-  - workflowId: listLineItems
+  - workflowId: getRevenueLegacy
     steps:
       - stepId: test
-        operationId: listLineItems
+        operationId: getRevenueLegacy
         parameters:
+          - name: startTime
+            in: query
+            value: "2024-12-16T02:41:21.143Z"
+          - name: endTime
+            in: query
+            value: "2026-01-03T21:06:09.907Z"
+          - name: bucketWidth
+            in: query
+            value: hour
+          - name: topN
+            in: query
+            value: 10
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"revenue_time_series","buckets":[{"timestamp":"2026-07-20T06:06:59.689Z"}]}
+            type: simple
+    x-speakeasy-test-group: Revenue
+    x-speakeasy-test-rebuild: true
+  - workflowId: listEntitlementGrants
+    steps:
+      - stepId: test
+        operationId: listEntitlementGrants
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
           - name: limit
             in: query
-            value: 100
+            value: 20
           - name: offset
             in: query
             value: 0
+          - name: includeVoided
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[{"id":"<id>","subscriptionId":"<id>","type":"metered","status":"invoiced","displayName":"Ruthe20","currency":"Tenge","periodStart":"2026-09-04T02:49:10.376Z","periodEnd":"2026-09-15T08:12:34.337Z","invoiceAt":"2024-10-05T12:55:27.688Z","unitPrice":"<value>","createdAt":"2024-05-18T12:29:19.850Z","updatedAt":"2024-07-26T23:40:10.281Z"}],"totalCount":585166,"summary":{"feeSubtotal":"<value>","meteredEstimatedSubtotal":"<value>","currency":"Swedish Krona"}}
+              {"object":"list","data":[],"pagination":{}}
             type: simple
-    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true
-  - workflowId: createLineItem
+  - workflowId: createEntitlementGrant-minimal
     steps:
       - stepId: test
-        operationId: createLineItem
+        operationId: createEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
         requestBody:
           contentType: application/json
           payload:
-            currency: Rwanda Franc
-            displayName: Nathan54
-            quantity: 6214.31
-            unitPrice: 740813
+            amount: 100
+            idempotencyKey: grant-initial-100
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z"}
+            type: simple
+    x-speakeasy-test-group: grants
+    x-speakeasy-test-rebuild: true
+  - workflowId: createEntitlementGrant-withExpiry
+    steps:
+      - stepId: test
+        operationId: createEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: 500
+            effectiveAt: "2026-03-14T00:00:00Z"
+            expiresAt: "2026-04-14T00:00:00Z"
+            idempotencyKey: grant-march-2026-promo
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z"}
+            type: simple
+    x-speakeasy-test-group: grants
+    x-speakeasy-test-rebuild: true
+  - workflowId: createEntitlementGrant
+    steps:
+      - stepId: test
+        operationId: createEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: 1830.35
+            idempotencyKey: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z"}
+            type: simple
+    x-speakeasy-test-group: grants
+    x-speakeasy-test-rebuild: true
+  - workflowId: purchaseEntitlementGrant-basic
+    steps:
+      - stepId: test
+        operationId: purchaseEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: 1000
+            idempotencyKey: purchase-march-2026-topup
+            price: "5.00"
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant_purchase","invoiceId":"<id>","entitlementId":"<id>","grantAmount":999736,"price":"805.99","currency":"Saint Helena Pound","paymentSessions":[{"url":"https://glum-advancement.name/"}]}
+            type: simple
+    x-speakeasy-test-group: grants
+    x-speakeasy-test-rebuild: true
+  - workflowId: purchaseEntitlementGrant-withOptions
+    steps:
+      - stepId: test
+        operationId: purchaseEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: 500
+            cancelUrl: https://example.com/cancel
+            effectiveAt: "2026-03-14T00:00:00Z"
+            expiresAt: "2026-04-14T00:00:00Z"
+            idempotencyKey: purchase-promo-500
+            paymentExpiresAt: "2026-03-15T00:00:00Z"
+            price: "2.50"
+            successUrl: https://example.com/success
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant_purchase","invoiceId":"<id>","entitlementId":"<id>","grantAmount":999736,"price":"805.99","currency":"Saint Helena Pound","paymentSessions":[{"url":"https://glum-advancement.name/"}]}
+            type: simple
+    x-speakeasy-test-group: grants
+    x-speakeasy-test-rebuild: true
+  - workflowId: purchaseEntitlementGrant
+    steps:
+      - stepId: test
+        operationId: purchaseEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: 1703.91
+            idempotencyKey: <value>
+            price: "367.99"
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant_purchase","invoiceId":"<id>","entitlementId":"<id>","grantAmount":999736,"price":"805.99","currency":"Saint Helena Pound","paymentSessions":[{"url":"https://glum-advancement.name/"}]}
+            type: simple
+    x-speakeasy-test-group: grants
+    x-speakeasy-test-rebuild: true
+  - workflowId: getEntitlementGrant
+    steps:
+      - stepId: test
+        operationId: getEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+          - name: grantId
+            in: path
+            value: <id>
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","subscriptionId":"<id>","type":"manual","status":"pending","displayName":"Roscoe_Haag","currency":"Belize Dollar","periodStart":"2025-06-18T03:33:03.362Z","periodEnd":"2025-11-09T02:25:51.382Z","invoiceAt":"2024-04-26T04:27:52.258Z","unitPrice":"<value>","createdAt":"2025-10-18T18:51:06.413Z","updatedAt":"2025-04-29T04:46:04.080Z"}
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":4991.16,"effectiveAt":"2024-09-22T15:49:08.483Z","createdAt":"2026-11-16T03:45:11.345Z"}
             type: simple
-    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-group: grants
+    x-speakeasy-test-rebuild: true
+  - workflowId: voidEntitlementGrant
+    steps:
+      - stepId: test
+        operationId: voidEntitlementGrant
+        parameters:
+          - name: entitlementId
+            in: path
+            value: <id>
+          - name: grantId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2546.27,"effectiveAt":"2024-11-09T23:13:48.090Z","createdAt":"2026-04-05T05:12:44.830Z"}
+            type: simple
+    x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true

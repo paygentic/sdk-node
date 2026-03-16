@@ -191,6 +191,14 @@ run();
 * [issue](docs/sdks/entitlements/README.md#issue) - Issue Entitlement
 * [get](docs/sdks/entitlements/README.md#get) - Get Entitlement
 
+### [Entitlements.Grants](docs/sdks/grants/README.md)
+
+* [list](docs/sdks/grants/README.md#list) - List Grants
+* [create](docs/sdks/grants/README.md#create) - Create Grant
+* [purchase](docs/sdks/grants/README.md#purchase) - Purchase Grant
+* [get](docs/sdks/grants/README.md#get) - Get Grant
+* [void](docs/sdks/grants/README.md#void) - Void Grant
+
 ### [EntitlementsV0](docs/sdks/entitlementsv0/README.md)
 
 * [listActive](docs/sdks/entitlementsv0/README.md#listactive) - List by Customer
@@ -256,7 +264,7 @@ run();
 
 ### [Revenue](docs/sdks/revenue/README.md)
 
-* [get](docs/sdks/revenue/README.md#get) - Get revenue time series
+* [get](docs/sdks/revenue/README.md#get) - Get revenue summary
 
 ### [Sources](docs/sdks/sources/README.md)
 
@@ -341,6 +349,11 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`disputesCreate`](docs/sdks/disputes/README.md#create) - Create
 - [`disputesList`](docs/sdks/disputes/README.md#list) - List
 - [`entitlementsGet`](docs/sdks/entitlements/README.md#get) - Get Entitlement
+- [`entitlementsGrantsCreate`](docs/sdks/grants/README.md#create) - Create Grant
+- [`entitlementsGrantsGet`](docs/sdks/grants/README.md#get) - Get Grant
+- [`entitlementsGrantsList`](docs/sdks/grants/README.md#list) - List Grants
+- [`entitlementsGrantsPurchase`](docs/sdks/grants/README.md#purchase) - Purchase Grant
+- [`entitlementsGrantsVoid`](docs/sdks/grants/README.md#void) - Void Grant
 - [`entitlementsIssue`](docs/sdks/entitlements/README.md#issue) - Issue Entitlement
 - [`entitlementsList`](docs/sdks/entitlements/README.md#list) - List Entitlements
 - [`entitlementsV0Create`](docs/sdks/entitlementsv0/README.md#create) - Create
@@ -379,7 +392,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`productsGet`](docs/sdks/products/README.md#get) - Get
 - [`productsList`](docs/sdks/products/README.md#list) - List
 - [`productsUpdate`](docs/sdks/products/README.md#update) - Update
-- [`revenueGet`](docs/sdks/revenue/README.md#get) - Get revenue time series
+- [`revenueGet`](docs/sdks/revenue/README.md#get) - Get revenue summary
 - [`sourcesCreate`](docs/sdks/sources/README.md#create) - Create
 - [`sourcesEventsApprove`](docs/sdks/sourcesevents/README.md#approve) - Approve
 - [`sourcesEventsBulkApprove`](docs/sdks/sourcesevents/README.md#bulkapprove) - Bulk Approve
@@ -567,9 +580,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 50 of 83 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 83 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 83 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 56 of 88 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 88 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 88 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
