@@ -11,6 +11,7 @@ export * from "./createbillablemetric.js";
 export * from "./createcustomer.js";
 export * from "./createfeature.js";
 export * from "./createfee.js";
+export * from "./createlineitem.js";
 export * from "./createpayment.js";
 export * from "./createplan.js";
 export * from "./createprice.js";

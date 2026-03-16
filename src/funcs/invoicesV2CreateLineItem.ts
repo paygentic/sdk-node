@@ -3,7 +3,7 @@
  */
 
 import { PaygenticCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -22,6 +22,7 @@ import { PaygenticError } from "../models/errors/paygenticerror.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
+import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
@@ -33,7 +34,7 @@ import { Result } from "../types/fp.js";
  */
 export function invoicesV2CreateLineItem(
   client: PaygenticCore,
-  request: models.CreateManualLineItemRequest,
+  request: operations.CreateLineItemRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
@@ -59,7 +60,7 @@ export function invoicesV2CreateLineItem(
 
 async function $do(
   client: PaygenticCore,
-  request: models.CreateManualLineItemRequest,
+  request: operations.CreateLineItemRequest,
   options?: RequestOptions,
 ): Promise<
   [
@@ -81,20 +82,27 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => models.CreateManualLineItemRequest$outboundSchema.parse(value),
+    (value) => operations.CreateLineItemRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = encodeJSON("body", payload.CreateManualLineItemRequest, {
+    explode: true,
+  });
 
   const path = pathToFunc("/v2/invoices/lineItems")();
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
     Accept: "application/json",
+    "Idempotency-Key": encodeSimple(
+      "Idempotency-Key",
+      payload["Idempotency-Key"],
+      { explode: false, charEncoding: "none" },
+    ),
   }));
 
   const secConfig = await extractSecurity(client._options.bearerAuth);

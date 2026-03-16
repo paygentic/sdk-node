@@ -54,7 +54,7 @@ export class InvoicesV2 extends ClientSDK {
    * Create a manual line item for a billing v1 subscription. Manual line items are ad-hoc charges or credits that flow through the same collection pipeline as auto-generated items. Exactly one of subscriptionId or invoiceId must be provided.
    */
   async createLineItem(
-    request: models.CreateManualLineItemRequest,
+    request: operations.CreateLineItemRequest,
     options?: RequestOptions,
   ): Promise<models.LineItem> {
     return unwrapAsync(invoicesV2CreateLineItem(

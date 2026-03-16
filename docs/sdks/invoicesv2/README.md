@@ -172,10 +172,12 @@ const paygentic = new Paygentic({
 
 async function run() {
   const result = await paygentic.invoicesV2.createLineItem({
-    displayName: "Nathan54",
-    currency: "Rwanda Franc",
-    quantity: 6214.31,
-    unitPrice: 740813,
+    createManualLineItemRequest: {
+      displayName: "Nathan54",
+      currency: "Rwanda Franc",
+      quantity: 6214.31,
+      unitPrice: 740813,
+    },
   });
 
   console.log(result);
@@ -200,10 +202,12 @@ const paygentic = new PaygenticCore({
 
 async function run() {
   const res = await invoicesV2CreateLineItem(paygentic, {
-    displayName: "Nathan54",
-    currency: "Rwanda Franc",
-    quantity: 6214.31,
-    unitPrice: 740813,
+    createManualLineItemRequest: {
+      displayName: "Nathan54",
+      currency: "Rwanda Franc",
+      quantity: 6214.31,
+      unitPrice: 740813,
+    },
   });
   if (res.ok) {
     const { value: result } = res;
@@ -220,7 +224,7 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [models.CreateManualLineItemRequest](../../models/createmanuallineitemrequest.md)                                                                                              | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.CreateLineItemRequest](../../models/operations/createlineitemrequest.md)                                                                                           | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |

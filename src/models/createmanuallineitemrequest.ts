@@ -10,7 +10,7 @@ export type CreateManualLineItemRequest = {
    */
   subscriptionId?: string | undefined;
   /**
-   * The invoice ID to attach this item directly to. Exactly one of subscriptionId or invoiceId must be provided. The invoice must not have reached ISSUED status (accepted states: CLOSING, CLOSED, CALCULATING, DRAFT, APPROVED).
+   * The invoice ID to attach this item directly to. Exactly one of subscriptionId or invoiceId must be provided. The invoice must be in ACTIVE or CLOSING state.
    */
   invoiceId?: string | undefined;
   /**
@@ -30,7 +30,7 @@ export type CreateManualLineItemRequest = {
    */
   quantity: number;
   /**
-   * Price per unit as a decimal amount (e.g., 29.99 for $29.99). Can be negative for credits or adjustments. Must be between -99,999,999 and 99,999,999.
+   * Price per unit as a decimal amount (e.g., 29.99 for $29.99). Can be negative for credits or adjustments.
    */
   unitPrice: number;
   /**

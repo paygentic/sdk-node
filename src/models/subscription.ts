@@ -14,6 +14,24 @@ export const SubscriptionObject = {
 export type SubscriptionObject = ClosedEnum<typeof SubscriptionObject>;
 
 /**
+ * Zero-amount Invoice 0 that completed synchronously to PAID
+ */
+export type PaymentPaid = {
+  /**
+   * The Invoice 0 id
+   */
+  invoiceId: string;
+  /**
+   * Payment amount ('0' for zero-amount subscriptions)
+   */
+  amount: string;
+  /**
+   * Payment status
+   */
+  status: "paid";
+};
+
+/**
  * Breakdown of payment amount
  */
 export type Breakdown = {
@@ -22,26 +40,12 @@ export type Breakdown = {
    */
   upfrontCharges: string;
   /**
-   * Wallet charge amount in decimal dollar format. This is the calculated difference between the minimum account balance requirement and the customer's current balance. If the customer already has sufficient balance, this will be '0.00'. Sample values: '200.00' equals $200.00 charge, '0.00' means no charge needed
+   * Wallet charge amount in decimal dollar format.
    */
   walletCharge: string;
 };
 
-/**
- * Payment status
- */
-export const StatusPending = {
-  Pending: "pending",
-} as const;
-/**
- * Payment status
- */
-export type StatusPending = ClosedEnum<typeof StatusPending>;
-
-/**
- * Payment session details when upfront payment is required
- */
-export type SubscriptionPayment = {
+export type PaymentPending = {
   /**
    * Total payment amount in decimal dollar format. Sample values: '250.00' equals $250.00, '99.99' equals $99.99
    */
@@ -51,7 +55,7 @@ export type SubscriptionPayment = {
    */
   breakdown: Breakdown;
   /**
-   * Checkout page URL for customer payment completion. Sample values: 'https://checkout.paygentic.com/session/ps_abc123', 'https://pay.example.com/checkout/xyz789'
+   * Checkout page URL for customer payment completion.
    */
   checkoutUrl: string;
   /**
@@ -59,21 +63,26 @@ export type SubscriptionPayment = {
    */
   invoiceId?: string | undefined;
   /**
-   * Payment session identifier for upfront payment processing. Sample values: 'ps_abc123xyz', 'ps_789def456'
+   * Payment session identifier for upfront payment processing.
    */
   paymentSessionId: string;
   /**
    * Payment status
    */
-  status: StatusPending;
+  status: "pending";
 };
 
-export const SubscriptionStatus = {
+/**
+ * Payment session details when upfront payment is required, or confirmation of a zero-amount paid invoice
+ */
+export type PaymentUnion = PaymentPending | PaymentPaid;
+
+export const SubscriptionStatusEnum = {
   PendingPayment: "pending_payment",
   Active: "active",
   Terminated: "terminated",
 } as const;
-export type SubscriptionStatus = ClosedEnum<typeof SubscriptionStatus>;
+export type SubscriptionStatusEnum = ClosedEnum<typeof SubscriptionStatusEnum>;
 
 export type Subscription = {
   id: string;
@@ -95,9 +104,9 @@ export type Subscription = {
   taxExempt: boolean;
   name: string;
   /**
-   * Payment session details when upfront payment is required
+   * Payment session details when upfront payment is required, or confirmation of a zero-amount paid invoice
    */
-  payment?: SubscriptionPayment | undefined;
+  payment?: PaymentPending | PaymentPaid | undefined;
   planId: string;
   /**
    * @deprecated Use minimumAccountBalance instead. Minimum required wallet balance in atomic units. Sample values: '200000000000' equals $200.00 minimum, '1000000000000' equals $1000.00 minimum
@@ -108,7 +117,7 @@ export type Subscription = {
    */
   minimumAccountBalance?: string | undefined;
   startedAt: Date;
-  status: SubscriptionStatus;
+  status: SubscriptionStatusEnum;
   terminatedAt?: Date | undefined;
   /**
    * ID of who terminated the subscription (customer ID or merchant ID)
@@ -143,6 +152,27 @@ export const SubscriptionObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(SubscriptionObject);
 
 /** @internal */
+export const PaymentPaid$inboundSchema: z.ZodType<
+  PaymentPaid,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  invoiceId: z.string(),
+  amount: z.string(),
+  status: z.literal("paid"),
+});
+
+export function paymentPaidFromJSON(
+  jsonString: string,
+): SafeParseResult<PaymentPaid, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PaymentPaid$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PaymentPaid' from JSON`,
+  );
+}
+
+/** @internal */
 export const Breakdown$inboundSchema: z.ZodType<
   Breakdown,
   z.ZodTypeDef,
@@ -163,13 +193,8 @@ export function breakdownFromJSON(
 }
 
 /** @internal */
-export const StatusPending$inboundSchema: z.ZodNativeEnum<
-  typeof StatusPending
-> = z.nativeEnum(StatusPending);
-
-/** @internal */
-export const SubscriptionPayment$inboundSchema: z.ZodType<
-  SubscriptionPayment,
+export const PaymentPending$inboundSchema: z.ZodType<
+  PaymentPending,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -178,23 +203,43 @@ export const SubscriptionPayment$inboundSchema: z.ZodType<
   checkoutUrl: z.string(),
   invoiceId: z.string().optional(),
   paymentSessionId: z.string(),
-  status: StatusPending$inboundSchema,
+  status: z.literal("pending"),
 });
 
-export function subscriptionPaymentFromJSON(
+export function paymentPendingFromJSON(
   jsonString: string,
-): SafeParseResult<SubscriptionPayment, SDKValidationError> {
+): SafeParseResult<PaymentPending, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => SubscriptionPayment$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'SubscriptionPayment' from JSON`,
+    (x) => PaymentPending$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PaymentPending' from JSON`,
   );
 }
 
 /** @internal */
-export const SubscriptionStatus$inboundSchema: z.ZodNativeEnum<
-  typeof SubscriptionStatus
-> = z.nativeEnum(SubscriptionStatus);
+export const PaymentUnion$inboundSchema: z.ZodType<
+  PaymentUnion,
+  z.ZodTypeDef,
+  unknown
+> = z.union([
+  z.lazy(() => PaymentPending$inboundSchema),
+  z.lazy(() => PaymentPaid$inboundSchema),
+]);
+
+export function paymentUnionFromJSON(
+  jsonString: string,
+): SafeParseResult<PaymentUnion, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PaymentUnion$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PaymentUnion' from JSON`,
+  );
+}
+
+/** @internal */
+export const SubscriptionStatusEnum$inboundSchema: z.ZodNativeEnum<
+  typeof SubscriptionStatusEnum
+> = z.nativeEnum(SubscriptionStatusEnum);
 
 /** @internal */
 export const Subscription$inboundSchema: z.ZodType<
@@ -212,12 +257,15 @@ export const Subscription$inboundSchema: z.ZodType<
   estimatedTaxRate: z.number().optional(),
   taxExempt: z.boolean().default(false),
   name: z.string(),
-  payment: z.lazy(() => SubscriptionPayment$inboundSchema).optional(),
+  payment: z.union([
+    z.lazy(() => PaymentPending$inboundSchema),
+    z.lazy(() => PaymentPaid$inboundSchema),
+  ]).optional(),
   planId: z.string(),
   prefundAmount: z.string().optional(),
   minimumAccountBalance: z.string().optional(),
   startedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
-  status: SubscriptionStatus$inboundSchema,
+  status: SubscriptionStatusEnum$inboundSchema,
   terminatedAt: z.string().datetime({ offset: true }).transform(v =>
     new Date(v)
   ).optional(),
