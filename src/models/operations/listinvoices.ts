@@ -58,6 +58,10 @@ export type ListInvoicesRequest = {
    * Filter invoices by subscription ID
    */
   subscriptionId?: string | undefined;
+  /**
+   * Filter invoices by merchant ID
+   */
+  merchantId?: string | undefined;
 };
 
 export const ListInvoicesObject = {
@@ -88,6 +92,7 @@ export type ListInvoicesRequest$Outbound = {
   nextActionAt?: string | undefined;
   status?: string | undefined;
   subscriptionId?: string | undefined;
+  merchantId?: string | undefined;
 };
 
 /** @internal */
@@ -100,6 +105,7 @@ export const ListInvoicesRequest$outboundSchema: z.ZodType<
   nextActionAt: NextActionAt$outboundSchema.optional(),
   status: ListInvoicesStatus$outboundSchema.optional(),
   subscriptionId: z.string().optional(),
+  merchantId: z.string().optional(),
 });
 
 export function listInvoicesRequestToJSON(

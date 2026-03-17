@@ -93,6 +93,7 @@ async function $do(
 
   const query = encodeFormQuery({
     "limit": payload?.limit,
+    "merchantId": payload?.merchantId,
     "nextActionAt": payload?.nextActionAt,
     "status": payload?.status,
     "subscriptionId": payload?.subscriptionId,
