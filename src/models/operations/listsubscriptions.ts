@@ -12,10 +12,22 @@ import * as models from "../index.js";
 export const ListSubscriptionsStatus = {
   Active: "active",
   Terminated: "terminated",
+  PendingPayment: "pending_payment",
 } as const;
 export type ListSubscriptionsStatus = ClosedEnum<
   typeof ListSubscriptionsStatus
 >;
+
+/**
+ * Include related resources. When 'customer' is specified, each subscription includes merchant and consumer details.
+ */
+export const Include = {
+  Customer: "customer",
+} as const;
+/**
+ * Include related resources. When 'customer' is specified, each subscription includes merchant and consumer details.
+ */
+export type Include = ClosedEnum<typeof Include>;
 
 export type ListSubscriptionsRequest = {
   consumerId?: string | undefined;
@@ -30,6 +42,14 @@ export type ListSubscriptionsRequest = {
    */
   offset?: string | undefined;
   status?: ListSubscriptionsStatus | undefined;
+  /**
+   * Filter subscriptions started at or before this ISO 8601 date-time
+   */
+  startedBefore?: Date | undefined;
+  /**
+   * Include related resources. When 'customer' is specified, each subscription includes merchant and consumer details.
+   */
+  include?: Include | undefined;
 };
 
 /**
@@ -49,6 +69,10 @@ export const ListSubscriptionsStatus$outboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(ListSubscriptionsStatus);
 
 /** @internal */
+export const Include$outboundSchema: z.ZodNativeEnum<typeof Include> = z
+  .nativeEnum(Include);
+
+/** @internal */
 export type ListSubscriptionsRequest$Outbound = {
   consumerId?: string | undefined;
   customerId?: string | undefined;
@@ -56,6 +80,8 @@ export type ListSubscriptionsRequest$Outbound = {
   merchantId?: string | undefined;
   offset: string;
   status?: string | undefined;
+  startedBefore?: string | undefined;
+  include?: string | undefined;
 };
 
 /** @internal */
@@ -70,6 +96,8 @@ export const ListSubscriptionsRequest$outboundSchema: z.ZodType<
   merchantId: z.string().optional(),
   offset: z.string().default("0"),
   status: ListSubscriptionsStatus$outboundSchema.optional(),
+  startedBefore: z.date().transform(v => v.toISOString()).optional(),
+  include: Include$outboundSchema.optional(),
 });
 
 export function listSubscriptionsRequestToJSON(

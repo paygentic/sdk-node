@@ -95,9 +95,11 @@ async function $do(
   const query = encodeFormQuery({
     "consumerId": payload?.consumerId,
     "customerId": payload?.customerId,
+    "include": payload?.include,
     "limit": payload?.limit,
     "merchantId": payload?.merchantId,
     "offset": payload?.offset,
+    "startedBefore": payload?.startedBefore,
     "status": payload?.status,
   });
 

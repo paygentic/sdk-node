@@ -84,6 +84,34 @@ export const SubscriptionStatusEnum = {
 } as const;
 export type SubscriptionStatusEnum = ClosedEnum<typeof SubscriptionStatusEnum>;
 
+export type Merchant = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+export type Consumer = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+/**
+ * Customer details with merchant and consumer information. Only included when include=customer is specified in the list query.
+ */
+export type SubscriptionCustomer = {
+  /**
+   * Customer ID
+   */
+  id?: string | undefined;
+  /**
+   * Merchant organization ID
+   */
+  merchantId?: string | undefined;
+  merchant?: Merchant | undefined;
+  consumer?: Consumer | undefined;
+};
+
 export type Subscription = {
   id: string;
   object: SubscriptionObject;
@@ -144,6 +172,10 @@ export type Subscription = {
    * Number of days before renewal to send the reminder. Null means use plan default.
    */
   renewalReminderDays?: number | null | undefined;
+  /**
+   * Customer details with merchant and consumer information. Only included when include=customer is specified in the list query.
+   */
+  customer?: SubscriptionCustomer | undefined;
 };
 
 /** @internal */
@@ -242,6 +274,70 @@ export const SubscriptionStatusEnum$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(SubscriptionStatusEnum);
 
 /** @internal */
+export const Merchant$inboundSchema: z.ZodType<
+  Merchant,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string(),
+});
+
+export function merchantFromJSON(
+  jsonString: string,
+): SafeParseResult<Merchant, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Merchant$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Merchant' from JSON`,
+  );
+}
+
+/** @internal */
+export const Consumer$inboundSchema: z.ZodType<
+  Consumer,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string(),
+});
+
+export function consumerFromJSON(
+  jsonString: string,
+): SafeParseResult<Consumer, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Consumer$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Consumer' from JSON`,
+  );
+}
+
+/** @internal */
+export const SubscriptionCustomer$inboundSchema: z.ZodType<
+  SubscriptionCustomer,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  id: z.string().optional(),
+  merchantId: z.string().optional(),
+  merchant: z.lazy(() => Merchant$inboundSchema).optional(),
+  consumer: z.lazy(() => Consumer$inboundSchema).optional(),
+});
+
+export function subscriptionCustomerFromJSON(
+  jsonString: string,
+): SafeParseResult<SubscriptionCustomer, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => SubscriptionCustomer$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'SubscriptionCustomer' from JSON`,
+  );
+}
+
+/** @internal */
 export const Subscription$inboundSchema: z.ZodType<
   Subscription,
   z.ZodTypeDef,
@@ -276,6 +372,7 @@ export const Subscription$inboundSchema: z.ZodType<
   walletId: z.string().optional(),
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
+  customer: z.lazy(() => SubscriptionCustomer$inboundSchema).optional(),
 });
 
 export function subscriptionFromJSON(
