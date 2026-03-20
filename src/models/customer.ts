@@ -47,6 +47,10 @@ export type Customer = {
    */
   taxId?: string | undefined;
   /**
+   * Merchant-defined identifier for this customer in their own system.
+   */
+  externalId?: string | undefined;
+  /**
    * An object mapping plan IDs, metric IDs, or 'default' to a tax rate percentage (e.g., 13 for 13%)
    */
   taxRates?: { [k: string]: number } | undefined;
@@ -98,6 +102,7 @@ export const Customer$inboundSchema: z.ZodType<
   merchantId: z.string(),
   organization: z.lazy(() => CustomerOrganization$inboundSchema).optional(),
   taxId: z.string().optional(),
+  externalId: z.string().optional(),
   taxRates: z.record(z.number()).optional(),
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   validTaxAddress: ValidTaxAddress$inboundSchema,

@@ -95,7 +95,6 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-
   const path = pathToFunc("/v2/invoices/{id}")(pathParams);
 
   const query = encodeFormQuery({

@@ -94,7 +94,6 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-
   const path = pathToFunc("/v0/sourceRules/{ruleId}")(pathParams);
 
   const headers = new Headers(compactMap({

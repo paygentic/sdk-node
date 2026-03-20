@@ -94,7 +94,6 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-
   const path = pathToFunc("/v0/customers/{id}")(pathParams);
 
   const headers = new Headers(compactMap({
@@ -138,7 +137,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "404", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "404", "409", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -166,7 +165,7 @@ async function $do(
   >(
     M.json(200, models.Customer$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
-    M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
+    M.jsonErr([401, 403, 404, 409], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

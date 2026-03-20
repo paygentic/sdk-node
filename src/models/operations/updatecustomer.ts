@@ -12,6 +12,10 @@ export type UpdateCustomerRequestBody = {
    * Business tax registration identifier. Sample values: 'GB123456789' for UK VAT, 'DE123456789' for German VAT, 'FR12345678901' for French VAT. Enables inter-company tax handling and exemption from standard tax collection. Assign null to delete the identifier.
    */
   taxId?: string | null | undefined;
+  /**
+   * Merchant-defined identifier for this customer in their own system. Set to null to clear.
+   */
+  externalId?: string | null | undefined;
   taxRates?: number | { [k: string]: number } | undefined;
 };
 
@@ -40,6 +44,7 @@ export function taxRatesToJSON(taxRates: TaxRates): string {
 /** @internal */
 export type UpdateCustomerRequestBody$Outbound = {
   taxId?: string | null | undefined;
+  externalId?: string | null | undefined;
   taxRates?: number | { [k: string]: number } | undefined;
 };
 
@@ -50,6 +55,7 @@ export const UpdateCustomerRequestBody$outboundSchema: z.ZodType<
   UpdateCustomerRequestBody
 > = z.object({
   taxId: z.nullable(z.string()).optional(),
+  externalId: z.nullable(z.string()).optional(),
   taxRates: z.union([z.number(), z.record(z.number())]).optional(),
 });
 

@@ -45,6 +45,10 @@ export type CreateCustomerRequest = {
    */
   taxId?: string | undefined;
   /**
+   * Merchant-defined identifier for this customer in their own system.
+   */
+  externalId?: string | undefined;
+  /**
    * An object mapping plan IDs, metric IDs, or 'default' to a tax rate percentage (e.g., 13 for 13%)
    */
   taxRates?: { [k: string]: number } | undefined;
@@ -106,6 +110,7 @@ export type CreateCustomerRequest$Outbound = {
   consumerId?: string | undefined;
   merchantId: string;
   taxId?: string | undefined;
+  externalId?: string | undefined;
   taxRates?: { [k: string]: number } | undefined;
 };
 
@@ -119,6 +124,7 @@ export const CreateCustomerRequest$outboundSchema: z.ZodType<
   consumerId: z.string().optional(),
   merchantId: z.string(),
   taxId: z.string().optional(),
+  externalId: z.string().optional(),
   taxRates: z.record(z.number()).optional(),
 });
 

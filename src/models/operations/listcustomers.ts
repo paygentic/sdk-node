@@ -27,6 +27,10 @@ export type ListCustomersRequest = {
    */
   email?: string | undefined;
   /**
+   * Filter customers by exact external ID match.
+   */
+  externalId?: string | undefined;
+  /**
    * ID of the merchant organization to filter customers by
    */
   organizationId: string;
@@ -55,6 +59,7 @@ export type ListCustomersRequest$Outbound = {
   offset: number;
   name?: string | undefined;
   email?: string | undefined;
+  externalId?: string | undefined;
   organizationId: string;
 };
 
@@ -68,6 +73,7 @@ export const ListCustomersRequest$outboundSchema: z.ZodType<
   offset: z.number().int().default(0),
   name: z.string().optional(),
   email: z.string().optional(),
+  externalId: z.string().optional(),
   organizationId: z.string(),
 });
 

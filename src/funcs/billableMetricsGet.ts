@@ -92,7 +92,6 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-
   const path = pathToFunc("/v0/billableMetrics/{id}")(pathParams);
 
   const headers = new Headers(compactMap({

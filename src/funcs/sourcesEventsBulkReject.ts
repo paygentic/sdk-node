@@ -97,7 +97,6 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-
   const path = pathToFunc("/v0/sources/{id}/events/bulk-reject")(pathParams);
 
   const headers = new Headers(compactMap({

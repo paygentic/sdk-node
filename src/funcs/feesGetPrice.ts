@@ -99,7 +99,6 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-
   const path = pathToFunc("/v0/fees/{id}/price/{subscriptionId}")(pathParams);
 
   const headers = new Headers(compactMap({

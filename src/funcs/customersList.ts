@@ -91,6 +91,7 @@ async function $do(
 
   const query = encodeFormQuery({
     "email": payload.email,
+    "externalId": payload.externalId,
     "limit": payload.limit,
     "name": payload.name,
     "offset": payload.offset,
