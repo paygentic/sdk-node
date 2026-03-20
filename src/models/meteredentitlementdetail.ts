@@ -77,6 +77,10 @@ export type MeteredEntitlementDetail = {
    */
   metadata?: { [k: string]: string } | undefined;
   /**
+   * When false (hard limit), access is blocked when balance is exhausted and overage is not charged on invoices. When true (soft limit), access continues past the grant and overage is charged at the per-unit rate.
+   */
+  isSoftLimit: boolean;
+  /**
    * Remaining grant balance for the current period.
    */
   balance: number;
@@ -128,6 +132,7 @@ export const MeteredEntitlementDetail$inboundSchema: z.ZodType<
   ).optional(),
   hasAccess: z.boolean(),
   metadata: z.record(z.string()).optional(),
+  isSoftLimit: z.boolean(),
   balance: z.number(),
   usageInPeriod: z.number(),
   overage: z.number(),

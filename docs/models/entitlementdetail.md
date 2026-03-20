@@ -47,9 +47,10 @@ const value: models.MeteredEntitlementDetail = {
   status: "active",
   activeFrom: new Date("2025-08-02T04:33:12.548Z"),
   hasAccess: true,
-  balance: 8439.55,
-  usageInPeriod: 8984.39,
-  overage: 9117.79,
+  isSoftLimit: false,
+  balance: 8984.39,
+  usageInPeriod: 9117.79,
+  overage: 6058.89,
 };
 ```
 

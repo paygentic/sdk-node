@@ -19,7 +19,7 @@ export type EntitlementTemplateMetered = {
   type: "metered";
   usagePeriod: UsagePeriod;
   /**
-   * When true, access is granted even when balance is exhausted.
+   * When false (hard limit), access is blocked when balance is exhausted and overage is not charged on invoices. When true (soft limit), access continues past the grant and overage is charged at the per-unit rate.
    */
   isSoftLimit?: boolean | undefined;
   /**
