@@ -7,6 +7,24 @@ import { remap as remap$ } from "../../lib/primitives.js";
 
 export type TaxRates = number | { [k: string]: number };
 
+/**
+ * Notification preferences for this customer. Only provided fields are updated.
+ */
+export type NotificationSettings = {
+  /**
+   * Whether to send invoice issued emails to this customer.
+   */
+  invoiceIssued?: boolean | undefined;
+  /**
+   * Whether to send invoice paid emails to this customer.
+   */
+  invoicePaid?: boolean | undefined;
+  /**
+   * Whether to send renewal reminder emails to this customer.
+   */
+  renewalReminder?: boolean | undefined;
+};
+
 export type UpdateCustomerRequestBody = {
   /**
    * Business tax registration identifier. Sample values: 'GB123456789' for UK VAT, 'DE123456789' for German VAT, 'FR12345678901' for French VAT. Enables inter-company tax handling and exemption from standard tax collection. Assign null to delete the identifier.
@@ -17,6 +35,10 @@ export type UpdateCustomerRequestBody = {
    */
   externalId?: string | null | undefined;
   taxRates?: number | { [k: string]: number } | undefined;
+  /**
+   * Notification preferences for this customer. Only provided fields are updated.
+   */
+  notificationSettings?: NotificationSettings | undefined;
 };
 
 export type UpdateCustomerRequest = {
@@ -42,10 +64,37 @@ export function taxRatesToJSON(taxRates: TaxRates): string {
 }
 
 /** @internal */
+export type NotificationSettings$Outbound = {
+  invoiceIssued?: boolean | undefined;
+  invoicePaid?: boolean | undefined;
+  renewalReminder?: boolean | undefined;
+};
+
+/** @internal */
+export const NotificationSettings$outboundSchema: z.ZodType<
+  NotificationSettings$Outbound,
+  z.ZodTypeDef,
+  NotificationSettings
+> = z.object({
+  invoiceIssued: z.boolean().optional(),
+  invoicePaid: z.boolean().optional(),
+  renewalReminder: z.boolean().optional(),
+});
+
+export function notificationSettingsToJSON(
+  notificationSettings: NotificationSettings,
+): string {
+  return JSON.stringify(
+    NotificationSettings$outboundSchema.parse(notificationSettings),
+  );
+}
+
+/** @internal */
 export type UpdateCustomerRequestBody$Outbound = {
   taxId?: string | null | undefined;
   externalId?: string | null | undefined;
   taxRates?: number | { [k: string]: number } | undefined;
+  notificationSettings?: NotificationSettings$Outbound | undefined;
 };
 
 /** @internal */
@@ -57,6 +106,8 @@ export const UpdateCustomerRequestBody$outboundSchema: z.ZodType<
   taxId: z.nullable(z.string()).optional(),
   externalId: z.nullable(z.string()).optional(),
   taxRates: z.union([z.number(), z.record(z.number())]).optional(),
+  notificationSettings: z.lazy(() => NotificationSettings$outboundSchema)
+    .optional(),
 });
 
 export function updateCustomerRequestBodyToJSON(

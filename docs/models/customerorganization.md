@@ -17,6 +17,6 @@ let value: CustomerOrganization = {
 | -------------------------------------- | -------------------------------------- | -------------------------------------- | -------------------------------------- |
 | `id`                                   | *string*                               | :heavy_check_mark:                     | N/A                                    |
 | `address`                              | [models.Address](../models/address.md) | :heavy_minus_sign:                     | N/A                                    |
-| `billingEmail`                         | *string*                               | :heavy_minus_sign:                     | N/A                                    |
+| `billingEmails`                        | *string*[]                             | :heavy_minus_sign:                     | N/A                                    |
 | `name`                                 | *string*                               | :heavy_check_mark:                     | N/A                                    |
 | `phone`                                | *string*                               | :heavy_minus_sign:                     | N/A                                    |

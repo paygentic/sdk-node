@@ -21,9 +21,24 @@ export type CustomerObject = ClosedEnum<typeof CustomerObject>;
 export type CustomerOrganization = {
   id: string;
   address?: Address | undefined;
-  billingEmail?: string | undefined;
+  billingEmails?: Array<string> | undefined;
   name: string;
   phone?: string | undefined;
+};
+
+export type NotificationSettings = {
+  /**
+   * Whether to send invoice issued emails to this customer.
+   */
+  invoiceIssued: boolean;
+  /**
+   * Whether to send invoice paid emails to this customer.
+   */
+  invoicePaid: boolean;
+  /**
+   * Whether to send renewal reminder emails to this customer.
+   */
+  renewalReminder: boolean;
 };
 
 export type Customer = {
@@ -59,6 +74,7 @@ export type Customer = {
    * Indicates whether the consumer address is valid for tax calculation when using Paygentic Tax. If valid=false, tax calculation will be skipped and internal invoice flow with default tax rate will be used.
    */
   validTaxAddress: ValidTaxAddress;
+  notificationSettings?: NotificationSettings | undefined;
 };
 
 /** @internal */
@@ -74,7 +90,7 @@ export const CustomerOrganization$inboundSchema: z.ZodType<
 > = z.object({
   id: z.string(),
   address: Address$inboundSchema.optional(),
-  billingEmail: z.string().optional(),
+  billingEmails: z.array(z.string()).optional(),
   name: z.string(),
   phone: z.string().optional(),
 });
@@ -86,6 +102,27 @@ export function customerOrganizationFromJSON(
     jsonString,
     (x) => CustomerOrganization$inboundSchema.parse(JSON.parse(x)),
     `Failed to parse 'CustomerOrganization' from JSON`,
+  );
+}
+
+/** @internal */
+export const NotificationSettings$inboundSchema: z.ZodType<
+  NotificationSettings,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  invoiceIssued: z.boolean(),
+  invoicePaid: z.boolean(),
+  renewalReminder: z.boolean(),
+});
+
+export function notificationSettingsFromJSON(
+  jsonString: string,
+): SafeParseResult<NotificationSettings, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => NotificationSettings$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'NotificationSettings' from JSON`,
   );
 }
 
@@ -106,6 +143,8 @@ export const Customer$inboundSchema: z.ZodType<
   taxRates: z.record(z.number()).optional(),
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   validTaxAddress: ValidTaxAddress$inboundSchema,
+  notificationSettings: z.lazy(() => NotificationSettings$inboundSchema)
+    .optional(),
 });
 
 export function customerFromJSON(
