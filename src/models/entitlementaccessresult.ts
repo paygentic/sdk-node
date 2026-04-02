@@ -76,6 +76,26 @@ export type EntitlementAccessResult = {
    * Current status of the entitlement.
    */
   status: EntitlementAccessResultStatus;
+  /**
+   * Remaining grant balance. Only present for `metered` features.
+   */
+  balance?: number | null | undefined;
+  /**
+   * Total usage in the current period. Only present for `metered` features.
+   */
+  usageInPeriod?: number | null | undefined;
+  /**
+   * Amount of overage beyond granted balance. Only present for `metered` features.
+   */
+  overage?: number | null | undefined;
+  /**
+   * Start of the current usage period. Only present for `metered` features with a usage period configured.
+   */
+  currentPeriodStart?: Date | null | undefined;
+  /**
+   * End of the current usage period. Only present for `metered` features with a usage period configured.
+   */
+  currentPeriodEnd?: Date | null | undefined;
 };
 
 /** @internal */
@@ -105,6 +125,15 @@ export const EntitlementAccessResult$inboundSchema: z.ZodType<
     z.string().datetime({ offset: true }).transform(v => new Date(v)),
   ).optional(),
   status: EntitlementAccessResultStatus$inboundSchema,
+  balance: z.nullable(z.number()).optional(),
+  usageInPeriod: z.nullable(z.number()).optional(),
+  overage: z.nullable(z.number()).optional(),
+  currentPeriodStart: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ).optional(),
+  currentPeriodEnd: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ).optional(),
 });
 
 export function entitlementAccessResultFromJSON(

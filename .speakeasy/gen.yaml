@@ -34,7 +34,7 @@ generation:
     generateNewTests: true
     skipResponseBodyAssertions: false
 typescript:
-  version: 0.6.29
+  version: 0.6.30
   acceptHeaderEnum: true
   additionalDependencies:
     dependencies: {}
@@ -57,6 +57,7 @@ typescript:
   enumFormat: union
   envVarPrefix: PAYGENTIC
   exportZodModelNamespace: false
+  fixEnumNameSanitization: false
   flatAdditionalProperties: false
   flattenGlobalSecurity: true
   flatteningOrder: parameters-first
