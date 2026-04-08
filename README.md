@@ -172,6 +172,15 @@ run();
 * [update](docs/sdks/billablemetrics/README.md#update) - Update
 * [meter](docs/sdks/billablemetrics/README.md#meter) - Query Meter Usage
 
+### [Costs](docs/sdks/costs/README.md)
+
+* [createCost](docs/sdks/costs/README.md#createcost) - Create
+* [listCosts](docs/sdks/costs/README.md#listcosts) - List
+* [getCost](docs/sdks/costs/README.md#getcost) - Get
+* [updateCost](docs/sdks/costs/README.md#updatecost) - Update
+* [deleteCost](docs/sdks/costs/README.md#deletecost) - Delete
+* [getCostSummary](docs/sdks/costs/README.md#getcostsummary) - Query Summary
+
 ### [Customers](docs/sdks/customers/README.md)
 
 * [list](docs/sdks/customers/README.md#list) - List by Merchant
@@ -341,6 +350,12 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`billableMetricsList`](docs/sdks/billablemetrics/README.md#list) - List
 - [`billableMetricsMeter`](docs/sdks/billablemetrics/README.md#meter) - Query Meter Usage
 - [`billableMetricsUpdate`](docs/sdks/billablemetrics/README.md#update) - Update
+- [`costsCreateCost`](docs/sdks/costs/README.md#createcost) - Create
+- [`costsDeleteCost`](docs/sdks/costs/README.md#deletecost) - Delete
+- [`costsGetCost`](docs/sdks/costs/README.md#getcost) - Get
+- [`costsGetCostSummary`](docs/sdks/costs/README.md#getcostsummary) - Query Summary
+- [`costsListCosts`](docs/sdks/costs/README.md#listcosts) - List
+- [`costsUpdateCost`](docs/sdks/costs/README.md#updatecost) - Update
 - [`customersCreate`](docs/sdks/customers/README.md#create) - Create
 - [`customersDelete`](docs/sdks/customers/README.md#delete) - Delete
 - [`customersGet`](docs/sdks/customers/README.md#get) - Get
@@ -580,9 +595,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 56 of 88 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 88 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 88 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 59 of 94 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 94 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 94 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

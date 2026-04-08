@@ -8,7 +8,7 @@ import { ClosedEnum } from "../../types/enums.js";
 /**
  * Aggregation calculation method for metric values.
  */
-export const Aggregation = {
+export const CreateBillableMetricAggregation = {
   Sum: "SUM",
   Count: "COUNT",
   Avg: "AVG",
@@ -20,13 +20,15 @@ export const Aggregation = {
 /**
  * Aggregation calculation method for metric values.
  */
-export type Aggregation = ClosedEnum<typeof Aggregation>;
+export type CreateBillableMetricAggregation = ClosedEnum<
+  typeof CreateBillableMetricAggregation
+>;
 
 export type CreateBillableMetricRequest = {
   /**
    * Aggregation calculation method for metric values.
    */
-  aggregation: Aggregation;
+  aggregation: CreateBillableMetricAggregation;
   /**
    * Explanatory text describing what the metric tracks and how it's used for billing. Sample values: 'Total tokens consumed by Claude language model interactions', 'Gigabytes of cloud storage utilized', 'Count of machine learning inference requests processed', 'Quantity of AI-generated images created', 'Compute hours spent training neural networks', 'Terabytes of data transferred'
    */
@@ -66,8 +68,9 @@ export type CreateBillableMetricRequest = {
 };
 
 /** @internal */
-export const Aggregation$outboundSchema: z.ZodNativeEnum<typeof Aggregation> = z
-  .nativeEnum(Aggregation);
+export const CreateBillableMetricAggregation$outboundSchema: z.ZodNativeEnum<
+  typeof CreateBillableMetricAggregation
+> = z.nativeEnum(CreateBillableMetricAggregation);
 
 /** @internal */
 export type CreateBillableMetricRequest$Outbound = {
@@ -89,7 +92,7 @@ export const CreateBillableMetricRequest$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   CreateBillableMetricRequest
 > = z.object({
-  aggregation: Aggregation$outboundSchema,
+  aggregation: CreateBillableMetricAggregation$outboundSchema,
   description: z.string(),
   merchantId: z.string(),
   name: z.string(),

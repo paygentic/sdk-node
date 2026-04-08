@@ -12,6 +12,7 @@ export const WindowSize = {
   Minute: "MINUTE",
   Hour: "HOUR",
   Day: "DAY",
+  Month: "MONTH",
 } as const;
 /**
  * Time bucket granularity

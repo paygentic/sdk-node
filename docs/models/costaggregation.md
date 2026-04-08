@@ -1,11 +1,11 @@
-# Aggregation
+# CostAggregation
 
 ## Example Usage
 
 ```typescript
-import { Aggregation } from "@paygentic/sdk/models";
+import { CostAggregation } from "@paygentic/sdk/models";
 
-let value: Aggregation = "MAX";
+let value: CostAggregation = "LATEST";
 ```
 
 ## Values

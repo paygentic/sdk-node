@@ -13,7 +13,7 @@ export const BillableMetricObject = {
 } as const;
 export type BillableMetricObject = ClosedEnum<typeof BillableMetricObject>;
 
-export const Aggregation = {
+export const BillableMetricAggregation = {
   Sum: "SUM",
   Count: "COUNT",
   Avg: "AVG",
@@ -22,7 +22,9 @@ export const Aggregation = {
   UniqueCount: "UNIQUE_COUNT",
   Latest: "LATEST",
 } as const;
-export type Aggregation = ClosedEnum<typeof Aggregation>;
+export type BillableMetricAggregation = ClosedEnum<
+  typeof BillableMetricAggregation
+>;
 
 export type BillableMetric = {
   /**
@@ -30,7 +32,7 @@ export type BillableMetric = {
    */
   id: string;
   object: BillableMetricObject;
-  aggregation: Aggregation;
+  aggregation: BillableMetricAggregation;
   createdAt: Date;
   description: string;
   /**
@@ -56,8 +58,9 @@ export const BillableMetricObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(BillableMetricObject);
 
 /** @internal */
-export const Aggregation$inboundSchema: z.ZodNativeEnum<typeof Aggregation> = z
-  .nativeEnum(Aggregation);
+export const BillableMetricAggregation$inboundSchema: z.ZodNativeEnum<
+  typeof BillableMetricAggregation
+> = z.nativeEnum(BillableMetricAggregation);
 
 /** @internal */
 export const BillableMetric$inboundSchema: z.ZodType<
@@ -67,7 +70,7 @@ export const BillableMetric$inboundSchema: z.ZodType<
 > = z.object({
   id: z.string(),
   object: BillableMetricObject$inboundSchema.default("billableMetric"),
-  aggregation: Aggregation$inboundSchema,
+  aggregation: BillableMetricAggregation$inboundSchema,
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   description: z.string(),
   merchantId: z.string(),

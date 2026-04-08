@@ -1,13 +1,13 @@
-# Aggregation
+# CreateBillableMetricAggregation
 
 Aggregation calculation method for metric values.
 
 ## Example Usage
 
 ```typescript
-import { Aggregation } from "@paygentic/sdk/models/operations";
+import { CreateBillableMetricAggregation } from "@paygentic/sdk/models/operations";
 
-let value: Aggregation = "MAX";
+let value: CreateBillableMetricAggregation = "LATEST";
 ```
 
 ## Values

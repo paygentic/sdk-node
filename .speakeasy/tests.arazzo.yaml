@@ -2561,3 +2561,106 @@ workflows:
             type: simple
     x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true
+  - workflowId: createCost
+    steps:
+      - stepId: test
+        operationId: createCost
+        requestBody:
+          contentType: application/json
+          payload:
+            aggregation: MIN
+            currency: Swedish Krona
+            eventType: <value>
+            name: <value>
+            productId: <id>
+            type: metered
+            unitCost: 6810
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"cost","type":"metered","name":"<value>","currency":"Rwanda Franc","unitCost":"<value>","productId":"<id>","merchantId":"<id>","createdAt":"2026-05-07T08:47:26.684Z","updatedAt":"2026-07-02T16:59:14.784Z"}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: listCosts
+    steps:
+      - stepId: test
+        operationId: listCosts
+        parameters:
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"id":"<id>","object":"cost","type":"metered","name":"<value>","currency":"Pound Sterling","unitCost":"<value>","productId":"<id>","merchantId":"<id>","createdAt":"2024-11-09T23:52:04.171Z","updatedAt":"2025-03-05T09:20:37.476Z"}],"pagination":{"limit":373927,"offset":119785,"total":251810}}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCost
+    steps:
+      - stepId: test
+        operationId: getCost
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"cost","type":"metered","name":"<value>","currency":"Hong Kong Dollar","unitCost":"<value>","productId":"<id>","merchantId":"<id>","createdAt":"2024-11-16T21:03:55.862Z","updatedAt":"2026-01-25T22:05:52.211Z"}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateCost
+    steps:
+      - stepId: test
+        operationId: updateCost
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"cost","type":"metered","name":"<value>","currency":"Liberian Dollar","unitCost":"<value>","productId":"<id>","merchantId":"<id>","createdAt":"2025-03-25T00:10:52.401Z","updatedAt":"2024-03-28T12:44:10.326Z"}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCostSummary
+    steps:
+      - stepId: test
+        operationId: getCostSummary
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: from
+            in: query
+            value: "2024-06-26T21:12:15.723Z"
+          - name: to
+            in: query
+            value: "2026-01-05T23:33:29.000Z"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"cost","id":"<id>","name":"<value>","type":"metered","currency":"Metical","totalCost":4252.16}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true

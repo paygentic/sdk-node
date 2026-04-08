@@ -7,6 +7,8 @@ export * from "./address.js";
 export * from "./batchusageeventresponse.js";
 export * from "./billablemetric.js";
 export * from "./booleanentitlementdetail.js";
+export * from "./cost.js";
+export * from "./costusageresponse.js";
 export * from "./createdisputerequest.js";
 export * from "./createentitlementrequest.js";
 export * from "./creategrantrequest.js";

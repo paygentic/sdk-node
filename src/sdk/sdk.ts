@@ -4,6 +4,7 @@
 
 import { ClientSDK } from "../lib/sdks.js";
 import { BillableMetrics } from "./billablemetrics.js";
+import { Costs } from "./costs.js";
 import { Customers } from "./customers.js";
 import { Disputes } from "./disputes.js";
 import { Entitlements } from "./entitlements.js";
@@ -107,6 +108,11 @@ export class Paygentic extends ClientSDK {
   private _events?: Events;
   get events(): Events {
     return (this._events ??= new Events(this._options));
+  }
+
+  private _costs?: Costs;
+  get costs(): Costs {
+    return (this._costs ??= new Costs(this._options));
   }
 
   private _revenue?: Revenue;

@@ -13,5 +13,5 @@ let value: WindowSize = "DAY";
 ## Values
 
 ```typescript
-"MINUTE" | "HOUR" | "DAY"
+"MINUTE" | "HOUR" | "DAY" | "MONTH"
 ```
