@@ -57,6 +57,10 @@ export type Price = {
    * Features associated with this price
    */
   features?: Array<PriceFeature> | undefined;
+  /**
+   * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
+   */
+  grantDiscountEnabled: boolean;
 };
 
 /** @internal */
@@ -94,6 +98,7 @@ export const Price$inboundSchema: z.ZodType<Price, z.ZodTypeDef, unknown> = z
       new Date(v)
     ),
     features: z.array(PriceFeature$inboundSchema).optional(),
+    grantDiscountEnabled: z.boolean().default(false),
   });
 
 export function priceFromJSON(

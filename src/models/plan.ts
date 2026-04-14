@@ -15,6 +15,19 @@ export const PlanObject = {
 } as const;
 export type PlanObject = ClosedEnum<typeof PlanObject>;
 
+/**
+ * ISO 8601 duration for the billing period.
+ */
+export const BillingCadence = {
+  P1M: "P1M",
+  P3M: "P3M",
+  P1Y: "P1Y",
+} as const;
+/**
+ * ISO 8601 duration for the billing period.
+ */
+export type BillingCadence = ClosedEnum<typeof BillingCadence>;
+
 export type PlanPaymentTerm = {
   inArrears?: boolean | undefined;
   instant?: boolean | undefined;
@@ -38,6 +51,15 @@ export type Plan = {
    */
   id: string;
   object: PlanObject;
+  /**
+   * ISO 8601 duration for the billing period.
+   */
+  billingCadence: BillingCadence;
+  /**
+   * Deprecated. Human-readable billing period derived from billingCadence. Use billingCadence instead.
+   *
+   * @deprecated field: Use billingCadence (ISO 8601 duration: P1M, P3M, P1Y) instead..
+   */
   billingInterval: string;
   createdAt: Date;
   currency: string;
@@ -91,6 +113,11 @@ export const PlanObject$inboundSchema: z.ZodNativeEnum<typeof PlanObject> = z
   .nativeEnum(PlanObject);
 
 /** @internal */
+export const BillingCadence$inboundSchema: z.ZodNativeEnum<
+  typeof BillingCadence
+> = z.nativeEnum(BillingCadence);
+
+/** @internal */
 export const PlanPaymentTerm$inboundSchema: z.ZodType<
   PlanPaymentTerm,
   z.ZodTypeDef,
@@ -123,6 +150,7 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
   .object({
     id: z.string(),
     object: PlanObject$inboundSchema,
+    billingCadence: BillingCadence$inboundSchema.default("P1M"),
     billingInterval: z.string(),
     createdAt: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)

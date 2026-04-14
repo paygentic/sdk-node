@@ -15,6 +15,8 @@ let value: ListEntitlementGrantsResponse = {
       amount: 398.2,
       effectiveAt: new Date("2024-04-27T22:31:40.007Z"),
       createdAt: new Date("2024-11-16T08:19:23.748Z"),
+      recurrencePeriod: "<value>",
+      idempotencyKey: "<value>",
     },
   ],
   pagination: {},

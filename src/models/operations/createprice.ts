@@ -60,6 +60,10 @@ export type CreatePriceRequest = {
   billingCadence?: string | null | undefined;
   properties: models.PricePropertiesUnion;
   feature?: models.PriceFeatureInput | undefined;
+  /**
+   * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
+   */
+  grantDiscountEnabled?: boolean | undefined;
 };
 
 /** @internal */
@@ -82,6 +86,7 @@ export type CreatePriceRequest$Outbound = {
   billingCadence?: string | null | undefined;
   properties: models.PricePropertiesUnion$Outbound;
   feature?: models.PriceFeatureInput$Outbound | undefined;
+  grantDiscountEnabled: boolean;
 };
 
 /** @internal */
@@ -98,6 +103,7 @@ export const CreatePriceRequest$outboundSchema: z.ZodType<
   billingCadence: z.nullable(z.string()).optional(),
   properties: models.PricePropertiesUnion$outboundSchema,
   feature: models.PriceFeatureInput$outboundSchema.optional(),
+  grantDiscountEnabled: z.boolean().default(false),
 });
 
 export function createPriceRequestToJSON(

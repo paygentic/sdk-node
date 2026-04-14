@@ -625,7 +625,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingInterval":"<value>","createdAt":"2025-01-04T18:47:28.165Z","currency":"North Korean Won","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-06-07T06:34:20.265Z"}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-01-04T18:47:28.165Z","currency":"North Korean Won","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-06-07T06:34:20.265Z"}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -662,7 +662,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingInterval":"<value>","createdAt":"2025-11-12T08:13:08.969Z","currency":"Moldovan Leu","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-05-14T02:22:53.032Z"}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-11-12T08:13:08.969Z","currency":"Moldovan Leu","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-05-14T02:22:53.032Z"}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -682,7 +682,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingInterval":"<value>","createdAt":"2025-02-25T08:23:09.829Z","currency":"Lek","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2025-09-29T06:50:28.959Z"}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-02-25T08:23:09.829Z","currency":"Lek","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2025-09-29T06:50:28.959Z"}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -693,6 +693,7 @@ workflows:
         requestBody:
           contentType: application/json
           payload:
+            grantDiscountEnabled: false
             invoiceDisplayName: <value>
             paymentTerm: instant
             properties:
@@ -707,7 +708,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z"}
+              {"id":"<id>","object":"price","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z","grantDiscountEnabled":false}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -744,7 +745,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z"}
+              {"id":"<id>","object":"price","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -764,7 +765,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z"}
+              {"id":"<id>","object":"price","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z","grantDiscountEnabled":false}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -2397,7 +2398,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z"}
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z","recurrencePeriod":"<value>","idempotencyKey":"<value>"}
             type: simple
     x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true
@@ -2421,7 +2422,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z"}
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z","recurrencePeriod":"<value>","idempotencyKey":"<value>"}
             type: simple
     x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true
@@ -2443,7 +2444,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z"}
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2509.85,"effectiveAt":"2024-07-12T06:42:15.153Z","createdAt":"2026-06-27T19:29:58.560Z","recurrencePeriod":"<value>","idempotencyKey":"<value>"}
             type: simple
     x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true
@@ -2537,7 +2538,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":4991.16,"effectiveAt":"2024-09-22T15:49:08.483Z","createdAt":"2026-11-16T03:45:11.345Z"}
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":4991.16,"effectiveAt":"2024-09-22T15:49:08.483Z","createdAt":"2026-11-16T03:45:11.345Z","recurrencePeriod":"<value>","idempotencyKey":"<value>"}
             type: simple
     x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true
@@ -2557,7 +2558,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2546.27,"effectiveAt":"2024-11-09T23:13:48.090Z","createdAt":"2026-04-05T05:12:44.830Z"}
+              {"object":"grant","id":"<id>","entitlementId":"<id>","amount":2546.27,"effectiveAt":"2024-11-09T23:13:48.090Z","createdAt":"2026-04-05T05:12:44.830Z","recurrencePeriod":"<value>","idempotencyKey":"<value>"}
             type: simple
     x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true

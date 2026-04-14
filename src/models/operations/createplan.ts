@@ -6,6 +6,37 @@ import * as z from "zod/v3";
 import { ClosedEnum } from "../../types/enums.js";
 
 /**
+ * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
+ */
+export const CreatePlanBillingCadence = {
+  P1M: "P1M",
+  P3M: "P3M",
+  P1Y: "P1Y",
+} as const;
+/**
+ * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
+ */
+export type CreatePlanBillingCadence = ClosedEnum<
+  typeof CreatePlanBillingCadence
+>;
+
+/**
+ * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'quarterly' for quarterly billing, 'yearly' for annual billing
+ */
+export const CreatePlanBillingInterval = {
+  Monthly: "monthly",
+  Quarterly: "quarterly",
+  Yearly: "yearly",
+  Annual: "annual",
+} as const;
+/**
+ * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'quarterly' for quarterly billing, 'yearly' for annual billing
+ */
+export type CreatePlanBillingInterval = ClosedEnum<
+  typeof CreatePlanBillingInterval
+>;
+
+/**
  * Whether tax is added on top of the price (exclusive) or included in the price (inclusive)
  */
 export const CreatePlanTaxBehavior = {
@@ -31,9 +62,13 @@ export type BillingVersion = ClosedEnum<typeof BillingVersion>;
 
 export type CreatePlanRequest = {
   /**
-   * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'yearly' for annual billing, 'weekly' for weekly billing
+   * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
    */
-  billingInterval?: string | undefined;
+  billingCadence?: CreatePlanBillingCadence | undefined;
+  /**
+   * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'quarterly' for quarterly billing, 'yearly' for annual billing
+   */
+  billingInterval?: CreatePlanBillingInterval | undefined;
   /**
    * Three-letter ISO 4217 currency code for plan pricing. Must be one of the merchant's supported currencies. Sample values: 'USD' for US dollars, 'EUR' for euros, 'GBP' for British pounds
    */
@@ -89,6 +124,16 @@ export type CreatePlanRequest = {
 };
 
 /** @internal */
+export const CreatePlanBillingCadence$outboundSchema: z.ZodNativeEnum<
+  typeof CreatePlanBillingCadence
+> = z.nativeEnum(CreatePlanBillingCadence);
+
+/** @internal */
+export const CreatePlanBillingInterval$outboundSchema: z.ZodNativeEnum<
+  typeof CreatePlanBillingInterval
+> = z.nativeEnum(CreatePlanBillingInterval);
+
+/** @internal */
 export const CreatePlanTaxBehavior$outboundSchema: z.ZodNativeEnum<
   typeof CreatePlanTaxBehavior
 > = z.nativeEnum(CreatePlanTaxBehavior);
@@ -100,6 +145,7 @@ export const BillingVersion$outboundSchema: z.ZodNativeEnum<
 
 /** @internal */
 export type CreatePlanRequest$Outbound = {
+  billingCadence?: string | undefined;
   billingInterval?: string | undefined;
   currency: string;
   defaultTaxCode: string;
@@ -122,7 +168,8 @@ export const CreatePlanRequest$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   CreatePlanRequest
 > = z.object({
-  billingInterval: z.string().optional(),
+  billingCadence: CreatePlanBillingCadence$outboundSchema.optional(),
+  billingInterval: CreatePlanBillingInterval$outboundSchema.optional(),
   currency: z.string(),
   defaultTaxCode: z.string().default("eservice"),
   defaultTaxRate: z.number().default(0),

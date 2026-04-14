@@ -9,11 +9,16 @@ export type GetEntitlementRequest = {
    * The unique identifier of the entitlement.
    */
   entitlementId: string;
+  /**
+   * Evaluate balance and access at this point in time (RFC 3339 datetime with any UTC offset, e.g. 2024-01-15T10:30:00Z or 2024-01-15T15:30:00+05:30). Defaults to current time.
+   */
+  at?: Date | undefined;
 };
 
 /** @internal */
 export type GetEntitlementRequest$Outbound = {
   entitlementId: string;
+  at?: string | undefined;
 };
 
 /** @internal */
@@ -23,6 +28,7 @@ export const GetEntitlementRequest$outboundSchema: z.ZodType<
   GetEntitlementRequest
 > = z.object({
   entitlementId: z.string(),
+  at: z.date().transform(v => v.toISOString()).optional(),
 });
 
 export function getEntitlementRequestToJSON(

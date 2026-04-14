@@ -34,6 +34,10 @@ export type ListEntitlementsRequest = {
    * Number of entitlements to skip. Use with `limit` for pagination through large result sets.
    */
   offset?: number | undefined;
+  /**
+   * Evaluate balance and access at this point in time (RFC 3339 datetime with any UTC offset, e.g. 2024-01-15T10:30:00Z or 2024-01-15T15:30:00+05:30). Defaults to current time.
+   */
+  at?: Date | undefined;
 };
 
 export const ListEntitlementsObject = {
@@ -64,6 +68,7 @@ export type ListEntitlementsRequest$Outbound = {
   subscriptionId?: string | undefined;
   limit: number;
   offset: number;
+  at?: string | undefined;
 };
 
 /** @internal */
@@ -78,6 +83,7 @@ export const ListEntitlementsRequest$outboundSchema: z.ZodType<
   subscriptionId: z.string().optional(),
   limit: z.number().int().default(10),
   offset: z.number().int().default(0),
+  at: z.date().transform(v => v.toISOString()).optional(),
 });
 
 export function listEntitlementsRequestToJSON(

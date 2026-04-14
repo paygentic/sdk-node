@@ -7,6 +7,37 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { ClosedEnum } from "../../types/enums.js";
 
 /**
+ * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
+ */
+export const UpdatePlanBillingCadence = {
+  P1M: "P1M",
+  P3M: "P3M",
+  P1Y: "P1Y",
+} as const;
+/**
+ * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
+ */
+export type UpdatePlanBillingCadence = ClosedEnum<
+  typeof UpdatePlanBillingCadence
+>;
+
+/**
+ * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'quarterly' for quarterly billing, 'yearly' for annual billing
+ */
+export const UpdatePlanBillingInterval = {
+  Monthly: "monthly",
+  Quarterly: "quarterly",
+  Yearly: "yearly",
+  Annual: "annual",
+} as const;
+/**
+ * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'quarterly' for quarterly billing, 'yearly' for annual billing
+ */
+export type UpdatePlanBillingInterval = ClosedEnum<
+  typeof UpdatePlanBillingInterval
+>;
+
+/**
  * Whether tax is added on top of the price (exclusive) or included in the price (inclusive)
  */
 export const UpdatePlanTaxBehavior = {
@@ -20,9 +51,13 @@ export type UpdatePlanTaxBehavior = ClosedEnum<typeof UpdatePlanTaxBehavior>;
 
 export type UpdatePlanRequestBody = {
   /**
-   * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'yearly' for annual billing, 'weekly' for weekly billing
+   * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
    */
-  billingInterval?: string | undefined;
+  billingCadence?: UpdatePlanBillingCadence | undefined;
+  /**
+   * Recurring billing period frequency. Sample values: 'monthly' for monthly billing, 'quarterly' for quarterly billing, 'yearly' for annual billing
+   */
+  billingInterval?: UpdatePlanBillingInterval | undefined;
   /**
    * Default tax code for plan line items. Common values: 'eservice' (electronically supplied services), 'saas' (software as a service), 'consulting', 'ebook', 'standard', 'reduced', 'exempt'. Full list available via GET /tax/codes endpoint.
    */
@@ -70,12 +105,23 @@ export type UpdatePlanRequest = {
 };
 
 /** @internal */
+export const UpdatePlanBillingCadence$outboundSchema: z.ZodNativeEnum<
+  typeof UpdatePlanBillingCadence
+> = z.nativeEnum(UpdatePlanBillingCadence);
+
+/** @internal */
+export const UpdatePlanBillingInterval$outboundSchema: z.ZodNativeEnum<
+  typeof UpdatePlanBillingInterval
+> = z.nativeEnum(UpdatePlanBillingInterval);
+
+/** @internal */
 export const UpdatePlanTaxBehavior$outboundSchema: z.ZodNativeEnum<
   typeof UpdatePlanTaxBehavior
 > = z.nativeEnum(UpdatePlanTaxBehavior);
 
 /** @internal */
 export type UpdatePlanRequestBody$Outbound = {
+  billingCadence?: string | undefined;
   billingInterval?: string | undefined;
   defaultTaxCode?: string | undefined;
   defaultTaxRate?: number | undefined;
@@ -94,7 +140,8 @@ export const UpdatePlanRequestBody$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   UpdatePlanRequestBody
 > = z.object({
-  billingInterval: z.string().optional(),
+  billingCadence: UpdatePlanBillingCadence$outboundSchema.optional(),
+  billingInterval: UpdatePlanBillingInterval$outboundSchema.optional(),
   defaultTaxCode: z.string().optional(),
   defaultTaxRate: z.number().optional(),
   description: z.string().optional(),

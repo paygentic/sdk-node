@@ -9,15 +9,16 @@ import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
- * The type of line item
+ * The type of line item. 'discount' line items represent grant discounts with negative subtotal/total amounts.
  */
 export const LineItemType = {
   Fee: "fee",
   Metered: "metered",
   Manual: "manual",
+  Discount: "discount",
 } as const;
 /**
- * The type of line item
+ * The type of line item. 'discount' line items represent grant discounts with negative subtotal/total amounts.
  */
 export type LineItemType = ClosedEnum<typeof LineItemType>;
 
@@ -63,7 +64,7 @@ export type LineItem = {
    */
   invoiceId?: string | null | undefined;
   /**
-   * The type of line item
+   * The type of line item. 'discount' line items represent grant discounts with negative subtotal/total amounts.
    */
   type: LineItemType;
   /**

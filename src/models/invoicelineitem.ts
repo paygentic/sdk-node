@@ -9,14 +9,15 @@ import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
- * Type of event: 'usage' for billable metric events, 'fee' for fee events
+ * Type of event: 'usage' for billable metric events, 'fee' for fee events, 'discount' for grant discount line items (subtotal/total are negative, representing a credit)
  */
 export const EventType = {
   Usage: "usage",
   Fee: "fee",
+  Discount: "discount",
 } as const;
 /**
- * Type of event: 'usage' for billable metric events, 'fee' for fee events
+ * Type of event: 'usage' for billable metric events, 'fee' for fee events, 'discount' for grant discount line items (subtotal/total are negative, representing a credit)
  */
 export type EventType = ClosedEnum<typeof EventType>;
 
@@ -36,7 +37,7 @@ export type InvoiceLineItemLineItemType = ClosedEnum<
 
 export type InvoiceLineItem = {
   /**
-   * Type of event: 'usage' for billable metric events, 'fee' for fee events
+   * Type of event: 'usage' for billable metric events, 'fee' for fee events, 'discount' for grant discount line items (subtotal/total are negative, representing a credit)
    */
   eventType: EventType;
   /**

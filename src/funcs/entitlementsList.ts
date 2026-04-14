@@ -93,6 +93,7 @@ async function $do(
   const path = pathToFunc("/v1/entitlements")();
 
   const query = encodeFormQuery({
+    "at": payload.at,
     "customerId": payload.customerId,
     "featureKey": payload.featureKey,
     "limit": payload.limit,

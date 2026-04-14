@@ -63,6 +63,10 @@ export type SchemasPrice = {
    * Features associated with this price
    */
   features?: Array<PriceFeature> | undefined;
+  /**
+   * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
+   */
+  grantDiscountEnabled: boolean;
 };
 
 /** @internal */
@@ -98,6 +102,7 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   properties: PricePropertiesUnion$inboundSchema,
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   features: z.array(PriceFeature$inboundSchema).optional(),
+  grantDiscountEnabled: z.boolean().default(false),
 });
 
 export function schemasPriceFromJSON(

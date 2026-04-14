@@ -11,7 +11,7 @@ let value: LineItems = {
   invoiceId: "<id>",
   lineItems: [
     {
-      eventType: "usage",
+      eventType: "fee",
       eventId: "<id>",
       eventSourceId: "<id>",
       billableMetricId: "<id>",

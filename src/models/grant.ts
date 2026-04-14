@@ -43,6 +43,14 @@ export type Grant = {
    * When the grant was created.
    */
   createdAt: Date;
+  /**
+   * The recurrence interval (ISO 8601 duration) if this is a recurring grant. Null for one-time grants.
+   */
+  recurrencePeriod: string | null;
+  /**
+   * The idempotency key used when creating this grant. Null if not provided.
+   */
+  idempotencyKey: string | null;
 };
 
 /** @internal */
@@ -68,6 +76,8 @@ export const Grant$inboundSchema: z.ZodType<Grant, z.ZodTypeDef, unknown> = z
     createdAt: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),
+    recurrencePeriod: z.nullable(z.string()),
+    idempotencyKey: z.nullable(z.string()),
   });
 
 export function grantFromJSON(
