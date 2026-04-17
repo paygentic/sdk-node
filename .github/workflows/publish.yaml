@@ -36,6 +36,10 @@ jobs:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
           # Keep pnpm_version in sync with monorepo package.json packageManager.
           pnpm_version: "10.33.0"
+          # Force regen so a version-only bump in gen.yaml still rewrites
+          # package.json — otherwise the action skips regen when it sees no
+          # spec diff and Detect version reads the stale version.
+          force: "true"
           mode: direct
         env:
           SPEAKEASY_API_KEY: ${{ secrets.ORG_SPEAKEASY_API_KEY }}
