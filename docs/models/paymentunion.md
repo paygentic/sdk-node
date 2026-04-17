@@ -30,3 +30,13 @@ const value: models.PaymentPaid = {
 };
 ```
 
+### `models.PaymentAwaitingApproval`
+
+```typescript
+const value: models.PaymentAwaitingApproval = {
+  invoiceId: "<id>",
+  amount: "153.61",
+  status: "awaiting_approval",
+};
+```
+

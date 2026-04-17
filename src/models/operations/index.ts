@@ -55,6 +55,7 @@ export * from "./getusageevent.js";
 export * from "./getuser.js";
 export * from "./ingestevent.js";
 export * from "./listavailableplans.js";
+export * from "./listbillablemetricevents.js";
 export * from "./listbillablemetrics.js";
 export * from "./listcosts.js";
 export * from "./listcustomers.js";

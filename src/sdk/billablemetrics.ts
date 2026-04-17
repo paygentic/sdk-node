@@ -5,6 +5,7 @@
 import { billableMetricsCreate } from "../funcs/billableMetricsCreate.js";
 import { billableMetricsGet } from "../funcs/billableMetricsGet.js";
 import { billableMetricsList } from "../funcs/billableMetricsList.js";
+import { billableMetricsListEvents } from "../funcs/billableMetricsListEvents.js";
 import { billableMetricsMeter } from "../funcs/billableMetricsMeter.js";
 import { billableMetricsUpdate } from "../funcs/billableMetricsUpdate.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -83,6 +84,23 @@ export class BillableMetrics extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.UsageResponse> {
     return unwrapAsync(billableMetricsMeter(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * List Meter Events
+   *
+   * @remarks
+   * List raw underlying events for a billable metric from the metering service. Returns events ordered by time descending.
+   */
+  async listEvents(
+    request: operations.ListBillableMetricEventsRequest,
+    options?: RequestOptions,
+  ): Promise<models.MeterEventList> {
+    return unwrapAsync(billableMetricsListEvents(
       this,
       request,
       options,

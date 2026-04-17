@@ -39,6 +39,8 @@ export * from "./lineitem.js";
 export * from "./lineitemsresponse.js";
 export * from "./lineitemssummary.js";
 export * from "./meteredentitlementdetail.js";
+export * from "./meterevent.js";
+export * from "./metereventlist.js";
 export * from "./offsetpagination.js";
 export * from "./payment.js";
 export * from "./paymentsummary.js";

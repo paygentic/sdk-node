@@ -14,6 +14,24 @@ export const SubscriptionObject = {
 export type SubscriptionObject = ClosedEnum<typeof SubscriptionObject>;
 
 /**
+ * Invoice 0 awaiting merchant approval before payment can proceed. The invoice is in DRAFT status with totals calculated. Approval is currently platform-only — do not call PATCH /v2/invoices/{id} with {"trigger": "APPROVE"} from merchant credentials (it will return 403). A merchant-accessible approval endpoint is planned for PAYG-754.
+ */
+export type PaymentAwaitingApproval = {
+  /**
+   * The Invoice 0 id awaiting approval
+   */
+  invoiceId: string;
+  /**
+   * Total payment amount in decimal dollar format
+   */
+  amount: string;
+  /**
+   * Payment status
+   */
+  status: "awaiting_approval";
+};
+
+/**
  * Zero-amount Invoice 0 that completed synchronously to PAID
  */
 export type PaymentPaid = {
@@ -75,7 +93,10 @@ export type PaymentPending = {
 /**
  * Payment session details when upfront payment is required, or confirmation of a zero-amount paid invoice
  */
-export type PaymentUnion = PaymentPending | PaymentPaid;
+export type PaymentUnion =
+  | PaymentPending
+  | PaymentPaid
+  | PaymentAwaitingApproval;
 
 export const SubscriptionStatusEnum = {
   PendingPayment: "pending_payment",
@@ -134,7 +155,7 @@ export type Subscription = {
   /**
    * Payment session details when upfront payment is required, or confirmation of a zero-amount paid invoice
    */
-  payment?: PaymentPending | PaymentPaid | undefined;
+  payment?: PaymentPending | PaymentPaid | PaymentAwaitingApproval | undefined;
   planId: string;
   /**
    * @deprecated Use minimumAccountBalance instead. Minimum required wallet balance in atomic units. Sample values: '200000000000' equals $200.00 minimum, '1000000000000' equals $1000.00 minimum
@@ -182,6 +203,27 @@ export type Subscription = {
 export const SubscriptionObject$inboundSchema: z.ZodNativeEnum<
   typeof SubscriptionObject
 > = z.nativeEnum(SubscriptionObject);
+
+/** @internal */
+export const PaymentAwaitingApproval$inboundSchema: z.ZodType<
+  PaymentAwaitingApproval,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  invoiceId: z.string(),
+  amount: z.string(),
+  status: z.literal("awaiting_approval"),
+});
+
+export function paymentAwaitingApprovalFromJSON(
+  jsonString: string,
+): SafeParseResult<PaymentAwaitingApproval, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => PaymentAwaitingApproval$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PaymentAwaitingApproval' from JSON`,
+  );
+}
 
 /** @internal */
 export const PaymentPaid$inboundSchema: z.ZodType<
@@ -256,6 +298,7 @@ export const PaymentUnion$inboundSchema: z.ZodType<
 > = z.union([
   z.lazy(() => PaymentPending$inboundSchema),
   z.lazy(() => PaymentPaid$inboundSchema),
+  z.lazy(() => PaymentAwaitingApproval$inboundSchema),
 ]);
 
 export function paymentUnionFromJSON(
@@ -356,6 +399,7 @@ export const Subscription$inboundSchema: z.ZodType<
   payment: z.union([
     z.lazy(() => PaymentPending$inboundSchema),
     z.lazy(() => PaymentPaid$inboundSchema),
+    z.lazy(() => PaymentAwaitingApproval$inboundSchema),
   ]).optional(),
   planId: z.string(),
   prefundAmount: z.string().optional(),

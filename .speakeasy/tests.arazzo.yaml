@@ -2665,3 +2665,32 @@ workflows:
             type: simple
     x-speakeasy-test-group: Costs
     x-speakeasy-test-rebuild: true
+  - workflowId: listBillableMetricEvents
+    steps:
+      - stepId: test
+        operationId: listBillableMetricEvents
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: 20
+          - name: offset
+            in: query
+            value: 0
+          - name: from
+            in: query
+            value: "2024-09-28T08:04:20.478Z"
+          - name: to
+            in: query
+            value: "2025-07-03T05:08:35.498Z"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","billableMetricId":"<id>","events":[],"pagination":{}}
+            type: simple
+    x-speakeasy-test-group: billableMetrics
+    x-speakeasy-test-rebuild: true
