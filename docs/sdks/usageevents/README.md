@@ -29,13 +29,8 @@ async function run() {
     customerId: "<id>",
     idempotencyKey: "<value>",
     merchantId: "<id>",
-    properties: [
-      {
-        billableMetricId: "<id>",
-        quantity: 6787.65,
-      },
-    ],
-    timestamp: new Date("2024-06-20T13:04:13.935Z"),
+    properties: [],
+    timestamp: new Date("2026-05-14T00:54:35.100Z"),
   });
 
   console.log(result);
@@ -63,13 +58,8 @@ async function run() {
     customerId: "<id>",
     idempotencyKey: "<value>",
     merchantId: "<id>",
-    properties: [
-      {
-        billableMetricId: "<id>",
-        quantity: 6787.65,
-      },
-    ],
-    timestamp: new Date("2024-06-20T13:04:13.935Z"),
+    properties: [],
+    timestamp: new Date("2026-05-14T00:54:35.100Z"),
   });
   if (res.ok) {
     const { value: result } = res;
@@ -121,8 +111,8 @@ const paygentic = new Paygentic({
 
 async function run() {
   const result = await paygentic.usageEvents.list({
-    endTime: new Date("2023-02-04T03:47:15.138Z"),
-    startTime: new Date("2025-03-29T00:23:32.822Z"),
+    endTime: new Date("2026-03-29T00:23:32.822Z"),
+    startTime: new Date("2024-02-04T03:47:15.138Z"),
   });
 
   console.log(result);
@@ -147,8 +137,8 @@ const paygentic = new PaygenticCore({
 
 async function run() {
   const res = await usageEventsList(paygentic, {
-    endTime: new Date("2023-02-04T03:47:15.138Z"),
-    startTime: new Date("2025-03-29T00:23:32.822Z"),
+    endTime: new Date("2026-03-29T00:23:32.822Z"),
+    startTime: new Date("2024-02-04T03:47:15.138Z"),
   });
   if (res.ok) {
     const { value: result } = res;

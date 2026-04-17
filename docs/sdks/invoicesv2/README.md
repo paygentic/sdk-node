@@ -176,7 +176,7 @@ async function run() {
       displayName: "Nathan54",
       currency: "Rwanda Franc",
       quantity: 6214.31,
-      unitPrice: 740813,
+      unitPrice: 7408.13,
     },
   });
 
@@ -206,7 +206,7 @@ async function run() {
       displayName: "Nathan54",
       currency: "Rwanda Franc",
       quantity: 6214.31,
-      unitPrice: 740813,
+      unitPrice: 7408.13,
     },
   });
   if (res.ok) {

@@ -6,6 +6,11 @@
 import { CreateCustomerRequest } from "@paygentic/sdk/models/operations";
 
 let value: CreateCustomerRequest = {
+  consumer: {
+    name: "Jane Smith",
+    email: "jane@example.com",
+    address: {},
+  },
   merchantId: "<id>",
 };
 ```

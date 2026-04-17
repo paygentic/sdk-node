@@ -28,11 +28,11 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
-    description: "other gracefully hold",
-    merchantId: "<id>",
-    name: "<value>",
-    productId: "<id>",
-    unit: "becquerel",
+    description: "Tracks total tokens consumed per API call",
+    merchantId: "org_YS8jkP59V71TdUvj",
+    name: "Token Counter",
+    productId: "prod_abc123",
+    unit: "tokens",
   });
 
   console.log(result);
@@ -58,11 +58,11 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await billableMetricsCreate(paygentic, {
     aggregation: "SUM",
-    description: "other gracefully hold",
-    merchantId: "<id>",
-    name: "<value>",
-    productId: "<id>",
-    unit: "becquerel",
+    description: "Tracks total tokens consumed per API call",
+    merchantId: "org_YS8jkP59V71TdUvj",
+    name: "Token Counter",
+    productId: "prod_abc123",
+    unit: "tokens",
   });
   if (res.ok) {
     const { value: result } = res;

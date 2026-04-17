@@ -24,12 +24,12 @@ const paygentic = new Paygentic({
 
 async function run() {
   const result = await paygentic.events.ingest({
-    type: "<value>",
-    source: "<value>",
-    subject: "<value>",
+    type: "ai.inference",
+    source: "https://api.myapp.com",
+    subject: "cus_abc123",
     data: {
-      "key": "<value>",
-      "key1": "<value>",
+      "tokens": 1500,
+      "model": "gpt-4o",
     },
   });
 
@@ -55,12 +55,12 @@ const paygentic = new PaygenticCore({
 
 async function run() {
   const res = await eventsIngest(paygentic, {
-    type: "<value>",
-    source: "<value>",
-    subject: "<value>",
+    type: "ai.inference",
+    source: "https://api.myapp.com",
+    subject: "cus_abc123",
     data: {
-      "key": "<value>",
-      "key1": "<value>",
+      "tokens": 1500,
+      "model": "gpt-4o",
     },
   });
   if (res.ok) {

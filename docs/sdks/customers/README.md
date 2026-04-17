@@ -105,7 +105,16 @@ const paygentic = new Paygentic({
 
 async function run() {
   const result = await paygentic.customers.create({
-    merchantId: "<id>",
+    consumer: {
+      name: "Jane Smith",
+      email: "jane@example.com",
+      address: {
+        city: "San Francisco",
+        state: "CA",
+        country: "US",
+      },
+    },
+    merchantId: "org_YS8jkP59V71TdUvj",
   });
 
   console.log(result);
@@ -130,7 +139,16 @@ const paygentic = new PaygenticCore({
 
 async function run() {
   const res = await customersCreate(paygentic, {
-    merchantId: "<id>",
+    consumer: {
+      name: "Jane Smith",
+      email: "jane@example.com",
+      address: {
+        city: "San Francisco",
+        state: "CA",
+        country: "US",
+      },
+    },
+    merchantId: "org_YS8jkP59V71TdUvj",
   });
   if (res.ok) {
     const { value: result } = res;

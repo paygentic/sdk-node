@@ -101,9 +101,10 @@ const paygentic = new Paygentic({
 
 async function run() {
   const result = await paygentic.subscriptions.create({
-    name: "<value>",
-    planId: "<id>",
-    startedAt: new Date("2025-08-09T13:09:26.829Z"),
+    customerId: "cus_abc123",
+    name: "Monthly API Service",
+    planId: "plan_abc123",
+    startedAt: new Date("2024-01-15T00:00:00Z"),
   });
 
   console.log(result);
@@ -128,9 +129,10 @@ const paygentic = new PaygenticCore({
 
 async function run() {
   const res = await subscriptionsCreate(paygentic, {
-    name: "<value>",
-    planId: "<id>",
-    startedAt: new Date("2025-08-09T13:09:26.829Z"),
+    customerId: "cus_abc123",
+    name: "Monthly API Service",
+    planId: "plan_abc123",
+    startedAt: new Date("2024-01-15T00:00:00Z"),
   });
   if (res.ok) {
     const { value: result } = res;

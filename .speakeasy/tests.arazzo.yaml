@@ -51,17 +51,17 @@ workflows:
           contentType: application/json
           payload:
             aggregation: SUM
-            description: other gracefully hold
+            description: Tracks total tokens consumed per API call
             merchantId: <id>
-            name: <value>
+            name: Token Counter
             productId: <id>
-            unit: becquerel
+            unit: tokens
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"billableMetric","aggregation":"SUM","createdAt":"2025-04-10T18:04:21.688Z","description":"unimportant less rare avaricious which after scope inasmuch ick cutlet","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"hertz","updatedAt":"2024-11-16T22:40:17.756Z"}
+              {"id":"<id>","object":"billableMetric","aggregation":"AVG","createdAt":"2026-11-27T06:33:28.146Z","description":"odd drat spherical regularly","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"second","updatedAt":"2026-11-05T18:27:48.113Z"}
             type: simple
     x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
@@ -70,12 +70,12 @@ workflows:
       - stepId: test
         operationId: listBillableMetrics
         parameters:
-          - name: merchantId
-            in: query
-            value: <id>
           - name: limit
             in: query
             value: 10
+          - name: merchantId
+            in: query
+            value: <id>
           - name: offset
             in: query
             value: 0
@@ -101,7 +101,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"billableMetric","aggregation":"COUNT","createdAt":"2024-04-29T10:20:07.224Z","description":"even weary pine","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"siemens","updatedAt":"2026-12-10T07:52:04.795Z"}
+              {"id":"<id>","object":"billableMetric","aggregation":"MIN","createdAt":"2024-04-29T10:20:07.224Z","description":"even weary pine","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"siemens","updatedAt":"2026-12-10T07:52:04.795Z"}
             type: simple
     x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
@@ -121,7 +121,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"billableMetric","aggregation":"MAX","createdAt":"2026-11-02T11:56:44.093Z","description":"self-assured provided fondly questionable","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"weber","updatedAt":"2024-10-02T02:27:52.097Z"}
+              {"id":"<id>","object":"billableMetric","aggregation":"MIN","createdAt":"2026-11-02T11:56:44.093Z","description":"self-assured provided fondly questionable","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"weber","updatedAt":"2024-10-02T02:27:52.097Z"}
             type: simple
     x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
@@ -239,15 +239,15 @@ workflows:
       - stepId: test
         operationId: listCustomers
         parameters:
-          - name: organizationId
-            in: query
-            value: <id>
           - name: limit
             in: query
             value: 10
           - name: offset
             in: query
             value: 0
+          - name: organizationId
+            in: query
+            value: <id>
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -264,6 +264,10 @@ workflows:
         requestBody:
           contentType: application/json
           payload:
+            consumer:
+              address: {}
+              email: jane@example.com
+              name: Jane Smith
             merchantId: <id>
         successCriteria:
           - condition: $statusCode == 200
@@ -287,7 +291,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"customer","consumerId":"<id>","createdAt":"2025-01-14T14:35:50.794Z","merchantId":"<id>","updatedAt":"2023-03-04T14:37:04.813Z","validTaxAddress":{"valid":true}}
+              {"id":"<id>","object":"customer","consumerId":"<id>","createdAt":"2024-06-19T12:43:49.006Z","merchantId":"<id>","updatedAt":"2026-01-14T14:35:50.794Z","validTaxAddress":{"valid":true}}
             type: simple
     x-speakeasy-test-group: Customers
     x-speakeasy-test-rebuild: true
@@ -349,7 +353,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"dispute","createdAt":"2023-09-05T14:27:32.260Z","customerId":"<id>","customerMessage":"<value>","disputedAmount":"2443.04","merchantId":"<id>","status":"declined","updatedAt":"2025-01-25T06:06:41.064Z","usageEventId":"<id>"}
+              {"id":"<id>","object":"dispute","createdAt":"2026-02-22T17:52:27.414Z","customerId":"<id>","customerMessage":"<value>","disputedAmount":"2443.04","merchantId":"<id>","status":"pending","updatedAt":"2026-01-25T06:06:41.064Z","usageEventId":"<id>"}
             type: simple
     x-speakeasy-test-group: Disputes
     x-speakeasy-test-rebuild: true
@@ -784,7 +788,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"product","createdAt":"2024-12-15T10:08:58.673Z","description":"seemingly negotiation ouch","merchantId":"<id>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"name":"<value>","updatedAt":"2023-01-29T22:23:09.159Z"}
+              {"id":"<id>","object":"product","createdAt":"2024-03-03T22:14:12.327Z","description":"general coin thump preheat jaggedly now oof amongst","merchantId":"<id>","metadata":{},"name":"<value>","updatedAt":"2024-01-01T16:52:31.108Z"}
             type: simple
     x-speakeasy-test-group: Products
     x-speakeasy-test-rebuild: true
@@ -821,7 +825,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"product","createdAt":"2023-07-28T11:27:42.833Z","description":"or entomb provided pfft before gleaming until from","merchantId":"<id>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"name":"<value>","updatedAt":"2024-08-06T21:17:56.955Z"}
+              {"id":"<id>","object":"product","createdAt":"2026-01-16T09:50:06.528Z","description":"besides till about inasmuch oddly platypus","merchantId":"<id>","metadata":{"key":"<value>","key1":"<value>"},"name":"<value>","updatedAt":"2025-08-27T10:23:41.194Z"}
             type: simple
     x-speakeasy-test-group: Products
     x-speakeasy-test-rebuild: true
@@ -841,7 +845,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"product","createdAt":"2023-02-09T19:56:20.732Z","description":"besides stoop understanding rim purse","merchantId":"<id>","metadata":{"key":"<value>"},"name":"<value>","updatedAt":"2024-06-01T08:47:18.598Z"}
+              {"id":"<id>","object":"product","createdAt":"2024-12-26T02:52:22.213Z","description":"ferret ick blue thorough enrich ravioli","merchantId":"<id>","metadata":{"key":"<value>"},"name":"<value>","updatedAt":"2025-04-01T23:00:52.374Z"}
             type: simple
     x-speakeasy-test-group: Products
     x-speakeasy-test-rebuild: true
@@ -862,7 +866,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"source","createdAt":"2023-05-28T11:06:56.258Z","enabled":false,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2025-04-02T19:22:56.277Z"}
+              {"id":"<id>","object":"source","createdAt":"2025-09-13T11:39:34.948Z","enabled":true,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2026-04-02T19:22:56.277Z"}
             type: simple
     x-speakeasy-test-group: Sources
     x-speakeasy-test-rebuild: true
@@ -899,7 +903,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"source","createdAt":"2023-08-05T15:05:11.738Z","enabled":false,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2025-12-21T22:10:45.432Z"}
+              {"id":"<id>","object":"source","createdAt":"2025-12-04T06:33:36.383Z","enabled":true,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2026-12-21T22:10:45.432Z"}
             type: simple
     x-speakeasy-test-group: Sources
     x-speakeasy-test-rebuild: true
@@ -919,7 +923,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"source","createdAt":"2023-12-30T07:21:44.909Z","enabled":false,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2025-09-10T10:01:58.888Z"}
+              {"id":"<id>","object":"source","createdAt":"2026-02-20T02:07:05.869Z","enabled":true,"merchantId":"<id>","name":"<value>","planId":"<id>","processingMode":"automatic","type":"stripe_revenue","updatedAt":"2026-09-10T10:01:58.888Z"}
             type: simple
     x-speakeasy-test-group: Sources
     x-speakeasy-test-rebuild: true
@@ -962,7 +966,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","createdAt":"2023-10-04T03:44:38.557Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>","key2":"<value>"},"sourceId":"<id>","status":"processed","updatedAt":"2023-07-24T01:11:13.326Z"}
+              {"id":"<id>","createdAt":"2025-05-29T02:56:29.153Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>","key2":"<value>"},"sourceId":"<id>","status":"processed","updatedAt":"2024-07-23T01:11:13.326Z"}
             type: simple
     x-speakeasy-test-group: Sources_events
     x-speakeasy-test-rebuild: true
@@ -982,7 +986,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","createdAt":"2023-12-11T03:45:42.105Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>"},"sourceId":"<id>","status":"pending","updatedAt":"2024-05-21T02:04:37.726Z"}
+              {"id":"<id>","createdAt":"2024-06-13T19:01:33.525Z","externalEventId":"<id>","rawData":{"key":"<value>","key1":"<value>"},"sourceId":"<id>","status":"processed","updatedAt":"2025-05-21T02:04:37.726Z"}
             type: simple
     x-speakeasy-test-group: Sources_events
     x-speakeasy-test-rebuild: true
@@ -1043,7 +1047,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","conditions":[],"createdAt":"2026-04-23T21:22:31.337Z","description":"mixed readies striking upward kosher","enabled":true,"evaluationCount":606402,"matchCount":632234,"name":"<value>","order":612662,"sourceId":"<id>","updatedAt":"2026-04-10T13:45:02.925Z"}
+              {"id":"<id>","conditions":[{"operator":"contains","type":"customerEmail","value":6126.62}],"createdAt":"2026-04-10T13:45:02.925Z","description":"readies striking upward kosher offset since meanwhile","enabled":true,"evaluationCount":320155,"matchCount":940480,"name":"<value>","order":925886,"sourceId":"<id>","updatedAt":"2024-05-27T00:15:12.353Z"}
             type: simple
     x-speakeasy-test-group: rules
     x-speakeasy-test-rebuild: true
@@ -1060,7 +1064,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","conditions":[],"createdAt":"2026-05-18T19:00:26.759Z","description":"yippee usefully annually even spherical geez","enabled":true,"evaluationCount":77849,"matchCount":313367,"name":"<value>","order":311509,"sourceId":"<id>","updatedAt":"2024-11-30T05:34:06.432Z"}
+              {"id":"<id>","conditions":[],"createdAt":"2026-05-18T19:00:26.759Z","description":"burgeon unimpressively duh jet","enabled":false,"evaluationCount":581043,"matchCount":946318,"name":"<value>","order":596229,"sourceId":"<id>","updatedAt":"2026-05-08T22:59:32.251Z"}
             type: simple
     x-speakeasy-test-group: rules
     x-speakeasy-test-rebuild: true
@@ -1080,7 +1084,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","conditions":[],"createdAt":"2025-07-30T23:23:51.722Z","description":"instructor icy oof indolent","enabled":true,"evaluationCount":214110,"matchCount":757504,"name":"<value>","order":293952,"sourceId":"<id>","updatedAt":"2025-05-30T04:39:16.591Z"}
+              {"id":"<id>","conditions":[],"createdAt":"2025-07-30T23:23:51.722Z","description":"which expostulate gently","enabled":true,"evaluationCount":694067,"matchCount":923781,"name":"<value>","order":658983,"sourceId":"<id>","updatedAt":"2025-03-29T05:53:17.388Z"}
             type: simple
     x-speakeasy-test-group: rules
     x-speakeasy-test-rebuild: true
@@ -1158,7 +1162,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"subscriptionPortal","expiresAt":"2023-07-10T22:00:42.526Z","url":"https://true-advertisement.com"}
+              {"object":"subscriptionPortal","expiresAt":"2026-09-13T16:34:13.918Z","url":"https://aggravating-cleaner.biz"}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1172,16 +1176,14 @@ workflows:
             customerId: <id>
             idempotencyKey: <value>
             merchantId: <id>
-            properties:
-              - billableMetricId: <id>
-                quantity: 6787.65
-            timestamp: "2024-06-20T13:04:13.935Z"
+            properties: []
+            timestamp: "2026-05-14T00:54:35.100Z"
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"usageEvent","createdAt":"2025-06-20T13:04:13.935Z","customerId":"<id>","merchantId":"<id>","properties":[{"billableMetricId":"<id>","quantity":678765}],"subscriptionId":"<id>","timestamp":"2024-04-15T14:37:24.493Z"}
+              {"id":"<id>","object":"usageEvent","createdAt":"2026-01-13T22:13:24.358Z","customerId":"<id>","merchantId":"<id>","properties":[],"subscriptionId":"<id>","timestamp":"2026-01-19T14:04:02.522Z"}
             type: simple
     x-speakeasy-test-group: usageEvents
     x-speakeasy-test-rebuild: true
@@ -1190,18 +1192,18 @@ workflows:
       - stepId: test
         operationId: listUsageEvents
         parameters:
-          - name: startTime
-            in: query
-            value: "2025-03-29T00:23:32.822Z"
           - name: endTime
             in: query
-            value: "2023-02-04T03:47:15.138Z"
+            value: "2026-03-29T00:23:32.822Z"
           - name: limit
             in: query
             value: 10
           - name: offset
             in: query
             value: 0
+          - name: startTime
+            in: query
+            value: "2024-02-04T03:47:15.138Z"
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -1241,7 +1243,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"batchUsageEvents","failed":[{"error":"<value>","idempotencyKey":"<value>","index":246491}],"successful":[],"summary":{"failed":605506,"successful":760452,"total":297542}}
+              {"object":"batchUsageEvents","failed":[],"successful":[{"id":"<id>","object":"usageEvent","createdAt":"2024-09-27T03:41:35.491Z","customerId":"<id>","merchantId":"<id>","properties":[],"subscriptionId":"<id>","timestamp":"2026-04-13T10:55:55.088Z"}],"summary":{"failed":605506,"successful":725321,"total":596948}}
             type: simple
     x-speakeasy-test-group: usageEvents
     x-speakeasy-test-rebuild: true
@@ -1258,7 +1260,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"user","createdAt":"2023-03-11T00:37:03.383Z","email":"Cortney_Jakubowski@gmail.com","organizations":[],"oryId":"<id>","updatedAt":"2025-05-28T12:10:36.619Z"}
+              {"id":"<id>","object":"user","createdAt":"2024-05-19T14:40:56.948Z","email":"Ruby.OKeefe34@gmail.com","organizations":[{}],"oryId":"<id>","updatedAt":"2024-12-13T20:22:39.756Z"}
             type: simple
     x-speakeasy-test-group: Users
     x-speakeasy-test-rebuild: true
@@ -1278,7 +1280,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"user","createdAt":"2024-10-28T02:07:09.434Z","email":"Joanny.Feeney@gmail.com","organizations":[],"oryId":"<id>","updatedAt":"2025-12-24T10:17:58.569Z"}
+              {"id":"<id>","object":"user","createdAt":"2024-02-12T21:13:47.779Z","email":"Brain.Crist@yahoo.com","organizations":[{}],"oryId":"<id>","updatedAt":"2026-03-09T06:50:35.701Z"}
             type: simple
     x-speakeasy-test-group: Users
     x-speakeasy-test-rebuild: true
@@ -1424,7 +1426,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"customer","consumerId":"<id>","createdAt":"2024-05-23T03:16:25.992Z","merchantId":"<id>","updatedAt":"2023-02-08T13:13:55.872Z","validTaxAddress":{"valid":true}}
+              {"id":"<id>","object":"customer","consumerId":"<id>","createdAt":"2024-07-27T11:34:14.056Z","merchantId":"<id>","updatedAt":"2025-05-23T03:16:25.992Z","validTaxAddress":{"valid":true}}
             type: simple
     x-speakeasy-test-group: Customers
     x-speakeasy-test-rebuild: true
@@ -1436,16 +1438,16 @@ workflows:
           contentType: application/json
           payload:
             autoCharge: false
-            name: <value>
+            name: Monthly API Service
             planId: <id>
-            startedAt: "2025-08-09T13:09:26.829Z"
+            startedAt: "2026-08-09T13:09:26.829Z"
             taxExempt: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2026-08-09T13:09:26.829Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2025-10-04T05:26:12.259Z","status":"terminated","updatedAt":"2024-06-06T16:25:42.484Z"}
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z"}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1540,7 +1542,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"invoice","autoApprove":true,"billingAnchor":"2024-11-08T23:43:42.730Z","billingCadence":"<value>","createdAt":"2024-12-13T06:54:35.195Z","currency":"Costa Rican Colon","gracePeriodEnd":"2025-09-09T07:32:58.606Z","grandTotal":"<value>","itemCount":983557,"merchantId":"<id>","paidAmount":"<value>","periodEnd":"2025-06-06T22:32:10.024Z","periodStart":"2025-05-07T17:21:44.913Z","sequenceNumber":196780,"status":"WRITTEN_OFF","subscriptionId":"<id>","subtotal":"<value>","totalTax":"<value>","unpaidAmount":"<value>","updatedAt":"2023-02-22T18:30:48.719Z"}
+              {"id":"<id>","object":"invoice","autoApprove":true,"billingAnchor":"2026-09-05T07:35:48.967Z","billingCadence":"<value>","createdAt":"2026-05-07T17:21:44.913Z","currency":"Syrian Pound","gracePeriodEnd":"2026-09-09T07:32:58.606Z","grandTotal":"<value>","itemCount":618603,"merchantId":"<id>","paidAmount":"<value>","periodEnd":"2025-03-26T10:35:15.865Z","periodStart":"2026-12-13T23:28:43.227Z","sequenceNumber":649898,"status":"ACTIVE","subscriptionId":"<id>","subtotal":"<value>","totalTax":"<value>","unpaidAmount":"<value>","updatedAt":"2025-01-05T14:26:49.311Z"}
             type: simple
     x-speakeasy-test-group: Invoices V2
     x-speakeasy-test-rebuild: true
@@ -1776,7 +1778,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"fee","name":"<value>","description":"obnoxiously boldly that fort as minus bob adventurously","merchantId":"<id>","productId":"<id>","createdAt":"2025-12-13T01:38:36.298Z","updatedAt":"2024-01-26T06:39:20.634Z"}
+              {"id":"<id>","object":"fee","name":"<value>","description":"flint once whoa where fellow rationalise pish piglet","merchantId":"<id>","productId":"<id>","createdAt":"2025-08-09T15:27:19.888Z","updatedAt":"2025-07-02T22:33:36.653Z"}
             type: simple
     x-speakeasy-test-group: Fees
     x-speakeasy-test-rebuild: true
@@ -1923,7 +1925,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"revenue_summary","netRevenue":"<value>","invoices":{"issued":{"count":186743,"amount":"775.35"},"outstanding":{"count":186743,"amount":"775.35"},"paid":{"count":290758,"amount":"20.75"},"writtenOff":{"count":86320,"amount":"735.88"}},"payments":{"completedCount":290758,"completedAmount":"<value>","pendingCount":186743,"pendingAmount":"<value>","expiredCount":186743,"expiredAmount":"<value>"},"trend":[]}
+              {"object":"revenue_summary","netRevenue":"<value>","invoices":{"issued":{"count":290758,"amount":"20.75"},"outstanding":{"count":86320,"amount":"735.88"},"paid":{"count":744387,"amount":"440.67"},"writtenOff":{"count":390905,"amount":"744.63"}},"payments":{"completedCount":13144,"completedAmount":"<value>","pendingCount":290186,"pendingAmount":"<value>","expiredCount":489645,"expiredAmount":"<value>"},"trend":[{"timestamp":"2026-07-15T23:15:12.204Z","issuedInvoices":"<value>","writtenOffInvoices":"<value>","completedPayments":"<value>"}]}
             type: simple
     x-speakeasy-test-group: Revenue
     x-speakeasy-test-rebuild: true
@@ -2093,7 +2095,11 @@ workflows:
             customerId: <id>
             featureId: <id>
             template:
-              type: boolean
+              config:
+                key: <value>
+                key1: <value>
+                key2: <value>
+              type: static
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
@@ -2128,11 +2134,11 @@ workflows:
           contentType: application/json
           payload:
             data:
-              key: <value>
-              key1: <value>
-            source: <value>
-            subject: <value>
-            type: <value>
+              model: gpt-4o
+              tokens: 1500
+            source: https://api.myapp.com
+            subject: cus_abc123
+            type: ai.inference
         successCriteria:
           - condition: $statusCode == 202
           - condition: $response.header.Content-Type == application/json
@@ -2437,7 +2443,7 @@ workflows:
         requestBody:
           contentType: application/json
           payload:
-            amount: 1830.35
+            amount: 4545.92
             idempotencyKey: <value>
         successCriteria:
           - condition: $statusCode == 201
@@ -2673,18 +2679,18 @@ workflows:
           - name: id
             in: path
             value: <id>
-          - name: limit
-            in: query
-            value: 20
-          - name: offset
-            in: query
-            value: 0
           - name: from
             in: query
             value: "2024-09-28T08:04:20.478Z"
           - name: to
             in: query
             value: "2025-07-03T05:08:35.498Z"
+          - name: limit
+            in: query
+            value: 20
+          - name: offset
+            in: query
+            value: 0
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -2693,4 +2699,44 @@ workflows:
               {"object":"list","billableMetricId":"<id>","events":[],"pagination":{}}
             type: simple
     x-speakeasy-test-group: billableMetrics
+    x-speakeasy-test-rebuild: true
+  - workflowId: listLineItems
+    steps:
+      - stepId: test
+        operationId: listLineItems
+        parameters:
+          - name: limit
+            in: query
+            value: 100
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"id":"<id>","subscriptionId":"<id>","type":"metered","status":"invoiced","displayName":"Ruthe20","currency":"Tenge","periodStart":"2026-09-04T02:49:10.376Z","periodEnd":"2026-09-15T08:12:34.337Z","invoiceAt":"2024-10-05T12:55:27.688Z","unitPrice":"<value>","createdAt":"2024-05-18T12:29:19.850Z","updatedAt":"2024-07-26T23:40:10.281Z"}],"totalCount":585166,"summary":{"feeSubtotal":"<value>","meteredEstimatedSubtotal":"<value>","currency":"Swedish Krona"}}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: createLineItem
+    steps:
+      - stepId: test
+        operationId: createLineItem
+        requestBody:
+          contentType: application/json
+          payload:
+            currency: Rwanda Franc
+            displayName: Nathan54
+            quantity: 6214.31
+            unitPrice: 7408.13
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","subscriptionId":"<id>","type":"discount","status":"pending","displayName":"Roscoe_Haag","currency":"Belize Dollar","periodStart":"2025-06-18T03:33:03.362Z","periodEnd":"2025-11-09T02:25:51.382Z","invoiceAt":"2024-04-26T04:27:52.258Z","unitPrice":"<value>","createdAt":"2025-10-18T18:51:06.413Z","updatedAt":"2025-04-29T04:46:04.080Z"}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
     x-speakeasy-test-rebuild: true
