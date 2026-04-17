@@ -1,9 +1,4 @@
-# Managed file — do not edit directly.
-#
-# Flow:
-# 1. Monorepo's sdk_release.yaml pushes spec + overlay + gen.yaml here
-# 2. This workflow generates the SDK, tags, builds, and publishes to npm (OIDC)
-
+# Managed file — do not edit directly. Synced from the paygentic monorepo.
 name: Generate and Publish SDK
 
 on:
@@ -12,121 +7,17 @@ on:
   workflow_dispatch: {}
 
 permissions:
-  checks: write
   contents: write
-  statuses: write
   id-token: write
+  checks: write
+  statuses: write
 
 jobs:
-  generate:
-    name: Generate TypeScript SDK
-    runs-on: ubuntu-latest
-    environment:
-      name: npm
-      url: https://www.npmjs.com/package/@paygentic/sdk
-    steps:
-      # fetch-depth: 0 is required so Detect version can read tag history.
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - uses: speakeasy-api/sdk-generation-action@v15
-        with:
-          speakeasy_version: 1.761.4
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          # Keep pnpm_version in sync with monorepo package.json packageManager.
-          pnpm_version: "10.33.0"
-          # Force regen so a version-only bump in gen.yaml still rewrites
-          # package.json — otherwise the action skips regen when it sees no
-          # spec diff and Detect version reads the stale version.
-          force: "true"
-          mode: direct
-        env:
-          SPEAKEASY_API_KEY: ${{ secrets.ORG_SPEAKEASY_API_KEY }}
-
-      - name: Detect version and tag
-        id: version
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-
-          if git rev-parse -q --verify "refs/tags/v${VERSION}" >/dev/null 2>&1; then
-            echo "::warning::Tag v${VERSION} already exists — version was not bumped. Skipping publish. If this was intentional, trigger a manual dispatch after bumping the version."
-            echo "should_publish=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "New version detected: v${VERSION}"
-            echo "should_publish=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Create tag
-        if: steps.version.outputs.should_publish == 'true'
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          git config user.name "paygentic-bot"
-          git config user.email "bot@paygentic.io"
-          git tag -a "v${VERSION}" -m "Release v${VERSION}"
-          git push origin "v${VERSION}"
-
-      - uses: actions/setup-node@v6
-        if: steps.version.outputs.should_publish == 'true'
-        with:
-          # Node 24 ships npm >= 11.5.1 (required for OIDC trusted publisher auth)
-          node-version: 24
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
-
-      - name: Install dependencies
-        if: steps.version.outputs.should_publish == 'true'
-        run: npm ci
-
-      - name: Build
-        if: steps.version.outputs.should_publish == 'true'
-        run: npm run build
-
-      - name: Publish to npm
-        if: steps.version.outputs.should_publish == 'true'
-        run: npm publish --tag latest --access public --provenance
-
-      - name: Create GitHub Release
-        if: steps.version.outputs.should_publish == 'true'
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          gh release create "v${VERSION}" \
-            --title "v${VERSION}" \
-            --notes "## Installation
-
-          \`\`\`bash
-          npm install @paygentic/sdk@${VERSION}
-          \`\`\`"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Failed (slack)
-        uses: slackapi/slack-github-action@v3.0.1
-        if: failure()
-        with:
-          webhook: ${{ secrets.ORG_SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": "TypeScript SDK generation/publish failed",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "TypeScript SDK generation/publish failed in <https://github.com/${{ github.repository }}|${{ github.repository }}>"
-                  },
-                  "accessory": {
-                    "type": "button",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "View Logs",
-                      "emoji": true
-                    },
-                    "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                  }
-                }
-              ]
-            }
+  publish:
+    uses: speakeasy-api/sdk-generation-action/.github/workflows/sdk-publish.yaml@v15
+    with:
+      target: typescript
+    secrets:
+      github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      speakeasy_api_key: ${{ secrets.ORG_SPEAKEASY_API_KEY }}
+      slack_webhook_url: ${{ secrets.ORG_SLACK_WEBHOOK_URL }}
