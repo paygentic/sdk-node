@@ -849,3 +849,100 @@ actions:
       created_at: 1759148565008
       reviewed_at: 1759148608352
       type: method-name
+  # ── usage examples (quickstart flow) ─────────────────────────────────
+  - target: $["paths"]["/v0/customers"]["post"]
+    update:
+      x-speakeasy-usage-example:
+        title: "Create a customer"
+        description: "Create a customer for each organization you bill. This is the first step in the billing setup — see the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) for the full flow."
+        position: 1
+  - target: $["paths"]["/v0/subscriptions"]["post"]
+    update:
+      x-speakeasy-usage-example:
+        title: "Create a subscription"
+        description: "Subscribe a customer to a plan. If the plan includes in-advance charges, Paygentic generates an initial invoice and the subscription activates once paid."
+        position: 2
+  - target: $["paths"]["/v0/events"]["post"]
+    update:
+      x-speakeasy-usage-example:
+        title: "Report usage"
+        description: "Send meter events to record consumption once a subscription is active. The endpoint is fire-and-forget — it always returns `202 Accepted`."
+        position: 3
+  # ── example values — billableMetrics.create ──────────────────────────
+  # Used by [security], [retries], [errors], [server] sections as Speakeasy's default example op
+  - target: $["paths"]["/v0/billableMetrics"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["name"]
+    update:
+      example: "Token Counter"
+  - target: $["paths"]["/v0/billableMetrics"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["description"]
+    update:
+      example: "Tracks total tokens consumed per API call"
+  - target: $["paths"]["/v0/billableMetrics"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["unit"]
+    update:
+      example: "tokens"
+  # ── example values — subscriptions.create ────────────────────────────
+  - target: $["paths"]["/v0/subscriptions"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["name"]
+    update:
+      example: "Monthly API Service"
+  # ── example values — customers.create ────────────────────────────────
+  - target: $["paths"]["/v0/customers"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["consumer"]["properties"]["name"]
+    update:
+      example: "Jane Smith"
+  - target: $["paths"]["/v0/customers"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["consumer"]["properties"]["email"]
+    update:
+      example: "jane@example.com"
+  # ── example values — events.ingest ───────────────────────────────────
+  - target: $["paths"]["/v0/events"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["type"]
+    update:
+      example: "ai.inference"
+  - target: $["paths"]["/v0/events"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["source"]
+    update:
+      example: "https://api.myapp.com"
+  - target: $["paths"]["/v0/events"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["subject"]
+    update:
+      example: "cus_abc123"
+  - target: $["paths"]["/v0/events"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["data"]
+    update:
+      example:
+        tokens: 1500
+        model: "gpt-4o"
+  # ── request-body-level examples (for required params Speakeasy won't use property examples) ──
+  - target: $["paths"]["/v0/billableMetrics"]["post"]["requestBody"]["content"]["application/json"]
+    update:
+      example:
+        name: "Token Counter"
+        description: "Tracks total tokens consumed per API call"
+        unit: "tokens"
+        aggregation: "SUM"
+        merchantId: "org_YS8jkP59V71TdUvj"
+        productId: "prod_abc123"
+  - target: $["paths"]["/v0/events"]["post"]["requestBody"]["content"]["application/json"]
+    update:
+      example:
+        type: "ai.inference"
+        source: "https://api.myapp.com"
+        subject: "cus_abc123"
+        data:
+          tokens: 1500
+          model: "gpt-4o"
+  - target: $["paths"]["/v0/subscriptions"]["post"]["requestBody"]["content"]["application/json"]
+    update:
+      example:
+        name: "Monthly API Service"
+        planId: "plan_abc123"
+        customerId: "cus_abc123"
+        startedAt: "2024-01-15T00:00:00Z"
+  - target: $["paths"]["/v0/customers"]["post"]["requestBody"]["content"]["application/json"]
+    update:
+      example:
+        merchantId: "org_YS8jkP59V71TdUvj"
+        consumer:
+          name: "Jane Smith"
+          email: "jane@example.com"
+          address:
+            city: "San Francisco"
+            state: "CA"
+            country: "US"
+  # ── info.description — remove duplicate auth/base URL ─────────────────
+  - target: $["info"]
+    update:
+      description: "The Paygentic API provides billing infrastructure for usage-based and subscription monetization — customers, subscriptions, usage metering, invoicing, entitlements, and payments.\n\nSee the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go from zero to billing in four steps."

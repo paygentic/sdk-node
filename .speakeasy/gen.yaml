@@ -2,7 +2,7 @@ configVersion: 2.0.0
 generation:
   devContainers:
     enabled: true
-    schemaPath: .speakeasy/out.openapi.yaml
+    schemaPath: ../.speakeasy/out.openapi.yaml
   sdkClassName: Paygentic
   maintainOpenAPIOrder: true
   usageSnippets:
@@ -27,7 +27,7 @@ generation:
   schemas:
     allOfMergeStrategy: shallowMerge
   requestBodyFieldName: ""
-  versioningStrategy: manual
+  versioningStrategy: auto
   persistentEdits: {}
   tests:
     generateTests: true
@@ -49,6 +49,10 @@ typescript:
   author: Speakeasy
   baseErrorName: PaygenticError
   clientServerStatusCodesAsErrors: true
+  compileCommand:
+    - sh
+    - -c
+    - pnpm install --ignore-scripts && pnpm rebuild bun esbuild && pnpm run lint && pnpm run build && pnpm --dir examples install --ignore-scripts
   constFieldsAlwaysOptional: false
   defaultErrorName: PaygenticDefaultError
   enableCustomCodeRegions: false
