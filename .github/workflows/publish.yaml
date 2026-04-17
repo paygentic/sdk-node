@@ -27,4 +27,4 @@ jobs:
         run: npm run build
 
       - name: Publish to npm
-        run: npm publish --tag latest --access public
+        run: npm publish --tag latest --access public --provenance
