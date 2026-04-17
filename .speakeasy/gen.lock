@@ -5,14 +5,14 @@ management:
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.6.33
-  configChecksum: 929e712459ada53f65614363b925a121
+  releaseVersion: 0.6.34
+  configChecksum: 6326b518b60c6b191f73c685edef10e2
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
 persistentEdits:
-  generation_id: 1c4f5dd9-abc9-41c9-805b-f8857f932781
-  pristine_commit_hash: 0e0fec4747a40494010252268379d7b4da029c91
-  pristine_tree_hash: 0de11a2d2ead422dc25b8706886c6200b935bbd4
+  generation_id: 64587f15-e57b-4700-b441-c9f824daff99
+  pristine_commit_hash: b6e434f2aa8106aaa5a453a8dc6454d97ca50154
+  pristine_tree_hash: 0db58ca9b75c46ef043aa0885314222a709da772
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -1781,12 +1781,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:b0a7d02394fecf239290aeaf9908642862b0033f
-    pristine_git_object: 199e199c8575540d389119b684013a427cb05280
+    last_write_checksum: sha1:4a6eda55e2be809c5ffa567cbd55ef3a9e1a9ed9
+    pristine_git_object: 4928249a4967fba7baf40b3099340d09a8172643
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:2fbf970d02c1012273cb7462f317778ba1ded526
-    pristine_git_object: f19185973ad61a7834e66ed91d918e91c3a187d2
+    last_write_checksum: sha1:3a3197204016151102b14995fafaff1144dae04e
+    pristine_git_object: 1c8809a3460811aa428ba40bd015b8ecd0b5a59b
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -2193,8 +2193,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:22d3e54c1a4fdd955dd0d3b29168091eb184bcfd
-    pristine_git_object: ab54acd0ee1c215244fc600672a5be3f953b08b3
+    last_write_checksum: sha1:66c581272b2c5b8b846236fc9ba6c327a1d3b1ad
+    pristine_git_object: c5bd4731550257455982201a5eed71557de02109
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
