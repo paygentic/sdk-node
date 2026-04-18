@@ -1,17 +1,21 @@
 # Managed file — owned by paygentic/sdk-node.
-# Delegates to Speakeasy's canonical reusable publish workflow.
-name: Generate and Publish SDK
+# Canonical Speakeasy publish workflow. Fires when sdk_generation.yaml
+# commits a new gen.lock to main (or via manual workflow_dispatch).
+name: Publish
 
 on:
-  repository_dispatch:
-    types: [monorepo-release]
+  push:
+    branches: [main]
+    paths:
+      - .speakeasy/gen.lock
   workflow_dispatch: {}
 
 permissions:
-  contents: write
-  id-token: write
   checks: write
+  contents: write
+  pull-requests: write
   statuses: write
+  id-token: write
 
 jobs:
   publish:
@@ -20,6 +24,6 @@ jobs:
       target: typescript
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      npm_token: ${{ secrets.ORG_NPM_TOKEN }}
       speakeasy_api_key: ${{ secrets.ORG_SPEAKEASY_API_KEY }}
       slack_webhook_url: ${{ secrets.ORG_SLACK_WEBHOOK_URL }}
-      npm_token: ${{ secrets.ORG_NPM_TOKEN }}
