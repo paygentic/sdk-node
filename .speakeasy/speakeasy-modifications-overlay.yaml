@@ -875,7 +875,7 @@ actions:
       example: "Token Counter"
   - target: $["paths"]["/v0/billableMetrics"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["description"]
     update:
-      example: "Tracks total tokens consumed per API call"
+      example: "Tracks total tokens consumed per API call."
   - target: $["paths"]["/v0/billableMetrics"]["post"]["requestBody"]["content"]["application/json"]["schema"]["properties"]["unit"]
     update:
       example: "tokens"
@@ -910,7 +910,7 @@ actions:
     update:
       example:
         name: "Token Counter"
-        description: "Tracks total tokens consumed per API call"
+        description: "Tracks total tokens consumed per API call."
         unit: "tokens"
         aggregation: "SUM"
         merchantId: "org_YS8jkP59V71TdUvj"
