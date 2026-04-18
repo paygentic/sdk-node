@@ -945,4 +945,4 @@ actions:
   # ── info.description — remove duplicate auth/base URL ─────────────────
   - target: $["info"]
     update:
-      description: "The Paygentic API provides billing infrastructure for usage-based and subscription monetization — customers, subscriptions, usage metering, invoicing, entitlements, and payments.\n\nSee the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go from zero to billing in four steps."
+      description: "The Paygentic API provides billing infrastructure for usage-based and subscription monetization — customers, subscriptions, usage metering, invoicing, entitlements, and payments.\n\nSee the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go from zero to billing in a few steps."
