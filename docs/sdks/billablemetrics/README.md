@@ -28,7 +28,7 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
-    description: "Tracks total tokens consumed per API call",
+    description: "Tracks total tokens consumed per API call.",
     merchantId: "org_YS8jkP59V71TdUvj",
     name: "Token Counter",
     productId: "prod_abc123",
@@ -58,7 +58,7 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await billableMetricsCreate(paygentic, {
     aggregation: "SUM",
-    description: "Tracks total tokens consumed per API call",
+    description: "Tracks total tokens consumed per API call.",
     merchantId: "org_YS8jkP59V71TdUvj",
     name: "Token Counter",
     productId: "prod_abc123",

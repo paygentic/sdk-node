@@ -16,7 +16,7 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 
 Paygentic API: The Paygentic API provides billing infrastructure for usage-based and subscription monetization — customers, subscriptions, usage metering, invoicing, entitlements, and payments.
 
-See the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go from zero to billing in four steps.
+See the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go from zero to billing in a handful of steps.
 <!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
@@ -43,34 +43,30 @@ See the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go
 <!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
-> [!TIP]
-> To finish publishing your SDK to npm and others you must [run your first generation action](https://www.speakeasy.com/docs/github-setup#step-by-step-guide).
-
-
 The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https://pnpm.io/), [bun](https://bun.sh/) or [yarn](https://classic.yarnpkg.com/en/) package managers.
 
 ### NPM
 
 ```bash
-npm add https://github.com/paygentic/sdk-node
+npm add @paygentic/sdk
 ```
 
 ### PNPM
 
 ```bash
-pnpm add https://github.com/paygentic/sdk-node
+pnpm add @paygentic/sdk
 ```
 
 ### Bun
 
 ```bash
-bun add https://github.com/paygentic/sdk-node
+bun add @paygentic/sdk
 ```
 
 ### Yarn
 
 ```bash
-yarn add https://github.com/paygentic/sdk-node
+yarn add @paygentic/sdk
 ```
 
 > [!NOTE]
@@ -196,7 +192,7 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
-    description: "Tracks total tokens consumed per API call",
+    description: "Tracks total tokens consumed per API call.",
     merchantId: "org_YS8jkP59V71TdUvj",
     name: "Token Counter",
     productId: "prod_abc123",
@@ -514,7 +510,7 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
-    description: "Tracks total tokens consumed per API call",
+    description: "Tracks total tokens consumed per API call.",
     merchantId: "org_YS8jkP59V71TdUvj",
     name: "Token Counter",
     productId: "prod_abc123",
@@ -560,7 +556,7 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
-    description: "Tracks total tokens consumed per API call",
+    description: "Tracks total tokens consumed per API call.",
     merchantId: "org_YS8jkP59V71TdUvj",
     name: "Token Counter",
     productId: "prod_abc123",
@@ -602,7 +598,7 @@ async function run() {
   try {
     const result = await paygentic.billableMetrics.create({
       aggregation: "SUM",
-      description: "Tracks total tokens consumed per API call",
+      description: "Tracks total tokens consumed per API call.",
       merchantId: "org_YS8jkP59V71TdUvj",
       name: "Token Counter",
       productId: "prod_abc123",
@@ -677,7 +673,7 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.billableMetrics.create({
     aggregation: "SUM",
-    description: "Tracks total tokens consumed per API call",
+    description: "Tracks total tokens consumed per API call.",
     merchantId: "org_YS8jkP59V71TdUvj",
     name: "Token Counter",
     productId: "prod_abc123",

@@ -1,18 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: bee9d730fcf6a00ce1674814e4c3a41e
+  docChecksum: f92e30d5b7b95e9123dd32884b552a8b
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.6.34
-  configChecksum: 6326b518b60c6b191f73c685edef10e2
+  releaseVersion: 0.6.36
+  configChecksum: 3002df02b725e9ff015898f185cfdff4
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
+  published: true
 persistentEdits:
-  generation_id: 64587f15-e57b-4700-b441-c9f824daff99
-  pristine_commit_hash: b6e434f2aa8106aaa5a453a8dc6454d97ca50154
-  pristine_tree_hash: 0db58ca9b75c46ef043aa0885314222a709da772
+  generation_id: cacd14b4-f5ff-4355-9e04-61ce59c5c48c
+  pristine_commit_hash: 94abd3e7f36f5cd767d06a0492be97924558ae33
+  pristine_tree_hash: 96f33cf1a67a8cdc37c8079529bb82d92e21232e
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -561,8 +562,8 @@ trackedFiles:
     pristine_git_object: 8b22e851dd8fa6e68966ab31152b4be6fff7f628
   docs/models/operations/createbillablemetricrequest.md:
     id: bef393dc53e6
-    last_write_checksum: sha1:e875f900b3e5c50678457e51d992864de0b46df0
-    pristine_git_object: d6cbb651e2a662b4cec8fd6f89bfc7fdb71898f1
+    last_write_checksum: sha1:ff1418e1ecaef8695ff391ce6de0bba21e8b81e2
+    pristine_git_object: 09322a123341f1f4b1ffac2782740600c9df4d59
   docs/models/operations/createcostaggregation.md:
     id: 78c3d269bcca
     last_write_checksum: sha1:0809a8dfcf17a3b343cd9817bff11b8797603969
@@ -1665,8 +1666,8 @@ trackedFiles:
     pristine_git_object: f1911aaac56ab1f516ddb1f5f48a9738ffea1bc9
   docs/sdks/billablemetrics/README.md:
     id: 4a5403fb7335
-    last_write_checksum: sha1:1219ed466f23ef4e7c17d76feff8330234ab5c57
-    pristine_git_object: 5acbdb1069fa46813c8a4f3e8c64460db11006cf
+    last_write_checksum: sha1:a88b0b5c3c96308a1f597e1ff4ce16f26434366a
+    pristine_git_object: cec7d26ef35abf137f50dad0073edf68145f7f44
   docs/sdks/costs/README.md:
     id: 8d96b80b9dde
     last_write_checksum: sha1:0716d2a469f8ff0bfe32b5d30b435a319426ebe2
@@ -1781,12 +1782,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:4a6eda55e2be809c5ffa567cbd55ef3a9e1a9ed9
-    pristine_git_object: 4928249a4967fba7baf40b3099340d09a8172643
+    last_write_checksum: sha1:f05b46eb0e836f86407a67d0dc76f7db8ea03d52
+    pristine_git_object: 0d8d543f31868942195ba7f700d04d525053d4c8
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:3a3197204016151102b14995fafaff1144dae04e
-    pristine_git_object: 1c8809a3460811aa428ba40bd015b8ecd0b5a59b
+    last_write_checksum: sha1:b34b03ea49ea357ede9b25324077b2050d47f0bb
+    pristine_git_object: e4e558e30b37f6c49b161b4a9a55b7afc518ceb6
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -2193,8 +2194,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:66c581272b2c5b8b846236fc9ba6c327a1d3b1ad
-    pristine_git_object: c5bd4731550257455982201a5eed71557de02109
+    last_write_checksum: sha1:ed9ac81377f1aabd32c47a0322c0d87494d9c3c7
+    pristine_git_object: 6d3b19030f71becfb2ade85e81eac07e18fc711a
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250

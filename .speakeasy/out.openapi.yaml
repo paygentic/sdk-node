@@ -2,7 +2,7 @@ openapi: "3.1.0"
 info:
   title: "Paygentic API"
   version: "0.1.0"
-  description: "The Paygentic API provides billing infrastructure for usage-based and subscription monetization — customers, subscriptions, usage metering, invoicing, entitlements, and payments.\n\nSee the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go from zero to billing in four steps."
+  description: "The Paygentic API provides billing infrastructure for usage-based and subscription monetization — customers, subscriptions, usage metering, invoicing, entitlements, and payments.\n\nSee the [Quickstart](https://docs.paygentic.io/getting-started/quickstart) to go from zero to billing in a handful of steps."
   contact:
     name: "Paygentic Support"
     email: "support@paygentic.io"
@@ -90,7 +90,7 @@ paths:
                 description:
                   type: "string"
                   description: "Explanatory text describing what the metric tracks and how it's used for billing. Sample values: 'Total tokens consumed by Claude language model interactions', 'Gigabytes of cloud storage utilized', 'Count of machine learning inference requests processed', 'Quantity of AI-generated images created', 'Compute hours spent training neural networks', 'Terabytes of data transferred'"
-                  example: "Tracks total tokens consumed per API call"
+                  example: "Tracks total tokens consumed per API call."
                 merchantId:
                   $ref: "#/components/schemas/OrganizationId"
                   description: "The unique identifier of the merchant organization associated with the billable metric."
@@ -122,7 +122,7 @@ paths:
                   description: "Only count events after this timestamp. Used for meter versioning."
             example:
               name: "Token Counter"
-              description: "Tracks total tokens consumed per API call"
+              description: "Tracks total tokens consumed per API call."
               unit: "tokens"
               aggregation: "SUM"
               merchantId: "org_YS8jkP59V71TdUvj"
