@@ -1,4 +1,5 @@
-# Managed file — do not edit directly. Synced from the paygentic monorepo.
+# Managed file — owned by paygentic/sdk-node.
+# Delegates to Speakeasy's canonical reusable publish workflow.
 name: Generate and Publish SDK
 
 on:
@@ -21,3 +22,4 @@ jobs:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
       speakeasy_api_key: ${{ secrets.ORG_SPEAKEASY_API_KEY }}
       slack_webhook_url: ${{ secrets.ORG_SLACK_WEBHOOK_URL }}
+      npm_token: ${{ secrets.ORG_NPM_TOKEN }}
