@@ -22,6 +22,7 @@ jobs:
     uses: speakeasy-api/sdk-generation-action/.github/workflows/sdk-publish.yaml@v15
     with:
       target: typescript
+      pnpm_version: "10.33.0"
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
       npm_token: ${{ secrets.ORG_NPM_TOKEN }}
