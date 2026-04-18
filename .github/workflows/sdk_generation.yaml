@@ -30,6 +30,7 @@ jobs:
       force: ${{ github.event.inputs.force || false }}
       mode: direct
       set_version: ${{ github.event.inputs.set_version || '' }}
+      pnpm_version: "10.33.0"
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
       npm_token: ${{ secrets.ORG_NPM_TOKEN }}
