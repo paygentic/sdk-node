@@ -1,0 +1,36 @@
+# Managed file — owned by paygentic/sdk-node.
+# Canonical Speakeasy generation workflow. Regenerates the SDK and
+# commits the result directly to main; that push triggers sdk_publish.yaml.
+name: Generate
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Force generation of SDKs
+        type: boolean
+        default: false
+      set_version:
+        description: Optionally set a specific SDK version
+        type: string
+  repository_dispatch:
+    types: [monorepo-release]
+
+permissions:
+  checks: write
+  contents: write
+  pull-requests: write
+  statuses: write
+  id-token: write
+
+jobs:
+  generate:
+    uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@v15
+    with:
+      force: ${{ github.event.inputs.force || false }}
+      mode: direct
+      set_version: ${{ github.event.inputs.set_version || '' }}
+    secrets:
+      github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      npm_token: ${{ secrets.ORG_NPM_TOKEN }}
+      speakeasy_api_key: ${{ secrets.ORG_SPEAKEASY_API_KEY }}
