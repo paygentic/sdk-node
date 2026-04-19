@@ -3,12 +3,8 @@ speakeasyVersion: 1.761.4
 sources:
     Paygentic API:
         inputs:
-            - location: .speakeasy/openapi.json
-        overlays:
-            - location: .speakeasy/speakeasy-modifications-overlay.yaml
+            - location: registry.speakeasyapi.dev/paygentic/default/paygentic-api:main
         output: .speakeasy/out.openapi.yaml
-        registry:
-            location: registry.speakeasyapi.dev/paygentic/default/paygentic-api
 targets:
     typescript:
         target: typescript

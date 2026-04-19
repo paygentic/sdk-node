@@ -35,3 +35,4 @@ jobs:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
       npm_token: ${{ secrets.ORG_NPM_TOKEN }}
       speakeasy_api_key: ${{ secrets.ORG_SPEAKEASY_API_KEY }}
+      slack_webhook_url: ${{ secrets.ORG_SLACK_WEBHOOK_URL }}
