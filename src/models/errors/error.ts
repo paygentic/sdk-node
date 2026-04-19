@@ -3,17 +3,22 @@
  */
 
 import * as z from "zod/v3";
+import * as models from "../index.js";
 import { PaygenticError } from "./paygenticerror.js";
 
 export type ErrorTData = {
   /**
-   * Error type or code
+   * Coarse HTTP error category (e.g. 'bad_request', 'forbidden'). Maps to the HTTP status code.
    */
   error?: string | undefined;
   /**
-   * Human-readable error message
+   * Human-readable error message. Clients must not parse this field programmatically.
    */
   message: string;
+  /**
+   * Optional semantic business error code for machine-readable discrimination (e.g. 'TAX_NOT_ENABLED'). UPPER_SNAKE_CASE. Clients should check this field, not message.
+   */
+  code?: models.Code | undefined;
   /**
    * Additional error details
    */
@@ -22,9 +27,13 @@ export type ErrorTData = {
 
 export class ErrorT extends PaygenticError {
   /**
-   * Error type or code
+   * Coarse HTTP error category (e.g. 'bad_request', 'forbidden'). Maps to the HTTP status code.
    */
   error?: string | undefined;
+  /**
+   * Optional semantic business error code for machine-readable discrimination (e.g. 'TAX_NOT_ENABLED'). UPPER_SNAKE_CASE. Clients should check this field, not message.
+   */
+  code?: models.Code | undefined;
   /**
    * Additional error details
    */
@@ -41,6 +50,7 @@ export class ErrorT extends PaygenticError {
     super(message, httpMeta);
     this.data$ = err;
     if (err.error != null) this.error = err.error;
+    if (err.code != null) this.code = err.code;
     if (err.details != null) this.details = err.details;
 
     this.name = "ErrorT";
@@ -52,6 +62,7 @@ export const ErrorT$inboundSchema: z.ZodType<ErrorT, z.ZodTypeDef, unknown> = z
   .object({
     error: z.string().optional(),
     message: z.string(),
+    code: models.Code$inboundSchema.optional(),
     details: z.record(z.any()).optional(),
     request$: z.instanceof(Request),
     response$: z.instanceof(Response),

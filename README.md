@@ -618,6 +618,7 @@ async function run() {
       if (error instanceof errors.ErrorT) {
         console.log(error.data$.error); // string
         console.log(error.data$.message); // string
+        console.log(error.data$.code); // models.Code
         console.log(error.data$.details); // { [k: string]: any }
       }
     }

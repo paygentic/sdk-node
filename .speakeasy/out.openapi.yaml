@@ -30,7 +30,7 @@
     },
     {
       "name": "Billable Metrics",
-      "description": "A `Billable Metric` defines a measurable quantity tied to a `Product`'s consumption. Each metric stores details including its label, explanatory text, and measurement units."
+      "description": "A `Billable Metric` defines a measurable quantity tied to a `Product`'s consumption. Each metric stores details including its label, an explanatory description, and measurement units."
     },
     {
       "name": "Disputes",
@@ -9955,11 +9955,19 @@
         "properties": {
           "error": {
             "type": "string",
-            "description": "Error type or code"
+            "description": "Coarse HTTP error category (e.g. 'bad_request', 'forbidden'). Maps to the HTTP status code."
           },
           "message": {
             "type": "string",
-            "description": "Human-readable error message"
+            "description": "Human-readable error message. Clients must not parse this field programmatically."
+          },
+          "code": {
+            "type": "string",
+            "enum": [
+              "TAX_NOT_ENABLED",
+              "PAYMENT_SESSION_EXPIRED"
+            ],
+            "description": "Optional semantic business error code for machine-readable discrimination (e.g. 'TAX_NOT_ENABLED'). UPPER_SNAKE_CASE. Clients should check this field, not message."
           },
           "details": {
             "type": "object",

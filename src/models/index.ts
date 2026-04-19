@@ -22,6 +22,7 @@ export * from "./entitlement.js";
 export * from "./entitlementaccessresult.js";
 export * from "./entitlementdetail.js";
 export * from "./entitlementtemplate.js";
+export * from "./error.js";
 export * from "./eventresponse.js";
 export * from "./feature.js";
 export * from "./fee.js";
