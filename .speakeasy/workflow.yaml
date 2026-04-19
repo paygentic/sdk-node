@@ -4,8 +4,6 @@ sources:
     Paygentic API:
         inputs:
             - location: registry.speakeasyapi.dev/paygentic/default/paygentic-api:main
-        overlays:
-            - location: registry.speakeasyapi.dev/paygentic/default/paygentic-api-overlay:main
         output: .speakeasy/out.openapi.yaml
 targets:
     typescript:
