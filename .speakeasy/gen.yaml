@@ -52,7 +52,7 @@ typescript:
   compileCommand:
     - sh
     - -c
-    - pnpm install --ignore-scripts && pnpm rebuild bun esbuild && pnpm run lint && pnpm run build && pnpm --dir examples install --ignore-scripts
+    - pnpm install --ignore-scripts --no-frozen-lockfile && pnpm rebuild bun esbuild && pnpm run lint && pnpm run build && pnpm --dir examples install --ignore-scripts --no-frozen-lockfile
   constFieldsAlwaysOptional: false
   defaultErrorName: PaygenticDefaultError
   enableCustomCodeRegions: false
