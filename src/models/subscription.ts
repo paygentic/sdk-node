@@ -14,7 +14,7 @@ export const SubscriptionObject = {
 export type SubscriptionObject = ClosedEnum<typeof SubscriptionObject>;
 
 /**
- * Invoice 0 awaiting merchant approval before payment can proceed. The invoice is in DRAFT status with totals calculated. Approval is currently platform-only — do not call PATCH /v2/invoices/{id} with {"trigger": "APPROVE"} from merchant credentials (it will return 403). A merchant-accessible approval endpoint is planned for PAYG-754.
+ * Invoice 0 awaiting merchant approval before payment can proceed. The invoice is in DRAFT status with totals calculated. Approval is a platform-managed action and will be available via a public endpoint in a future release.
  */
 export type PaymentAwaitingApproval = {
   /**
@@ -193,6 +193,10 @@ export type Subscription = {
    * Number of days before renewal to send the reminder. Null means use plan default.
    */
   renewalReminderDays?: number | null | undefined;
+  /**
+   * Subscription-level auto-approval override. Null means plan default is used.
+   */
+  autoApprove?: boolean | null | undefined;
   /**
    * Customer details with merchant and consumer information. Only included when include=customer is specified in the list query.
    */
@@ -416,6 +420,7 @@ export const Subscription$inboundSchema: z.ZodType<
   walletId: z.string().optional(),
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
+  autoApprove: z.nullable(z.boolean()).optional(),
   customer: z.lazy(() => SubscriptionCustomer$inboundSchema).optional(),
 });
 

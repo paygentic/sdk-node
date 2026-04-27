@@ -2,8 +2,6 @@
 
 ## Overview
 
-An `Entitlement` grants a customer the right to access and use a specific product feature.
-
 ### Available Operations
 
 * [list](#list) - List Entitlements
@@ -433,7 +431,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasEntitlement](../../models/schemasentitlement.md)\>**
+**Promise\<[models.Entitlement](../../models/entitlement.md)\>**
 
 ### Errors
 

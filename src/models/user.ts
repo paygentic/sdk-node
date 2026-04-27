@@ -28,6 +28,10 @@ export type UserOrganization = {
    */
   id?: string | undefined;
   state?: State | undefined;
+  /**
+   * Roles assigned to the user in this organization.
+   */
+  roles?: Array<string> | undefined;
 };
 
 export const UserType = {
@@ -72,6 +76,7 @@ export const UserOrganization$inboundSchema: z.ZodType<
 > = z.object({
   id: z.string().optional(),
   state: State$inboundSchema.optional(),
+  roles: z.array(z.string()).optional(),
 });
 
 export function userOrganizationFromJSON(

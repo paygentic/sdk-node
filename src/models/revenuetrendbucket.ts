@@ -29,7 +29,7 @@ export type RevenueTrendBucket = {
    */
   completedPayments: string;
   /**
-   * Per-group trend entries (only present when groupBy is specified)
+   * Per-group trend entries (present when groupBy=plan or groupBy=customer)
    */
   groupBreakdown?: Array<GroupTrendEntry> | undefined;
 };

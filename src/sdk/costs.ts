@@ -5,6 +5,7 @@
 import { costsCreateCost } from "../funcs/costsCreateCost.js";
 import { costsDeleteCost } from "../funcs/costsDeleteCost.js";
 import { costsGetCost } from "../funcs/costsGetCost.js";
+import { costsGetCostReport } from "../funcs/costsGetCostReport.js";
 import { costsGetCostSummary } from "../funcs/costsGetCostSummary.js";
 import { costsListCosts } from "../funcs/costsListCosts.js";
 import { costsUpdateCost } from "../funcs/costsUpdateCost.js";
@@ -98,6 +99,23 @@ export class Costs extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.CostUsageResponse> {
     return unwrapAsync(costsGetCostSummary(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Report
+   *
+   * @remarks
+   * Aggregate cost data across costs and customers with grouping, filtering, and time-series breakdown.
+   */
+  async getCostReport(
+    request: operations.GetCostReportRequest,
+    options?: RequestOptions,
+  ): Promise<models.CostReportResponse> {
+    return unwrapAsync(costsGetCostReport(
       this,
       request,
       options,

@@ -6,9 +6,7 @@ import { ClientSDK } from "../lib/sdks.js";
 import { BillableMetrics } from "./billablemetrics.js";
 import { Costs } from "./costs.js";
 import { Customers } from "./customers.js";
-import { Disputes } from "./disputes.js";
 import { Entitlements } from "./entitlements.js";
-import { EntitlementsV0 } from "./entitlementsv0.js";
 import { Events } from "./events.js";
 import { Features } from "./features.js";
 import { Fees } from "./fees.js";
@@ -21,7 +19,6 @@ import { Revenue } from "./revenue.js";
 import { Sources } from "./sources.js";
 import { Subscriptions } from "./subscriptions.js";
 import { TestClocks } from "./testclocks.js";
-import { UsageEvents } from "./usageevents.js";
 import { Users } from "./users.js";
 
 export class Paygentic extends ClientSDK {
@@ -33,16 +30,6 @@ export class Paygentic extends ClientSDK {
   private _customers?: Customers;
   get customers(): Customers {
     return (this._customers ??= new Customers(this._options));
-  }
-
-  private _disputes?: Disputes;
-  get disputes(): Disputes {
-    return (this._disputes ??= new Disputes(this._options));
-  }
-
-  private _entitlementsV0?: EntitlementsV0;
-  get entitlementsV0(): EntitlementsV0 {
-    return (this._entitlementsV0 ??= new EntitlementsV0(this._options));
   }
 
   private _entitlements?: Entitlements;
@@ -83,11 +70,6 @@ export class Paygentic extends ClientSDK {
   private _subscriptions?: Subscriptions;
   get subscriptions(): Subscriptions {
     return (this._subscriptions ??= new Subscriptions(this._options));
-  }
-
-  private _usageEvents?: UsageEvents;
-  get usageEvents(): UsageEvents {
-    return (this._usageEvents ??= new UsageEvents(this._options));
   }
 
   private _users?: Users;

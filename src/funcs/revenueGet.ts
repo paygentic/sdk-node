@@ -95,6 +95,7 @@ async function $do(
 
   const query = encodeFormQuery({
     "bucketWidth": payload.bucketWidth,
+    "currency": payload.currency,
     "customerId": payload.customerId,
     "endTime": payload.endTime,
     "groupBy": payload.groupBy,

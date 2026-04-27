@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod/v3";
-import * as models from "../index.js";
 import { PaygenticError } from "./paygenticerror.js";
 
 export type ErrorTData = {
@@ -18,7 +17,7 @@ export type ErrorTData = {
   /**
    * Optional semantic business error code for machine-readable discrimination (e.g. 'TAX_NOT_ENABLED'). UPPER_SNAKE_CASE. Clients should check this field, not message.
    */
-  code?: models.Code | undefined;
+  code?: string | undefined;
   /**
    * Additional error details
    */
@@ -33,7 +32,7 @@ export class ErrorT extends PaygenticError {
   /**
    * Optional semantic business error code for machine-readable discrimination (e.g. 'TAX_NOT_ENABLED'). UPPER_SNAKE_CASE. Clients should check this field, not message.
    */
-  code?: models.Code | undefined;
+  code?: string | undefined;
   /**
    * Additional error details
    */
@@ -62,7 +61,7 @@ export const ErrorT$inboundSchema: z.ZodType<ErrorT, z.ZodTypeDef, unknown> = z
   .object({
     error: z.string().optional(),
     message: z.string(),
-    code: models.Code$inboundSchema.optional(),
+    code: z.string().optional(),
     details: z.record(z.any()).optional(),
     request$: z.instanceof(Request),
     response$: z.instanceof(Response),

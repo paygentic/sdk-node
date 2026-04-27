@@ -13,63 +13,57 @@ export const EntitlementObject = {
 } as const;
 export type EntitlementObject = ClosedEnum<typeof EntitlementObject>;
 
-export type EntitlementBillableMetric = {
-  /**
-   * Unique identifier for a billable metric
-   */
-  billableMetricId?: string | undefined;
-  /**
-   * Custom price override in decimal dollars. Sample values: '0.000012' sets $0.000012 per unit, '0.50' sets $0.50 per unit, '1.25' sets $1.25 per unit
-   */
-  price?: string | undefined;
-  /**
-   * Pre-authorized metric quantity amount. Sample values: 10000 tokens, 500 GB storage, 1000 API calls, 24 compute hours
-   */
-  quantity?: number | undefined;
-};
+/**
+ * Current status of the entitlement.
+ */
+export const EntitlementStatus = {
+  Active: "active",
+  Canceled: "canceled",
+  Expired: "expired",
+} as const;
+/**
+ * Current status of the entitlement.
+ */
+export type EntitlementStatus = ClosedEnum<typeof EntitlementStatus>;
 
 export type Entitlement = {
-  /**
-   * Unique identifier for an entitlement
-   */
-  id?: string | undefined;
   object: EntitlementObject;
   /**
-   * Billable metrics and quantities reserved stored as JSON.
+   * Unique identifier for the entitlement.
    */
-  billableMetrics?: Array<EntitlementBillableMetric> | undefined;
-  /**
-   * Entitlement creation timestamp in ISO 8601 format. Sample values: '2024-01-15T10:30:00Z', '2024-02-01T14:45:30Z'
-   */
-  createdAt?: Date | undefined;
+  id: string;
   /**
    * Unique identifier for a customer
    */
-  customerId?: string | undefined;
+  customerId: string;
   /**
-   * Entitlement expiration timestamp in ISO 8601 format. Sample values: '2024-12-31T23:59:59Z', '2025-01-15T10:30:00Z'
+   * The feature this entitlement grants access to.
    */
-  expiresAt?: Date | undefined;
+  featureId: string;
   /**
-   * Maximum consumption events allowed before entitlement expires. Sample values: 1 allows single use, 10 allows ten uses, 100 allows one hundred uses
+   * The subscription this entitlement is associated with, if any.
    */
-  maxUses?: number | undefined;
+  subscriptionId?: string | null | undefined;
   /**
-   * Unique identifier for a merchant/organization
+   * Current status of the entitlement.
    */
-  merchantId?: string | undefined;
+  status: EntitlementStatus;
   /**
-   * Geographic restriction zone limiting where this entitlement applies. Sample values: 'us-west-2' confines usage to AWS US West 2 region, 'eu-central-1' confines usage to EU Central 1 region, 'global' permits usage from all regions
+   * When the entitlement becomes active.
    */
-  region?: string | undefined;
+  activeFrom: Date;
   /**
-   * Unused entitlement balance in atomic units (string representation of BigInt). Sample values: '100000000000' equals $100.00 remaining, '50000000000' equals $50.00 remaining, '0' equals fully consumed
+   * When the entitlement expires. Null means no expiration.
    */
-  remainingBalance?: string | undefined;
+  activeTo?: Date | null | undefined;
   /**
-   * Count of consumption events processed using this entitlement. Sample values: 0 indicates unused, 5 indicates five events processed, 10 indicates ten events processed
+   * Configuration values for static features.
    */
-  usedCount?: number | undefined;
+  config: { [k: string]: any } | null;
+  /**
+   * Additional metadata for the entitlement.
+   */
+  metadata?: { [k: string]: string } | undefined;
 };
 
 /** @internal */
@@ -78,25 +72,9 @@ export const EntitlementObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(EntitlementObject);
 
 /** @internal */
-export const EntitlementBillableMetric$inboundSchema: z.ZodType<
-  EntitlementBillableMetric,
-  z.ZodTypeDef,
-  unknown
-> = z.object({
-  billableMetricId: z.string().optional(),
-  price: z.string().optional(),
-  quantity: z.number().optional(),
-});
-
-export function entitlementBillableMetricFromJSON(
-  jsonString: string,
-): SafeParseResult<EntitlementBillableMetric, SDKValidationError> {
-  return safeParse(
-    jsonString,
-    (x) => EntitlementBillableMetric$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'EntitlementBillableMetric' from JSON`,
-  );
-}
+export const EntitlementStatus$inboundSchema: z.ZodNativeEnum<
+  typeof EntitlementStatus
+> = z.nativeEnum(EntitlementStatus);
 
 /** @internal */
 export const Entitlement$inboundSchema: z.ZodType<
@@ -104,21 +82,18 @@ export const Entitlement$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  id: z.string().optional(),
   object: EntitlementObject$inboundSchema.default("entitlement"),
-  billableMetrics: z.array(
-    z.lazy(() => EntitlementBillableMetric$inboundSchema),
+  id: z.string(),
+  customerId: z.string(),
+  featureId: z.string(),
+  subscriptionId: z.nullable(z.string()).optional(),
+  status: EntitlementStatus$inboundSchema,
+  activeFrom: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  activeTo: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
   ).optional(),
-  createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v))
-    .optional(),
-  customerId: z.string().optional(),
-  expiresAt: z.string().datetime({ offset: true }).transform(v => new Date(v))
-    .optional(),
-  maxUses: z.number().int().optional(),
-  merchantId: z.string().optional(),
-  region: z.string().optional(),
-  remainingBalance: z.string().optional(),
-  usedCount: z.number().int().optional(),
+  config: z.nullable(z.record(z.any())),
+  metadata: z.record(z.string()).optional(),
 });
 
 export function entitlementFromJSON(

@@ -230,6 +230,7 @@ run();
 * [updateCost](docs/sdks/costs/README.md#updatecost) - Update
 * [deleteCost](docs/sdks/costs/README.md#deletecost) - Delete
 * [getCostSummary](docs/sdks/costs/README.md#getcostsummary) - Query Summary
+* [getCostReport](docs/sdks/costs/README.md#getcostreport) - Report
 
 ### [Customers](docs/sdks/customers/README.md)
 
@@ -238,11 +239,6 @@ run();
 * [get](docs/sdks/customers/README.md#get) - Get
 * [delete](docs/sdks/customers/README.md#delete) - Delete
 * [update](docs/sdks/customers/README.md#update) - Update
-
-### [Disputes](docs/sdks/disputes/README.md)
-
-* [create](docs/sdks/disputes/README.md#create) - Create
-* [list](docs/sdks/disputes/README.md#list) - List
 
 ### [Entitlements](docs/sdks/entitlements/README.md)
 
@@ -257,11 +253,6 @@ run();
 * [purchase](docs/sdks/grants/README.md#purchase) - Purchase Grant
 * [get](docs/sdks/grants/README.md#get) - Get Grant
 * [void](docs/sdks/grants/README.md#void) - Void Grant
-
-### [EntitlementsV0](docs/sdks/entitlementsv0/README.md)
-
-* [listActive](docs/sdks/entitlementsv0/README.md#listactive) - List by Customer
-* [create](docs/sdks/entitlementsv0/README.md#create) - Create
 
 ### [Events](docs/sdks/events/README.md)
 
@@ -364,14 +355,6 @@ run();
 * [advance](docs/sdks/testclocks/README.md#advance) - Advance
 * [delete](docs/sdks/testclocks/README.md#delete) - Delete
 
-### [UsageEvents](docs/sdks/usageevents/README.md)
-
-* [create](docs/sdks/usageevents/README.md#create) - Create
-* [list](docs/sdks/usageevents/README.md#list) - List
-* [get](docs/sdks/usageevents/README.md#get) - Get
-* [refund](docs/sdks/usageevents/README.md#refund) - Refund
-* [batchCreate](docs/sdks/usageevents/README.md#batchcreate) - Batch Create
-
 ### [Users](docs/sdks/users/README.md)
 
 * [get](docs/sdks/users/README.md#get) - Get
@@ -404,6 +387,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`costsCreateCost`](docs/sdks/costs/README.md#createcost) - Create
 - [`costsDeleteCost`](docs/sdks/costs/README.md#deletecost) - Delete
 - [`costsGetCost`](docs/sdks/costs/README.md#getcost) - Get
+- [`costsGetCostReport`](docs/sdks/costs/README.md#getcostreport) - Report
 - [`costsGetCostSummary`](docs/sdks/costs/README.md#getcostsummary) - Query Summary
 - [`costsListCosts`](docs/sdks/costs/README.md#listcosts) - List
 - [`costsUpdateCost`](docs/sdks/costs/README.md#updatecost) - Update
@@ -412,8 +396,6 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`customersGet`](docs/sdks/customers/README.md#get) - Get
 - [`customersList`](docs/sdks/customers/README.md#list) - List by Merchant
 - [`customersUpdate`](docs/sdks/customers/README.md#update) - Update
-- [`disputesCreate`](docs/sdks/disputes/README.md#create) - Create
-- [`disputesList`](docs/sdks/disputes/README.md#list) - List
 - [`entitlementsGet`](docs/sdks/entitlements/README.md#get) - Get Entitlement
 - [`entitlementsGrantsCreate`](docs/sdks/grants/README.md#create) - Create Grant
 - [`entitlementsGrantsGet`](docs/sdks/grants/README.md#get) - Get Grant
@@ -422,8 +404,6 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`entitlementsGrantsVoid`](docs/sdks/grants/README.md#void) - Void Grant
 - [`entitlementsIssue`](docs/sdks/entitlements/README.md#issue) - Issue Entitlement
 - [`entitlementsList`](docs/sdks/entitlements/README.md#list) - List Entitlements
-- [`entitlementsV0Create`](docs/sdks/entitlementsv0/README.md#create) - Create
-- [`entitlementsV0ListActive`](docs/sdks/entitlementsv0/README.md#listactive) - List by Customer
 - [`eventsIngest`](docs/sdks/events/README.md#ingest) - Ingest Event
 - [`featuresCreate`](docs/sdks/features/README.md#create) - Create
 - [`featuresDelete`](docs/sdks/features/README.md#delete) - Delete
@@ -483,11 +463,6 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`testClocksDelete`](docs/sdks/testclocks/README.md#delete) - Delete
 - [`testClocksGet`](docs/sdks/testclocks/README.md#get) - Get
 - [`testClocksList`](docs/sdks/testclocks/README.md#list) - List
-- [`usageEventsBatchCreate`](docs/sdks/usageevents/README.md#batchcreate) - Batch Create
-- [`usageEventsCreate`](docs/sdks/usageevents/README.md#create) - Create
-- [`usageEventsGet`](docs/sdks/usageevents/README.md#get) - Get
-- [`usageEventsList`](docs/sdks/usageevents/README.md#list) - List
-- [`usageEventsRefund`](docs/sdks/usageevents/README.md#refund) - Refund
 - [`usersGet`](docs/sdks/users/README.md#get) - Get
 - [`usersUpdate`](docs/sdks/users/README.md#update) - Update
 
@@ -618,7 +593,7 @@ async function run() {
       if (error instanceof errors.ErrorT) {
         console.log(error.data$.error); // string
         console.log(error.data$.message); // string
-        console.log(error.data$.code); // models.Code
+        console.log(error.data$.code); // string
         console.log(error.data$.details); // { [k: string]: any }
       }
     }
@@ -647,9 +622,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 60 of 95 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 95 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 95 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 53 of 87 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 87 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 87 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>
@@ -660,14 +635,50 @@ run();
 <!-- Start Server Selection [server] -->
 ## Server Selection
 
-### Override Server URL Per-Client
+### Select Server by Index
 
-The default server can be overridden globally by passing a URL to the `serverURL: string` optional parameter when initializing the SDK client instance. For example:
+You can override the default server globally by passing a server index to the `serverIdx: number` optional parameter when initializing the SDK client instance. The selected server will then be used as the default on the operations that use it. This table lists the indexes associated with the available servers:
+
+| #   | Server                             | Description    |
+| --- | ---------------------------------- | -------------- |
+| 0   | `https://api.paygentic.io`         | Production API |
+| 1   | `https://api.sandbox.paygentic.io` | Sandbox API    |
+
+#### Example
+
 ```typescript
 import { Paygentic } from "@paygentic/sdk";
 
 const paygentic = new Paygentic({
-  serverURL: "https://api.paygentic.io",
+  serverIdx: 0,
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.billableMetrics.create({
+    aggregation: "SUM",
+    description: "Tracks total tokens consumed per API call.",
+    merchantId: "org_YS8jkP59V71TdUvj",
+    name: "Token Counter",
+    productId: "prod_abc123",
+    unit: "tokens",
+  });
+
+  console.log(result);
+}
+
+run();
+
+```
+
+### Override Server URL Per-Client
+
+The default server can also be overridden globally by passing a URL to the `serverURL: string` optional parameter when initializing the SDK client instance. For example:
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  serverURL: "https://api.sandbox.paygentic.io",
   bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
 });
 

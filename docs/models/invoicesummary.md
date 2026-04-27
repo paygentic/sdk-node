@@ -7,20 +7,20 @@ import { InvoiceSummary } from "@paygentic/sdk/models";
 
 let value: InvoiceSummary = {
   issued: {
-    count: 282125,
-    amount: "674.64",
+    count: 366546,
+    amount: "774.49",
   },
   outstanding: {
-    count: 136097,
-    amount: "969.47",
+    count: 965637,
+    amount: "159.49",
   },
   paid: {
-    count: 679467,
-    amount: "317.76",
+    count: 140409,
+    amount: "166.95",
   },
   writtenOff: {
-    count: 94548,
-    amount: "637.88",
+    count: 466682,
+    amount: "143.09",
   },
 };
 ```

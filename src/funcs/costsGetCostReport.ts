@@ -3,7 +3,7 @@
  */
 
 import { PaygenticCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeFormQuery } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -22,22 +22,23 @@ import { PaygenticError } from "../models/errors/paygenticerror.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import * as models from "../models/index.js";
+import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Issue Entitlement
+ * Report
  *
  * @remarks
- * Issue a new entitlement to a customer, granting them access to a specific feature. The feature must exist and belong to the same merchant as the customer.
+ * Aggregate cost data across costs and customers with grouping, filtering, and time-series breakdown.
  */
-export function entitlementsIssue(
+export function costsGetCostReport(
   client: PaygenticCore,
-  request: models.IssueEntitlementRequest,
+  request: operations.GetCostReportRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.Entitlement,
+    models.CostReportResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -59,12 +60,12 @@ export function entitlementsIssue(
 
 async function $do(
   client: PaygenticCore,
-  request: models.IssueEntitlementRequest,
+  request: operations.GetCostReportRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.Entitlement,
+      models.CostReportResponse,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -81,19 +82,36 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => models.IssueEntitlementRequest$outboundSchema.parse(value),
+    (value) => operations.GetCostReportRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = null;
 
-  const path = pathToFunc("/v1/entitlements")();
+  const path = pathToFunc("/v0/costs/report")();
+
+  const query = encodeFormQuery({
+    "comparePriorPeriod": payload.comparePriorPeriod,
+    "costId": payload.costId,
+    "currency": payload.currency,
+    "filterGroupBy": payload.filterGroupBy,
+    "from": payload.from,
+    "groupBy": payload.groupBy,
+    "limit": payload.limit,
+    "merchantId": payload.merchantId,
+    "offset": payload.offset,
+    "sort": payload.sort,
+    "sortDir": payload.sortDir,
+    "subject": payload.subject,
+    "to": payload.to,
+    "topN": payload.topN,
+    "windowSize": payload.windowSize,
+  });
 
   const headers = new Headers(compactMap({
-    "Content-Type": "application/json",
     Accept: "application/json",
   }));
 
@@ -104,7 +122,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "issueEntitlement",
+    operationID: "getCostReport",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -118,10 +136,11 @@ async function $do(
 
   const requestRes = client._createRequest(context, {
     security: requestSecurity,
-    method: "POST",
+    method: "GET",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -133,7 +152,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "403", "404", "409", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -147,7 +166,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.Entitlement,
+    models.CostReportResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -159,9 +178,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(201, models.Entitlement$inboundSchema),
+    M.json(200, models.CostReportResponse$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
-    M.jsonErr([403, 404, 409], errors.ErrorT$inboundSchema),
+    M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

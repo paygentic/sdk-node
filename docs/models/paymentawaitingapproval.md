@@ -1,6 +1,6 @@
 # PaymentAwaitingApproval
 
-Invoice 0 awaiting merchant approval before payment can proceed. The invoice is in DRAFT status with totals calculated. Approval is currently platform-only — do not call PATCH /v2/invoices/{id} with {"trigger": "APPROVE"} from merchant credentials (it will return 403). A merchant-accessible approval endpoint is planned for PAYG-754.
+Invoice 0 awaiting merchant approval before payment can proceed. The invoice is in DRAFT status with totals calculated. Approval is a platform-managed action and will be available via a public endpoint in a future release.
 
 ## Example Usage
 

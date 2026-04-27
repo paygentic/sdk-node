@@ -5,6 +5,10 @@
 import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
 import { Result as SafeParseResult } from "../types/fp.js";
+import {
+  CurrencyBreakdownEntry,
+  CurrencyBreakdownEntry$inboundSchema,
+} from "./currencybreakdownentry.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import {
   GroupInvoiceSummary,
@@ -29,19 +33,23 @@ export type RevenueSummaryResponse = {
    */
   object: "revenue_summary";
   /**
-   * Net collected revenue in dollars (paid invoices + completed payments)
+   * Net collected revenue in dollars (paid invoices + completed payments). Omitted when groupBy=currency is active.
    */
-  netRevenue: string;
-  invoices: InvoiceSummary;
-  payments: PaymentSummary;
+  netRevenue?: string | undefined;
+  invoices?: InvoiceSummary | undefined;
+  payments?: PaymentSummary | undefined;
   /**
-   * Time-bucketed revenue trend data
+   * Time-bucketed revenue trend data. Omitted when groupBy=currency is active.
    */
-  trend: Array<RevenueTrendBucket>;
+  trend?: Array<RevenueTrendBucket> | undefined;
   /**
-   * Invoice breakdown by group dimension (only present when groupBy is specified)
+   * Invoice breakdown by group dimension (only present when groupBy=plan or groupBy=customer is specified)
    */
   groupBreakdown?: Array<GroupInvoiceSummary> | undefined;
+  /**
+   * Per-currency revenue aggregates (only present when groupBy=currency is specified). Primary currency appears first, then alphabetical by ISO code. When present, top-level netRevenue, invoices, payments, and trend fields are omitted.
+   */
+  currencyBreakdown?: Array<CurrencyBreakdownEntry> | undefined;
 };
 
 /** @internal */
@@ -51,11 +59,12 @@ export const RevenueSummaryResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   object: z.literal("revenue_summary"),
-  netRevenue: z.string(),
-  invoices: InvoiceSummary$inboundSchema,
-  payments: PaymentSummary$inboundSchema,
-  trend: z.array(RevenueTrendBucket$inboundSchema),
+  netRevenue: z.string().optional(),
+  invoices: InvoiceSummary$inboundSchema.optional(),
+  payments: PaymentSummary$inboundSchema.optional(),
+  trend: z.array(RevenueTrendBucket$inboundSchema).optional(),
   groupBreakdown: z.array(GroupInvoiceSummary$inboundSchema).optional(),
+  currencyBreakdown: z.array(CurrencyBreakdownEntry$inboundSchema).optional(),
 });
 
 export function revenueSummaryResponseFromJSON(

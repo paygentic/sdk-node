@@ -1,6 +1,6 @@
 {
   "name": "@paygentic/sdk",
-  "version": "0.6.38",
+  "version": "0.7.0",
   "author": "Speakeasy",
   "repository": {
     "type": "git",
@@ -38,7 +38,6 @@
     "typescript-eslint": "^8.26.0"
   },
   "dependencies": {
-    "decimal.js": "^10.4.3",
     "zod": "^3.25.0 || ^4.0.0"
   },
   "exports": {

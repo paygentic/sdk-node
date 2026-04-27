@@ -19,13 +19,15 @@ export const BucketWidth = {
 export type BucketWidth = ClosedEnum<typeof BucketWidth>;
 
 /**
- * Group invoice data by dimension. Max 5 groups (top 4 + 'other' when exceeding).
+ * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
  */
 export const GroupBy = {
   Plan: "plan",
+  Customer: "customer",
+  Currency: "currency",
 } as const;
 /**
- * Group invoice data by dimension. Max 5 groups (top 4 + 'other' when exceeding).
+ * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
  */
 export type GroupBy = ClosedEnum<typeof GroupBy>;
 
@@ -55,7 +57,11 @@ export type GetRevenueRequest = {
    */
   subscriptionIds?: Array<string> | undefined;
   /**
-   * Group invoice data by dimension. Max 5 groups (top 4 + 'other' when exceeding).
+   * Filter all results to a single ISO 4217 currency code (e.g. 'USD'). When omitted, results include all currencies.
+   */
+  currency?: string | undefined;
+  /**
+   * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
    */
   groupBy?: GroupBy | undefined;
 };
@@ -76,6 +82,7 @@ export type GetRevenueRequest$Outbound = {
   merchantId?: string | undefined;
   customerId?: string | undefined;
   subscriptionIds?: Array<string> | undefined;
+  currency?: string | undefined;
   groupBy?: string | undefined;
 };
 
@@ -91,6 +98,7 @@ export const GetRevenueRequest$outboundSchema: z.ZodType<
   merchantId: z.string().optional(),
   customerId: z.string().optional(),
   subscriptionIds: z.array(z.string()).optional(),
+  currency: z.string().optional(),
   groupBy: GroupBy$outboundSchema.optional(),
 });
 

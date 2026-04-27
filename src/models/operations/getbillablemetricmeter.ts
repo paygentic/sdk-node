@@ -8,7 +8,7 @@ import { ClosedEnum } from "../../types/enums.js";
 /**
  * Time bucket granularity
  */
-export const WindowSize = {
+export const GetBillableMetricMeterWindowSize = {
   Minute: "MINUTE",
   Hour: "HOUR",
   Day: "DAY",
@@ -17,7 +17,9 @@ export const WindowSize = {
 /**
  * Time bucket granularity
  */
-export type WindowSize = ClosedEnum<typeof WindowSize>;
+export type GetBillableMetricMeterWindowSize = ClosedEnum<
+  typeof GetBillableMetricMeterWindowSize
+>;
 
 export type GetBillableMetricMeterRequest = {
   id: string;
@@ -36,7 +38,7 @@ export type GetBillableMetricMeterRequest = {
   /**
    * Time bucket granularity
    */
-  windowSize?: WindowSize | undefined;
+  windowSize?: GetBillableMetricMeterWindowSize | undefined;
   /**
    * JSON-encoded dimension filter (e.g. {"key":"value"})
    */
@@ -48,8 +50,9 @@ export type GetBillableMetricMeterRequest = {
 };
 
 /** @internal */
-export const WindowSize$outboundSchema: z.ZodNativeEnum<typeof WindowSize> = z
-  .nativeEnum(WindowSize);
+export const GetBillableMetricMeterWindowSize$outboundSchema: z.ZodNativeEnum<
+  typeof GetBillableMetricMeterWindowSize
+> = z.nativeEnum(GetBillableMetricMeterWindowSize);
 
 /** @internal */
 export type GetBillableMetricMeterRequest$Outbound = {
@@ -72,7 +75,7 @@ export const GetBillableMetricMeterRequest$outboundSchema: z.ZodType<
   from: z.date().transform(v => v.toISOString()),
   to: z.date().transform(v => v.toISOString()),
   subject: z.string().optional(),
-  windowSize: WindowSize$outboundSchema.optional(),
+  windowSize: GetBillableMetricMeterWindowSize$outboundSchema.optional(),
   filterGroupBy: z.string().optional(),
   groupBy: z.string().optional(),
 });

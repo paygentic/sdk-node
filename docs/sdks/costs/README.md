@@ -12,6 +12,7 @@ A Cost represents the operational or infrastructure expense of serving customers
 * [updateCost](#updatecost) - Update
 * [deleteCost](#deletecost) - Delete
 * [getCostSummary](#getcostsummary) - Query Summary
+* [getCostReport](#getcostreport) - Report
 
 ## createCost
 
@@ -480,5 +481,192 @@ run();
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
 | errors.ErrorT                | 403, 404                     | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## getCostReport
+
+Aggregate cost data across costs and customers with grouping, filtering, and time-series breakdown.
+
+### Example Usage: byCost
+
+<!-- UsageSnippet language="typescript" operationID="getCostReport" method="get" path="/v0/costs/report" example="byCost" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.costs.getCostReport({
+    from: new Date("2025-03-21T13:37:39.948Z"),
+    to: new Date("2024-04-29T10:02:17.490Z"),
+    groupBy: "cost",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { costsGetCostReport } from "@paygentic/sdk/funcs/costsGetCostReport.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await costsGetCostReport(paygentic, {
+    from: new Date("2025-03-21T13:37:39.948Z"),
+    to: new Date("2024-04-29T10:02:17.490Z"),
+    groupBy: "cost",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("costsGetCostReport failed:", res.error);
+  }
+}
+
+run();
+```
+### Example Usage: byCustomer
+
+<!-- UsageSnippet language="typescript" operationID="getCostReport" method="get" path="/v0/costs/report" example="byCustomer" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.costs.getCostReport({
+    from: new Date("2025-08-12T01:51:47.475Z"),
+    to: new Date("2026-03-02T08:25:30.632Z"),
+    groupBy: "customer",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { costsGetCostReport } from "@paygentic/sdk/funcs/costsGetCostReport.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await costsGetCostReport(paygentic, {
+    from: new Date("2025-08-12T01:51:47.475Z"),
+    to: new Date("2026-03-02T08:25:30.632Z"),
+    groupBy: "customer",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("costsGetCostReport failed:", res.error);
+  }
+}
+
+run();
+```
+### Example Usage: byDimension
+
+<!-- UsageSnippet language="typescript" operationID="getCostReport" method="get" path="/v0/costs/report" example="byDimension" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.costs.getCostReport({
+    from: new Date("2024-12-31T00:20:48.817Z"),
+    to: new Date("2026-12-30T08:35:53.784Z"),
+    groupBy: "region",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { costsGetCostReport } from "@paygentic/sdk/funcs/costsGetCostReport.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await costsGetCostReport(paygentic, {
+    from: new Date("2024-12-31T00:20:48.817Z"),
+    to: new Date("2026-12-30T08:35:53.784Z"),
+    groupBy: "region",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("costsGetCostReport failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetCostReportRequest](../../models/operations/getcostreportrequest.md)                                                                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.CostReportResponse](../../models/costreportresponse.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 401, 403                     | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |

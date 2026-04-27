@@ -43,7 +43,7 @@ export class Entitlements extends ClientSDK {
   async issue(
     request: models.IssueEntitlementRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasEntitlement> {
+  ): Promise<models.Entitlement> {
     return unwrapAsync(entitlementsIssue(
       this,
       request,

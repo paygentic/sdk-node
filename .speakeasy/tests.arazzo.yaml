@@ -1925,7 +1925,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"revenue_summary","netRevenue":"<value>","invoices":{"issued":{"count":290758,"amount":"20.75"},"outstanding":{"count":86320,"amount":"735.88"},"paid":{"count":744387,"amount":"440.67"},"writtenOff":{"count":390905,"amount":"744.63"}},"payments":{"completedCount":13144,"completedAmount":"<value>","pendingCount":290186,"pendingAmount":"<value>","expiredCount":489645,"expiredAmount":"<value>"},"trend":[{"timestamp":"2026-07-15T23:15:12.204Z","issuedInvoices":"<value>","writtenOffInvoices":"<value>","completedPayments":"<value>"}]}
+              {"object":"revenue_summary"}
             type: simple
     x-speakeasy-test-group: Revenue
     x-speakeasy-test-rebuild: true
@@ -2739,4 +2739,168 @@ workflows:
               {"id":"<id>","subscriptionId":"<id>","type":"discount","status":"pending","displayName":"Roscoe_Haag","currency":"Belize Dollar","periodStart":"2025-06-18T03:33:03.362Z","periodEnd":"2025-11-09T02:25:51.382Z","invoiceAt":"2024-04-26T04:27:52.258Z","unitPrice":"<value>","createdAt":"2025-10-18T18:51:06.413Z","updatedAt":"2025-04-29T04:46:04.080Z"}
             type: simple
     x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCostReport-byCost
+    steps:
+      - stepId: test
+        operationId: getCostReport
+        parameters:
+          - name: from
+            in: query
+            value: "2025-03-21T13:37:39.948Z"
+          - name: to
+            in: query
+            value: "2024-04-29T10:02:17.490Z"
+          - name: groupBy
+            in: query
+            value: cost
+          - name: topN
+            in: query
+            value: 9
+          - name: comparePriorPeriod
+            in: query
+            value: false
+          - name: sort
+            in: query
+            value: totalCost
+          - name: sortDir
+            in: query
+            value: desc
+          - name: offset
+            in: query
+            value: 0
+          - name: limit
+            in: query
+            value: 25
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"cost_report","currency":"Dobra","period":{"from":"2026-12-10T09:47:38.425Z","to":"2026-11-23T18:52:47.121Z"},"groupBy":"<value>","totalCost":733.14,"totalQuantity":3381.98,"groups":[{"key":"<key>","label":"<value>","totalCost":8778.99,"totalQuantity":7020.43,"percentOfTotal":9744.28,"isOther":false}],"timeSeries":[{"windowStart":"2024-11-30T12:28:05.992Z","windowEnd":"2024-01-30T21:58:17.726Z","groups":{"key":9048.26}}],"availableDimensions":["<value 1>"],"pagination":{"total":937713,"limit":405938,"offset":253657}}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCostReport-byCustomer
+    steps:
+      - stepId: test
+        operationId: getCostReport
+        parameters:
+          - name: from
+            in: query
+            value: "2025-08-12T01:51:47.475Z"
+          - name: to
+            in: query
+            value: "2026-03-02T08:25:30.632Z"
+          - name: groupBy
+            in: query
+            value: customer
+          - name: topN
+            in: query
+            value: 9
+          - name: comparePriorPeriod
+            in: query
+            value: false
+          - name: sort
+            in: query
+            value: totalCost
+          - name: sortDir
+            in: query
+            value: desc
+          - name: offset
+            in: query
+            value: 0
+          - name: limit
+            in: query
+            value: 25
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"cost_report","currency":"Dobra","period":{"from":"2026-12-10T09:47:38.425Z","to":"2026-11-23T18:52:47.121Z"},"groupBy":"<value>","totalCost":733.14,"totalQuantity":3381.98,"groups":[{"key":"<key>","label":"<value>","totalCost":8778.99,"totalQuantity":7020.43,"percentOfTotal":9744.28,"isOther":false}],"timeSeries":[{"windowStart":"2024-11-30T12:28:05.992Z","windowEnd":"2024-01-30T21:58:17.726Z","groups":{"key":9048.26}}],"availableDimensions":["<value 1>"],"pagination":{"total":937713,"limit":405938,"offset":253657}}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCostReport-byDimension
+    steps:
+      - stepId: test
+        operationId: getCostReport
+        parameters:
+          - name: from
+            in: query
+            value: "2024-12-31T00:20:48.817Z"
+          - name: to
+            in: query
+            value: "2026-12-30T08:35:53.784Z"
+          - name: groupBy
+            in: query
+            value: region
+          - name: topN
+            in: query
+            value: 9
+          - name: comparePriorPeriod
+            in: query
+            value: false
+          - name: sort
+            in: query
+            value: totalCost
+          - name: sortDir
+            in: query
+            value: desc
+          - name: offset
+            in: query
+            value: 0
+          - name: limit
+            in: query
+            value: 25
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"cost_report","currency":"Dobra","period":{"from":"2026-12-10T09:47:38.425Z","to":"2026-11-23T18:52:47.121Z"},"groupBy":"<value>","totalCost":733.14,"totalQuantity":3381.98,"groups":[{"key":"<key>","label":"<value>","totalCost":8778.99,"totalQuantity":7020.43,"percentOfTotal":9744.28,"isOther":false}],"timeSeries":[{"windowStart":"2024-11-30T12:28:05.992Z","windowEnd":"2024-01-30T21:58:17.726Z","groups":{"key":9048.26}}],"availableDimensions":["<value 1>"],"pagination":{"total":937713,"limit":405938,"offset":253657}}
+            type: simple
+    x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCostReport
+    steps:
+      - stepId: test
+        operationId: getCostReport
+        parameters:
+          - name: from
+            in: query
+            value: "2026-06-28T05:53:31.425Z"
+          - name: to
+            in: query
+            value: "2024-11-19T00:07:55.173Z"
+          - name: groupBy
+            in: query
+            value: <value>
+          - name: topN
+            in: query
+            value: 9
+          - name: comparePriorPeriod
+            in: query
+            value: false
+          - name: sort
+            in: query
+            value: totalCost
+          - name: sortDir
+            in: query
+            value: desc
+          - name: offset
+            in: query
+            value: 0
+          - name: limit
+            in: query
+            value: 25
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"cost_report","currency":"Dobra","period":{"from":"2026-12-10T09:47:38.425Z","to":"2026-11-23T18:52:47.121Z"},"groupBy":"<value>","totalCost":733.14,"totalQuantity":3381.98,"groups":[{"key":"<key>","label":"<value>","totalCost":8778.99,"totalQuantity":7020.43,"percentOfTotal":9744.28,"isOther":false}],"timeSeries":[{"windowStart":"2024-11-30T12:28:05.992Z","windowEnd":"2024-01-30T21:58:17.726Z","groups":{"key":9048.26}}],"availableDimensions":["<value 1>"],"pagination":{"total":937713,"limit":405938,"offset":253657}}
+            type: simple
+    x-speakeasy-test-group: Costs
     x-speakeasy-test-rebuild: true

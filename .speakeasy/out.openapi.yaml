@@ -16,6 +16,10 @@
     {
       "url": "https://api.paygentic.io",
       "description": "Production API"
+    },
+    {
+      "url": "https://api.sandbox.paygentic.io",
+      "description": "Sandbox API"
     }
   ],
   "security": [
@@ -31,14 +35,6 @@
     {
       "name": "Billable Metrics",
       "description": "A `Billable Metric` defines a measurable quantity tied to a `Product`'s consumption. Each metric stores details including its label, an explanatory description, and measurement units."
-    },
-    {
-      "name": "Disputes",
-      "description": "A `Dispute` enables customers to contest usage events that they consider to be inaccurately recorded or billed."
-    },
-    {
-      "name": "Entitlements",
-      "description": "An `Entitlement` grants a customer the right to access and use a specific product feature."
     },
     {
       "name": "Grants",
@@ -71,10 +67,6 @@
     {
       "name": "Subscriptions",
       "description": "A `Subscription` is a customer's commitment to purchase a `Product` following the terms of a `Plan` and its linked `Prices`."
-    },
-    {
-      "name": "Usage Events",
-      "description": "A `Usage Event` records consumption activity for one or more `Billable Metrics`. It captures event details including consumption quantity and when it occurred."
     },
     {
       "name": "Users",
@@ -1354,428 +1346,6 @@
         "x-speakeasy-name-override": "update"
       }
     },
-    "/v0/disputes": {
-      "post": {
-        "tags": [
-          "Disputes"
-        ],
-        "summary": "Create",
-        "operationId": "createDispute",
-        "description": "Create a dispute for a usage event. Only one dispute can be created per usage event.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateDisputeRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Dispute created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Dispute"
-                },
-                "example": {
-                  "id": "disp_m3n4o5p6q7r8s9t0",
-                  "object": "dispute",
-                  "createdAt": "2024-03-10T14:30:00Z",
-                  "customerId": "cust_c9d0e1f2g3h4i5j6",
-                  "customerMessage": "Token count appears incorrect for this request",
-                  "disputedAmount": "2.50",
-                  "merchantId": "org_k7l8m9n0o1p2q3r4",
-                  "merchantMessage": null,
-                  "resolvedAt": null,
-                  "status": "pending",
-                  "updatedAt": "2024-03-10T14:30:00Z",
-                  "usageEventId": "usg_u1v2w3x4y5z6a7b8"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "409": {
-            "description": "Dispute already exists for this usage event",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-name-override": "create"
-      },
-      "get": {
-        "tags": [
-          "Disputes"
-        ],
-        "summary": "List",
-        "operationId": "listDisputes",
-        "description": "List disputes for a merchant, customer, or consumer. At least one of merchantId, customerId, or consumerId must be provided.",
-        "parameters": [
-          {
-            "name": "consumerId",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/OrganizationId"
-            },
-            "required": false,
-            "description": "Filter disputes for a specific consumer. At least one of merchantId, customerId, or consumerId must be provided."
-          },
-          {
-            "name": "customerId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "pattern": "^cust_[a-zA-Z0-9]+$"
-            },
-            "required": false,
-            "description": "Filter disputes for a specific customer. At least one of merchantId, customerId, or consumerId must be provided."
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            },
-            "description": "Number of disputes to return"
-          },
-          {
-            "name": "merchantId",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/OrganizationId"
-            },
-            "required": false,
-            "description": "Filter disputes for a specific merchant. At least one of merchantId, customerId, or consumerId must be provided."
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0
-            },
-            "description": "Number of disputes to skip"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "pending",
-                "accepted",
-                "declined"
-              ]
-            },
-            "description": "Filter by dispute status"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Disputes retrieved successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "object",
-                    "data",
-                    "pagination"
-                  ],
-                  "properties": {
-                    "object": {
-                      "type": "string",
-                      "enum": [
-                        "list"
-                      ]
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/DisputeWithCustomer"
-                      }
-                    },
-                    "pagination": {
-                      "type": "object",
-                      "required": [
-                        "limit",
-                        "offset",
-                        "total",
-                        "hasMore"
-                      ],
-                      "properties": {
-                        "limit": {
-                          "type": "integer"
-                        },
-                        "offset": {
-                          "type": "integer"
-                        },
-                        "total": {
-                          "type": "integer"
-                        },
-                        "hasMore": {
-                          "type": "boolean"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "object": "list",
-                  "data": [
-                    {
-                      "id": "disp_s5t6u7v8w9x0y1z2",
-                      "object": "dispute",
-                      "createdAt": "2024-03-15T10:20:00Z",
-                      "customer": {
-                        "id": "cust_i1j2k3l4m5n6o7p8",
-                        "email": "billing@techcorp.com",
-                        "name": "TechCorp"
-                      },
-                      "customerId": "cust_i1j2k3l4m5n6o7p8",
-                      "customerMessage": "Storage charges don't match actual usage",
-                      "disputedAmount": "15.00",
-                      "merchantId": "org_q9r0s1t2u3v4w5x6",
-                      "merchantMessage": null,
-                      "resolvedAt": null,
-                      "status": "pending",
-                      "updatedAt": "2024-03-15T10:20:00Z",
-                      "usageEventId": "usg_a3b4c5d6e7f8g9h0"
-                    }
-                  ],
-                  "pagination": {
-                    "hasMore": false,
-                    "limit": 10,
-                    "offset": 0,
-                    "total": 1
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-name-override": "list"
-      }
-    },
-    "/v0/entitlements/activeEntitlements": {
-      "get": {
-        "tags": [
-          "Entitlements"
-        ],
-        "summary": "List by Customer",
-        "operationId": "getActiveEntitlements",
-        "parameters": [
-          {
-            "name": "customerId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/CustomerId"
-            },
-            "description": "The customer ID to get active entitlements for."
-          },
-          {
-            "name": "productId",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/ProductId"
-            },
-            "description": "The product ID to get active entitlements for."
-          },
-          {
-            "name": "subscriptionId",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/SubscriptionId"
-            },
-            "description": "The subscription ID to get active entitlements for."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of active entitlements",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "object": {
-                      "type": "string",
-                      "enum": [
-                        "list"
-                      ],
-                      "default": "list"
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/ActiveEntitlement"
-                      }
-                    },
-                    "pagination": {
-                      "type": "object",
-                      "properties": {
-                        "offset": {
-                          "type": "number"
-                        },
-                        "limit": {
-                          "type": "number"
-                        },
-                        "total": {
-                          "type": "number"
-                        }
-                      }
-                    }
-                  }
-                },
-                "example": {
-                  "object": "list",
-                  "data": [
-                    {
-                      "id": "ent_a7b8c9d0e1f2g3h4",
-                      "object": "entitlement",
-                      "billableMetrics": [
-                        "bm_y1z2a3b4c5d6e7f8"
-                      ],
-                      "customerId": "cus_q3r4s5t6u7v8w9x0",
-                      "planId": "plan_t9u0v1w2x3y4z5a6",
-                      "productId": "prod_m5n6o7p8q9r0s1t2",
-                      "subscriptionId": "sub_z1a2b3c4d5e6f7g8",
-                      "verifiedAt": "2024-01-20T10:00:00Z"
-                    },
-                    {
-                      "id": "ent_b8c9d0e1f2g3h4i5",
-                      "object": "entitlement",
-                      "billableMetrics": [
-                        "bm_a1b2c3d4e5f6g7h8",
-                        "bm_c2d3e4f5g6h7i8j9"
-                      ],
-                      "customerId": "cus_q3r4s5t6u7v8w9x0",
-                      "planId": "plan_t9u0v1w2x3y4z5a6",
-                      "productId": "prod_m5n6o7p8q9r0s1t2",
-                      "subscriptionId": "sub_z1a2b3c4d5e6f7g8",
-                      "verifiedAt": "2024-01-20T10:00:00Z"
-                    }
-                  ],
-                  "pagination": {
-                    "limit": 10,
-                    "offset": 0,
-                    "total": 2
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-group": "entitlementsV0",
-        "x-speakeasy-name-override": "listActive"
-      }
-    },
-    "/v0/entitlements": {
-      "post": {
-        "tags": [
-          "Entitlements"
-        ],
-        "summary": "Create",
-        "description": "Create an entitlement for a customer. This temporarily reserves funds in the customer's wallet to guarantee payment for future usage.",
-        "operationId": "createEntitlement",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateEntitlementRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Entitlement created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Entitlement"
-                },
-                "example": {
-                  "id": "ent_a7b8c9d0e1f2g3h4",
-                  "object": "entitlement",
-                  "billableMetrics": [
-                    {
-                      "billableMetricId": "bm_y1z2a3b4c5d6e7f8",
-                      "price": "0.000025",
-                      "quantity": 10000
-                    }
-                  ],
-                  "createdAt": "2024-01-20T10:00:00Z",
-                  "customerId": "cus_q3r4s5t6u7v8w9x0",
-                  "expiresAt": "2024-12-31T23:59:59Z",
-                  "maxUses": 1,
-                  "merchantId": "org_i5j6k7l8m9n0o1p2",
-                  "region": "global",
-                  "remainingBalance": "100000000000",
-                  "usedCount": 0
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-group": "entitlementsV0",
-        "x-speakeasy-name-override": "create"
-      }
-    },
     "/v1/entitlements": {
       "get": {
         "tags": [
@@ -2079,7 +1649,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-Entitlement"
+                  "$ref": "#/components/schemas/Entitlement"
                 }
               }
             }
@@ -6808,656 +6378,6 @@
         "x-speakeasy-name-override": "terminate"
       }
     },
-    "/v0/usage": {
-      "post": {
-        "tags": [
-          "Usage Events"
-        ],
-        "summary": "Create",
-        "operationId": "createUsageEvent",
-        "description": "Creates a usage event. The idempotencyKey is used to ensure the event is processed only once by downstream consumers, even if the same event is submitted multiple times. Duplicate submissions will be accepted and return the same response.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateUsageEventRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Usage event created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UsageEvent"
-                },
-                "example": {
-                  "id": "usg_f3g4h5i6j7k8l9m0",
-                  "object": "usageEvent",
-                  "billing": null,
-                  "consumerId": "org_v9w8x7y6z5a4b3c2",
-                  "createdAt": "2024-04-15T10:30:05Z",
-                  "customerId": "cus_n1o2p3q4r5s6t7u8",
-                  "description": "Claude language model text generation",
-                  "entitlementId": null,
-                  "idempotencyKey": "usg_2024_04_15_abc123",
-                  "merchantId": "org_v9w8x7y6z5a4b3c2",
-                  "metadata": {
-                    "input_tokens": "1500",
-                    "model_name": "claude-3-opus",
-                    "output_tokens": "800"
-                  },
-                  "properties": [
-                    {
-                      "billableMetricId": "bm_l5m6n7o8p9q0r1s2",
-                      "price": null,
-                      "quantity": 2500
-                    }
-                  ],
-                  "subscriptionId": "sub_d1e2f3g4h5i6j7k8",
-                  "timestamp": "2024-04-15T10:30:00Z"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-group": "usageEvents",
-        "x-speakeasy-name-override": "create"
-      },
-      "get": {
-        "tags": [
-          "Usage Events"
-        ],
-        "summary": "List",
-        "operationId": "listUsageEvents",
-        "parameters": [
-          {
-            "name": "consumerId",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/OrganizationId"
-            },
-            "description": "Filter by consumer ID. This is only available if the caller is member of the consumer organization."
-          },
-          {
-            "name": "customerId",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/CustomerId"
-            },
-            "description": "Filter by customer ID. This is only available if the caller is member of the merchant organization owning this customer."
-          },
-          {
-            "name": "endTime",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "ISO 8601 date-time string filtering events up to this timestamp. Sample values: '2024-01-31T23:59:59Z', '2024-02-28T12:00:00Z'"
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 100,
-              "default": 10
-            },
-            "description": "Number of usage events to return"
-          },
-          {
-            "name": "merchantId",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/OrganizationId"
-            },
-            "description": "Filter by merchant ID. This is only available if the caller is member of the merchant organization."
-          },
-          {
-            "name": "offset",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "minimum": 0,
-              "default": 0
-            },
-            "description": "Number of usage events to skip"
-          },
-          {
-            "name": "startTime",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "description": "ISO 8601 date-time string filtering events from this timestamp onward. Sample values: '2024-01-15T00:00:00Z', '2024-02-01T10:30:00Z'"
-          },
-          {
-            "name": "subscriptionId",
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/SubscriptionId"
-            },
-            "description": "Filter by subscription ID. This is only available if the caller is member of the consumer or merchant organization owning this subscription."
-          }
-        ],
-        "x-query-validation": {
-          "allOf": [
-            {
-              "required": [
-                "startTime",
-                "endTime"
-              ]
-            },
-            {
-              "anyOf": [
-                {
-                  "required": [
-                    "customerId"
-                  ]
-                },
-                {
-                  "required": [
-                    "merchantId"
-                  ]
-                },
-                {
-                  "required": [
-                    "consumerId"
-                  ]
-                },
-                {
-                  "required": [
-                    "subscriptionId"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        "responses": {
-          "200": {
-            "description": "List of usage events",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "object": {
-                      "type": "string",
-                      "enum": [
-                        "list"
-                      ]
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/UsageEvent"
-                      }
-                    },
-                    "pagination": {
-                      "$ref": "#/components/schemas/OffsetPagination"
-                    }
-                  }
-                },
-                "example": {
-                  "object": "list",
-                  "data": [
-                    {
-                      "id": "usg_f3g4h5i6j7k8l9m0",
-                      "object": "usageEvent",
-                      "billing": null,
-                      "consumerId": "org_v9w8x7y6z5a4b3c2",
-                      "createdAt": "2024-04-15T10:30:05Z",
-                      "customerId": "cus_n1o2p3q4r5s6t7u8",
-                      "description": "Claude language model text generation",
-                      "entitlementId": null,
-                      "idempotencyKey": "usg_2024_04_15_abc123",
-                      "merchantId": "org_v9w8x7y6z5a4b3c2",
-                      "metadata": {
-                        "input_tokens": "1500",
-                        "model_name": "claude-3-opus",
-                        "output_tokens": "800"
-                      },
-                      "properties": [
-                        {
-                          "billableMetricId": "bm_l5m6n7o8p9q0r1s2",
-                          "price": null,
-                          "quantity": 2500
-                        }
-                      ],
-                      "subscriptionId": "sub_d1e2f3g4h5i6j7k8",
-                      "timestamp": "2024-04-15T10:30:00Z"
-                    },
-                    {
-                      "id": "usg_t3u4v5w6x7y8z9a0",
-                      "object": "usageEvent",
-                      "billing": {
-                        "billingEventId": "bev_p1q2r3s4t5u6v7w8",
-                        "currency": "USD",
-                        "price": 6345000000000,
-                        "totalAmount": 6916050000000,
-                        "totalTax": 571050000000
-                      },
-                      "consumerId": "org_j9k0l1m2n3o4p5q6",
-                      "createdAt": "2024-05-20T14:45:35Z",
-                      "customerId": "cus_b1c2d3e4f5g6h7i8",
-                      "description": "Customer data warehouse storage allocation",
-                      "entitlementId": "com_z5a6b7c8d9e0f1g2",
-                      "idempotencyKey": "usg_2024_05_20_xyz789",
-                      "merchantId": "org_j9k0l1m2n3o4p5q6",
-                      "metadata": {
-                        "data_center": "eu-west-1",
-                        "encryption": "enabled",
-                        "storage_tier": "premium"
-                      },
-                      "properties": [
-                        {
-                          "billableMetricId": "bm_h3i4j5k6l7m8n9o0",
-                          "price": null,
-                          "quantity": 42
-                        }
-                      ],
-                      "subscriptionId": "sub_r7s8t9u0v1w2x3y4",
-                      "timestamp": "2024-05-20T14:45:30Z"
-                    }
-                  ],
-                  "pagination": {
-                    "limit": 10,
-                    "offset": 0,
-                    "total": 2
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-group": "usageEvents",
-        "x-speakeasy-name-override": "list"
-      }
-    },
-    "/v0/usage/{id}": {
-      "get": {
-        "tags": [
-          "Usage Events"
-        ],
-        "summary": "Get",
-        "operationId": "getUsageEvent",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/UsageEventId"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Usage event details",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UsageEvent"
-                },
-                "example": {
-                  "id": "usg_t3u4v5w6x7y8z9a0",
-                  "object": "usageEvent",
-                  "billing": {
-                    "billingEventId": "bev_p1q2r3s4t5u6v7w8",
-                    "currency": "USD",
-                    "price": 6345000000000,
-                    "totalAmount": 6916050000000,
-                    "totalTax": 571050000000
-                  },
-                  "consumerId": "org_j9k0l1m2n3o4p5q6",
-                  "createdAt": "2024-05-20T14:45:35Z",
-                  "customerId": "cus_b1c2d3e4f5g6h7i8",
-                  "description": "Customer data warehouse storage allocation",
-                  "entitlementId": "com_z5a6b7c8d9e0f1g2",
-                  "idempotencyKey": "usg_2024_05_20_xyz789",
-                  "merchantId": "org_j9k0l1m2n3o4p5q6",
-                  "metadata": {
-                    "data_center": "eu-west-1",
-                    "encryption": "enabled",
-                    "storage_tier": "premium"
-                  },
-                  "properties": [
-                    {
-                      "billableMetricId": "bm_h3i4j5k6l7m8n9o0",
-                      "price": null,
-                      "quantity": 42
-                    }
-                  ],
-                  "subscriptionId": "sub_r7s8t9u0v1w2x3y4",
-                  "timestamp": "2024-05-20T14:45:30Z"
-                }
-              }
-            }
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-group": "usageEvents",
-        "x-speakeasy-name-override": "get"
-      },
-      "patch": {
-        "tags": [
-          "Usage Events"
-        ],
-        "summary": "Refund",
-        "operationId": "refundUsageEvent",
-        "description": "Marks a usage event as refunded. This reverts the consumption recorded by the usage event and creates a corresponding refund billing event if the usage event was already billed.",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/UsageEventId"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "refunded"
-                ],
-                "properties": {
-                  "refunded": {
-                    "type": "boolean",
-                    "description": "Set to true to mark the usage event as refunded. Once refunded, the event cannot be un-refunded.",
-                    "enum": [
-                      true
-                    ]
-                  },
-                  "reason": {
-                    "type": "string",
-                    "description": "Optional reason for the refund. Sample values: 'Customer request', 'Billing error', 'Service credit', 'System error correction'"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Usage event refunded successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UsageEvent"
-                },
-                "example": {
-                  "id": "usg_t3u4v5w6x7y8z9a0",
-                  "object": "usageEvent",
-                  "billing": {
-                    "billingEventId": "bev_p1q2r3s4t5u6v7w8",
-                    "currency": "USD",
-                    "price": 6345000000000,
-                    "totalAmount": 6916050000000,
-                    "totalTax": 571050000000
-                  },
-                  "consumerId": "org_j9k0l1m2n3o4p5q6",
-                  "createdAt": "2024-05-20T14:45:35Z",
-                  "customerId": "cus_b1c2d3e4f5g6h7i8",
-                  "description": "Customer data warehouse storage allocation",
-                  "entitlementId": "com_z5a6b7c8d9e0f1g2",
-                  "idempotencyKey": "usg_2024_05_20_xyz789",
-                  "merchantId": "org_j9k0l1m2n3o4p5q6",
-                  "metadata": {
-                    "data_center": "eu-west-1",
-                    "encryption": "enabled",
-                    "storage_tier": "premium"
-                  },
-                  "properties": [
-                    {
-                      "billableMetricId": "bm_h3i4j5k6l7m8n9o0",
-                      "price": null,
-                      "quantity": 42
-                    }
-                  ],
-                  "refund": {
-                    "reason": "Customer request",
-                    "refundedAt": "2024-05-22T10:15:00Z"
-                  },
-                  "subscriptionId": "sub_r7s8t9u0v1w2x3y4",
-                  "timestamp": "2024-05-20T14:45:30Z"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-group": "usageEvents",
-        "x-speakeasy-name-override": "refund"
-      }
-    },
-    "/v0/usage/batch": {
-      "post": {
-        "tags": [
-          "Usage Events"
-        ],
-        "summary": "Batch Create",
-        "operationId": "batchCreateUsageEvents",
-        "description": "Creates multiple usage events in a single request. The idempotencyKey for each event is used to ensure the event is processed only once by downstream consumers, even if the same event is submitted multiple times. Duplicate submissions will be accepted and return the same response.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "events"
-                ],
-                "properties": {
-                  "events": {
-                    "type": "array",
-                    "minItems": 1,
-                    "maxItems": 1000,
-                    "items": {
-                      "$ref": "#/components/schemas/CreateUsageEventRequest"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Usage events created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BatchUsageEventResponse"
-                },
-                "example": {
-                  "object": "batchUsageEvents",
-                  "failed": [],
-                  "successful": [
-                    {
-                      "id": "usg_a1b2c3d4e5f6g7h8",
-                      "object": "usageEvent",
-                      "billing": null,
-                      "consumerId": "org_y1z2a3b4c5d6e7f8",
-                      "createdAt": "2024-06-01T12:00:05Z",
-                      "customerId": "cus_q3r4s5t6u7v8w9x0",
-                      "description": "DALL-E image creation batch job",
-                      "entitlementId": null,
-                      "idempotencyKey": "usg_2024_06_01_event1",
-                      "merchantId": "org_y1z2a3b4c5d6e7f8",
-                      "metadata": {
-                        "generation_model": "stable-diffusion-xl",
-                        "image_resolution": "1024x1024"
-                      },
-                      "properties": [
-                        {
-                          "billableMetricId": "bm_o7p8q9r0s1t2u3v4",
-                          "price": null,
-                          "quantity": 10
-                        }
-                      ],
-                      "subscriptionId": "sub_g9h0i1j2k3l4m5n6",
-                      "timestamp": "2024-06-01T12:00:00Z"
-                    },
-                    {
-                      "id": "usg_b2c3d4e5f6g7h8i9",
-                      "object": "usageEvent",
-                      "billing": null,
-                      "consumerId": "org_y1z2a3b4c5d6e7f8",
-                      "createdAt": "2024-06-01T13:00:05Z",
-                      "customerId": "cus_q3r4s5t6u7v8w9x0",
-                      "description": "GPT-4 fine-tuning compute session",
-                      "entitlementId": "com_c1d2e3f4g5h6i7j8",
-                      "idempotencyKey": "usg_2024_06_01_event2",
-                      "merchantId": "org_y1z2a3b4c5d6e7f8",
-                      "metadata": {
-                        "model_size": "large",
-                        "training_hours": "8.5"
-                      },
-                      "properties": [
-                        {
-                          "billableMetricId": "bm_k9l0m1n2o3p4q5r6",
-                          "price": null,
-                          "quantity": 8
-                        }
-                      ],
-                      "subscriptionId": "sub_g9h0i1j2k3l4m5n6",
-                      "timestamp": "2024-06-01T13:00:00Z"
-                    }
-                  ],
-                  "summary": {
-                    "failed": 0,
-                    "successful": 2,
-                    "total": 2
-                  }
-                }
-              }
-            }
-          },
-          "207": {
-            "description": "Batch processed with some failures",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BatchUsageEventResponse"
-                },
-                "example": {
-                  "object": "batchUsageEvents",
-                  "failed": [
-                    {
-                      "error": "Invalid billable metric ID",
-                      "idempotencyKey": "usg_2024_06_02_event2",
-                      "index": 1
-                    },
-                    {
-                      "error": "Customer not found",
-                      "idempotencyKey": "usg_2024_06_02_event3",
-                      "index": 2
-                    }
-                  ],
-                  "successful": [
-                    {
-                      "id": "usg_c3d4e5f6g7h8i9j0",
-                      "object": "usageEvent",
-                      "billing": null,
-                      "consumerId": "org_z7a8b9c0d1e2f3g4",
-                      "createdAt": "2024-06-02T10:00:05Z",
-                      "customerId": "cus_r9s0t1u2v3w4x5y6",
-                      "description": "Vector database query operations",
-                      "entitlementId": null,
-                      "idempotencyKey": "usg_2024_06_02_event1",
-                      "merchantId": "org_z7a8b9c0d1e2f3g4",
-                      "metadata": {
-                        "query_type": "similarity_search",
-                        "vector_dimension": "1536"
-                      },
-                      "properties": [
-                        {
-                          "billableMetricId": "bm_s1t2u3v4w5x6y7z8",
-                          "price": null,
-                          "quantity": 750
-                        }
-                      ],
-                      "subscriptionId": "sub_h5i6j7k8l9m0n1o2",
-                      "timestamp": "2024-06-02T10:00:00Z"
-                    }
-                  ],
-                  "summary": {
-                    "failed": 2,
-                    "successful": 1,
-                    "total": 3
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-group": "usageEvents",
-        "x-speakeasy-name-override": "batchCreate"
-      }
-    },
     "/v0/users/{id}": {
       "get": {
         "tags": [
@@ -9093,6 +8013,225 @@
         }
       }
     },
+    "/v0/costs/report": {
+      "get": {
+        "tags": [
+          "Costs"
+        ],
+        "summary": "Report",
+        "description": "Aggregate cost data across costs and customers with grouping, filtering, and time-series breakdown.",
+        "operationId": "getCostReport",
+        "x-rate-limit": {
+          "max": 600,
+          "timeWindow": "1 minute",
+          "errorMessage": "Too many cost report requests. Please wait before trying again."
+        },
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The merchant organization ID. If omitted, defaults to the merchant associated with the authenticated API key."
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Start of the query window (ISO 8601)."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "End of the query window (ISO 8601)."
+          },
+          {
+            "name": "groupBy",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Dimension to group results by. Valid values: 'cost' (group by cost ID), 'customer' (group by customer ID), or any dimension key from a filtered cost's groupBy schema for dynamic dimension grouping. Dynamic dimension values require exactly one costId filter.",
+            "examples": {
+              "byCost": {
+                "value": "cost"
+              },
+              "byCustomer": {
+                "value": "customer"
+              },
+              "byDimension": {
+                "value": "region"
+              }
+            }
+          },
+          {
+            "name": "costId",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": "Filter to specific cost(s). Enables dynamic dimension grouping."
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter to a specific subject (customer/event subject ID)."
+          },
+          {
+            "name": "filterGroupBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 4096
+            },
+            "description": "JSON-encoded dimension filters (e.g. {\"region\":\"us-east-1\"}). Max 4KB, max 5 keys."
+          },
+          {
+            "name": "topN",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 25,
+              "default": 9
+            },
+            "description": "Number of top groups to return. An 'Other' bucket aggregates remaining groups."
+          },
+          {
+            "name": "comparePriorPeriod",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "When true, include prior-period comparison data in each group."
+          },
+          {
+            "name": "windowSize",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "HOUR",
+                "DAY",
+                "MONTH"
+              ]
+            },
+            "description": "Time window granularity for the time-series breakdown."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "totalCost",
+                "totalQuantity"
+              ],
+              "default": "totalCost"
+            },
+            "description": "Field to sort groups by."
+          },
+          {
+            "name": "sortDir",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "description": "Sort direction."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Number of groups to skip for pagination."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 25
+            },
+            "description": "Maximum number of groups to return."
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter costs to a single ISO 4217 currency code (e.g. 'USD'). When omitted, defaults to the merchant's primary currency."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Aggregated cost report",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CostReportResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v0/revenue": {
       "get": {
         "operationId": "getRevenue",
@@ -9170,14 +8309,25 @@
             "explode": true
           },
           {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "description": "Filter all results to a single ISO 4217 currency code (e.g. 'USD'). When omitted, results include all currencies.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "groupBy",
             "in": "query",
             "required": false,
-            "description": "Group invoice data by dimension. Max 5 groups (top 4 + 'other' when exceeding).",
+            "description": "Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.",
             "schema": {
               "type": "string",
               "enum": [
-                "plan"
+                "plan",
+                "customer",
+                "currency"
               ]
             }
           }
@@ -9963,7 +9113,7 @@
           },
           "code": {
             "type": "string",
-            "enum": [
+            "examples": [
               "TAX_NOT_ENABLED",
               "PAYMENT_SESSION_EXPIRED"
             ],
@@ -10288,320 +9438,6 @@
           }
         }
       },
-      "Dispute": {
-        "type": "object",
-        "required": [
-          "id",
-          "object",
-          "usageEventId",
-          "customerId",
-          "merchantId",
-          "customerMessage",
-          "status",
-          "disputedAmount",
-          "createdAt",
-          "updatedAt"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^disp_[a-zA-Z0-9]+$",
-            "description": "Unique identifier for a dispute"
-          },
-          "object": {
-            "type": "string",
-            "enum": [
-              "dispute"
-            ],
-            "default": "dispute"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "customerId": {
-            "type": "string",
-            "pattern": "^cust_[a-zA-Z0-9]+$",
-            "description": "Customer who filed the dispute"
-          },
-          "customerMessage": {
-            "type": "string",
-            "description": "Customer's reason for the dispute"
-          },
-          "disputedAmount": {
-            "type": "string",
-            "format": "decimal",
-            "description": "Disputed charge amount in decimal dollar format. Sample values: '2.50' equals $2.50 disputed, '15.00' equals $15.00 disputed, '0.50' equals $0.50 disputed"
-          },
-          "merchantId": {
-            "$ref": "#/components/schemas/OrganizationId",
-            "description": "Merchant associated with the dispute"
-          },
-          "merchantMessage": {
-            "type": "string",
-            "nullable": true,
-            "description": "Merchant's response to the dispute"
-          },
-          "resolvedAt": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "description": "When the dispute was resolved"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "pending",
-              "accepted",
-              "declined"
-            ],
-            "description": "Current status of the dispute"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "usageEventId": {
-            "type": "string",
-            "pattern": "^usg_[a-zA-Z0-9]+$",
-            "description": "The usage event being disputed"
-          }
-        }
-      },
-      "DisputeWithCustomer": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Dispute"
-          },
-          {
-            "type": "object",
-            "required": [
-              "customer"
-            ],
-            "properties": {
-              "customer": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "name",
-                  "email"
-                ],
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "pattern": "^cust_[a-zA-Z0-9]+$"
-                  },
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "name": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        ]
-      },
-      "CreateDisputeRequest": {
-        "type": "object",
-        "required": [
-          "usageEventId",
-          "message"
-        ],
-        "properties": {
-          "message": {
-            "type": "string",
-            "minLength": 10,
-            "maxLength": 1000,
-            "description": "Customer explanation for challenging the consumption event. Sample values: 'Token count appears incorrect for this request', 'Storage charges don't match actual usage', 'API call was made during maintenance window', 'Inference request failed but still charged'"
-          },
-          "usageEventId": {
-            "type": "string",
-            "pattern": "^usg_[a-zA-Z0-9]+$",
-            "description": "Usage event identifier being challenged. Sample values: 'usg_abc123xyz', 'usg_789def456'"
-          }
-        }
-      },
-      "EntitlementId": {
-        "type": "string",
-        "pattern": "^ent_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for an entitlement"
-      },
-      "ActiveEntitlement": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/EntitlementId"
-          },
-          "object": {
-            "type": "string",
-            "enum": [
-              "entitlement"
-            ],
-            "default": "entitlement"
-          },
-          "billableMetrics": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BillableMetricId"
-            },
-            "description": "List of billable metrics that this entitlement covers."
-          },
-          "customerId": {
-            "$ref": "#/components/schemas/CustomerId",
-            "description": "ID of the customer that this entitlement belongs to."
-          },
-          "planId": {
-            "$ref": "#/components/schemas/PlanId",
-            "description": "ID of the plan that this entitlement belongs to."
-          },
-          "productId": {
-            "$ref": "#/components/schemas/ProductId",
-            "description": "ID of the product that this entitlement belongs to."
-          },
-          "subscriptionId": {
-            "$ref": "#/components/schemas/SubscriptionId",
-            "description": "ID of the subscription that this entitlement belongs to."
-          },
-          "verifiedAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Timestamp when the entitlement was checked."
-          }
-        }
-      },
-      "MerchantId": {
-        "type": "string",
-        "pattern": "^org_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for a merchant/organization"
-      },
-      "CreateEntitlementRequest": {
-        "type": "object",
-        "required": [
-          "merchantId",
-          "customerId",
-          "entitlementData"
-        ],
-        "properties": {
-          "customerId": {
-            "$ref": "#/components/schemas/CustomerId",
-            "description": "ID of the customer to create the entitlement for."
-          },
-          "entitlementData": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "billableMetricId",
-                "quantity"
-              ],
-              "properties": {
-                "billableMetricId": {
-                  "$ref": "#/components/schemas/BillableMetricId",
-                  "description": "Consumption metric identifier to reserve funds for. Sample metrics: token usage, storage capacity, inference requests, training compute hours"
-                },
-                "price": {
-                  "type": "string",
-                  "pattern": "^[0-9]+(\\.[0-9]{1,9})?$",
-                  "description": "Optional per-unit price override in decimal dollars for variable-rate pricing. Sample values: '0.000025' sets $0.000025 per token, '0.12' sets $0.12 per GB"
-                },
-                "quantity": {
-                  "type": "number",
-                  "minimum": 0,
-                  "description": "Amount of metric units to pre-authorize. Sample values: 10000 tokens, 500 GB storage, 1000 API calls, 24 compute hours"
-                }
-              }
-            },
-            "description": "Array of consumption metrics with quantities to pre-authorize payment for."
-          },
-          "maxUses": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 1000,
-            "description": "Maximum consumption events allowed before expiration (optional). Defaults to 1 for global entitlements, 100 for regional entitlements."
-          },
-          "merchantId": {
-            "$ref": "#/components/schemas/MerchantId",
-            "description": "ID of the merchant creating the entitlement."
-          }
-        }
-      },
-      "Entitlement": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/EntitlementId",
-            "description": "Unique identifier for the entitlement."
-          },
-          "object": {
-            "type": "string",
-            "enum": [
-              "entitlement"
-            ],
-            "default": "entitlement"
-          },
-          "billableMetrics": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "billableMetricId": {
-                  "$ref": "#/components/schemas/BillableMetricId",
-                  "description": "Consumption metric identifier reserved in this entitlement. Sample values: 'bm_abc123xyz', 'bm_789def456'"
-                },
-                "price": {
-                  "type": "string",
-                  "description": "Custom price override in decimal dollars. Sample values: '0.000012' sets $0.000012 per unit, '0.50' sets $0.50 per unit, '1.25' sets $1.25 per unit"
-                },
-                "quantity": {
-                  "type": "number",
-                  "description": "Pre-authorized metric quantity amount. Sample values: 10000 tokens, 500 GB storage, 1000 API calls, 24 compute hours"
-                }
-              }
-            },
-            "description": "Billable metrics and quantities reserved stored as JSON."
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Entitlement creation timestamp in ISO 8601 format. Sample values: '2024-01-15T10:30:00Z', '2024-02-01T14:45:30Z'"
-          },
-          "customerId": {
-            "$ref": "#/components/schemas/CustomerId",
-            "description": "ID of the customer this entitlement is for."
-          },
-          "expiresAt": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Entitlement expiration timestamp in ISO 8601 format. Sample values: '2024-12-31T23:59:59Z', '2025-01-15T10:30:00Z'"
-          },
-          "maxUses": {
-            "type": "integer",
-            "minimum": 1,
-            "description": "Maximum consumption events allowed before entitlement expires. Sample values: 1 allows single use, 10 allows ten uses, 100 allows one hundred uses"
-          },
-          "merchantId": {
-            "$ref": "#/components/schemas/MerchantId",
-            "description": "ID of the merchant that created this entitlement."
-          },
-          "region": {
-            "type": "string",
-            "description": "Geographic restriction zone limiting where this entitlement applies. Sample values: 'us-west-2' confines usage to AWS US West 2 region, 'eu-central-1' confines usage to EU Central 1 region, 'global' permits usage from all regions"
-          },
-          "remainingBalance": {
-            "type": "string",
-            "pattern": "^[0-9]+$",
-            "description": "Unused entitlement balance in atomic units (string representation of BigInt). Sample values: '100000000000' equals $100.00 remaining, '50000000000' equals $50.00 remaining, '0' equals fully consumed"
-          },
-          "usedCount": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "Count of consumption events processed using this entitlement. Sample values: 0 indicates unused, 5 indicates five events processed, 10 indicates ten events processed"
-          }
-        }
-      },
       "EntitlementAccessResult": {
         "type": "object",
         "description": "A customer's entitlement to a specific feature.",
@@ -10836,7 +9672,7 @@
           }
         }
       },
-      "schemas-Entitlement": {
+      "Entitlement": {
         "type": "object",
         "required": [
           "object",
@@ -11497,6 +10333,11 @@
           }
         }
       },
+      "schemas-PlanId": {
+        "type": "string",
+        "pattern": "^plan_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for a plan"
+      },
       "schemas-PriceId": {
         "type": "string",
         "pattern": "^price_[a-zA-Z0-9]+$",
@@ -11652,7 +10493,7 @@
         ],
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/PlanId"
+            "$ref": "#/components/schemas/schemas-PlanId"
           },
           "object": {
             "type": "string",
@@ -12505,7 +11346,7 @@
               },
               {
                 "type": "object",
-                "description": "Invoice 0 awaiting merchant approval before payment can proceed. The invoice is in DRAFT status with totals calculated. Approval is currently platform-only — do not call PATCH /v2/invoices/{id} with {\"trigger\": \"APPROVE\"} from merchant credentials (it will return 403). A merchant-accessible approval endpoint is planned for PAYG-754.",
+                "description": "Invoice 0 awaiting merchant approval before payment can proceed. The invoice is in DRAFT status with totals calculated. Approval is a platform-managed action and will be available via a public endpoint in a future release.",
                 "properties": {
                   "invoiceId": {
                     "type": "string",
@@ -12588,6 +11429,11 @@
             "nullable": true,
             "description": "Number of days before renewal to send the reminder. Null means use plan default."
           },
+          "autoApprove": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Subscription-level auto-approval override. Null means plan default is used."
+          },
           "customer": {
             "type": "object",
             "description": "Customer details with merchant and consumer information. Only included when include=customer is specified in the list query.",
@@ -12668,293 +11514,6 @@
           "expiresAt"
         ]
       },
-      "UsageEventId": {
-        "type": "string",
-        "pattern": "^usg_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for a usage event"
-      },
-      "UsageEvent": {
-        "type": "object",
-        "required": [
-          "id",
-          "object",
-          "subscriptionId",
-          "customerId",
-          "merchantId",
-          "properties",
-          "timestamp",
-          "createdAt"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/UsageEventId",
-            "readOnly": true
-          },
-          "object": {
-            "type": "string",
-            "enum": [
-              "usageEvent"
-            ],
-            "readOnly": true
-          },
-          "billing": {
-            "type": "object",
-            "description": "Billing information for the usage event when it has been billed. This object is populated by the server and returned in GET and PATCH responses. It cannot be set directly in request bodies.",
-            "readOnly": true,
-            "properties": {
-              "billingEventId": {
-                "type": "string",
-                "description": "Billing event identifier linked to this consumption record",
-                "readOnly": true
-              },
-              "currency": {
-                "type": "string",
-                "description": "Three-letter ISO 4217 currency code. Sample values: 'USD' for US dollars, 'EUR' for euros, 'GBP' for British pounds",
-                "readOnly": true
-              },
-              "invoiceId": {
-                "type": "string",
-                "description": "Invoice V2 period ID (subscription-anchor based billing). Null for legacy billing.",
-                "readOnly": true
-              },
-              "price": {
-                "type": "integer",
-                "description": "Price amount in the smallest currency unit, excluding tax. Sample values: 1000000000 represents $1.00 in atomic units, 5000000000 represents $5.00 in atomic units",
-                "readOnly": true
-              },
-              "totalAmount": {
-                "type": "integer",
-                "description": "Final amount including tax in the smallest currency unit. Sample values: 1085000000 equals $1.085 total (price + tax) in atomic units, 5500000000 equals $5.50 total in atomic units. Calculated as price plus totalTax.",
-                "readOnly": true
-              },
-              "totalTax": {
-                "type": "integer",
-                "description": "Total tax amount in the smallest currency unit. Sample values: 85000000 represents $0.085 tax in atomic units, 100000000 represents $0.10 tax in atomic units",
-                "readOnly": true
-              }
-            }
-          },
-          "consumerId": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "readOnly": true
-          },
-          "customerId": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "description": "Readable summary explaining what triggered this consumption event. Sample values: 'Claude language model text generation', 'Customer data warehouse storage allocation', 'DALL-E image creation batch job', 'GPT-4 fine-tuning compute session', 'Vector database query operations'"
-          },
-          "entitlementId": {
-            "type": "string",
-            "description": "Commitment identifier used for this consumption event. Sample values: 'com_abc123xyz', 'com_789def456'"
-          },
-          "idempotencyKey": {
-            "type": "string"
-          },
-          "merchantId": {
-            "type": "string"
-          },
-          "metadata": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          },
-          "properties": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "billableMetricId",
-                "quantity"
-              ],
-              "properties": {
-                "billableMetricId": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "string",
-                  "description": "Custom price override in decimal dollars. Sample values: '0.000012' sets $0.000012 per unit, '0.50' sets $0.50 per unit, '1.25' sets $1.25 per unit"
-                },
-                "quantity": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "description": "Consumption quantity must be a positive whole number. Sample values: 1 for single unit, 100 for one hundred units, 2500 for tokens consumed"
-                }
-              }
-            }
-          },
-          "refund": {
-            "type": "object",
-            "description": "Refund information for the usage event when it has been refunded. This object is populated by the server and returned in GET and PATCH responses. It cannot be set directly in request bodies.",
-            "readOnly": true,
-            "properties": {
-              "reason": {
-                "type": "string",
-                "description": "Reason for the refund. Sample values: 'Customer request', 'Billing error', 'Service credit', 'System error correction'",
-                "readOnly": true
-              },
-              "refundedAt": {
-                "type": "string",
-                "format": "date-time",
-                "description": "Timestamp when the usage event was refunded",
-                "readOnly": true
-              }
-            }
-          },
-          "subscriptionId": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "CreateUsageEventRequest": {
-        "type": "object",
-        "required": [
-          "idempotencyKey",
-          "customerId",
-          "merchantId",
-          "timestamp",
-          "properties"
-        ],
-        "properties": {
-          "customerId": {
-            "type": "string",
-            "description": "Customer identifier that generated this consumption event. Sample values: 'cus_abc123xyz', 'cus_789def456'"
-          },
-          "entitlementId": {
-            "type": "string",
-            "pattern": "^com_[a-zA-Z0-9]+$",
-            "description": "Commitment identifier for this consumption event. Sample values: 'com_abc123xyz', 'com_789def456'"
-          },
-          "idempotencyKey": {
-            "type": "string",
-            "description": "Unique deduplication key preventing duplicate event processing. Sample values: 'usg_2024_01_15_abc123', 'event_wallet_xyz789', 'consumption_ref_456def'"
-          },
-          "merchantId": {
-            "type": "string",
-            "description": "Merchant organization identifier owning this consumption event. Sample values: 'org_abc123xyz', 'org_789def456'"
-          },
-          "metadata": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Custom key-value attributes providing context about the consumption event. Sample values: {\"model_name\": \"claude-3-opus\", \"input_tokens\": \"1500\", \"output_tokens\": \"800\"} or {\"storage_tier\": \"premium\", \"data_center\": \"eu-west-1\", \"encryption\": \"enabled\"} or {\"image_resolution\": \"1024x1024\", \"generation_model\": \"stable-diffusion-xl\"}"
-          },
-          "properties": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "billableMetricId",
-                "quantity"
-              ],
-              "properties": {
-                "billableMetricId": {
-                  "type": "string",
-                  "description": "Identifier for the consumption metric being reported. Sample metrics: token consumption, storage capacity, inference requests, training hours, data transfer volume"
-                },
-                "price": {
-                  "type": "string",
-                  "description": "Custom per-unit price in decimal format. The total charge is calculated as price × quantity. Sample values: '0.125' sets $0.125 per unit, '2.50' sets $2.50 per unit. Must be within the minPrice and maxPrice bounds defined for the dynamic price model."
-                },
-                "quantity": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "description": "Measured consumption amount for this metric. Must be a positive whole number. Sample values: 2500 tokens consumed, 42 gigabytes stored, 750 API calls executed, 8 compute hours utilized, 120 images generated"
-                }
-              }
-            }
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time",
-            "description": "Actual occurrence timestamp for the consumption event in ISO 8601 format. Sample values: '2024-01-15T10:30:00Z', '2024-02-01T14:45:30Z'. Represents when the event occurred, not when Paygentic received it."
-          }
-        }
-      },
-      "BatchUsageEventResponse": {
-        "type": "object",
-        "required": [
-          "object",
-          "successful",
-          "failed",
-          "summary"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "batchUsageEvents"
-            ]
-          },
-          "failed": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "index",
-                "error",
-                "idempotencyKey"
-              ],
-              "properties": {
-                "error": {
-                  "type": "string",
-                  "description": "Error message describing why the event failed"
-                },
-                "idempotencyKey": {
-                  "type": "string",
-                  "description": "Idempotency key of the failed event for identification"
-                },
-                "index": {
-                  "type": "integer",
-                  "description": "Index of the failed event in the original request array"
-                }
-              }
-            },
-            "description": "Array of events that failed to be created with error details"
-          },
-          "successful": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UsageEvent"
-            },
-            "description": "Array of successfully created usage events"
-          },
-          "summary": {
-            "type": "object",
-            "required": [
-              "total",
-              "successful",
-              "failed"
-            ],
-            "properties": {
-              "failed": {
-                "type": "integer",
-                "description": "Number of events that failed to be created"
-              },
-              "successful": {
-                "type": "integer",
-                "description": "Number of successfully created events"
-              },
-              "total": {
-                "type": "integer",
-                "description": "Total number of events in the batch"
-              }
-            },
-            "description": "Summary of batch processing results"
-          }
-        }
-      },
       "UserId": {
         "type": "string",
         "pattern": "^usr_[a-zA-Z0-9]+$",
@@ -13018,6 +11577,13 @@
                     "active",
                     "suspended"
                   ]
+                },
+                "roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Roles assigned to the user in this organization."
                 }
               }
             }
@@ -14013,6 +12579,196 @@
           }
         }
       },
+      "CostReportGroup": {
+        "type": "object",
+        "required": [
+          "key",
+          "label",
+          "totalCost",
+          "totalQuantity",
+          "percentOfTotal",
+          "isOther"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Group identifier (cost ID, customer ID, or dimension value). '__other__' for the aggregated remainder bucket."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable display name for the group."
+          },
+          "totalCost": {
+            "type": "number"
+          },
+          "totalQuantity": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unit label for the quantity (e.g. 'token', 'request')."
+          },
+          "percentOfTotal": {
+            "type": "number",
+            "description": "This group's share of total cost, 0–100."
+          },
+          "priorPeriod": {
+            "type": "object",
+            "nullable": true,
+            "required": [
+              "cost",
+              "changePercent"
+            ],
+            "properties": {
+              "cost": {
+                "type": "number"
+              },
+              "changePercent": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Percentage change vs prior period. Null when prior period cost is 0."
+              }
+            },
+            "description": "Prior-period comparison data. Present only when comparePriorPeriod=true."
+          },
+          "isOther": {
+            "type": "boolean",
+            "description": "True for the aggregated 'Other' bucket."
+          }
+        }
+      },
+      "CostReportTimeSeries": {
+        "type": "object",
+        "required": [
+          "windowStart",
+          "windowEnd",
+          "groups"
+        ],
+        "properties": {
+          "windowStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "windowEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "groups": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            },
+            "description": "Map of group key → cost value for this time window. Keys match CostReportGroup.key."
+          }
+        }
+      },
+      "CostReportResponse": {
+        "type": "object",
+        "required": [
+          "object",
+          "currency",
+          "period",
+          "groupBy",
+          "totalCost",
+          "totalQuantity",
+          "groups",
+          "timeSeries",
+          "availableDimensions",
+          "pagination"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "cost_report"
+            ],
+            "default": "cost_report"
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code for all monetary values in this response."
+          },
+          "period": {
+            "type": "object",
+            "required": [
+              "from",
+              "to"
+            ],
+            "properties": {
+              "from": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "to": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "groupBy": {
+            "type": "string",
+            "description": "The active grouping dimension (e.g. 'cost', 'customer', or a dynamic dimension key)."
+          },
+          "totalCost": {
+            "type": "number",
+            "description": "Sum of cost across all groups (not just top N)."
+          },
+          "totalQuantity": {
+            "type": "number",
+            "description": "Sum of quantity across all groups."
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostReportGroup"
+            },
+            "description": "Top N groups plus an 'Other' bucket aggregating the remainder."
+          },
+          "timeSeries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostReportTimeSeries"
+            },
+            "description": "Time-bucketed breakdown per group. Keys in each window's 'groups' object correspond to CostReportGroup.key. The 'Other' bucket key is '__other__'."
+          },
+          "availableDimensions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Dimension keys available for further drill-down (populated when a single cost is filtered)."
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Non-fatal warnings, e.g. costs that could not be queried."
+          },
+          "pagination": {
+            "type": "object",
+            "required": [
+              "total",
+              "limit",
+              "offset"
+            ],
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "offset": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
       "InvoiceCategorySummary": {
         "type": "object",
         "required": [
@@ -14140,7 +12896,7 @@
           },
           "groupBreakdown": {
             "type": "array",
-            "description": "Per-group trend entries (only present when groupBy is specified)",
+            "description": "Per-group trend entries (present when groupBy=plan or groupBy=customer)",
             "items": {
               "$ref": "#/components/schemas/GroupTrendEntry"
             }
@@ -14176,24 +12932,23 @@
           }
         }
       },
-      "RevenueSummaryResponse": {
+      "CurrencyBreakdownEntry": {
         "type": "object",
         "required": [
-          "object",
+          "currency",
           "netRevenue",
           "invoices",
           "payments",
           "trend"
         ],
         "properties": {
-          "object": {
+          "currency": {
             "type": "string",
-            "const": "revenue_summary",
-            "description": "Object type identifier"
+            "description": "ISO 4217 currency code (uppercase, e.g. USD, EUR, GBP)"
           },
           "netRevenue": {
             "type": "string",
-            "description": "Net collected revenue in dollars (paid invoices + completed payments)"
+            "description": "Net collected revenue in dollars for this currency (issued invoices + completed payments)"
           },
           "invoices": {
             "$ref": "#/components/schemas/InvoiceSummary"
@@ -14203,16 +12958,55 @@
           },
           "trend": {
             "type": "array",
-            "description": "Time-bucketed revenue trend data",
+            "description": "Time-bucketed revenue trend data for this currency",
+            "items": {
+              "$ref": "#/components/schemas/RevenueTrendBucket"
+            }
+          }
+        }
+      },
+      "RevenueSummaryResponse": {
+        "type": "object",
+        "required": [
+          "object"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "revenue_summary",
+            "description": "Object type identifier"
+          },
+          "netRevenue": {
+            "type": "string",
+            "description": "Net collected revenue in dollars (paid invoices + completed payments). Omitted when groupBy=currency is active."
+          },
+          "invoices": {
+            "$ref": "#/components/schemas/InvoiceSummary",
+            "description": "Invoice breakdown. Omitted when groupBy=currency is active."
+          },
+          "payments": {
+            "$ref": "#/components/schemas/PaymentSummary",
+            "description": "Payment breakdown. Omitted when groupBy=currency is active."
+          },
+          "trend": {
+            "type": "array",
+            "description": "Time-bucketed revenue trend data. Omitted when groupBy=currency is active.",
             "items": {
               "$ref": "#/components/schemas/RevenueTrendBucket"
             }
           },
           "groupBreakdown": {
             "type": "array",
-            "description": "Invoice breakdown by group dimension (only present when groupBy is specified)",
+            "description": "Invoice breakdown by group dimension (only present when groupBy=plan or groupBy=customer is specified)",
             "items": {
               "$ref": "#/components/schemas/GroupInvoiceSummary"
+            }
+          },
+          "currencyBreakdown": {
+            "type": "array",
+            "description": "Per-currency revenue aggregates (only present when groupBy=currency is specified). Primary currency appears first, then alphabetical by ISO code. When present, top-level netRevenue, invoices, payments, and trend fields are omitted.",
+            "items": {
+              "$ref": "#/components/schemas/CurrencyBreakdownEntry"
             }
           }
         }
