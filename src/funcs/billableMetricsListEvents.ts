@@ -101,6 +101,7 @@ async function $do(
   const path = pathToFunc("/v0/billableMetrics/{id}/events")(pathParams);
 
   const query = encodeFormQuery({
+    "externalId": payload.externalId,
     "from": payload.from,
     "limit": payload.limit,
     "offset": payload.offset,

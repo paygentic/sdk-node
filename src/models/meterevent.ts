@@ -43,6 +43,10 @@ export type MeterEvent = {
    * Event payload
    */
   data: { [k: string]: any };
+  /**
+   * Optional external identifier for cross-referencing with external systems. Alphanumeric characters, hyphens, and underscores only.
+   */
+  externalId?: string | undefined;
 };
 
 /** @internal */
@@ -64,6 +68,7 @@ export const MeterEvent$inboundSchema: z.ZodType<
   time: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   idempotencyKey: z.string(),
   data: z.record(z.any()),
+  externalId: z.string().optional(),
 });
 
 export function meterEventFromJSON(

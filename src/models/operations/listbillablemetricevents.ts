@@ -26,6 +26,10 @@ export type ListBillableMetricEventsRequest = {
    * Number of events to skip
    */
   offset?: number | undefined;
+  /**
+   * Filter by external identifier. Alphanumeric characters, hyphens, and underscores only.
+   */
+  externalId?: string | undefined;
 };
 
 /** @internal */
@@ -36,6 +40,7 @@ export type ListBillableMetricEventsRequest$Outbound = {
   subject?: string | undefined;
   limit: number;
   offset: number;
+  externalId?: string | undefined;
 };
 
 /** @internal */
@@ -50,6 +55,7 @@ export const ListBillableMetricEventsRequest$outboundSchema: z.ZodType<
   subject: z.string().optional(),
   limit: z.number().int().default(20),
   offset: z.number().int().default(0),
+  externalId: z.string().optional(),
 });
 
 export function listBillableMetricEventsRequestToJSON(

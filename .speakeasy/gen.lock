@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: 40314a0e64cf09243f2c71070f120e58
+  docChecksum: f79782d1dfbbeffbdd412a4f9e8a7cc1
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.7.0
-  configChecksum: 5e1b1776ce6a9e26985388f4feb70388
+  releaseVersion: 0.7.1
+  configChecksum: b77d2059cd30c6bd6a2375af708e933e
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: 678b098c-9e33-44c6-bd0a-7c7f9c1cd596
-  pristine_commit_hash: f086f2b06992daabd528e3c90e12b809fda61f50
-  pristine_tree_hash: 17469712f1692702807a359ec363e4492f08b7f1
+  generation_id: 75579677-6048-4707-b1ff-4c1a8375a602
+  pristine_commit_hash: 85cbfc0a232fea66938e96e94d735679ecc3e263
+  pristine_tree_hash: afe0d7b24be5ebfb84dd8e7694c437b480b61aa6
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -421,8 +421,8 @@ trackedFiles:
     pristine_git_object: adaf10f9b37093c13adc25ecccc13a420694756b
   docs/models/meterevent.md:
     id: 4ace79174f84
-    last_write_checksum: sha1:1f674e9f2d3dc8c0730e9cc8cb613fd2e35fac12
-    pristine_git_object: 65f0c337e738ba02d9251fad6708a3441b15cd9d
+    last_write_checksum: sha1:b58c5e415d3165f7e33797912cef482e609be6f4
+    pristine_git_object: 2cc60c05edb902c3ee831f39e5a9fc6c8c3ea8f1
   docs/models/metereventlist.md:
     id: 463ab6042aef
     last_write_checksum: sha1:00c88f404f998d0b72cdbd729492b225f7e96c2c
@@ -817,8 +817,8 @@ trackedFiles:
     pristine_git_object: d247a7bc3d7167c82e4ef8ca7eb9b90bcdc96a42
   docs/models/operations/listbillablemetriceventsrequest.md:
     id: 1c050334483b
-    last_write_checksum: sha1:4392ac81b3acf8b4d946caed7ef086ff5f375939
-    pristine_git_object: f17f9b5577cdcdab7fc2eb7cc087ccda9cbee4b9
+    last_write_checksum: sha1:99e3ce42a343a7c08081f96ab6034d4c4113fbbf
+    pristine_git_object: 4d1fff690d7b1e671fa142a1c3a01934c787e9fc
   docs/models/operations/listbillablemetricsobject.md:
     id: 764bcec06efa
     last_write_checksum: sha1:aca5ee776314b5eb8516bfd25801fad221363679
@@ -1649,12 +1649,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:5102ee2006a99fcc8a2b5273d3f63a6e0deab850
-    pristine_git_object: b27f1fd0aed27318b4557707bf9264ea914e2b7c
+    last_write_checksum: sha1:369a208e321811ec995cecb8809e8cbd4c2b2a6a
+    pristine_git_object: 654b1a9d0cff89dfb1c5ea2bc88f09ed01d8d180
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:0b4e8f58e25bc88249fc8e60f5ac5d6c4f5da46a
-    pristine_git_object: 60f7657dce424c8d3aaea63ba83dfa32d2a52c1a
+    last_write_checksum: sha1:d6678f5058b0bc9ac6a55bca8fc11130b0185fed
+    pristine_git_object: 60fe660dc6e3badd5ce1e1fcfb8423e3d44d41fe
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -1673,8 +1673,8 @@ trackedFiles:
     pristine_git_object: db3eab247c601eb3e98c58e070339e02eb03d8a6
   src/funcs/billableMetricsListEvents.ts:
     id: e2f1aea5502e
-    last_write_checksum: sha1:b563c690bd6a78ee6482df17191fc8a21ecb65e0
-    pristine_git_object: 58ce96df2233da7e15223ee7b07b8675cb64e04a
+    last_write_checksum: sha1:9afb98777360ac44deb030b89487d4955179778d
+    pristine_git_object: bf435a3794ab32dce444352f0e9dce400d4f67c5
   src/funcs/billableMetricsMeter.ts:
     id: eaed5ff2e78d
     last_write_checksum: sha1:fa0b569c378fc89a8e74d667c529d89825228eef
@@ -2029,8 +2029,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:6952be2b82e87e916d1c4d45e4f9fd2bc8b5859c
-    pristine_git_object: c4985152eecdbcbac383f220b9c7c2a6e24e960e
+    last_write_checksum: sha1:e2b3a6ceddeafc05801db1fdf0aa19c9d0c72193
+    pristine_git_object: 741ad1e6f066d52dfb1b7738468326f3514c9e1e
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -2273,8 +2273,8 @@ trackedFiles:
     pristine_git_object: c64b4afb0a4b2ca5bcf0a47ecefa55380a91c9a7
   src/models/meterevent.ts:
     id: a24757b96746
-    last_write_checksum: sha1:be55a1910105d1d33d2267bae6c50601912960f6
-    pristine_git_object: 7f21acd220f1115ced5c0ad305d5482214482142
+    last_write_checksum: sha1:d01f44b423f760d2cb2ca19cd548ba0c04f63403
+    pristine_git_object: 6673eb49935768699c478b29e9897b96c5719537
   src/models/metereventlist.ts:
     id: 5d9cc8d6fb93
     last_write_checksum: sha1:5f6b8c7755c72a15c8e344db915c63448ef0d6e0
@@ -2493,8 +2493,8 @@ trackedFiles:
     pristine_git_object: bcbcaa777e6189139df391ce68f6c5ce270a364a
   src/models/operations/listbillablemetricevents.ts:
     id: c64e3f0882db
-    last_write_checksum: sha1:5181d4f3a72858c3415ed183e7b183632c637c91
-    pristine_git_object: b20d005178c4a87b5414aaca600efe9153c89fdf
+    last_write_checksum: sha1:e8260492f6013f13c1db87509b762614c1f99b03
+    pristine_git_object: cf5a2866294e2381ce86219b82882b0cfee93a65
   src/models/operations/listbillablemetrics.ts:
     id: e815997b98f6
     last_write_checksum: sha1:e2896dd092e2e2fca12d8d0981fd6f383dcb0708
@@ -4542,4 +4542,4 @@ generatedTests:
   getCostReport-byCustomer: "2026-04-27T12:46:12Z"
   getCostReport-byDimension: "2026-04-27T12:46:12Z"
   getCostReport: "2026-04-27T12:46:12Z"
-releaseNotes: "## Typescript SDK Changes:\n* `paygentic.products.update()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.sources.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.billableMetrics.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.billableMetrics.update()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.billableMetrics.meter()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.testClocks.delete()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.testClocks.advance()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.testClocks.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.billableMetrics.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.testClocks.create()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.billableMetrics.listEvents()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.customers.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.customers.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.customers.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.customers.delete()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.customers.update()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.issue()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.get()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.grants.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.grants.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.grants.purchase()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.grants.get()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlements.grants.void()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.features.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.features.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.features.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.features.update()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.features.delete()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.fees.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.fees.list()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.fees.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.products.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.fees.delete()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.fees.getPrice()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.plans.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.plans.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.plans.listAvailable()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.plans.get()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.plans.update()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.prices.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.prices.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.prices.get()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.prices.update()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.prices.delete()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.products.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.fees.update()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.billableMetrics.list()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.testClocks.list()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.products.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.sources.list()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.sources.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.sources.update()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.events.list()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.sources.events.approve()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.events.reject()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.events.bulkApprove()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.events.bulkReject()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.rules.list()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.rules.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.rules.get()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.rules.update()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.sources.rules.delete()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.list()`: \n  *  `response.data[].autoApprove` **Added**\n  *  `error` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.create()`: \n  *  `response.autoApprove` **Added**\n  *  `error` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.get()`: \n  *  `response.autoApprove` **Added**\n  *  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.generatePortalLink()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.terminate()`: \n  *  `response.autoApprove` **Added**\n  *  `error` **Changed** (Breaking ⚠️)\n* `paygentic.users.get()`: \n  *  `response.organizations[].roles` **Added**\n  *  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.users.update()`: \n  *  `response.organizations[].roles` **Added**\n  *  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.list()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.listLineItems()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.createLineItem()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.getLineItems()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.payments.list()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.payments.create()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.payments.get()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.events.ingest()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.costs.createCost()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.costs.listCosts()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.costs.getCost()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.costs.updateCost()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.costs.deleteCost()`:  `error.code` **Changed** (Breaking ⚠️)\n* `paygentic.costs.getCostSummary()`:  `error` **Changed** (Breaking ⚠️)\n* `paygentic.revenue.get()`: \n  *  `request` **Changed**\n  *  `response` **Changed**\n  *  `error` **Changed** (Breaking ⚠️)\n* `paygentic.entitlementsV0.listActive()`: **Removed** (Breaking ⚠️)\n* `paygentic.entitlementsV0.create()`: **Removed** (Breaking ⚠️)\n* `paygentic.disputes.list()`: **Removed** (Breaking ⚠️)\n* `paygentic.disputes.create()`: **Removed** (Breaking ⚠️)\n* `paygentic.costs.getCostReport()`: **Added**\n* `paygentic.usageEvents.create()`: **Removed** (Breaking ⚠️)\n* `paygentic.usageEvents.list()`: **Removed** (Breaking ⚠️)\n* `paygentic.usageEvents.get()`: **Removed** (Breaking ⚠️)\n* `paygentic.usageEvents.refund()`: **Removed** (Breaking ⚠️)\n* `paygentic.usageEvents.batchCreate()`: **Removed** (Breaking ⚠️)\n"
+releaseNotes: "## Typescript SDK Changes:\n* `paygentic.billableMetrics.listEvents()`: \n  *  `request.externalId` **Added**\n  *  `response.events[].externalId` **Added**\n"

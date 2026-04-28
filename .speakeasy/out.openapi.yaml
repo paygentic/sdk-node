@@ -716,6 +716,15 @@
               "default": 0
             },
             "description": "Number of events to skip"
+          },
+          {
+            "name": "externalId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ExternalId"
+            },
+            "description": "Filter by external identifier. Alphanumeric characters, hyphens, and underscores only."
           }
         ],
         "responses": {
@@ -9201,6 +9210,12 @@
           }
         }
       },
+      "ExternalId": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_-]+$",
+        "maxLength": 255,
+        "description": "Optional external identifier for cross-referencing with external systems. Alphanumeric characters, hyphens, and underscores only."
+      },
       "MeterEvent": {
         "type": "object",
         "required": [
@@ -9250,6 +9265,9 @@
             "type": "object",
             "additionalProperties": true,
             "description": "Event payload"
+          },
+          "externalId": {
+            "$ref": "#/components/schemas/ExternalId"
           }
         }
       },
