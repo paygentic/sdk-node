@@ -253,7 +253,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[],"pagination":{}}
+              {"object":"list","data":[],"pagination":{"limit":235810,"offset":17124,"total":513621}}
             type: simple
     x-speakeasy-test-group: Customers
     x-speakeasy-test-rebuild: true
@@ -1517,6 +1517,9 @@ workflows:
           - name: limit
             in: query
             value: 10
+          - name: offset
+            in: query
+            value: 0
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -1585,7 +1588,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[],"pagination":{}}
+              {"object":"list","data":[],"pagination":{"limit":109839,"offset":186518,"total":410309}}
             type: simple
     x-speakeasy-test-group: Entitlements
     x-speakeasy-test-rebuild: true
@@ -2238,9 +2241,9 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[{"id":"<id>","object":"payment","amount":"151.87","currency":"Ethiopian Birr","paymentUrl":"https://noteworthy-curl.org/","status":"expired","expiresAt":"2025-02-22T19:40:52.805Z","createdAt":"2026-03-23T13:38:58.468Z"}],"pagination":{}}
+              {"object":"list","data":[{"object":"payment_session","id":"<id>","entityType":"<value>","entityId":"<id>","amount":"151.87","currency":"Ethiopian Birr","status":"pending","createdAt":"2025-09-05T21:37:46.480Z","updatedAt":"2024-08-19T15:11:54.917Z"}],"pagination":{"limit":853950,"offset":600611,"total":382135}}
             type: simple
-    x-speakeasy-test-group: Payments
+    x-speakeasy-test-group: Payment Sessions
     x-speakeasy-test-rebuild: true
   - workflowId: createPaymentSession
     steps:
@@ -2294,7 +2297,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[],"pagination":{}}
+              {"object":"list","data":[],"pagination":{"limit":342872,"offset":376044,"total":167657}}
             type: simple
     x-speakeasy-test-group: Payments
     x-speakeasy-test-rebuild: true
@@ -2382,7 +2385,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[],"pagination":{}}
+              {"object":"list","data":[],"pagination":{"limit":286484,"offset":773796,"total":626305}}
             type: simple
     x-speakeasy-test-group: grants
     x-speakeasy-test-rebuild: true
@@ -2696,7 +2699,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","billableMetricId":"<id>","events":[],"pagination":{}}
+              {"object":"list","billableMetricId":"<id>","events":[],"pagination":{"limit":247569,"offset":501108,"total":255095}}
             type: simple
     x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
@@ -2903,4 +2906,33 @@ workflows:
               {"object":"cost_report","currency":"Dobra","period":{"from":"2026-12-10T09:47:38.425Z","to":"2026-11-23T18:52:47.121Z"},"groupBy":"<value>","totalCost":733.14,"totalQuantity":3381.98,"groups":[{"key":"<key>","label":"<value>","totalCost":8778.99,"totalQuantity":7020.43,"percentOfTotal":9744.28,"isOther":false}],"timeSeries":[{"windowStart":"2024-11-30T12:28:05.992Z","windowEnd":"2024-01-30T21:58:17.726Z","groups":{"key":9048.26}}],"availableDimensions":["<value 1>"],"pagination":{"total":937713,"limit":405938,"offset":253657}}
             type: simple
     x-speakeasy-test-group: Costs
+    x-speakeasy-test-rebuild: true
+  - workflowId: getProfitability
+    steps:
+      - stepId: test
+        operationId: getProfitability
+        parameters:
+          - name: merchantId
+            in: query
+            value: <id>
+          - name: from
+            in: query
+            value: "2026-09-10T15:32:06.535Z"
+          - name: to
+            in: query
+            value: "2026-10-20T08:45:45.521Z"
+          - name: topN
+            in: query
+            value: 10
+          - name: bucketWidth
+            in: query
+            value: day
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"profitability_summary","currency":"Philippine Peso","rows":[{"customerId":"<id>","customerName":"<value>","netRevenue":"<value>","totalCost":"<value>","profit":"<value>","marginPct":"<value>","trend":{"values":["<value 1>","<value 2>"],"periodChange":4924.32}}]}
+            type: simple
+    x-speakeasy-test-group: Profitability
     x-speakeasy-test-rebuild: true

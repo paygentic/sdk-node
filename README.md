@@ -283,6 +283,10 @@ run();
 * [get](docs/sdks/invoicesv2/README.md#get) - Get
 * [getLineItems](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
 
+### [PaymentSessions](docs/sdks/paymentsessions/README.md)
+
+* [listPaymentSessions](docs/sdks/paymentsessions/README.md#listpaymentsessions) - List
+
 ### [Payments](docs/sdks/payments/README.md)
 
 * [list](docs/sdks/payments/README.md#list) - List Payments
@@ -311,6 +315,10 @@ run();
 * [list](docs/sdks/products/README.md#list) - List
 * [get](docs/sdks/products/README.md#get) - Get
 * [update](docs/sdks/products/README.md#update) - Update
+
+### [Profitability](docs/sdks/profitability/README.md)
+
+* [getProfitability](docs/sdks/profitability/README.md#getprofitability) - Get profitability summary
 
 ### [Revenue](docs/sdks/revenue/README.md)
 
@@ -422,6 +430,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`invoicesV2List`](docs/sdks/invoicesv2/README.md#list) - List
 - [`invoicesV2ListLineItems`](docs/sdks/invoicesv2/README.md#listlineitems) - List Line Items
 - [`paymentsCreate`](docs/sdks/payments/README.md#create) - Create Payment
+- [`paymentSessionsListPaymentSessions`](docs/sdks/paymentsessions/README.md#listpaymentsessions) - List
 - [`paymentsGet`](docs/sdks/payments/README.md#get) - Get Payment
 - [`paymentsList`](docs/sdks/payments/README.md#list) - List Payments
 - [`plansCreate`](docs/sdks/plans/README.md#create) - Create
@@ -438,6 +447,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`productsGet`](docs/sdks/products/README.md#get) - Get
 - [`productsList`](docs/sdks/products/README.md#list) - List
 - [`productsUpdate`](docs/sdks/products/README.md#update) - Update
+- [`profitabilityGetProfitability`](docs/sdks/profitability/README.md#getprofitability) - Get profitability summary
 - [`revenueGet`](docs/sdks/revenue/README.md#get) - Get revenue summary
 - [`sourcesCreate`](docs/sdks/sources/README.md#create) - Create
 - [`sourcesEventsApprove`](docs/sdks/sourcesevents/README.md#approve) - Approve
@@ -622,9 +632,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 53 of 87 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 87 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 87 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 54 of 89 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 89 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 89 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

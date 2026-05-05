@@ -10,7 +10,11 @@ import { ListPaymentsResponse } from "@paygentic/sdk/models/operations";
 let value: ListPaymentsResponse = {
   object: "list",
   data: [],
-  pagination: {},
+  pagination: {
+    limit: 513451,
+    offset: 150252,
+    total: 898024,
+  },
 };
 ```
 

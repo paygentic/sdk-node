@@ -12,17 +12,17 @@ import { SDKValidationError } from "./errors/sdkvalidationerror.js";
  */
 export type OffsetPagination = {
   /**
-   * Number of items returned in the current page.
+   * Requested page size.
    */
-  limit?: number | undefined;
+  limit: number;
   /**
    * Number of items skipped.
    */
-  offset?: number | undefined;
+  offset: number;
   /**
    * Total number of items available.
    */
-  total?: number | undefined;
+  total: number;
 };
 
 /** @internal */
@@ -31,9 +31,9 @@ export const OffsetPagination$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  limit: z.number().int().optional(),
-  offset: z.number().int().optional(),
-  total: z.number().int().optional(),
+  limit: z.number().int(),
+  offset: z.number().int(),
+  total: z.number().int(),
 });
 
 export function offsetPaginationFromJSON(

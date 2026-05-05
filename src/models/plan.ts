@@ -106,6 +106,10 @@ export type Plan = {
    * Billing engine version. Managed by Paygentic support.
    */
   billingVersion?: number | undefined;
+  /**
+   * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present at the time of creation or update. When set, all subscriptions created under this plan align their first billing period to the next recurrence of this anchor. Null means each subscription uses its own start time (hour-rounded) as the anchor.
+   */
+  billingAnchor?: Date | null | undefined;
 };
 
 /** @internal */
@@ -175,6 +179,9 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
     renewalReminderEnabled: z.boolean().optional(),
     renewalReminderDays: z.number().int().optional(),
     billingVersion: z.number().int().optional(),
+    billingAnchor: z.nullable(
+      z.string().datetime({ offset: true }).transform(v => new Date(v)),
+    ).optional(),
   });
 
 export function planFromJSON(

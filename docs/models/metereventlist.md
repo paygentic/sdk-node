@@ -8,7 +8,11 @@ import { MeterEventList } from "@paygentic/sdk/models";
 let value: MeterEventList = {
   billableMetricId: "<id>",
   events: [],
-  pagination: {},
+  pagination: {
+    limit: 513451,
+    offset: 150252,
+    total: 898024,
+  },
 };
 ```
 

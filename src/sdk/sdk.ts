@@ -12,9 +12,11 @@ import { Features } from "./features.js";
 import { Fees } from "./fees.js";
 import { InvoicesV2 } from "./invoicesv2.js";
 import { Payments } from "./payments.js";
+import { PaymentSessions } from "./paymentsessions.js";
 import { Plans } from "./plans.js";
 import { Prices } from "./prices.js";
 import { Products } from "./products.js";
+import { Profitability } from "./profitability.js";
 import { Revenue } from "./revenue.js";
 import { Sources } from "./sources.js";
 import { Subscriptions } from "./subscriptions.js";
@@ -87,6 +89,11 @@ export class Paygentic extends ClientSDK {
     return (this._payments ??= new Payments(this._options));
   }
 
+  private _paymentSessions?: PaymentSessions;
+  get paymentSessions(): PaymentSessions {
+    return (this._paymentSessions ??= new PaymentSessions(this._options));
+  }
+
   private _events?: Events;
   get events(): Events {
     return (this._events ??= new Events(this._options));
@@ -100,6 +107,11 @@ export class Paygentic extends ClientSDK {
   private _revenue?: Revenue;
   get revenue(): Revenue {
     return (this._revenue ??= new Revenue(this._options));
+  }
+
+  private _profitability?: Profitability;
+  get profitability(): Profitability {
+    return (this._profitability ??= new Profitability(this._options));
   }
 
   private _testClocks?: TestClocks;

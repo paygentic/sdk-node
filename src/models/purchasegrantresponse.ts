@@ -15,7 +15,7 @@ export type PurchaseGrantResponseObject = ClosedEnum<
   typeof PurchaseGrantResponseObject
 >;
 
-export type PaymentSession = {
+export type PurchaseGrantResponsePaymentSession = {
   /**
    * The Stripe checkout URL for the customer to complete payment.
    */
@@ -55,7 +55,7 @@ export type PurchaseGrantResponse = {
   /**
    * Payment session(s) for the customer to complete the purchase.
    */
-  paymentSessions: Array<PaymentSession>;
+  paymentSessions: Array<PurchaseGrantResponsePaymentSession>;
 };
 
 /** @internal */
@@ -64,8 +64,8 @@ export const PurchaseGrantResponseObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(PurchaseGrantResponseObject);
 
 /** @internal */
-export const PaymentSession$inboundSchema: z.ZodType<
-  PaymentSession,
+export const PurchaseGrantResponsePaymentSession$inboundSchema: z.ZodType<
+  PurchaseGrantResponsePaymentSession,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -76,13 +76,14 @@ export const PaymentSession$inboundSchema: z.ZodType<
   amount: z.number().optional(),
 });
 
-export function paymentSessionFromJSON(
+export function purchaseGrantResponsePaymentSessionFromJSON(
   jsonString: string,
-): SafeParseResult<PaymentSession, SDKValidationError> {
+): SafeParseResult<PurchaseGrantResponsePaymentSession, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => PaymentSession$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'PaymentSession' from JSON`,
+    (x) =>
+      PurchaseGrantResponsePaymentSession$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'PurchaseGrantResponsePaymentSession' from JSON`,
   );
 }
 
@@ -98,7 +99,9 @@ export const PurchaseGrantResponse$inboundSchema: z.ZodType<
   grantAmount: z.number().int(),
   price: z.string(),
   currency: z.string(),
-  paymentSessions: z.array(z.lazy(() => PaymentSession$inboundSchema)),
+  paymentSessions: z.array(
+    z.lazy(() => PurchaseGrantResponsePaymentSession$inboundSchema),
+  ),
 });
 
 export function purchaseGrantResponseFromJSON(

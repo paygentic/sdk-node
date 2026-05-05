@@ -1,0 +1,24 @@
+# GetProfitabilityRequest
+
+## Example Usage
+
+```typescript
+import { GetProfitabilityRequest } from "@paygentic/sdk/models/operations";
+
+let value: GetProfitabilityRequest = {
+  merchantId: "<id>",
+  from: new Date("2024-04-27T12:21:09.338Z"),
+  to: new Date("2025-09-07T07:20:17.565Z"),
+};
+```
+
+## Fields
+
+| Field                                                                                                                                  | Type                                                                                                                                   | Required                                                                                                                               | Description                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `merchantId`                                                                                                                           | *string*                                                                                                                               | :heavy_check_mark:                                                                                                                     | Merchant whose customers to summarize                                                                                                  |
+| `from`                                                                                                                                 | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                          | :heavy_check_mark:                                                                                                                     | Start of the time range (ISO 8601 format)                                                                                              |
+| `to`                                                                                                                                   | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                          | :heavy_check_mark:                                                                                                                     | End of the time range (ISO 8601 format)                                                                                                |
+| `topN`                                                                                                                                 | *number*                                                                                                                               | :heavy_minus_sign:                                                                                                                     | Number of top customers (by profit) to return individually. The rest are rolled into a single 'Other' row.                             |
+| `currency`                                                                                                                             | *string*                                                                                                                               | :heavy_minus_sign:                                                                                                                     | ISO 4217 currency code to scope the summary. Defaults to the merchant's primary currency.                                              |
+| `bucketWidth`                                                                                                                          | [operations.GetProfitabilityBucketWidth](../../models/operations/getprofitabilitybucketwidth.md)                                       | :heavy_minus_sign:                                                                                                                     | Time bucket granularity for the per-customer revenue trend. When omitted, the server picks a reasonable bucket from the window length. |

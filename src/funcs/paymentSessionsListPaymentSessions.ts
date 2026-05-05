@@ -29,15 +29,15 @@ import { Result } from "../types/fp.js";
  * List
  *
  * @remarks
- * List invoices with optional filters. Platform users can use nextActionAt=ready to get invoices ready for processing.
+ * List payment sessions for the authenticated merchant with optional filters. Supports filtering by subscriptionId, customerId, status, and entityType. When subscriptionId is provided the result includes both the subscription's own activation session (entityType='subscription') and any session attached to invoices for that subscription (entityType='invoice').
  */
-export function invoicesV2List(
+export function paymentSessionsListPaymentSessions(
   client: PaygenticCore,
-  request?: operations.ListInvoicesRequest | undefined,
+  request?: operations.ListPaymentSessionsRequest | undefined,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.ListInvoicesResponse,
+    operations.ListPaymentSessionsResponse,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -58,12 +58,12 @@ export function invoicesV2List(
 
 async function $do(
   client: PaygenticCore,
-  request?: operations.ListInvoicesRequest | undefined,
+  request?: operations.ListPaymentSessionsRequest | undefined,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.ListInvoicesResponse,
+      operations.ListPaymentSessionsResponse,
       | errors.ErrorT
       | PaygenticError
       | ResponseValidationError
@@ -80,7 +80,9 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      operations.ListInvoicesRequest$outboundSchema.optional().parse(value),
+      operations.ListPaymentSessionsRequest$outboundSchema.optional().parse(
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -89,12 +91,13 @@ async function $do(
   const payload = parsed.value;
   const body = null;
 
-  const path = pathToFunc("/v2/invoices")();
+  const path = pathToFunc("/v0/paymentSessions")();
 
   const query = encodeFormQuery({
+    "customerId": payload?.customerId,
+    "entityType": payload?.entityType,
     "limit": payload?.limit,
     "merchantId": payload?.merchantId,
-    "nextActionAt": payload?.nextActionAt,
     "offset": payload?.offset,
     "status": payload?.status,
     "subscriptionId": payload?.subscriptionId,
@@ -111,7 +114,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "listInvoices",
+    operationID: "listPaymentSessions",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -141,7 +144,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["403", "4XX", "500", "5XX"],
+    errorCodes: ["401", "403", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -155,7 +158,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.ListInvoicesResponse,
+    operations.ListPaymentSessionsResponse,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -166,8 +169,8 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.ListInvoicesResponse$inboundSchema),
-    M.jsonErr(403, errors.ErrorT$inboundSchema),
+    M.json(200, operations.ListPaymentSessionsResponse$inboundSchema),
+    M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

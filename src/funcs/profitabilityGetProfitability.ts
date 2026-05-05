@@ -21,23 +21,25 @@ import * as errors from "../models/errors/index.js";
 import { PaygenticError } from "../models/errors/paygenticerror.js";
 import { ResponseValidationError } from "../models/errors/responsevalidationerror.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
+import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * List
+ * Get profitability summary
  *
  * @remarks
- * List invoices with optional filters. Platform users can use nextActionAt=ready to get invoices ready for processing.
+ * Returns a per-customer profitability summary for a merchant over a date range. Each row aggregates revenue (from issued + paid invoices), cost (from metered cost discovery), profit, and margin. Customers are ranked by profit descending and capped at topN; the remainder is rolled into a single self-consistent 'Other' row whose revenue, cost, and profit reflect the same set of customers. Rows are inner-joined against the merchant's customer list, so orphaned meter subjects from deleted or unknown customers are dropped.
  */
-export function invoicesV2List(
+export function profitabilityGetProfitability(
   client: PaygenticCore,
-  request?: operations.ListInvoicesRequest | undefined,
+  request: operations.GetProfitabilityRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.ListInvoicesResponse,
+    models.ProfitabilitySummaryResponse,
+    | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -58,12 +60,13 @@ export function invoicesV2List(
 
 async function $do(
   client: PaygenticCore,
-  request?: operations.ListInvoicesRequest | undefined,
+  request: operations.GetProfitabilityRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.ListInvoicesResponse,
+      models.ProfitabilitySummaryResponse,
+      | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
       | ResponseValidationError
@@ -79,8 +82,7 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) =>
-      operations.ListInvoicesRequest$outboundSchema.optional().parse(value),
+    (value) => operations.GetProfitabilityRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -89,15 +91,15 @@ async function $do(
   const payload = parsed.value;
   const body = null;
 
-  const path = pathToFunc("/v2/invoices")();
+  const path = pathToFunc("/v0/profitability")();
 
   const query = encodeFormQuery({
-    "limit": payload?.limit,
-    "merchantId": payload?.merchantId,
-    "nextActionAt": payload?.nextActionAt,
-    "offset": payload?.offset,
-    "status": payload?.status,
-    "subscriptionId": payload?.subscriptionId,
+    "bucketWidth": payload.bucketWidth,
+    "currency": payload.currency,
+    "from": payload.from,
+    "merchantId": payload.merchantId,
+    "to": payload.to,
+    "topN": payload.topN,
   });
 
   const headers = new Headers(compactMap({
@@ -111,7 +113,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "listInvoices",
+    operationID: "getProfitability",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -141,7 +143,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["403", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -155,7 +157,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.ListInvoicesResponse,
+    models.ProfitabilitySummaryResponse,
+    | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -166,8 +169,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.ListInvoicesResponse$inboundSchema),
-    M.jsonErr(403, errors.ErrorT$inboundSchema),
+    M.json(200, models.ProfitabilitySummaryResponse$inboundSchema),
+    M.jsonErr(400, errors.BadRequest$inboundSchema),
+    M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

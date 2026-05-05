@@ -81,6 +81,10 @@
       "description": "Revenue data from invoices and payments"
     },
     {
+      "name": "Profitability",
+      "description": "Per-customer profitability summaries"
+    },
+    {
       "name": "Test Clocks",
       "description": "Test clocks provide programmable time control to simulate subscription and billing scenarios during testing."
     },
@@ -91,6 +95,10 @@
     {
       "name": "Payments",
       "description": "Create and manage one-off payments. A payment represents a single charge that a merchant wants to collect from a customer."
+    },
+    {
+      "name": "Payment Sessions",
+      "description": "Handle payment session lifecycle and processing across various entity types including invoices and subscriptions"
     },
     {
       "name": "Costs",
@@ -3230,6 +3238,12 @@
                     ],
                     "default": 0,
                     "description": "Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard)."
+                  },
+                  "billingAnchor": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. When set, subscriptions created under this plan align their first billing period to the next recurrence of this anchor."
                   }
                 }
               }
@@ -3724,6 +3738,12 @@
                     "description": "Number of days before renewal to send the reminder email",
                     "minimum": 1,
                     "maximum": 30
+                  },
+                  "billingAnchor": {
+                    "type": "string",
+                    "format": "date-time",
+                    "nullable": true,
+                    "description": "ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. Set to null to clear the anchor and revert to start-time-based anchoring."
                   }
                 }
               }
@@ -6585,6 +6605,17 @@
           },
           {
             "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "description": "Number of invoices to skip for pagination"
+          },
+          {
+            "in": "query",
             "name": "nextActionAt",
             "schema": {
               "type": "string",
@@ -6651,6 +6682,9 @@
                       "items": {
                         "$ref": "#/components/schemas/Invoice"
                       }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
                     }
                   },
                   "required": [
@@ -6686,7 +6720,12 @@
                       "totalTax": "0.00",
                       "unpaidAmount": "0.00"
                     }
-                  ]
+                  ],
+                  "pagination": {
+                    "limit": 10,
+                    "offset": 0,
+                    "total": 1
+                  }
                 }
               }
             }
@@ -7428,6 +7467,136 @@
           }
         },
         "x-speakeasy-name-override": "get"
+      }
+    },
+    "/v0/paymentSessions": {
+      "get": {
+        "tags": [
+          "Payment Sessions"
+        ],
+        "summary": "List",
+        "operationId": "listPaymentSessions",
+        "description": "List payment sessions for the authenticated merchant with optional filters. Supports filtering by subscriptionId, customerId, status, and entityType. When subscriptionId is provided the result includes both the subscription's own activation session (entityType='subscription') and any session attached to invoices for that subscription (entityType='invoice').",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Merchant organization ID. Required when using an API key that is not scoped to a single merchant."
+          },
+          {
+            "name": "subscriptionId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter to sessions linked to this subscription (its own activation session plus all of its invoices' sessions)."
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter to sessions linked to a payment for this customer."
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "processing",
+                "completed",
+                "failed",
+                "expired",
+                "cancelled"
+              ]
+            },
+            "description": "Filter by payment session status."
+          },
+          {
+            "name": "entityType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "invoice",
+                "subscription",
+                "payment",
+                "topup"
+              ]
+            },
+            "description": "Filter by the kind of entity the session pays for."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            },
+            "description": "Number of sessions to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Number of sessions to skip."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of payment sessions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PaymentSession"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
       }
     },
     "/v0/events": {
@@ -8387,6 +8556,109 @@
         "x-speakeasy-name-override": "get"
       }
     },
+    "/v0/profitability": {
+      "get": {
+        "operationId": "getProfitability",
+        "summary": "Get profitability summary",
+        "description": "Returns a per-customer profitability summary for a merchant over a date range. Each row aggregates revenue (from issued + paid invoices), cost (from metered cost discovery), profit, and margin. Customers are ranked by profit descending and capped at topN; the remainder is rolled into a single self-consistent 'Other' row whose revenue, cost, and profit reflect the same set of customers. Rows are inner-joined against the merchant's customer list, so orphaned meter subjects from deleted or unknown customers are dropped.",
+        "tags": [
+          "Profitability"
+        ],
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": true,
+            "description": "Merchant whose customers to summarize",
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "description": "Start of the time range (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "description": "End of the time range (ISO 8601 format)",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "topN",
+            "in": "query",
+            "required": false,
+            "description": "Number of top customers (by profit) to return individually. The rest are rolled into a single 'Other' row.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "description": "ISO 4217 currency code to scope the summary. Defaults to the merchant's primary currency.",
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3
+            }
+          },
+          {
+            "name": "bucketWidth",
+            "in": "query",
+            "required": false,
+            "description": "Time bucket granularity for the per-customer revenue trend. When omitted, the server picks a reasonable bucket from the window length.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "hour",
+                "day",
+                "week"
+              ],
+              "default": "day"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profitability summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfitabilitySummaryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v0/testClocks": {
       "get": {
         "tags": [
@@ -8952,7 +9224,7 @@
         "properties": {
           "limit": {
             "type": "integer",
-            "description": "Number of items returned in the current page."
+            "description": "Requested page size."
           },
           "offset": {
             "type": "integer",
@@ -8962,7 +9234,12 @@
             "type": "integer",
             "description": "Total number of items available."
           }
-        }
+        },
+        "required": [
+          "limit",
+          "offset",
+          "total"
+        ]
       },
       "ProductId": {
         "type": "string",
@@ -10614,6 +10891,12 @@
           "billingVersion": {
             "type": "integer",
             "description": "Billing engine version. Managed by Paygentic support."
+          },
+          "billingAnchor": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "ISO 8601 datetime reference point for billing period alignment. Must be in the past or present at the time of creation or update. When set, all subscriptions created under this plan align their first billing period to the next recurrence of this anchor. Null means each subscription uses its own start time (hour-rounded) as the anchor."
           }
         }
       },
@@ -12359,6 +12642,79 @@
           }
         }
       },
+      "PaymentSession": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "entityType",
+          "entityId",
+          "amount",
+          "currency",
+          "status",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "payment_session"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "description": "Payment session ID (ps_*)."
+          },
+          "entityType": {
+            "type": "string",
+            "description": "Type of entity the session pays for (invoice, subscription, payment, topup)."
+          },
+          "entityId": {
+            "type": "string",
+            "description": "ID of the entity the session pays for."
+          },
+          "amount": {
+            "type": "string",
+            "description": "Amount in decimal dollars."
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "processing",
+              "completed",
+              "failed",
+              "expired",
+              "cancelled"
+            ],
+            "description": "Lifecycle status of the session."
+          },
+          "merchantPaymentAccountId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Stripe Connect account ID (acct_*) when the session is routed to a connected account."
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Timestamp the session reached terminal completion. Null until the session completes."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "EventResponse": {
         "type": "object",
         "properties": {
@@ -13025,6 +13381,116 @@
             "description": "Per-currency revenue aggregates (only present when groupBy=currency is specified). Primary currency appears first, then alphabetical by ISO code. When present, top-level netRevenue, invoices, payments, and trend fields are omitted.",
             "items": {
               "$ref": "#/components/schemas/CurrencyBreakdownEntry"
+            }
+          }
+        }
+      },
+      "ProfitabilityTrend": {
+        "type": "object",
+        "required": [
+          "values",
+          "periodChange"
+        ],
+        "properties": {
+          "values": {
+            "type": "array",
+            "description": "Revenue values per time bucket, oldest first, in unit currency with two decimals.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "periodChange": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Period-over-period % change (current half vs prior half). Null when prior is zero."
+          }
+        }
+      },
+      "ProfitabilityRow": {
+        "type": "object",
+        "required": [
+          "customerId",
+          "customerName",
+          "netRevenue",
+          "totalCost",
+          "profit",
+          "marginPct",
+          "trend"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "description": "Customer ID, or the literal 'other' for the overflow row."
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Display name for the row. 'Other' for the overflow row."
+          },
+          "netRevenue": {
+            "type": "string",
+            "description": "Net revenue (paid + outstanding) in unit currency, with two decimals."
+          },
+          "totalCost": {
+            "type": "string",
+            "description": "Aggregated cost in unit currency, with two decimals."
+          },
+          "profit": {
+            "type": "string",
+            "description": "Profit (revenue − cost) in unit currency, with two decimals. May be negative."
+          },
+          "marginPct": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero."
+          },
+          "trend": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ProfitabilityTrend"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Per-customer revenue trend over the period. Null for the 'Other' row and when there's insufficient data."
+          }
+        }
+      },
+      "ProfitabilitySummaryResponse": {
+        "type": "object",
+        "required": [
+          "object",
+          "currency",
+          "rows"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "const": "profitability_summary",
+            "description": "Object type identifier"
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code applied to revenue and cost values"
+          },
+          "rows": {
+            "type": "array",
+            "description": "Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed.",
+            "maxItems": 101,
+            "items": {
+              "$ref": "#/components/schemas/ProfitabilityRow"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "description": "Non-fatal warnings collected during cost discovery (e.g. an individual cost query failed). Empty array on a clean run.",
+            "maxItems": 100,
+            "items": {
+              "type": "string"
             }
           }
         }

@@ -94,6 +94,10 @@ export type UpdatePlanRequestBody = {
    * Number of days before renewal to send the reminder email
    */
   renewalReminderDays?: number | undefined;
+  /**
+   * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. Set to null to clear the anchor and revert to start-time-based anchoring.
+   */
+  billingAnchor?: Date | null | undefined;
 };
 
 export type UpdatePlanRequest = {
@@ -132,6 +136,7 @@ export type UpdatePlanRequestBody$Outbound = {
   taxBehavior?: string | undefined;
   renewalReminderEnabled?: boolean | undefined;
   renewalReminderDays?: number | undefined;
+  billingAnchor?: string | null | undefined;
 };
 
 /** @internal */
@@ -151,6 +156,8 @@ export const UpdatePlanRequestBody$outboundSchema: z.ZodType<
   taxBehavior: UpdatePlanTaxBehavior$outboundSchema.optional(),
   renewalReminderEnabled: z.boolean().optional(),
   renewalReminderDays: z.number().int().optional(),
+  billingAnchor: z.nullable(z.date().transform(v => v.toISOString()))
+    .optional(),
 });
 
 export function updatePlanRequestBodyToJSON(

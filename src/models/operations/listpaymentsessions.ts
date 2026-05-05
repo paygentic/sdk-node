@@ -10,21 +10,36 @@ import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import * as models from "../index.js";
 
 /**
- * Filter by payment status.
+ * Filter by payment session status.
  */
 export const ListPaymentSessionsStatus = {
   Pending: "pending",
   Processing: "processing",
   Completed: "completed",
+  Failed: "failed",
   Expired: "expired",
   Cancelled: "cancelled",
 } as const;
 /**
- * Filter by payment status.
+ * Filter by payment session status.
  */
 export type ListPaymentSessionsStatus = ClosedEnum<
   typeof ListPaymentSessionsStatus
 >;
+
+/**
+ * Filter by the kind of entity the session pays for.
+ */
+export const EntityType = {
+  Invoice: "invoice",
+  Subscription: "subscription",
+  Payment: "payment",
+  Topup: "topup",
+} as const;
+/**
+ * Filter by the kind of entity the session pays for.
+ */
+export type EntityType = ClosedEnum<typeof EntityType>;
 
 export type ListPaymentSessionsRequest = {
   /**
@@ -32,19 +47,27 @@ export type ListPaymentSessionsRequest = {
    */
   merchantId?: string | undefined;
   /**
-   * Filter by payment status.
+   * Filter to sessions linked to this subscription (its own activation session plus all of its invoices' sessions).
    */
-  status?: ListPaymentSessionsStatus | undefined;
+  subscriptionId?: string | undefined;
   /**
-   * Filter by customer ID.
+   * Filter to sessions linked to a payment for this customer.
    */
   customerId?: string | undefined;
   /**
-   * Number of payments to return.
+   * Filter by payment session status.
+   */
+  status?: ListPaymentSessionsStatus | undefined;
+  /**
+   * Filter by the kind of entity the session pays for.
+   */
+  entityType?: EntityType | undefined;
+  /**
+   * Number of sessions to return.
    */
   limit?: number | undefined;
   /**
-   * Number of payments to skip.
+   * Number of sessions to skip.
    */
   offset?: number | undefined;
 };
@@ -57,11 +80,11 @@ export type ListPaymentSessionsObject = ClosedEnum<
 >;
 
 /**
- * List of payments
+ * List of payment sessions
  */
 export type ListPaymentSessionsResponse = {
   object: ListPaymentSessionsObject;
-  data: Array<models.Payment>;
+  data: Array<models.PaymentSession>;
   /**
    * Offset-based pagination response.
    */
@@ -74,10 +97,16 @@ export const ListPaymentSessionsStatus$outboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(ListPaymentSessionsStatus);
 
 /** @internal */
+export const EntityType$outboundSchema: z.ZodNativeEnum<typeof EntityType> = z
+  .nativeEnum(EntityType);
+
+/** @internal */
 export type ListPaymentSessionsRequest$Outbound = {
   merchantId?: string | undefined;
-  status?: string | undefined;
+  subscriptionId?: string | undefined;
   customerId?: string | undefined;
+  status?: string | undefined;
+  entityType?: string | undefined;
   limit: number;
   offset: number;
 };
@@ -89,8 +118,10 @@ export const ListPaymentSessionsRequest$outboundSchema: z.ZodType<
   ListPaymentSessionsRequest
 > = z.object({
   merchantId: z.string().optional(),
-  status: ListPaymentSessionsStatus$outboundSchema.optional(),
+  subscriptionId: z.string().optional(),
   customerId: z.string().optional(),
+  status: ListPaymentSessionsStatus$outboundSchema.optional(),
+  entityType: EntityType$outboundSchema.optional(),
   limit: z.number().int().default(10),
   offset: z.number().int().default(0),
 });
@@ -115,7 +146,7 @@ export const ListPaymentSessionsResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   object: ListPaymentSessionsObject$inboundSchema,
-  data: z.array(models.Payment$inboundSchema),
+  data: z.array(models.PaymentSession$inboundSchema),
   pagination: models.OffsetPagination$inboundSchema,
 });
 

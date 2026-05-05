@@ -47,6 +47,10 @@ export type ListInvoicesRequest = {
    */
   limit?: number | undefined;
   /**
+   * Number of invoices to skip for pagination
+   */
+  offset?: number | undefined;
+  /**
    * Filter for invoices ready for processing (platform only)
    */
   nextActionAt?: NextActionAt | undefined;
@@ -75,6 +79,10 @@ export type ListInvoicesObject = ClosedEnum<typeof ListInvoicesObject>;
 export type ListInvoicesResponse = {
   object: ListInvoicesObject;
   data: Array<models.Invoice>;
+  /**
+   * Offset-based pagination response.
+   */
+  pagination?: models.OffsetPagination | undefined;
 };
 
 /** @internal */
@@ -89,6 +97,7 @@ export const ListInvoicesStatus$outboundSchema: z.ZodNativeEnum<
 /** @internal */
 export type ListInvoicesRequest$Outbound = {
   limit: number;
+  offset: number;
   nextActionAt?: string | undefined;
   status?: string | undefined;
   subscriptionId?: string | undefined;
@@ -102,6 +111,7 @@ export const ListInvoicesRequest$outboundSchema: z.ZodType<
   ListInvoicesRequest
 > = z.object({
   limit: z.number().int().default(10),
+  offset: z.number().int().default(0),
   nextActionAt: NextActionAt$outboundSchema.optional(),
   status: ListInvoicesStatus$outboundSchema.optional(),
   subscriptionId: z.string().optional(),
@@ -129,6 +139,7 @@ export const ListInvoicesResponse$inboundSchema: z.ZodType<
 > = z.object({
   object: ListInvoicesObject$inboundSchema,
   data: z.array(models.Invoice$inboundSchema),
+  pagination: models.OffsetPagination$inboundSchema.optional(),
 });
 
 export function listInvoicesResponseFromJSON(

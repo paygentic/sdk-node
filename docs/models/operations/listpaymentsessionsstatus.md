@@ -1,17 +1,17 @@
 # ListPaymentSessionsStatus
 
-Filter by payment status.
+Filter by payment session status.
 
 ## Example Usage
 
 ```typescript
 import { ListPaymentSessionsStatus } from "@paygentic/sdk/models/operations";
 
-let value: ListPaymentSessionsStatus = "completed";
+let value: ListPaymentSessionsStatus = "failed";
 ```
 
 ## Values
 
 ```typescript
-"pending" | "processing" | "completed" | "expired" | "cancelled"
+"pending" | "processing" | "completed" | "failed" | "expired" | "cancelled"
 ```

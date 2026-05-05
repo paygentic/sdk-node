@@ -1,6 +1,6 @@
 # ListPaymentSessionsResponse
 
-List of payments
+List of payment sessions
 
 ## Example Usage
 
@@ -11,14 +11,22 @@ let value: ListPaymentSessionsResponse = {
   object: "list",
   data: [
     {
+      object: "payment_session",
       id: "<id>",
+      entityType: "<value>",
+      entityId: "<id>",
       amount: "564.55",
       currency: "Quetzal",
-      status: "processing",
+      status: "completed",
       createdAt: new Date("2024-03-13T01:03:12.484Z"),
+      updatedAt: new Date("2024-12-07T10:55:16.497Z"),
     },
   ],
-  pagination: {},
+  pagination: {
+    limit: 513451,
+    offset: 150252,
+    total: 898024,
+  },
 };
 ```
 
@@ -27,5 +35,5 @@ let value: ListPaymentSessionsResponse = {
 | Field                                                                                        | Type                                                                                         | Required                                                                                     | Description                                                                                  |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | `object`                                                                                     | [operations.ListPaymentSessionsObject](../../models/operations/listpaymentsessionsobject.md) | :heavy_check_mark:                                                                           | N/A                                                                                          |
-| `data`                                                                                       | [models.Payment](../../models/payment.md)[]                                                  | :heavy_check_mark:                                                                           | N/A                                                                                          |
+| `data`                                                                                       | [models.PaymentSession](../../models/paymentsession.md)[]                                    | :heavy_check_mark:                                                                           | N/A                                                                                          |
 | `pagination`                                                                                 | [models.OffsetPagination](../../models/offsetpagination.md)                                  | :heavy_check_mark:                                                                           | Offset-based pagination response.                                                            |

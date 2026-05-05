@@ -19,7 +19,11 @@ let value: ListEntitlementGrantsResponse = {
       idempotencyKey: "<value>",
     },
   ],
-  pagination: {},
+  pagination: {
+    limit: 513451,
+    offset: 150252,
+    total: 898024,
+  },
 };
 ```
 

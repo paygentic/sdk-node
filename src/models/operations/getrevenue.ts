@@ -8,7 +8,7 @@ import { ClosedEnum } from "../../types/enums.js";
 /**
  * Time bucket granularity for trend data
  */
-export const BucketWidth = {
+export const GetRevenueBucketWidth = {
   Hour: "hour",
   Day: "day",
   Week: "week",
@@ -16,7 +16,7 @@ export const BucketWidth = {
 /**
  * Time bucket granularity for trend data
  */
-export type BucketWidth = ClosedEnum<typeof BucketWidth>;
+export type GetRevenueBucketWidth = ClosedEnum<typeof GetRevenueBucketWidth>;
 
 /**
  * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
@@ -43,7 +43,7 @@ export type GetRevenueRequest = {
   /**
    * Time bucket granularity for trend data
    */
-  bucketWidth?: BucketWidth | undefined;
+  bucketWidth?: GetRevenueBucketWidth | undefined;
   /**
    * Filter by merchant ID. At least one of merchantId, subscriptionIds, or customerId must be provided.
    */
@@ -67,8 +67,9 @@ export type GetRevenueRequest = {
 };
 
 /** @internal */
-export const BucketWidth$outboundSchema: z.ZodNativeEnum<typeof BucketWidth> = z
-  .nativeEnum(BucketWidth);
+export const GetRevenueBucketWidth$outboundSchema: z.ZodNativeEnum<
+  typeof GetRevenueBucketWidth
+> = z.nativeEnum(GetRevenueBucketWidth);
 
 /** @internal */
 export const GroupBy$outboundSchema: z.ZodNativeEnum<typeof GroupBy> = z
@@ -94,7 +95,7 @@ export const GetRevenueRequest$outboundSchema: z.ZodType<
 > = z.object({
   startTime: z.date().transform(v => v.toISOString()),
   endTime: z.date().transform(v => v.toISOString()),
-  bucketWidth: BucketWidth$outboundSchema.default("day"),
+  bucketWidth: GetRevenueBucketWidth$outboundSchema.default("day"),
   merchantId: z.string().optional(),
   customerId: z.string().optional(),
   subscriptionIds: z.array(z.string()).optional(),

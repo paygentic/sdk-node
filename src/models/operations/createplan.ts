@@ -121,6 +121,10 @@ export type CreatePlanRequest = {
    * Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard).
    */
   billingVersion?: BillingVersion | undefined;
+  /**
+   * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. When set, subscriptions created under this plan align their first billing period to the next recurrence of this anchor.
+   */
+  billingAnchor?: Date | null | undefined;
 };
 
 /** @internal */
@@ -160,6 +164,7 @@ export type CreatePlanRequest$Outbound = {
   renewalReminderEnabled: boolean;
   renewalReminderDays: number;
   billingVersion: number;
+  billingAnchor?: string | null | undefined;
 };
 
 /** @internal */
@@ -183,6 +188,8 @@ export const CreatePlanRequest$outboundSchema: z.ZodType<
   renewalReminderEnabled: z.boolean().default(true),
   renewalReminderDays: z.number().int().default(3),
   billingVersion: BillingVersion$outboundSchema.default(0),
+  billingAnchor: z.nullable(z.date().transform(v => v.toISOString()))
+    .optional(),
 });
 
 export function createPlanRequestToJSON(
