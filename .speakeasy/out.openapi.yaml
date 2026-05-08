@@ -1363,6 +1363,125 @@
         "x-speakeasy-name-override": "update"
       }
     },
+    "/v0/customers/{id}/paymentMethods": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The unique identifier of the customer.",
+          "schema": {
+            "$ref": "#/components/schemas/CustomerId"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "List payment methods",
+        "description": "List off-session payment methods saved for this customer.",
+        "operationId": "listCustomerPaymentMethods",
+        "responses": {
+          "200": {
+            "description": "List of payment methods",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PaymentMethod"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Customers"
+        ],
+        "summary": "Set up a payment method",
+        "description": "Create a payment session that captures a new off-session payment method for this customer without charging. The response contains a hosted-page URL — redirect the customer to it, or load it inside an iframe (when iframed, the page reports outcomes via `postMessage` to the parent window).",
+        "operationId": "createCustomerPaymentMethod",
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "successRedirectUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL the customer is redirected to on success. When the page is iframed, success is reported via `postMessage` instead."
+                  },
+                  "failureRedirectUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL the customer is redirected to on failure. When the page is iframed, failure is reported via `postMessage` instead."
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Arbitrary key/value pairs to attach to the session."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Payment session created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentSession"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v1/entitlements": {
       "get": {
         "tags": [
@@ -6689,7 +6808,8 @@
                   },
                   "required": [
                     "object",
-                    "data"
+                    "data",
+                    "pagination"
                   ]
                 },
                 "example": {
@@ -7576,7 +7696,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/PaymentSession"
+                        "$ref": "#/components/schemas/schemas-PaymentSession"
                       }
                     },
                     "pagination": {
@@ -9730,6 +9850,125 @@
                 "description": "Whether to send renewal reminder emails to this customer."
               }
             }
+          }
+        }
+      },
+      "PaymentMethod": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "createdAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "paymentMethod"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "description": "Payment method identifier."
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "description": "Payment method type (e.g. `card`, `sepa_debit`)."
+          },
+          "brand": {
+            "type": "string",
+            "nullable": true
+          },
+          "last4": {
+            "type": "string",
+            "nullable": true
+          },
+          "expMonth": {
+            "type": "integer",
+            "nullable": true
+          },
+          "expYear": {
+            "type": "integer",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PaymentSession": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "mode",
+          "status",
+          "url",
+          "expiresAt",
+          "createdAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "paymentSession"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "description": "Payment session identifier (e.g. `ps_...`)."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "payment",
+              "setup"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "processing",
+              "completed",
+              "failed",
+              "expired",
+              "cancelled"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Hosted page URL. Redirect the customer here, or load it inside an iframe — when iframed, the page reports outcomes via `postMessage` (`payment_success` / `payment_error`) to the parent window."
+          },
+          "successRedirectUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "failureRedirectUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -12642,7 +12881,7 @@
           }
         }
       },
-      "PaymentSession": {
+      "schemas-PaymentSession": {
         "type": "object",
         "required": [
           "object",

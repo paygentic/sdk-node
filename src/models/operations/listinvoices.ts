@@ -82,7 +82,7 @@ export type ListInvoicesResponse = {
   /**
    * Offset-based pagination response.
    */
-  pagination?: models.OffsetPagination | undefined;
+  pagination: models.OffsetPagination;
 };
 
 /** @internal */
@@ -139,7 +139,7 @@ export const ListInvoicesResponse$inboundSchema: z.ZodType<
 > = z.object({
   object: ListInvoicesObject$inboundSchema,
   data: z.array(models.Invoice$inboundSchema),
-  pagination: models.OffsetPagination$inboundSchema.optional(),
+  pagination: models.OffsetPagination$inboundSchema,
 });
 
 export function listInvoicesResponseFromJSON(

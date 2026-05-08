@@ -239,6 +239,8 @@ run();
 * [get](docs/sdks/customers/README.md#get) - Get
 * [delete](docs/sdks/customers/README.md#delete) - Delete
 * [update](docs/sdks/customers/README.md#update) - Update
+* [listCustomerPaymentMethods](docs/sdks/customers/README.md#listcustomerpaymentmethods) - List payment methods
+* [createCustomerPaymentMethod](docs/sdks/customers/README.md#createcustomerpaymentmethod) - Set up a payment method
 
 ### [Entitlements](docs/sdks/entitlements/README.md)
 
@@ -400,9 +402,11 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`costsListCosts`](docs/sdks/costs/README.md#listcosts) - List
 - [`costsUpdateCost`](docs/sdks/costs/README.md#updatecost) - Update
 - [`customersCreate`](docs/sdks/customers/README.md#create) - Create
+- [`customersCreateCustomerPaymentMethod`](docs/sdks/customers/README.md#createcustomerpaymentmethod) - Set up a payment method
 - [`customersDelete`](docs/sdks/customers/README.md#delete) - Delete
 - [`customersGet`](docs/sdks/customers/README.md#get) - Get
 - [`customersList`](docs/sdks/customers/README.md#list) - List by Merchant
+- [`customersListCustomerPaymentMethods`](docs/sdks/customers/README.md#listcustomerpaymentmethods) - List payment methods
 - [`customersUpdate`](docs/sdks/customers/README.md#update) - Update
 - [`entitlementsGet`](docs/sdks/entitlements/README.md#get) - Get Entitlement
 - [`entitlementsGrantsCreate`](docs/sdks/grants/README.md#create) - Create Grant
@@ -632,9 +636,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 54 of 89 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 89 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 89 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 55 of 91 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 91 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 91 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

@@ -1525,7 +1525,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[]}
+              {"object":"list","data":[],"pagination":{"limit":68269,"offset":80477,"total":298150}}
             type: simple
     x-speakeasy-test-group: Invoices V2
     x-speakeasy-test-rebuild: true
@@ -2935,4 +2935,38 @@ workflows:
               {"object":"profitability_summary","currency":"Philippine Peso","rows":[{"customerId":"<id>","customerName":"<value>","netRevenue":"<value>","totalCost":"<value>","profit":"<value>","marginPct":"<value>","trend":{"values":["<value 1>","<value 2>"],"periodChange":4924.32}}]}
             type: simple
     x-speakeasy-test-group: Profitability
+    x-speakeasy-test-rebuild: true
+  - workflowId: listCustomerPaymentMethods
+    steps:
+      - stepId: test
+        operationId: listCustomerPaymentMethods
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[]}
+            type: simple
+    x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: createCustomerPaymentMethod
+    steps:
+      - stepId: test
+        operationId: createCustomerPaymentMethod
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"paymentSession","id":"<id>","mode":"setup","status":"expired","url":"https://flickering-wasabi.org","expiresAt":"2026-01-29T06:59:27.780Z","createdAt":"2026-03-21T03:55:15.785Z"}
+            type: simple
+    x-speakeasy-test-group: Customers
     x-speakeasy-test-rebuild: true

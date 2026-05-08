@@ -3,9 +3,11 @@
  */
 
 import { customersCreate } from "../funcs/customersCreate.js";
+import { customersCreateCustomerPaymentMethod } from "../funcs/customersCreateCustomerPaymentMethod.js";
 import { customersDelete } from "../funcs/customersDelete.js";
 import { customersGet } from "../funcs/customersGet.js";
 import { customersList } from "../funcs/customersList.js";
+import { customersListCustomerPaymentMethods } from "../funcs/customersListCustomerPaymentMethods.js";
 import { customersUpdate } from "../funcs/customersUpdate.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
@@ -80,6 +82,40 @@ export class Customers extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.Customer> {
     return unwrapAsync(customersUpdate(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * List payment methods
+   *
+   * @remarks
+   * List off-session payment methods saved for this customer.
+   */
+  async listCustomerPaymentMethods(
+    request: operations.ListCustomerPaymentMethodsRequest,
+    options?: RequestOptions,
+  ): Promise<operations.ListCustomerPaymentMethodsResponse> {
+    return unwrapAsync(customersListCustomerPaymentMethods(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Set up a payment method
+   *
+   * @remarks
+   * Create a payment session that captures a new off-session payment method for this customer without charging. The response contains a hosted-page URL — redirect the customer to it, or load it inside an iframe (when iframed, the page reports outcomes via `postMessage` to the parent window).
+   */
+  async createCustomerPaymentMethod(
+    request: operations.CreateCustomerPaymentMethodRequest,
+    options?: RequestOptions,
+  ): Promise<models.PaymentSession> {
+    return unwrapAsync(customersCreateCustomerPaymentMethod(
       this,
       request,
       options,

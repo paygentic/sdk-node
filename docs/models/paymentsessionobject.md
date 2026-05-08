@@ -5,11 +5,11 @@
 ```typescript
 import { PaymentSessionObject } from "@paygentic/sdk/models";
 
-let value: PaymentSessionObject = "payment_session";
+let value: PaymentSessionObject = "paymentSession";
 ```
 
 ## Values
 
 ```typescript
-"payment_session"
+"paymentSession"
 ```
