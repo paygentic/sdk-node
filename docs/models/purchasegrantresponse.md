@@ -8,7 +8,7 @@ import { PurchaseGrantResponse } from "@paygentic/sdk/models";
 let value: PurchaseGrantResponse = {
   invoiceId: "<id>",
   entitlementId: "<id>",
-  grantAmount: 729630,
+  grantAmount: 7296.3,
   price: "495.05",
   currency: "Guinea Franc",
   paymentSessions: [

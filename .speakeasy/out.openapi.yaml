@@ -10588,6 +10588,8 @@
           "amount": {
             "type": "number",
             "exclusiveMinimum": 0,
+            "exclusiveMaximum": 1e+12,
+            "multipleOf": 1e-08,
             "description": "The number of credits to grant upon payment completion."
           },
           "price": {
@@ -10658,7 +10660,8 @@
             "description": "The entitlement that will receive the grant."
           },
           "grantAmount": {
-            "type": "integer",
+            "type": "number",
+            "exclusiveMinimum": 0,
             "description": "The number of credits that will be granted on payment."
           },
           "price": {

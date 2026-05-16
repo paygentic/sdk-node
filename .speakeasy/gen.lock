@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: c7df4275136d28af0b9aaf23e05ce149
+  docChecksum: fa3e27396067f66bf1d337bbb2d92518
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.7.3
-  configChecksum: 4410e2f3b45ce773ea181319c3b70069
+  releaseVersion: 0.7.4
+  configChecksum: ed8cfdc5e4f06a1d1440761be71ec3d0
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: 6bf57b1d-1f86-46b2-b1fe-f6cc7c095dda
-  pristine_commit_hash: ca9335dd797ea805967f9adaca729d0affa05e37
-  pristine_tree_hash: 6ee81ede8e5f8f4c4bcad1bc36a2d8be540d344f
+  generation_id: 516789fe-3528-4c50-aae7-4104c2463e74
+  pristine_commit_hash: 2b6a988946f2b13f0952870c77425a002956e250
+  pristine_tree_hash: 11e69ae4f80bb6844a7306534163ef55d163cd74
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -1449,8 +1449,8 @@ trackedFiles:
     pristine_git_object: 9aa97e82ba16dc8a52d97b4ca91da1e8efaad964
   docs/models/purchasegrantresponse.md:
     id: eef7c8f30621
-    last_write_checksum: sha1:41071ee6995a633d4669683c3e53524495c78269
-    pristine_git_object: d63a27d27514b2830c465adaa990e2fcc36775bc
+    last_write_checksum: sha1:c06e0873f3231b9cf2e80be9d53c5d1bb8b01733
+    pristine_git_object: 48b8396b74118a773fc8b74fd1e32d0dc1ad3fca
   docs/models/purchasegrantresponseobject.md:
     id: 013aaef72a69
     last_write_checksum: sha1:044a90ad049ec2ad92aba2b64a3fdcf62269a159
@@ -1753,12 +1753,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:5c224a5a33df2263e4a003caccf20b4919123a21
-    pristine_git_object: 46d80257857838462f42e016fc3b6e6e808252cb
+    last_write_checksum: sha1:4ca6e5e008693f2d8ced6dc9bbc13b9f2fc36124
+    pristine_git_object: af7c93eee538df0421780be35c537663daa55a60
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:f7c5f7cd282a6c16b5201c61d0a8f001508a51c0
-    pristine_git_object: 21e320b739cea23816a0a480fb3bedffe6c74d3f
+    last_write_checksum: sha1:196cd35499ee7a479e6cfd311ac4e72abdadbf09
+    pristine_git_object: c3034f66d815d5cfaf5c67f0bc2956690de288a8
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -2149,8 +2149,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:ba19e4e9fc7e7a87b434b68f2eb3165a0d47dfc7
-    pristine_git_object: 3f78bfe1d85b3a0d47f8154cd3d578b2a52592f8
+    last_write_checksum: sha1:0923b2d9f9ab4cef0b1cccf7a3ab5d898e0ee64d
+    pristine_git_object: 733d661c155fb748e8ebbbf29071fab4b03ca9dc
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -2821,8 +2821,8 @@ trackedFiles:
     pristine_git_object: 0c1aefc783a22aa0991296061889a0f1529049f8
   src/models/purchasegrantresponse.ts:
     id: 4e7ed12d7a1d
-    last_write_checksum: sha1:7a69dfd34d24efb02224b8fe0ce00d61a669d8dd
-    pristine_git_object: 224e65ca12877cdfad7ae14e3a40a4ae893bfdd6
+    last_write_checksum: sha1:abe835e761c02126df80476d5cdf5f4844bce12a
+    pristine_git_object: 7b9ede6e0b5aac3c86a57ad1ca7b076b19994acd
   src/models/revenuesummaryresponse.ts:
     id: 2d46fd2248af
     last_write_checksum: sha1:4cd2b66cd017547ea68c78c44eaa7940fe753a5e
@@ -4773,6 +4773,4 @@ generatedTests:
   createCustomerPaymentMethod: "2026-05-08T17:36:43Z"
 releaseNotes: |
   ## Typescript SDK Changes:
-  * `paygentic.customers.listCustomerPaymentMethods()`: **Added**
-  * `paygentic.customers.createCustomerPaymentMethod()`: **Added**
-  * `paygentic.invoicesV2.list()`:  `response.pagination` **Changed**
+  * `paygentic.entitlements.grants.purchase()`:  `response.grantAmount` **Changed** (Breaking ⚠️)

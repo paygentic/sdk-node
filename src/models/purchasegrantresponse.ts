@@ -96,7 +96,7 @@ export const PurchaseGrantResponse$inboundSchema: z.ZodType<
   object: PurchaseGrantResponseObject$inboundSchema.default("grant_purchase"),
   invoiceId: z.string(),
   entitlementId: z.string(),
-  grantAmount: z.number().int(),
+  grantAmount: z.number(),
   price: z.string(),
   currency: z.string(),
   paymentSessions: z.array(
