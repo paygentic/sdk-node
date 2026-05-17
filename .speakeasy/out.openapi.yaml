@@ -171,14 +171,16 @@
                   },
                   "valueProperty": {
                     "type": "string",
-                    "description": "JSONPath to extract numeric value from event data. Required for SUM/AVG/MIN/MAX/LATEST aggregations."
+                    "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$",
+                    "description": "JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Required for SUM/AVG/MIN/MAX/LATEST aggregations."
                   },
                   "groupBy": {
                     "type": "object",
                     "additionalProperties": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$"
                     },
-                    "description": "Map of dimension name to JSONPath for group-by queries."
+                    "description": "Map of dimension name to JSONPath for group-by queries. Each value must start with `$.` (example: `$.region`)."
                   },
                   "eventFrom": {
                     "type": "string",
@@ -469,15 +471,17 @@
                   "valueProperty": {
                     "type": "string",
                     "nullable": true,
-                    "description": "JSONPath to extract numeric value from event data."
+                    "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$",
+                    "description": "JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`)."
                   },
                   "groupBy": {
                     "type": "object",
                     "additionalProperties": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$"
                     },
                     "nullable": true,
-                    "description": "Map of dimension name to JSONPath for group-by queries."
+                    "description": "Map of dimension name to JSONPath for group-by queries. Each value must start with `$.` (example: `$.region`)."
                   },
                   "eventFrom": {
                     "type": "string",
@@ -7897,14 +7901,16 @@
                   },
                   "valueProperty": {
                     "type": "string",
-                    "description": "JSONPath to extract numeric value from event data. Required for SUM/AVG/MIN/MAX/LATEST aggregations."
+                    "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$",
+                    "description": "JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Required for SUM/AVG/MIN/MAX/LATEST aggregations."
                   },
                   "groupBy": {
                     "type": "object",
                     "additionalProperties": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$"
                     },
-                    "description": "Map of dimension name to JSONPath for group-by queries. Only valid for metered costs."
+                    "description": "Map of dimension name to JSONPath for group-by queries. Each value must start with `$.` (example: `$.region`). Only valid for metered costs."
                   },
                   "merchantId": {
                     "$ref": "#/components/schemas/OrganizationId",
@@ -8141,15 +8147,17 @@
                   "valueProperty": {
                     "type": "string",
                     "nullable": true,
-                    "description": "Updated JSONPath for value extraction (metered costs only)."
+                    "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$",
+                    "description": "Updated JSONPath for value extraction. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Metered costs only."
                   },
                   "groupBy": {
                     "type": "object",
                     "additionalProperties": {
-                      "type": "string"
+                      "type": "string",
+                      "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$"
                     },
                     "nullable": true,
-                    "description": "Updated group-by dimension map (metered costs only)."
+                    "description": "Updated group-by dimension map. Each value must start with `$.` (example: `$.region`). Metered costs only."
                   }
                 }
               }
@@ -10104,8 +10112,7 @@
           {
             "type": "object",
             "required": [
-              "type",
-              "usagePeriod"
+              "type"
             ],
             "properties": {
               "type": {
@@ -10116,6 +10123,7 @@
               },
               "usagePeriod": {
                 "type": "object",
+                "description": "Recurrence configuration. Omit for a one-time grant that does not refill.",
                 "required": [
                   "interval"
                 ],
@@ -10137,7 +10145,8 @@
               },
               "issueAfterReset": {
                 "type": "number",
-                "description": "Amount of grants to issue after each period reset."
+                "minimum": 0,
+                "description": "Credits issued at each period reset. Set to 0 for entitlements without included credits; top-ups may be supplied via direct grants or grant purchases."
               },
               "issueAfterResetPriority": {
                 "type": "integer",
@@ -10544,6 +10553,14 @@
             "type": "string",
             "nullable": true,
             "description": "The idempotency key used when creating this grant. Null if not provided."
+          },
+          "resetMaxRollover": {
+            "type": "number",
+            "description": "Maximum balance carried over at the entitlement's reset boundary."
+          },
+          "resetMinRollover": {
+            "type": "number",
+            "description": "Minimum balance at the entitlement's reset boundary."
           }
         }
       },
@@ -10574,6 +10591,18 @@
             "type": "string",
             "maxLength": 255,
             "description": "Idempotency key to prevent duplicate grants. Must be unique per entitlement."
+          },
+          "resetMaxRollover": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 9.99999999999e+11,
+            "description": "Maximum balance carried over at the entitlement's reset boundary. If omitted, the entire balance rolls over until consumed or expired. Set to 0 to discard any remaining balance at each reset."
+          },
+          "resetMinRollover": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 9.99999999999e+11,
+            "description": "Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor)."
           }
         }
       },
@@ -10627,6 +10656,18 @@
             "type": "string",
             "format": "date-time",
             "description": "When the payment session expires. If omitted, uses the default expiry."
+          },
+          "resetMaxRollover": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 9.99999999999e+11,
+            "description": "Maximum balance carried over at the entitlement's reset boundary. If omitted, the purchased grant balance rolls over until consumed or expired. Set to 0 to discard any remaining balance at each reset."
+          },
+          "resetMinRollover": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 9.99999999999e+11,
+            "description": "Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor)."
           }
         }
       },

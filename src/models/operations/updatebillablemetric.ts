@@ -23,11 +23,11 @@ export type UpdateBillableMetricRequestBody = {
    */
   eventType?: string | null | undefined;
   /**
-   * JSONPath to extract numeric value from event data.
+   * JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`).
    */
   valueProperty?: string | null | undefined;
   /**
-   * Map of dimension name to JSONPath for group-by queries.
+   * Map of dimension name to JSONPath for group-by queries. Each value must start with `$.` (example: `$.region`).
    */
   groupBy?: { [k: string]: string } | null | undefined;
   /**

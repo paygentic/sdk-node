@@ -21,6 +21,14 @@ export type CreateGrantRequest = {
    * Idempotency key to prevent duplicate grants. Must be unique per entitlement.
    */
   idempotencyKey: string;
+  /**
+   * Maximum balance carried over at the entitlement's reset boundary. If omitted, the entire balance rolls over until consumed or expired. Set to 0 to discard any remaining balance at each reset.
+   */
+  resetMaxRollover?: number | undefined;
+  /**
+   * Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor).
+   */
+  resetMinRollover?: number | undefined;
 };
 
 /** @internal */
@@ -29,6 +37,8 @@ export type CreateGrantRequest$Outbound = {
   effectiveAt?: string | undefined;
   expiresAt?: string | null | undefined;
   idempotencyKey: string;
+  resetMaxRollover?: number | undefined;
+  resetMinRollover?: number | undefined;
 };
 
 /** @internal */
@@ -41,6 +51,8 @@ export const CreateGrantRequest$outboundSchema: z.ZodType<
   effectiveAt: z.date().transform(v => v.toISOString()).optional(),
   expiresAt: z.nullable(z.date().transform(v => v.toISOString())).optional(),
   idempotencyKey: z.string(),
+  resetMaxRollover: z.number().optional(),
+  resetMinRollover: z.number().optional(),
 });
 
 export function createGrantRequestToJSON(

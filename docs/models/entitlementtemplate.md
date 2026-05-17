@@ -27,9 +27,6 @@ const value: models.EntitlementTemplateStatic = {
 ```typescript
 const value: models.EntitlementTemplateMetered = {
   type: "metered",
-  usagePeriod: {
-    interval: "<value>",
-  },
 };
 ```
 

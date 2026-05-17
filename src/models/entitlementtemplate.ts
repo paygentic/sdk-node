@@ -4,6 +4,9 @@
 
 import * as z from "zod/v3";
 
+/**
+ * Recurrence configuration. Omit for a one-time grant that does not refill.
+ */
 export type UsagePeriod = {
   /**
    * ISO 8601 duration for the usage period, e.g. P1D, P1W, P1M, P1Y.
@@ -17,13 +20,16 @@ export type UsagePeriod = {
 
 export type EntitlementTemplateMetered = {
   type: "metered";
-  usagePeriod: UsagePeriod;
+  /**
+   * Recurrence configuration. Omit for a one-time grant that does not refill.
+   */
+  usagePeriod?: UsagePeriod | undefined;
   /**
    * When false (hard limit), access is blocked when balance is exhausted and overage is not charged on invoices. When true (soft limit), access continues past the grant and overage is charged at the per-unit rate.
    */
   isSoftLimit?: boolean | undefined;
   /**
-   * Amount of grants to issue after each period reset.
+   * Credits issued at each period reset. Set to 0 for entitlements without included credits; top-ups may be supplied via direct grants or grant purchases.
    */
   issueAfterReset?: number | undefined;
   /**
@@ -87,7 +93,7 @@ export function usagePeriodToJSON(usagePeriod: UsagePeriod): string {
 /** @internal */
 export type EntitlementTemplateMetered$Outbound = {
   type: "metered";
-  usagePeriod: UsagePeriod$Outbound;
+  usagePeriod?: UsagePeriod$Outbound | undefined;
   isSoftLimit?: boolean | undefined;
   issueAfterReset?: number | undefined;
   issueAfterResetPriority?: number | undefined;
@@ -103,7 +109,7 @@ export const EntitlementTemplateMetered$outboundSchema: z.ZodType<
   EntitlementTemplateMetered
 > = z.object({
   type: z.literal("metered"),
-  usagePeriod: z.lazy(() => UsagePeriod$outboundSchema),
+  usagePeriod: z.lazy(() => UsagePeriod$outboundSchema).optional(),
   isSoftLimit: z.boolean().optional(),
   issueAfterReset: z.number().optional(),
   issueAfterResetPriority: z.number().int().optional(),

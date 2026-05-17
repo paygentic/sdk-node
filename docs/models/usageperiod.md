@@ -1,5 +1,7 @@
 # UsagePeriod
 
+Recurrence configuration. Omit for a one-time grant that does not refill.
+
 ## Example Usage
 
 ```typescript

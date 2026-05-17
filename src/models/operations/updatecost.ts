@@ -49,11 +49,11 @@ export type UpdateCostRequestBody = {
    */
   eventType?: string | null | undefined;
   /**
-   * Updated JSONPath for value extraction (metered costs only).
+   * Updated JSONPath for value extraction. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Metered costs only.
    */
   valueProperty?: string | null | undefined;
   /**
-   * Updated group-by dimension map (metered costs only).
+   * Updated group-by dimension map. Each value must start with `$.` (example: `$.region`). Metered costs only.
    */
   groupBy?: { [k: string]: string } | null | undefined;
 };

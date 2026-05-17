@@ -37,6 +37,14 @@ export type PurchaseGrantRequest = {
    * When the payment session expires. If omitted, uses the default expiry.
    */
   paymentExpiresAt?: Date | undefined;
+  /**
+   * Maximum balance carried over at the entitlement's reset boundary. If omitted, the purchased grant balance rolls over until consumed or expired. Set to 0 to discard any remaining balance at each reset.
+   */
+  resetMaxRollover?: number | undefined;
+  /**
+   * Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor).
+   */
+  resetMinRollover?: number | undefined;
 };
 
 /** @internal */
@@ -49,6 +57,8 @@ export type PurchaseGrantRequest$Outbound = {
   successUrl?: string | undefined;
   cancelUrl?: string | undefined;
   paymentExpiresAt?: string | undefined;
+  resetMaxRollover?: number | undefined;
+  resetMinRollover?: number | undefined;
 };
 
 /** @internal */
@@ -65,6 +75,8 @@ export const PurchaseGrantRequest$outboundSchema: z.ZodType<
   successUrl: z.string().optional(),
   cancelUrl: z.string().optional(),
   paymentExpiresAt: z.date().transform(v => v.toISOString()).optional(),
+  resetMaxRollover: z.number().optional(),
+  resetMinRollover: z.number().optional(),
 });
 
 export function purchaseGrantRequestToJSON(

@@ -51,6 +51,14 @@ export type Grant = {
    * The idempotency key used when creating this grant. Null if not provided.
    */
   idempotencyKey: string | null;
+  /**
+   * Maximum balance carried over at the entitlement's reset boundary.
+   */
+  resetMaxRollover?: number | undefined;
+  /**
+   * Minimum balance at the entitlement's reset boundary.
+   */
+  resetMinRollover?: number | undefined;
 };
 
 /** @internal */
@@ -78,6 +86,8 @@ export const Grant$inboundSchema: z.ZodType<Grant, z.ZodTypeDef, unknown> = z
     ),
     recurrencePeriod: z.nullable(z.string()),
     idempotencyKey: z.nullable(z.string()),
+    resetMaxRollover: z.number().optional(),
+    resetMinRollover: z.number().optional(),
   });
 
 export function grantFromJSON(

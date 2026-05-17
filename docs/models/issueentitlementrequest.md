@@ -10,9 +10,6 @@ let value: IssueEntitlementRequest = {
   featureId: "<id>",
   template: {
     type: "metered",
-    usagePeriod: {
-      interval: "<value>",
-    },
   },
 };
 ```
