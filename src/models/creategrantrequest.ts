@@ -22,11 +22,11 @@ export type CreateGrantRequest = {
    */
   idempotencyKey: string;
   /**
-   * Maximum balance carried over at the entitlement's reset boundary. If omitted, the entire balance rolls over until consumed or expired. Set to 0 to discard any remaining balance at each reset.
+   * Maximum balance carried over at the entitlement's reset boundary. If omitted, the entire balance rolls over until consumed or expired. Set to 0 to discard any remaining balance at each reset. Ignored when the target entitlement has no `usagePeriod` (one-time entitlement) — one-time entitlements have no reset boundary, so this field has no effect.
    */
   resetMaxRollover?: number | undefined;
   /**
-   * Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor).
+   * Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor). Ignored when the target entitlement has no `usagePeriod` (one-time entitlement).
    */
   resetMinRollover?: number | undefined;
 };
