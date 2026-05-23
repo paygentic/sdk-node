@@ -3990,6 +3990,10 @@
                     "type": "boolean",
                     "default": false,
                     "description": "When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices."
+                  },
+                  "quantity": {
+                    "$ref": "#/components/schemas/PriceQuantity",
+                    "default": 1
                   }
                 }
               }
@@ -4293,6 +4297,9 @@
                   "grantDiscountEnabled": {
                     "type": "boolean",
                     "description": "When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices."
+                  },
+                  "quantity": {
+                    "$ref": "#/components/schemas/PriceQuantity"
                   }
                 }
               }
@@ -6344,6 +6351,130 @@
           }
         },
         "x-speakeasy-name-override": "get"
+      },
+      "patch": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Update",
+        "operationId": "updateSubscription",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "endingAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "active",
+                      "terminated"
+                    ]
+                  },
+                  "terminatedAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "terminatedBy": {
+                    "type": "string",
+                    "description": "Identifier of entity that cancelled the subscription. Sample values: 'cust_abc123' for customer-initiated cancellation, 'org_xyz789' for merchant-initiated cancellation"
+                  },
+                  "terminationReason": {
+                    "type": "string",
+                    "description": "Explanation for subscription cancellation. Sample values: 'Customer requested cancellation', 'Payment failure', 'Service migration', 'Contract expiration'"
+                  },
+                  "autoCharge": {
+                    "type": "boolean",
+                    "description": "Enable or disable automatic charging of invoices using stored payment methods."
+                  },
+                  "taxExempt": {
+                    "type": "boolean",
+                    "description": "When true, forces tax rate to 0%."
+                  },
+                  "minimumAccountBalance": {
+                    "type": "string",
+                    "description": "Minimum wallet balance requirement in decimal dollars (e.g., '100.00'). Can be set to '0' to disable. Maximum allowed is $5,000. Contact support for higher limits. Note: If the calculated charge amount at renewal is below payment processor minimums (typically $1.00), it will be automatically adjusted upward to meet the minimum requirement. Changes apply at next renewal."
+                  },
+                  "renewalReminderEnabled": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "description": "Override plan setting for renewal reminder emails. Set to true to enable, false to disable, or null to use plan default."
+                  },
+                  "renewalReminderDays": {
+                    "type": "integer",
+                    "nullable": true,
+                    "description": "Override plan setting for number of days before renewal to send the reminder. Set to null to use plan default.",
+                    "minimum": 1,
+                    "maximum": 30
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscription updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Subscription"
+                },
+                "example": {
+                  "id": "sub_z1a2b3c4d5e6f7g8",
+                  "object": "subscription",
+                  "autoCharge": true,
+                  "taxExempt": false,
+                  "createdAt": "2024-01-10T08:00:00Z",
+                  "customerId": "cus_q3r4s5t6u7v8w9x0",
+                  "endingAt": "2024-12-31T23:59:59Z",
+                  "estimatedTaxRate": 8.5,
+                  "name": "StartupXYZ - Image Generation Service",
+                  "payment": null,
+                  "planId": "plan_t9u0v1w2x3y4z5a6",
+                  "prefundAmount": "50000000000",
+                  "startedAt": "2024-01-10T08:00:00Z",
+                  "status": "active",
+                  "terminatedAt": null,
+                  "terminatedBy": null,
+                  "terminationReason": null,
+                  "updatedAt": "2024-03-15T10:30:00Z",
+                  "walletId": "acc_b7c8d9e0f1g2h3i4"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
       }
     },
     "/v0/subscriptions/{id}/portal": {
@@ -10852,6 +10983,11 @@
           }
         }
       },
+      "PriceQuantity": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1."
+      },
       "FeePrice": {
         "type": "object",
         "description": "The price configuration for a fee within a subscription context.",
@@ -10861,7 +10997,8 @@
           "model",
           "paymentTerm",
           "invoiceDisplayName",
-          "properties"
+          "properties",
+          "quantity"
         ],
         "properties": {
           "id": {
@@ -10901,9 +11038,12 @@
             "properties": {
               "unitPrice": {
                 "type": "string",
-                "description": "The unit price in dollars (e.g., '10.00')."
+                "description": "The unit price in dollars (e.g., '10.00'). Per unit. Total per period = quantity × unitPrice; see the `quantity` field."
               }
             }
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/PriceQuantity"
           },
           "taxRate": {
             "type": "number",
@@ -10970,7 +11110,8 @@
           "invoiceDisplayName",
           "properties",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "quantity"
         ],
         "properties": {
           "id": {
@@ -11048,6 +11189,13 @@
             "type": "boolean",
             "default": false,
             "description": "When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices."
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1e+06,
+            "default": 1,
+            "description": "Quantity used when generating invoice line items for this price. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1."
           }
         }
       },
@@ -11192,7 +11340,7 @@
             "properties": {
               "unitPrice": {
                 "type": "string",
-                "description": "Per-unit cost in decimal format for fixed-rate pricing. Sample values: '0.00002' represents $0.00002 per token, '0.15' represents $0.15 per gigabyte stored, '0.05' represents $0.05 per API call"
+                "description": "Per-unit cost in decimal format for fixed-rate pricing. Sample values: '0.00002' represents $0.00002 per token, '0.15' represents $0.15 per gigabyte stored, '0.05' represents $0.05 per API call. Per unit. Total per period = quantity × unitPrice; see the `quantity` field."
               }
             },
             "required": [
@@ -11297,7 +11445,8 @@
           "paymentTerm",
           "properties",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "quantity"
         ],
         "properties": {
           "id": {
@@ -11365,6 +11514,9 @@
             "type": "boolean",
             "default": false,
             "description": "When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices."
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/PriceQuantity"
           }
         }
       },
@@ -12641,7 +12793,7 @@
           },
           "subtotal": {
             "type": "string",
-            "description": "quantity x unitPrice, before discounts and taxes. Defaults to '0.00' when not yet calculated"
+            "description": "quantity × unitPrice, before discounts and taxes. For prorated lines, may differ from `quantity × unitPrice` by display precision; subtotal is the authoritative billed amount. Defaults to '0.00' when not yet calculated."
           },
           "taxesTotal": {
             "type": "string",

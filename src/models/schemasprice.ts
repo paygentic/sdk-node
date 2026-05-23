@@ -67,6 +67,10 @@ export type SchemasPrice = {
    * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
    */
   grantDiscountEnabled: boolean;
+  /**
+   * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
+   */
+  quantity: number;
 };
 
 /** @internal */
@@ -103,6 +107,7 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   features: z.array(PriceFeature$inboundSchema).optional(),
   grantDiscountEnabled: z.boolean().default(false),
+  quantity: z.number().int(),
 });
 
 export function schemasPriceFromJSON(

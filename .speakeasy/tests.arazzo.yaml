@@ -712,7 +712,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z","grantDiscountEnabled":false}
+              {"id":"<id>","object":"price","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z","grantDiscountEnabled":false,"quantity":252475}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -749,7 +749,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false}
+              {"id":"<id>","object":"price","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false,"quantity":296918}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -769,7 +769,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z","grantDiscountEnabled":false}
+              {"id":"<id>","object":"price","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z","grantDiscountEnabled":false,"quantity":616565}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -1861,7 +1861,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","feeId":"<id>","model":"standard","paymentTerm":"in_advance","invoiceDisplayName":"<value>","properties":{"unitPrice":"<value>"}}
+              {"id":"<id>","feeId":"<id>","model":"standard","paymentTerm":"in_advance","invoiceDisplayName":"<value>","properties":{"unitPrice":"<value>"},"quantity":403956}
             type: simple
     x-speakeasy-test-group: Fees
     x-speakeasy-test-rebuild: true
@@ -2969,4 +2969,24 @@ workflows:
               {"object":"paymentSession","id":"<id>","mode":"setup","status":"expired","url":"https://flickering-wasabi.org","expiresAt":"2026-01-29T06:59:27.780Z","createdAt":"2026-03-21T03:55:15.785Z"}
             type: simple
     x-speakeasy-test-group: Customers
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateSubscription
+    steps:
+      - stepId: test
+        operationId: updateSubscription
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true

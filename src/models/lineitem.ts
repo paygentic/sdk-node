@@ -116,7 +116,7 @@ export type LineItem = {
    */
   paymentTerm?: LineItemPaymentTerm | null | undefined;
   /**
-   * quantity x unitPrice, before discounts and taxes. Defaults to '0.00' when not yet calculated
+   * quantity × unitPrice, before discounts and taxes. For prorated lines, may differ from `quantity × unitPrice` by display precision; subtotal is the authoritative billed amount. Defaults to '0.00' when not yet calculated.
    */
   subtotal?: string | undefined;
   /**

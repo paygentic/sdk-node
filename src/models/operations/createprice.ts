@@ -64,6 +64,10 @@ export type CreatePriceRequest = {
    * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
    */
   grantDiscountEnabled?: boolean | undefined;
+  /**
+   * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
+   */
+  quantity?: number | undefined;
 };
 
 /** @internal */
@@ -87,6 +91,7 @@ export type CreatePriceRequest$Outbound = {
   properties: models.PricePropertiesUnion$Outbound;
   feature?: models.PriceFeatureInput$Outbound | undefined;
   grantDiscountEnabled: boolean;
+  quantity?: number | undefined;
 };
 
 /** @internal */
@@ -104,6 +109,7 @@ export const CreatePriceRequest$outboundSchema: z.ZodType<
   properties: models.PricePropertiesUnion$outboundSchema,
   feature: models.PriceFeatureInput$outboundSchema.optional(),
   grantDiscountEnabled: z.boolean().default(false),
+  quantity: z.number().int().optional(),
 });
 
 export function createPriceRequestToJSON(

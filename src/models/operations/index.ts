@@ -89,5 +89,6 @@ export * from "./updateprice.js";
 export * from "./updateproduct.js";
 export * from "./updatesource.js";
 export * from "./updatesourcerule.js";
+export * from "./updatesubscription.js";
 export * from "./updateuser.js";
 export * from "./voidentitlementgrant.js";

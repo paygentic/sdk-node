@@ -33,7 +33,7 @@ export type FeePricePaymentTerm = ClosedEnum<typeof FeePricePaymentTerm>;
 
 export type Properties = {
   /**
-   * The unit price in dollars (e.g., '10.00').
+   * The unit price in dollars (e.g., '10.00'). Per unit. Total per period = quantity × unitPrice; see the `quantity` field.
    */
   unitPrice: string;
 };
@@ -63,6 +63,10 @@ export type FeePrice = {
    */
   invoiceDisplayName: string;
   properties: Properties;
+  /**
+   * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
+   */
+  quantity: number;
   /**
    * The tax rate as a percentage (e.g., 10 for 10%).
    */
@@ -110,6 +114,7 @@ export const FeePrice$inboundSchema: z.ZodType<
   paymentTerm: FeePricePaymentTerm$inboundSchema,
   invoiceDisplayName: z.string(),
   properties: z.lazy(() => Properties$inboundSchema),
+  quantity: z.number().int(),
   taxRate: z.number().optional(),
 });
 

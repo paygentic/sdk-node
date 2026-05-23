@@ -7,6 +7,7 @@ import { subscriptionsGeneratePortalLink } from "../funcs/subscriptionsGenerateP
 import { subscriptionsGet } from "../funcs/subscriptionsGet.js";
 import { subscriptionsList } from "../funcs/subscriptionsList.js";
 import { subscriptionsTerminate } from "../funcs/subscriptionsTerminate.js";
+import { subscriptionsUpdateSubscription } from "../funcs/subscriptionsUpdateSubscription.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
@@ -52,6 +53,20 @@ export class Subscriptions extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.Subscription> {
     return unwrapAsync(subscriptionsGet(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Update
+   */
+  async updateSubscription(
+    request: operations.UpdateSubscriptionRequest,
+    options?: RequestOptions,
+  ): Promise<models.Subscription> {
+    return unwrapAsync(subscriptionsUpdateSubscription(
       this,
       request,
       options,
