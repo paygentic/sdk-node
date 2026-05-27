@@ -5892,14 +5892,16 @@
             "name": "consumerId",
             "schema": {
               "$ref": "#/components/schemas/OrganizationId"
-            }
+            },
+            "description": "Return subscriptions for this consumer organization. May be combined with `merchantId` to scope to a single consumer/merchant pair. Cannot be combined with `customerId`."
           },
           {
             "in": "query",
             "name": "customerId",
             "schema": {
               "$ref": "#/components/schemas/CustomerId"
-            }
+            },
+            "description": "Return subscriptions for this customer. Cannot be combined with `consumerId` or `merchantId`."
           },
           {
             "in": "query",
@@ -5915,7 +5917,8 @@
             "name": "merchantId",
             "schema": {
               "$ref": "#/components/schemas/OrganizationId"
-            }
+            },
+            "description": "Return subscriptions for this merchant organization. May be combined with `consumerId` to scope to a single consumer/merchant pair. Cannot be combined with `customerId`."
           },
           {
             "in": "query",
@@ -6181,6 +6184,9 @@
                     "type": "number",
                     "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.",
                     "minimum": 1
+                  },
+                  "metadata": {
+                    "$ref": "#/components/schemas/SubscriptionMetadata"
                   }
                 }
               },
@@ -11947,6 +11953,17 @@
           }
         }
       },
+      "SubscriptionMetadata": {
+        "type": "object",
+        "description": "Free-form merchant metadata to attach to the subscription. Values must be strings, numbers, or booleans.",
+        "additionalProperties": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      },
       "Subscription": {
         "type": "object",
         "required": [
@@ -12169,6 +12186,9 @@
             "type": "boolean",
             "nullable": true,
             "description": "Subscription-level auto-approval override. Null means plan default is used."
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/SubscriptionMetadata"
           },
           "customer": {
             "type": "object",

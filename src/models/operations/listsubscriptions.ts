@@ -30,12 +30,21 @@ export const Include = {
 export type Include = ClosedEnum<typeof Include>;
 
 export type ListSubscriptionsRequest = {
+  /**
+   * Return subscriptions for this consumer organization. May be combined with `merchantId` to scope to a single consumer/merchant pair. Cannot be combined with `customerId`.
+   */
   consumerId?: string | undefined;
+  /**
+   * Return subscriptions for this customer. Cannot be combined with `consumerId` or `merchantId`.
+   */
   customerId?: string | undefined;
   /**
    * Number of subscriptions to return
    */
   limit?: string | undefined;
+  /**
+   * Return subscriptions for this merchant organization. May be combined with `consumerId` to scope to a single consumer/merchant pair. Cannot be combined with `customerId`.
+   */
   merchantId?: string | undefined;
   /**
    * Number of subscriptions to skip

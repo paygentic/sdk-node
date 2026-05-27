@@ -7,6 +7,10 @@ import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  SubscriptionMetadata,
+  SubscriptionMetadata$inboundSchema,
+} from "./subscriptionmetadata.js";
 
 export const SubscriptionObject = {
   Subscription: "subscription",
@@ -197,6 +201,10 @@ export type Subscription = {
    * Subscription-level auto-approval override. Null means plan default is used.
    */
   autoApprove?: boolean | null | undefined;
+  /**
+   * Free-form merchant metadata to attach to the subscription. Values must be strings, numbers, or booleans.
+   */
+  metadata?: { [k: string]: SubscriptionMetadata } | undefined;
   /**
    * Customer details with merchant and consumer information. Only included when include=customer is specified in the list query.
    */
@@ -421,6 +429,7 @@ export const Subscription$inboundSchema: z.ZodType<
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
   autoApprove: z.nullable(z.boolean()).optional(),
+  metadata: z.record(SubscriptionMetadata$inboundSchema).optional(),
   customer: z.lazy(() => SubscriptionCustomer$inboundSchema).optional(),
 });
 

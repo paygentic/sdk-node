@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod/v3";
+import * as models from "../index.js";
 
 /**
  * Address is required for tax calculation. Must include: country (ISO 3166-1 alpha-2) and zipCode. The state/region field is required and validated for US/CA addresses only (custom validation in API logic). Postal code format is not validated but will be normalized.
@@ -108,6 +109,10 @@ export type CreateSubscriptionRequest = {
    * Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.
    */
   sessionExpiryMinutes?: number | undefined;
+  /**
+   * Free-form merchant metadata to attach to the subscription. Values must be strings, numbers, or booleans.
+   */
+  metadata?: { [k: string]: models.SubscriptionMetadata } | undefined;
 };
 
 /** @internal */
@@ -201,6 +206,7 @@ export type CreateSubscriptionRequest$Outbound = {
   renewalReminderEnabled?: boolean | null | undefined;
   renewalReminderDays?: number | null | undefined;
   sessionExpiryMinutes?: number | undefined;
+  metadata?: { [k: string]: models.SubscriptionMetadata$Outbound } | undefined;
 };
 
 /** @internal */
@@ -224,6 +230,7 @@ export const CreateSubscriptionRequest$outboundSchema: z.ZodType<
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
   sessionExpiryMinutes: z.number().optional(),
+  metadata: z.record(models.SubscriptionMetadata$outboundSchema).optional(),
 });
 
 export function createSubscriptionRequestToJSON(

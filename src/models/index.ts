@@ -65,6 +65,7 @@ export * from "./sourceevent.js";
 export * from "./sourcerule.js";
 export * from "./staticentitlementdetail.js";
 export * from "./subscription.js";
+export * from "./subscriptionmetadata.js";
 export * from "./subscriptionportal.js";
 export * from "./testclock.js";
 export * from "./updaterulerequest.js";
