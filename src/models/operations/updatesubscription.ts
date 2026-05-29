@@ -46,6 +46,10 @@ export type UpdateSubscriptionRequestBody = {
    * Override plan setting for number of days before renewal to send the reminder. Set to null to use plan default.
    */
   renewalReminderDays?: number | null | undefined;
+  /**
+   * Payment term in days ("Net X") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid alongside bankTransferOnly=true. Set 0 for "due on issue". Already-issued invoices keep their snapshotted dueAt.
+   */
+  paymentTermDays?: number | undefined;
 };
 
 export type UpdateSubscriptionRequest = {
@@ -70,6 +74,7 @@ export type UpdateSubscriptionRequestBody$Outbound = {
   minimumAccountBalance?: string | undefined;
   renewalReminderEnabled?: boolean | null | undefined;
   renewalReminderDays?: number | null | undefined;
+  paymentTermDays?: number | undefined;
 };
 
 /** @internal */
@@ -88,6 +93,7 @@ export const UpdateSubscriptionRequestBody$outboundSchema: z.ZodType<
   minimumAccountBalance: z.string().optional(),
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
+  paymentTermDays: z.number().int().optional(),
 });
 
 export function updateSubscriptionRequestBodyToJSON(

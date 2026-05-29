@@ -170,6 +170,10 @@ export type Invoice = {
    */
   paidAt?: Date | null | undefined;
   /**
+   * Payment due date snapshotted at invoice-create time as the issue date + subscription.paymentTermDays, anchored to midnight UTC. Null only for invoices created before this feature shipped (no backfill).
+   */
+  dueAt?: Date | null | undefined;
+  /**
    * Payment URL for completing payment (only present when status is ISSUED and unpaidAmount > 0)
    */
   paymentUrl?: string | null | undefined;
@@ -307,6 +311,9 @@ export const Invoice$inboundSchema: z.ZodType<Invoice, z.ZodTypeDef, unknown> =
     ).optional(),
     paidAmount: z.string(),
     paidAt: z.nullable(
+      z.string().datetime({ offset: true }).transform(v => new Date(v)),
+    ).optional(),
+    dueAt: z.nullable(
       z.string().datetime({ offset: true }).transform(v => new Date(v)),
     ).optional(),
     paymentUrl: z.nullable(z.string()).optional(),

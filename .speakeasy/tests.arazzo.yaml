@@ -1145,7 +1145,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z"}
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z","paymentTermDays":186713}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1447,7 +1447,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z"}
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z","paymentTermDays":868201}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1505,7 +1505,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z"}
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z","paymentTermDays":472943}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -2986,7 +2986,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z"}
+              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z","paymentTermDays":349693}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true

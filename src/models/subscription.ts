@@ -198,6 +198,10 @@ export type Subscription = {
    */
   renewalReminderDays?: number | null | undefined;
   /**
+   * Payment term in days ("Net X") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 ("due on issue"); a non-zero value is only set on bankTransferOnly subscriptions.
+   */
+  paymentTermDays: number;
+  /**
    * Subscription-level auto-approval override. Null means plan default is used.
    */
   autoApprove?: boolean | null | undefined;
@@ -428,6 +432,7 @@ export const Subscription$inboundSchema: z.ZodType<
   walletId: z.string().optional(),
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
+  paymentTermDays: z.number().int(),
   autoApprove: z.nullable(z.boolean()).optional(),
   metadata: z.record(SubscriptionMetadata$inboundSchema).optional(),
   customer: z.lazy(() => SubscriptionCustomer$inboundSchema).optional(),

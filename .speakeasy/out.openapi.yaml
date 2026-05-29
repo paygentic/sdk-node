@@ -2161,7 +2161,7 @@
           "Grants"
         ],
         "summary": "Purchase Grant",
-        "description": "Create an ad-hoc invoice with a payment session for a grant purchase. The customer pays via the returned payment URL; the grant is created automatically on payment completion. If payment expires, the invoice is cancelled and no grant is created.\n\nAfter the consumer completes payment, the grant is created automatically. To confirm payment completion, poll `GET /v2/invoices/{invoiceId}` using the `invoiceId` from the response and check for `status === \"PAID\"`. Recommended polling interval: 2 seconds, timeout: 60 seconds.",
+        "description": "Create an ad-hoc invoice with a payment session for a grant purchase. The customer pays via the returned payment URL; the grant is created automatically on payment completion. If payment expires, the invoice is cancelled and no grant is created.\n\nTo confirm payment completion, subscribe to the `invoice.paid.v0` webhook. The payload includes the original `invoiceId` and the created `grantId`, so you can correlate the purchase response with downstream fulfilment without an extra fetch. As a fallback if you cannot consume webhooks, poll `GET /v2/invoices/{invoiceId}` (interval 2s, timeout 60s) and check for `status === \"PAID\"`.",
         "operationId": "purchaseEntitlementGrant",
         "parameters": [
           {
@@ -6180,6 +6180,12 @@
                     "minimum": 1,
                     "maximum": 30
                   },
+                  "paymentTermDays": {
+                    "type": "integer",
+                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). A non-zero value is only valid alongside bankTransferOnly=true.",
+                    "minimum": 0,
+                    "maximum": 365
+                  },
                   "sessionExpiryMinutes": {
                     "type": "number",
                     "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.",
@@ -6427,6 +6433,12 @@
                     "description": "Override plan setting for number of days before renewal to send the reminder. Set to null to use plan default.",
                     "minimum": 1,
                     "maximum": 30
+                  },
+                  "paymentTermDays": {
+                    "type": "integer",
+                    "description": "Payment term in days (\"Net X\") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid alongside bankTransferOnly=true. Set 0 for \"due on issue\". Already-issued invoices keep their snapshotted dueAt.",
+                    "minimum": 0,
+                    "maximum": 365
                   }
                 }
               }
@@ -11975,7 +11987,8 @@
           "status",
           "startedAt",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "paymentTermDays"
         ],
         "properties": {
           "id": {
@@ -12181,6 +12194,12 @@
             "type": "integer",
             "nullable": true,
             "description": "Number of days before renewal to send the reminder. Null means use plan default."
+          },
+          "paymentTermDays": {
+            "type": "integer",
+            "description": "Payment term in days (\"Net X\") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 (\"due on issue\"); a non-zero value is only set on bankTransferOnly subscriptions.",
+            "minimum": 0,
+            "maximum": 365
           },
           "autoApprove": {
             "type": "boolean",
@@ -12569,6 +12588,12 @@
             "format": "date-time",
             "nullable": true,
             "description": "When the invoice was paid (null if not yet paid)"
+          },
+          "dueAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Payment due date snapshotted at invoice-create time as the issue date + subscription.paymentTermDays, anchored to midnight UTC. Null only for invoices created before this feature shipped (no backfill)."
           },
           "paymentUrl": {
             "type": "string",

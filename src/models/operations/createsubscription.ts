@@ -106,6 +106,10 @@ export type CreateSubscriptionRequest = {
    */
   renewalReminderDays?: number | null | undefined;
   /**
+   * Payment term in days ("Net X") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 ("due on issue"). A non-zero value is only valid alongside bankTransferOnly=true.
+   */
+  paymentTermDays?: number | undefined;
+  /**
    * Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.
    */
   sessionExpiryMinutes?: number | undefined;
@@ -205,6 +209,7 @@ export type CreateSubscriptionRequest$Outbound = {
   testClockId?: string | undefined;
   renewalReminderEnabled?: boolean | null | undefined;
   renewalReminderDays?: number | null | undefined;
+  paymentTermDays?: number | undefined;
   sessionExpiryMinutes?: number | undefined;
   metadata?: { [k: string]: models.SubscriptionMetadata$Outbound } | undefined;
 };
@@ -229,6 +234,7 @@ export const CreateSubscriptionRequest$outboundSchema: z.ZodType<
   testClockId: z.string().optional(),
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
+  paymentTermDays: z.number().int().optional(),
   sessionExpiryMinutes: z.number().optional(),
   metadata: z.record(models.SubscriptionMetadata$outboundSchema).optional(),
 });
