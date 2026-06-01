@@ -19,6 +19,7 @@ export const State = {
   Invited: "invited",
   Active: "active",
   Suspended: "suspended",
+  Declined: "declined",
 } as const;
 export type State = ClosedEnum<typeof State>;
 

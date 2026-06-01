@@ -12350,7 +12350,8 @@
                   "enum": [
                     "invited",
                     "active",
-                    "suspended"
+                    "suspended",
+                    "declined"
                   ]
                 },
                 "roles": {

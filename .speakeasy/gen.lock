@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: 7bd4782ffdd27c48343f8692938b1b4b
+  docChecksum: 5543dffd1d0b28714079628faa5578b2
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.7.9
-  configChecksum: a8aec9c704add280a3e2de78228c4b22
+  releaseVersion: 0.7.10
+  configChecksum: 31bcc531dae81107ef460033843f730c
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: 36d5da86-3544-4f54-92c5-1c03a183c529
-  pristine_commit_hash: 8f168503ab1a197ced5a2aa640cc30a817e5c7d3
-  pristine_tree_hash: d7ef2dc04d7e1da6f2f70eac8546f0f395a8d020
+  generation_id: df35f4d5-815a-4972-ab2a-d60841632ec0
+  pristine_commit_hash: 798cdac4d93e27707d506ac81a1d9960e1753a9e
+  pristine_tree_hash: d2d6b915e79a2ef9bb9e49e44b0401503dfcb523
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -1545,8 +1545,8 @@ trackedFiles:
     pristine_git_object: 0cf7536c4c37588455cbcce74ffbd4075522b2ad
   docs/models/state.md:
     id: e560b4e72643
-    last_write_checksum: sha1:baff19eb1c8f0906d6258a5f84a2d98f15d5ad1a
-    pristine_git_object: e0ace01bcf31c474ed51dedbc771324098f67209
+    last_write_checksum: sha1:c76cc26c090e0801b42229c70c5df7f9b71070e0
+    pristine_git_object: 4498f453ffe1a6ef501ad02c85f721614ca26fd8
   docs/models/staticentitlementdetail.md:
     id: 62c9b083779b
     last_write_checksum: sha1:b57013074adbf86eeacfc62359d89fb3147bfdeb
@@ -1769,12 +1769,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:8e555fe3de01680f8022eeb75a232c2457f6b930
-    pristine_git_object: edda5b42c9dc17d2f287db21d64743bfdbb6c0f2
+    last_write_checksum: sha1:c9b1dc9379602a689b7e434fcd4ec3ed79cf533d
+    pristine_git_object: 3484c7a83aea9354607a1987614640fae3c23421
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:85aea368a1a1bc9a592f014a30dc56a3b4e81979
-    pristine_git_object: 6273023f339ec6ce39ed3b518f608e661c735f9c
+    last_write_checksum: sha1:870ccecad5e377f244a026e9f58e4b9c0058e40a
+    pristine_git_object: 0193c3ebd4145f4fa03a3e9b89e23c04eef5c506
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -2169,8 +2169,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:9d31bc3052979aa34d6ff2e894b063a723d69088
-    pristine_git_object: b3a8c9d3318664e73955184907fc6e75ad79380a
+    last_write_checksum: sha1:91f5d191c22f68a914895a6ff2f0ad655e51fa11
+    pristine_git_object: 74143b50ef2e0eae7aa9fcf5ab0a93b4cb54cd11
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -2913,8 +2913,8 @@ trackedFiles:
     pristine_git_object: 6a9165e55dd7a5925e1addcc8ba7f59806fb69c3
   src/models/user.ts:
     id: 30400d1cf3c2
-    last_write_checksum: sha1:2e2b28b6055944a67ea86e5382c2ff17c899d863
-    pristine_git_object: 2e194d262b31782ce813b80b9bdc376ca9034c86
+    last_write_checksum: sha1:e49b4110e7a78a3465b189a14ce216c1ff6bdf3b
+    pristine_git_object: ec6b66c97b7f79093a93e52e485851711622c14a
   src/models/validationerror.ts:
     id: 5d038f3f7846
     last_write_checksum: sha1:61df1ea850824cf5838caf1b00f7812e5c7ab828
@@ -4816,4 +4816,7 @@ generatedTests:
   listCustomerPaymentMethods: "2026-05-08T17:36:43Z"
   createCustomerPaymentMethod: "2026-05-08T17:36:43Z"
   updateSubscription: "2026-05-23T07:46:13Z"
-releaseNotes: "## Typescript SDK Changes:\n* `paygentic.subscriptions.list()`:  `response.data[].paymentTermDays` **Added**\n* `paygentic.subscriptions.create()`: \n  *  `request.paymentTermDays` **Added**\n  *  `response.paymentTermDays` **Added**\n* `paygentic.subscriptions.get()`:  `response.paymentTermDays` **Added**\n* `paygentic.subscriptions.updateSubscription()`: \n  *  `request.requestBody.paymentTermDays` **Added**\n  *  `response.paymentTermDays` **Added**\n* `paygentic.subscriptions.terminate()`:  `response.paymentTermDays` **Added**\n* `paygentic.invoicesV2.list()`:  `response.data[].dueAt` **Added**\n* `paygentic.invoicesV2.get()`:  `response.dueAt` **Added**\n"
+releaseNotes: |
+  ## Typescript SDK Changes:
+  * `paygentic.users.get()`:  `response.organizations[].state.enum(declined)` **Added** (Breaking ⚠️)
+  * `paygentic.users.update()`:  `response.organizations[].state.enum(declined)` **Added** (Breaking ⚠️)

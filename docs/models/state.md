@@ -11,5 +11,5 @@ let value: State = "invited";
 ## Values
 
 ```typescript
-"invited" | "active" | "suspended"
+"invited" | "active" | "suspended" | "declined"
 ```
