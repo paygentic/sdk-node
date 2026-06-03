@@ -4,7 +4,6 @@
 
 import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
-import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import {
   EntitlementStatus,
@@ -12,22 +11,14 @@ import {
 } from "./entitlementstatus.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
-export const MeteredEntitlementDetailObject = {
-  Entitlement: "entitlement",
-} as const;
-export type MeteredEntitlementDetailObject = ClosedEnum<
-  typeof MeteredEntitlementDetailObject
->;
-
 /**
- * Common fields shared by all entitlement types.
+ * Common fields shared by all entitlement list items. List items use `entitlementId` (not `id`) to preserve the original public field name on `/v1/entitlements`. The get-by-id endpoint returns the same object with a top-level `id` and `object: "entitlement"` instead.
  */
-export type MeteredEntitlementDetail = {
-  object: MeteredEntitlementDetailObject;
+export type MeteredEntitlementListItem = {
   /**
    * Unique identifier for the entitlement.
    */
-  id: string;
+  entitlementId: string;
   /**
    * Unique identifier for a customer
    */
@@ -70,7 +61,7 @@ export type MeteredEntitlementDetail = {
    */
   metadata: { [k: string]: string };
   /**
-   * Always `null` for metered entitlements. Surfaced on every entitlement so clients can read `config` without first switching on `featureType`.
+   * Always `null` for metered entitlements. Surfaced on every list item so clients can read `item.config` without first switching on `featureType`.
    */
   config: { [k: string]: any } | null;
   /**
@@ -100,18 +91,12 @@ export type MeteredEntitlementDetail = {
 };
 
 /** @internal */
-export const MeteredEntitlementDetailObject$inboundSchema: z.ZodNativeEnum<
-  typeof MeteredEntitlementDetailObject
-> = z.nativeEnum(MeteredEntitlementDetailObject);
-
-/** @internal */
-export const MeteredEntitlementDetail$inboundSchema: z.ZodType<
-  MeteredEntitlementDetail,
+export const MeteredEntitlementListItem$inboundSchema: z.ZodType<
+  MeteredEntitlementListItem,
   z.ZodTypeDef,
   unknown
 > = z.object({
-  object: MeteredEntitlementDetailObject$inboundSchema.default("entitlement"),
-  id: z.string(),
+  entitlementId: z.string(),
   customerId: z.string(),
   featureId: z.string(),
   featureKey: z.string(),
@@ -138,12 +123,12 @@ export const MeteredEntitlementDetail$inboundSchema: z.ZodType<
   ),
 });
 
-export function meteredEntitlementDetailFromJSON(
+export function meteredEntitlementListItemFromJSON(
   jsonString: string,
-): SafeParseResult<MeteredEntitlementDetail, SDKValidationError> {
+): SafeParseResult<MeteredEntitlementListItem, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => MeteredEntitlementDetail$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'MeteredEntitlementDetail' from JSON`,
+    (x) => MeteredEntitlementListItem$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'MeteredEntitlementListItem' from JSON`,
   );
 }

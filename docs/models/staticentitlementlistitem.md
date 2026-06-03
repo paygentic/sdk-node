@@ -1,27 +1,32 @@
-# StaticEntitlementDetail
+# StaticEntitlementListItem
 
-Common fields shared by all entitlement types.
+Common fields shared by all entitlement list items. List items use `entitlementId` (not `id`) to preserve the original public field name on `/v1/entitlements`. The get-by-id endpoint returns the same object with a top-level `id` and `object: "entitlement"` instead.
 
 ## Example Usage
 
 ```typescript
-import { StaticEntitlementDetail } from "@paygentic/sdk/models";
+import { StaticEntitlementListItem } from "@paygentic/sdk/models";
 
-let value: StaticEntitlementDetail = {
-  id: "<id>",
+let value: StaticEntitlementListItem = {
+  entitlementId: "<id>",
   customerId: "<id>",
   featureId: "<id>",
   featureKey: "<value>",
   featureType: "static",
   productId: "<id>",
-  subscriptionId: "<id>",
-  status: "expired",
-  activeFrom: new Date("2024-02-25T20:41:20.667Z"),
-  activeTo: new Date("2025-12-25T06:44:37.128Z"),
+  subscriptionId: null,
+  status: "active",
+  activeFrom: new Date("2026-03-27T08:08:50.344Z"),
+  activeTo: new Date("2024-06-14T21:02:55.215Z"),
   hasAccess: true,
-  metadata: {},
+  metadata: {
+    "key": "<value>",
+    "key1": "<value>",
+  },
   config: {
     "key": "<value>",
+    "key1": "<value>",
+    "key2": "<value>",
   },
 };
 ```
@@ -30,8 +35,7 @@ let value: StaticEntitlementDetail = {
 
 | Field                                                                                         | Type                                                                                          | Required                                                                                      | Description                                                                                   |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `object`                                                                                      | [models.StaticEntitlementDetailObject](../models/staticentitlementdetailobject.md)            | :heavy_minus_sign:                                                                            | N/A                                                                                           |
-| `id`                                                                                          | *string*                                                                                      | :heavy_check_mark:                                                                            | Unique identifier for the entitlement.                                                        |
+| `entitlementId`                                                                               | *string*                                                                                      | :heavy_check_mark:                                                                            | Unique identifier for the entitlement.                                                        |
 | `customerId`                                                                                  | *string*                                                                                      | :heavy_check_mark:                                                                            | Unique identifier for a customer                                                              |
 | `featureId`                                                                                   | *string*                                                                                      | :heavy_check_mark:                                                                            | The feature this entitlement grants access to.                                                |
 | `featureKey`                                                                                  | *string*                                                                                      | :heavy_check_mark:                                                                            | The unique key identifying the feature.                                                       |

@@ -17,6 +17,9 @@ export type UpdateSubscriptionStatus = ClosedEnum<
 export type UpdateSubscriptionRequestBody = {
   endingAt?: Date | undefined;
   status?: UpdateSubscriptionStatus | undefined;
+  /**
+   * Effective termination timestamp. Capped at the current effective time (future values are clamped). Must be strictly after the subscription's start date — values at or before startedAt are rejected with 400.
+   */
   terminatedAt?: Date | undefined;
   /**
    * Identifier of entity that cancelled the subscription. Sample values: 'cust_abc123' for customer-initiated cancellation, 'org_xyz789' for merchant-initiated cancellation

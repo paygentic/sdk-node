@@ -4,7 +4,6 @@
 
 import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
-import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import {
   EntitlementStatus,
@@ -12,22 +11,14 @@ import {
 } from "./entitlementstatus.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
-export const StaticEntitlementDetailObject = {
-  Entitlement: "entitlement",
-} as const;
-export type StaticEntitlementDetailObject = ClosedEnum<
-  typeof StaticEntitlementDetailObject
->;
-
 /**
- * Common fields shared by all entitlement types.
+ * Common fields shared by all entitlement list items. List items use `entitlementId` (not `id`) to preserve the original public field name on `/v1/entitlements`. The get-by-id endpoint returns the same object with a top-level `id` and `object: "entitlement"` instead.
  */
-export type StaticEntitlementDetail = {
-  object: StaticEntitlementDetailObject;
+export type BooleanEntitlementListItem = {
   /**
    * Unique identifier for the entitlement.
    */
-  id: string;
+  entitlementId: string;
   /**
    * Unique identifier for a customer
    */
@@ -40,7 +31,7 @@ export type StaticEntitlementDetail = {
    * The unique key identifying the feature.
    */
   featureKey: string;
-  featureType: "static";
+  featureType: "boolean";
   /**
    * Unique identifier for a product
    */
@@ -70,28 +61,22 @@ export type StaticEntitlementDetail = {
    */
   metadata: { [k: string]: string };
   /**
-   * Configuration values for this entitlement.
+   * Always `null` for boolean entitlements. Surfaced on every list item so clients can read `item.config` without first switching on `featureType`.
    */
-  config: { [k: string]: any };
+  config: { [k: string]: any } | null;
 };
 
 /** @internal */
-export const StaticEntitlementDetailObject$inboundSchema: z.ZodNativeEnum<
-  typeof StaticEntitlementDetailObject
-> = z.nativeEnum(StaticEntitlementDetailObject);
-
-/** @internal */
-export const StaticEntitlementDetail$inboundSchema: z.ZodType<
-  StaticEntitlementDetail,
+export const BooleanEntitlementListItem$inboundSchema: z.ZodType<
+  BooleanEntitlementListItem,
   z.ZodTypeDef,
   unknown
 > = z.object({
-  object: StaticEntitlementDetailObject$inboundSchema.default("entitlement"),
-  id: z.string(),
+  entitlementId: z.string(),
   customerId: z.string(),
   featureId: z.string(),
   featureKey: z.string(),
-  featureType: z.literal("static"),
+  featureType: z.literal("boolean"),
   productId: z.string(),
   subscriptionId: z.nullable(z.string()),
   status: EntitlementStatus$inboundSchema,
@@ -101,15 +86,15 @@ export const StaticEntitlementDetail$inboundSchema: z.ZodType<
   ),
   hasAccess: z.boolean(),
   metadata: z.record(z.string()),
-  config: z.record(z.any()),
+  config: z.nullable(z.record(z.any())),
 });
 
-export function staticEntitlementDetailFromJSON(
+export function booleanEntitlementListItemFromJSON(
   jsonString: string,
-): SafeParseResult<StaticEntitlementDetail, SDKValidationError> {
+): SafeParseResult<BooleanEntitlementListItem, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => StaticEntitlementDetail$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'StaticEntitlementDetail' from JSON`,
+    (x) => BooleanEntitlementListItem$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'BooleanEntitlementListItem' from JSON`,
   );
 }

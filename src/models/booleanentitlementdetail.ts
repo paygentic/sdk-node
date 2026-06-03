@@ -6,6 +6,10 @@ import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
+import {
+  EntitlementStatus,
+  EntitlementStatus$inboundSchema,
+} from "./entitlementstatus.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 export const BooleanEntitlementDetailObject = {
@@ -13,21 +17,6 @@ export const BooleanEntitlementDetailObject = {
 } as const;
 export type BooleanEntitlementDetailObject = ClosedEnum<
   typeof BooleanEntitlementDetailObject
->;
-
-/**
- * Current status of the entitlement.
- */
-export const BooleanEntitlementDetailStatus = {
-  Active: "active",
-  Canceled: "canceled",
-  Expired: "expired",
-} as const;
-/**
- * Current status of the entitlement.
- */
-export type BooleanEntitlementDetailStatus = ClosedEnum<
-  typeof BooleanEntitlementDetailStatus
 >;
 
 /**
@@ -53,13 +42,17 @@ export type BooleanEntitlementDetail = {
   featureKey: string;
   featureType: "boolean";
   /**
+   * Unique identifier for a product
+   */
+  productId: string;
+  /**
    * The subscription this entitlement is associated with, if any.
    */
-  subscriptionId?: string | null | undefined;
+  subscriptionId: string | null;
   /**
    * Current status of the entitlement.
    */
-  status: BooleanEntitlementDetailStatus;
+  status: EntitlementStatus;
   /**
    * When the entitlement becomes active.
    */
@@ -67,7 +60,7 @@ export type BooleanEntitlementDetail = {
   /**
    * When the entitlement expires. Null means no expiration.
    */
-  activeTo?: Date | null | undefined;
+  activeTo: Date | null;
   /**
    * Whether the customer currently has active access to this entitlement.
    */
@@ -75,18 +68,17 @@ export type BooleanEntitlementDetail = {
   /**
    * Additional metadata for the entitlement.
    */
-  metadata?: { [k: string]: string } | undefined;
+  metadata: { [k: string]: string };
+  /**
+   * Always `null` for boolean entitlements. Surfaced on every entitlement so clients can read `config` without first switching on `featureType`.
+   */
+  config: { [k: string]: any } | null;
 };
 
 /** @internal */
 export const BooleanEntitlementDetailObject$inboundSchema: z.ZodNativeEnum<
   typeof BooleanEntitlementDetailObject
 > = z.nativeEnum(BooleanEntitlementDetailObject);
-
-/** @internal */
-export const BooleanEntitlementDetailStatus$inboundSchema: z.ZodNativeEnum<
-  typeof BooleanEntitlementDetailStatus
-> = z.nativeEnum(BooleanEntitlementDetailStatus);
 
 /** @internal */
 export const BooleanEntitlementDetail$inboundSchema: z.ZodType<
@@ -100,14 +92,16 @@ export const BooleanEntitlementDetail$inboundSchema: z.ZodType<
   featureId: z.string(),
   featureKey: z.string(),
   featureType: z.literal("boolean"),
-  subscriptionId: z.nullable(z.string()).optional(),
-  status: BooleanEntitlementDetailStatus$inboundSchema,
+  productId: z.string(),
+  subscriptionId: z.nullable(z.string()),
+  status: EntitlementStatus$inboundSchema,
   activeFrom: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   activeTo: z.nullable(
     z.string().datetime({ offset: true }).transform(v => new Date(v)),
-  ).optional(),
+  ),
   hasAccess: z.boolean(),
-  metadata: z.record(z.string()).optional(),
+  metadata: z.record(z.string()),
+  config: z.nullable(z.record(z.any())),
 });
 
 export function booleanEntitlementDetailFromJSON(

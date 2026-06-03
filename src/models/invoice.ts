@@ -130,6 +130,10 @@ export type Invoice = {
    */
   currency: string;
   /**
+   * Machine-readable reason code for the most recent failure (e.g. CALCULATION_FAILED). Present only when status is FAILED or PAYMENT_FAILED.
+   */
+  failureReason?: string | undefined;
+  /**
    * The end of the grace period for accepting usage events
    */
   gracePeriodEnd: Date;
@@ -297,6 +301,7 @@ export const Invoice$inboundSchema: z.ZodType<Invoice, z.ZodTypeDef, unknown> =
       new Date(v)
     ),
     currency: z.string(),
+    failureReason: z.string().optional(),
     gracePeriodEnd: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),

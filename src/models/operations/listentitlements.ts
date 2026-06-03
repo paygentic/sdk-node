@@ -51,9 +51,9 @@ export type ListEntitlementsObject = ClosedEnum<typeof ListEntitlementsObject>;
 export type ListEntitlementsResponse = {
   object: ListEntitlementsObject;
   /**
-   * Array of entitlement access results.
+   * Array of entitlement list items. The shape of each item varies by featureType.
    */
-  data: Array<models.EntitlementAccessResult>;
+  data: Array<models.EntitlementListItem>;
   /**
    * Offset-based pagination response.
    */
@@ -106,7 +106,7 @@ export const ListEntitlementsResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   object: ListEntitlementsObject$inboundSchema.default("list"),
-  data: z.array(models.EntitlementAccessResult$inboundSchema),
+  data: z.array(models.EntitlementListItem$inboundSchema),
   pagination: models.OffsetPagination$inboundSchema,
 });
 

@@ -1492,7 +1492,7 @@
           "Entitlements"
         ],
         "summary": "List Entitlements",
-        "description": "Retrieve all entitlements for a customer, optionally filtered by feature or product.",
+        "description": "Retrieve all entitlements for a customer, optionally filtered by feature or product.\n\nList items identify the entitlement with `entitlementId` (the original list contract). The get-by-id endpoint (`GET /v1/entitlements/{entitlementId}`) returns the same object but with a top-level `id` and `object: \"entitlement\"` instead — so use `item.entitlementId`, not `item.id`, when chaining a list result into a get-by-id call.\n\nFor metered entitlements, each item carries live balance/usage fields, which the API resolves with one grant-engine balance lookup per metered item (bounded concurrency, up to `limit` items per page).",
         "operationId": "listEntitlements",
         "parameters": [
           {
@@ -1589,9 +1589,9 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/EntitlementAccessResult"
+                        "$ref": "#/components/schemas/EntitlementListItem"
                       },
-                      "description": "Array of entitlement access results."
+                      "description": "Array of entitlement list items. The shape of each item varies by featureType."
                     },
                     "pagination": {
                       "$ref": "#/components/schemas/OffsetPagination"
@@ -1606,28 +1606,36 @@
                       "object": "list",
                       "data": [
                         {
-                          "hasAccess": true,
+                          "entitlementId": "ent_a7b8c9d0e1f2g3h4",
+                          "customerId": "cus_q3r4s5t6u7v8w9x0",
+                          "featureId": "feat_max_users",
                           "featureKey": "max_users",
                           "featureType": "static",
-                          "config": {
-                            "limit": 25
-                          },
-                          "entitlementId": "ent_a7b8c9d0e1f2g3h4",
                           "productId": "prod_m5n6o7p8q9r0s1t2",
+                          "subscriptionId": "sub_pro_plan",
+                          "status": "active",
                           "activeFrom": "2024-01-01T00:00:00Z",
                           "activeTo": "2025-01-01T00:00:00Z",
-                          "status": "active"
+                          "hasAccess": true,
+                          "metadata": {},
+                          "config": {
+                            "limit": 25
+                          }
                         },
                         {
-                          "hasAccess": true,
+                          "entitlementId": "ent_b8c9d0e1f2g3h4i5",
+                          "customerId": "cus_q3r4s5t6u7v8w9x0",
+                          "featureId": "feat_sso_enabled",
                           "featureKey": "sso_enabled",
                           "featureType": "boolean",
-                          "config": null,
-                          "entitlementId": "ent_b8c9d0e1f2g3h4i5",
                           "productId": "prod_m5n6o7p8q9r0s1t2",
+                          "subscriptionId": "sub_pro_plan",
+                          "status": "active",
                           "activeFrom": "2024-01-01T00:00:00Z",
                           "activeTo": null,
-                          "status": "active"
+                          "hasAccess": true,
+                          "metadata": {},
+                          "config": null
                         }
                       ],
                       "pagination": {
@@ -1644,9 +1652,18 @@
                       "object": "list",
                       "data": [
                         {
-                          "hasAccess": true,
+                          "entitlementId": "ent_d0e1f2g3h4i5j6k7",
+                          "customerId": "cus_q3r4s5t6u7v8w9x0",
+                          "featureId": "feat_storage_quota",
                           "featureKey": "storage_quota",
                           "featureType": "static",
+                          "productId": "prod_storage123456",
+                          "subscriptionId": "sub_storage_plan",
+                          "status": "active",
+                          "activeFrom": "2024-03-15T00:00:00Z",
+                          "activeTo": null,
+                          "hasAccess": true,
+                          "metadata": {},
                           "config": {
                             "limitGB": 500,
                             "allowedFileTypes": [
@@ -1656,12 +1673,7 @@
                               "png",
                               "jpg"
                             ]
-                          },
-                          "entitlementId": "ent_d0e1f2g3h4i5j6k7",
-                          "productId": "prod_storage123456",
-                          "activeFrom": "2024-03-15T00:00:00Z",
-                          "activeTo": null,
-                          "status": "active"
+                          }
                         }
                       ],
                       "pagination": {
@@ -1678,15 +1690,54 @@
                       "object": "list",
                       "data": [
                         {
-                          "hasAccess": false,
+                          "entitlementId": "ent_e1f2g3h4i5j6k7l8",
+                          "customerId": "cus_q3r4s5t6u7v8w9x0",
+                          "featureId": "feat_premium_support",
                           "featureKey": "premium_support",
                           "featureType": "boolean",
-                          "config": null,
-                          "entitlementId": "ent_e1f2g3h4i5j6k7l8",
                           "productId": "prod_support789012",
+                          "subscriptionId": null,
+                          "status": "expired",
                           "activeFrom": "2023-01-01T00:00:00Z",
                           "activeTo": "2024-01-01T00:00:00Z",
-                          "status": "expired"
+                          "hasAccess": false,
+                          "metadata": {},
+                          "config": null
+                        }
+                      ],
+                      "pagination": {
+                        "limit": 10,
+                        "offset": 0,
+                        "total": 1
+                      }
+                    }
+                  },
+                  "meteredEntitlement": {
+                    "summary": "Metered entitlement with cap and live usage",
+                    "description": "A usage-based feature with a hard cap (`isSoftLimit: false`) and live balance, usage, and period bounds from the grant engine.",
+                    "value": {
+                      "object": "list",
+                      "data": [
+                        {
+                          "entitlementId": "ent_c9d0e1f2g3h4i5j6",
+                          "customerId": "cus_q3r4s5t6u7v8w9x0",
+                          "featureId": "feat_api_calls",
+                          "featureKey": "api_calls",
+                          "featureType": "metered",
+                          "productId": "prod_m5n6o7p8q9r0s1t2",
+                          "subscriptionId": "sub_pro_plan",
+                          "status": "active",
+                          "activeFrom": "2024-03-01T00:00:00Z",
+                          "activeTo": null,
+                          "hasAccess": true,
+                          "metadata": {},
+                          "config": null,
+                          "isSoftLimit": false,
+                          "balance": 8340,
+                          "usageInPeriod": 1660,
+                          "overage": 0,
+                          "currentPeriodStart": "2024-03-01T00:00:00Z",
+                          "currentPeriodEnd": "2024-04-01T00:00:00Z"
                         }
                       ],
                       "pagination": {
@@ -1785,11 +1836,11 @@
         },
         "responses": {
           "201": {
-            "description": "Entitlement successfully issued.",
+            "description": "Entitlement successfully issued. Returns the same shape as `GET /v1/entitlements/{entitlementId}` (a discriminated `EntitlementDetail`), so callers can read `featureType`, `hasAccess`, and metered balance/usage fields directly from the create response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Entitlement"
+                  "$ref": "#/components/schemas/EntitlementDetail"
                 }
               }
             }
@@ -1873,11 +1924,13 @@
                       "featureId": "feat_p1q2r3s4t5u6v7w8",
                       "featureKey": "sso_enabled",
                       "featureType": "boolean",
+                      "productId": "prod_m5n6o7p8q9r0s1t2",
                       "subscriptionId": "sub_m1n2o3p4q5r6s7t8",
                       "status": "active",
                       "hasAccess": true,
                       "activeFrom": "2024-01-01T00:00:00Z",
                       "activeTo": null,
+                      "config": null,
                       "metadata": {}
                     }
                   },
@@ -1890,6 +1943,7 @@
                       "featureId": "feat_q2r3s4t5u6v7w8x9",
                       "featureKey": "storage_limit",
                       "featureType": "static",
+                      "productId": "prod_m5n6o7p8q9r0s1t2",
                       "subscriptionId": "sub_m1n2o3p4q5r6s7t8",
                       "status": "active",
                       "hasAccess": true,
@@ -1915,11 +1969,14 @@
                       "featureId": "feat_r3s4t5u6v7w8x9y0",
                       "featureKey": "api_calls",
                       "featureType": "metered",
+                      "productId": "prod_m5n6o7p8q9r0s1t2",
                       "subscriptionId": "sub_m1n2o3p4q5r6s7t8",
                       "status": "active",
                       "hasAccess": true,
                       "activeFrom": "2024-01-01T00:00:00Z",
                       "activeTo": null,
+                      "config": null,
+                      "isSoftLimit": false,
                       "balance": 8340,
                       "usageInPeriod": 1660,
                       "overage": 0,
@@ -6400,7 +6457,8 @@
                   },
                   "terminatedAt": {
                     "type": "string",
-                    "format": "date-time"
+                    "format": "date-time",
+                    "description": "Effective termination timestamp. Capped at the current effective time (future values are clamped). Must be strictly after the subscription's start date — values at or before startedAt are rejected with 400."
                   },
                   "terminatedBy": {
                     "type": "string",
@@ -10129,49 +10187,72 @@
           }
         }
       },
-      "EntitlementAccessResult": {
+      "EntitlementFeatureType": {
+        "type": "string",
+        "enum": [
+          "boolean",
+          "static",
+          "metered"
+        ],
+        "description": "The type of feature."
+      },
+      "EntitlementStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "canceled",
+          "expired"
+        ],
+        "description": "Current status of the entitlement."
+      },
+      "EntitlementListItemBase": {
         "type": "object",
-        "description": "A customer's entitlement to a specific feature.",
+        "description": "Common fields shared by all entitlement list items. List items use `entitlementId` (not `id`) to preserve the original public field name on `/v1/entitlements`. The get-by-id endpoint returns the same object with a top-level `id` and `object: \"entitlement\"` instead.",
         "required": [
-          "hasAccess",
+          "entitlementId",
+          "customerId",
+          "featureId",
           "featureKey",
           "featureType",
-          "entitlementId",
           "productId",
+          "subscriptionId",
+          "status",
           "activeFrom",
-          "status"
+          "activeTo",
+          "hasAccess",
+          "metadata"
         ],
         "properties": {
-          "hasAccess": {
-            "type": "boolean",
-            "description": "Whether the customer currently has active access to this feature."
+          "entitlementId": {
+            "type": "string",
+            "pattern": "^ent_[a-zA-Z0-9]+$",
+            "description": "Unique identifier for the entitlement."
+          },
+          "customerId": {
+            "$ref": "#/components/schemas/CustomerId"
+          },
+          "featureId": {
+            "type": "string",
+            "pattern": "^feat_[a-zA-Z0-9]+$",
+            "description": "The feature this entitlement grants access to."
           },
           "featureKey": {
             "type": "string",
             "description": "The unique key identifying the feature."
           },
           "featureType": {
-            "type": "string",
-            "enum": [
-              "boolean",
-              "static",
-              "metered"
-            ],
-            "description": "The type of feature: `boolean` (on/off), `static` (with config), or `metered` (usage-based)."
-          },
-          "config": {
-            "type": "object",
-            "nullable": true,
-            "additionalProperties": true,
-            "description": "Configuration values for `static` features. Null for other types."
-          },
-          "entitlementId": {
-            "type": "string",
-            "pattern": "^ent_[a-zA-Z0-9]+$",
-            "description": "Unique identifier for this entitlement."
+            "$ref": "#/components/schemas/EntitlementFeatureType"
           },
           "productId": {
             "$ref": "#/components/schemas/ProductId"
+          },
+          "subscriptionId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The subscription this entitlement is associated with, if any."
+          },
+          "status": {
+            "$ref": "#/components/schemas/EntitlementStatus"
           },
           "activeFrom": {
             "type": "string",
@@ -10184,43 +10265,157 @@
             "nullable": true,
             "description": "When the entitlement expires. Null means no expiration."
           },
-          "status": {
-            "type": "string",
-            "enum": [
-              "active",
-              "canceled",
-              "expired"
-            ],
-            "description": "Current status of the entitlement."
+          "hasAccess": {
+            "type": "boolean",
+            "description": "Whether the customer currently has active access to this entitlement."
           },
-          "balance": {
-            "type": "number",
-            "nullable": true,
-            "description": "Remaining grant balance. Only present for `metered` features."
-          },
-          "usageInPeriod": {
-            "type": "number",
-            "nullable": true,
-            "description": "Total usage in the current period. Only present for `metered` features."
-          },
-          "overage": {
-            "type": "number",
-            "nullable": true,
-            "description": "Amount of overage beyond granted balance. Only present for `metered` features."
-          },
-          "currentPeriodStart": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "description": "Start of the current usage period. Only present for `metered` features with a usage period configured."
-          },
-          "currentPeriodEnd": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "description": "End of the current usage period. Only present for `metered` features with a usage period configured."
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Additional metadata for the entitlement."
           }
         }
+      },
+      "BooleanEntitlementListItem": {
+        "unevaluatedProperties": false,
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntitlementListItemBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "config"
+            ],
+            "properties": {
+              "featureType": {
+                "type": "string",
+                "enum": [
+                  "boolean"
+                ]
+              },
+              "config": {
+                "type": "object",
+                "nullable": true,
+                "additionalProperties": true,
+                "description": "Always `null` for boolean entitlements. Surfaced on every list item so clients can read `item.config` without first switching on `featureType`."
+              }
+            }
+          }
+        ]
+      },
+      "StaticEntitlementListItem": {
+        "unevaluatedProperties": false,
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntitlementListItemBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "config"
+            ],
+            "properties": {
+              "featureType": {
+                "type": "string",
+                "enum": [
+                  "static"
+                ]
+              },
+              "config": {
+                "type": "object",
+                "additionalProperties": true,
+                "description": "Configuration values for this entitlement."
+              }
+            }
+          }
+        ]
+      },
+      "MeteredEntitlementListItem": {
+        "unevaluatedProperties": false,
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntitlementListItemBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "balance",
+              "usageInPeriod",
+              "overage",
+              "isSoftLimit",
+              "config",
+              "currentPeriodStart",
+              "currentPeriodEnd"
+            ],
+            "properties": {
+              "featureType": {
+                "type": "string",
+                "enum": [
+                  "metered"
+                ]
+              },
+              "config": {
+                "type": "object",
+                "nullable": true,
+                "additionalProperties": true,
+                "description": "Always `null` for metered entitlements. Surfaced on every list item so clients can read `item.config` without first switching on `featureType`."
+              },
+              "isSoftLimit": {
+                "type": "boolean",
+                "description": "When false (hard limit), access is blocked when balance is exhausted and overage is not charged on invoices. When true (soft limit), access continues past the grant and overage is charged at the per-unit rate."
+              },
+              "balance": {
+                "type": "number",
+                "description": "Remaining grant balance for the current period."
+              },
+              "usageInPeriod": {
+                "type": "number",
+                "description": "Total usage consumed in the current billing period."
+              },
+              "overage": {
+                "type": "number",
+                "description": "Amount of usage exceeding the granted balance."
+              },
+              "currentPeriodStart": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "description": "Start of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription."
+              },
+              "currentPeriodEnd": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "description": "End of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
+              }
+            }
+          }
+        ]
+      },
+      "EntitlementListItem": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/BooleanEntitlementListItem"
+          },
+          {
+            "$ref": "#/components/schemas/StaticEntitlementListItem"
+          },
+          {
+            "$ref": "#/components/schemas/MeteredEntitlementListItem"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "featureType",
+          "mapping": {
+            "boolean": "#/components/schemas/BooleanEntitlementListItem",
+            "static": "#/components/schemas/StaticEntitlementListItem",
+            "metered": "#/components/schemas/MeteredEntitlementListItem"
+          }
+        },
+        "description": "An entitlement as returned by the list endpoint. The shape varies by featureType. Uses `entitlementId` (not `id`) for backwards compatibility with the original list contract."
       },
       "EntitlementTemplate": {
         "oneOf": [
@@ -10364,78 +10559,6 @@
           }
         }
       },
-      "Entitlement": {
-        "type": "object",
-        "required": [
-          "object",
-          "id",
-          "customerId",
-          "featureId",
-          "status",
-          "activeFrom",
-          "config"
-        ],
-        "properties": {
-          "object": {
-            "type": "string",
-            "enum": [
-              "entitlement"
-            ],
-            "default": "entitlement"
-          },
-          "id": {
-            "type": "string",
-            "pattern": "^ent_[a-zA-Z0-9]+$",
-            "description": "Unique identifier for the entitlement."
-          },
-          "customerId": {
-            "$ref": "#/components/schemas/CustomerId"
-          },
-          "featureId": {
-            "type": "string",
-            "pattern": "^feat_[a-zA-Z0-9]+$",
-            "description": "The feature this entitlement grants access to."
-          },
-          "subscriptionId": {
-            "type": "string",
-            "nullable": true,
-            "description": "The subscription this entitlement is associated with, if any."
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "active",
-              "canceled",
-              "expired"
-            ],
-            "description": "Current status of the entitlement."
-          },
-          "activeFrom": {
-            "type": "string",
-            "format": "date-time",
-            "description": "When the entitlement becomes active."
-          },
-          "activeTo": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true,
-            "description": "When the entitlement expires. Null means no expiration."
-          },
-          "config": {
-            "type": "object",
-            "nullable": true,
-            "additionalProperties": true,
-            "description": "Configuration values for static features."
-          },
-          "metadata": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Additional metadata for the entitlement."
-          }
-        }
-      },
       "EntitlementDetailBase": {
         "type": "object",
         "description": "Common fields shared by all entitlement types.",
@@ -10446,9 +10569,13 @@
           "featureId",
           "featureKey",
           "featureType",
+          "productId",
+          "subscriptionId",
           "status",
           "activeFrom",
-          "hasAccess"
+          "activeTo",
+          "hasAccess",
+          "metadata"
         ],
         "properties": {
           "object": {
@@ -10476,13 +10603,10 @@
             "description": "The unique key identifying the feature."
           },
           "featureType": {
-            "type": "string",
-            "enum": [
-              "boolean",
-              "static",
-              "metered"
-            ],
-            "description": "The type of feature."
+            "$ref": "#/components/schemas/EntitlementFeatureType"
+          },
+          "productId": {
+            "$ref": "#/components/schemas/ProductId"
           },
           "subscriptionId": {
             "type": "string",
@@ -10490,13 +10614,7 @@
             "description": "The subscription this entitlement is associated with, if any."
           },
           "status": {
-            "type": "string",
-            "enum": [
-              "active",
-              "canceled",
-              "expired"
-            ],
-            "description": "Current status of the entitlement."
+            "$ref": "#/components/schemas/EntitlementStatus"
           },
           "activeFrom": {
             "type": "string",
@@ -10523,30 +10641,44 @@
         }
       },
       "BooleanEntitlementDetail": {
+        "unevaluatedProperties": false,
         "allOf": [
           {
             "$ref": "#/components/schemas/EntitlementDetailBase"
           },
           {
             "type": "object",
+            "required": [
+              "config"
+            ],
             "properties": {
               "featureType": {
                 "type": "string",
                 "enum": [
                   "boolean"
                 ]
+              },
+              "config": {
+                "type": "object",
+                "nullable": true,
+                "additionalProperties": true,
+                "description": "Always `null` for boolean entitlements. Surfaced on every entitlement so clients can read `config` without first switching on `featureType`."
               }
             }
           }
         ]
       },
       "StaticEntitlementDetail": {
+        "unevaluatedProperties": false,
         "allOf": [
           {
             "$ref": "#/components/schemas/EntitlementDetailBase"
           },
           {
             "type": "object",
+            "required": [
+              "config"
+            ],
             "properties": {
               "featureType": {
                 "type": "string",
@@ -10564,6 +10696,7 @@
         ]
       },
       "MeteredEntitlementDetail": {
+        "unevaluatedProperties": false,
         "allOf": [
           {
             "$ref": "#/components/schemas/EntitlementDetailBase"
@@ -10574,7 +10707,10 @@
               "balance",
               "usageInPeriod",
               "overage",
-              "isSoftLimit"
+              "isSoftLimit",
+              "config",
+              "currentPeriodStart",
+              "currentPeriodEnd"
             ],
             "properties": {
               "featureType": {
@@ -10582,6 +10718,12 @@
                 "enum": [
                   "metered"
                 ]
+              },
+              "config": {
+                "type": "object",
+                "nullable": true,
+                "additionalProperties": true,
+                "description": "Always `null` for metered entitlements. Surfaced on every entitlement so clients can read `config` without first switching on `featureType`."
               },
               "isSoftLimit": {
                 "type": "boolean",
@@ -10603,13 +10745,13 @@
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "description": "Start of the current usage period."
+                "description": "Start of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription."
               },
               "currentPeriodEnd": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "description": "End of the current usage period."
+                "description": "End of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
               }
             }
           }
@@ -12514,6 +12656,10 @@
           "currency": {
             "type": "string",
             "description": "ISO 4217 currency code (e.g., USD, EUR)"
+          },
+          "failureReason": {
+            "type": "string",
+            "description": "Machine-readable reason code for the most recent failure (e.g. CALCULATION_FAILED). Present only when status is FAILED or PAYMENT_FAILED."
           },
           "gracePeriodEnd": {
             "type": "string",

@@ -4,7 +4,6 @@
 
 import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
-import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import {
   EntitlementStatus,
@@ -12,22 +11,14 @@ import {
 } from "./entitlementstatus.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
-export const StaticEntitlementDetailObject = {
-  Entitlement: "entitlement",
-} as const;
-export type StaticEntitlementDetailObject = ClosedEnum<
-  typeof StaticEntitlementDetailObject
->;
-
 /**
- * Common fields shared by all entitlement types.
+ * Common fields shared by all entitlement list items. List items use `entitlementId` (not `id`) to preserve the original public field name on `/v1/entitlements`. The get-by-id endpoint returns the same object with a top-level `id` and `object: "entitlement"` instead.
  */
-export type StaticEntitlementDetail = {
-  object: StaticEntitlementDetailObject;
+export type StaticEntitlementListItem = {
   /**
    * Unique identifier for the entitlement.
    */
-  id: string;
+  entitlementId: string;
   /**
    * Unique identifier for a customer
    */
@@ -76,18 +67,12 @@ export type StaticEntitlementDetail = {
 };
 
 /** @internal */
-export const StaticEntitlementDetailObject$inboundSchema: z.ZodNativeEnum<
-  typeof StaticEntitlementDetailObject
-> = z.nativeEnum(StaticEntitlementDetailObject);
-
-/** @internal */
-export const StaticEntitlementDetail$inboundSchema: z.ZodType<
-  StaticEntitlementDetail,
+export const StaticEntitlementListItem$inboundSchema: z.ZodType<
+  StaticEntitlementListItem,
   z.ZodTypeDef,
   unknown
 > = z.object({
-  object: StaticEntitlementDetailObject$inboundSchema.default("entitlement"),
-  id: z.string(),
+  entitlementId: z.string(),
   customerId: z.string(),
   featureId: z.string(),
   featureKey: z.string(),
@@ -104,12 +89,12 @@ export const StaticEntitlementDetail$inboundSchema: z.ZodType<
   config: z.record(z.any()),
 });
 
-export function staticEntitlementDetailFromJSON(
+export function staticEntitlementListItemFromJSON(
   jsonString: string,
-): SafeParseResult<StaticEntitlementDetail, SDKValidationError> {
+): SafeParseResult<StaticEntitlementListItem, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => StaticEntitlementDetail$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'StaticEntitlementDetail' from JSON`,
+    (x) => StaticEntitlementListItem$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'StaticEntitlementListItem' from JSON`,
   );
 }

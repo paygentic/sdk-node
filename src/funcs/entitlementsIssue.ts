@@ -37,7 +37,7 @@ export function entitlementsIssue(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.Entitlement,
+    models.EntitlementDetail,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -64,7 +64,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.Entitlement,
+      models.EntitlementDetail,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -147,7 +147,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.Entitlement,
+    models.EntitlementDetail,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -159,7 +159,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(201, models.Entitlement$inboundSchema),
+    M.json(201, models.EntitlementDetail$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([403, 404, 409], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),

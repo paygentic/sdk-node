@@ -12,6 +12,10 @@
 
 Retrieve all entitlements for a customer, optionally filtered by feature or product.
 
+List items identify the entitlement with `entitlementId` (the original list contract). The get-by-id endpoint (`GET /v1/entitlements/{entitlementId}`) returns the same object but with a top-level `id` and `object: "entitlement"` instead — so use `item.entitlementId`, not `item.id`, when chaining a list result into a get-by-id call.
+
+For metered entitlements, each item carries live balance/usage fields, which the API resolves with one grant-engine balance lookup per metered item (bounded concurrency, up to `limit` items per page).
+
 ### Example Usage: emptyResult
 
 <!-- UsageSnippet language="typescript" operationID="listEntitlements" method="get" path="/v1/entitlements" example="emptyResult" -->
@@ -64,6 +68,55 @@ run();
 ### Example Usage: expiredEntitlement
 
 <!-- UsageSnippet language="typescript" operationID="listEntitlements" method="get" path="/v1/entitlements" example="expiredEntitlement" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.entitlements.list({
+    customerId: "cus_q3r4s5t6u7v8w9x0",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { entitlementsList } from "@paygentic/sdk/funcs/entitlementsList.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await entitlementsList(paygentic, {
+    customerId: "cus_q3r4s5t6u7v8w9x0",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("entitlementsList failed:", res.error);
+  }
+}
+
+run();
+```
+### Example Usage: meteredEntitlement
+
+<!-- UsageSnippet language="typescript" operationID="listEntitlements" method="get" path="/v1/entitlements" example="meteredEntitlement" -->
 ```typescript
 import { Paygentic } from "@paygentic/sdk";
 
@@ -431,7 +484,7 @@ run();
 
 ### Response
 
-**Promise\<[models.Entitlement](../../models/entitlement.md)\>**
+**Promise\<[models.EntitlementDetail](../../models/entitlementdetail.md)\>**
 
 ### Errors
 
