@@ -7807,7 +7807,7 @@
         ],
         "summary": "List",
         "operationId": "listPaymentSessions",
-        "description": "List payment sessions for the authenticated merchant with optional filters. Supports filtering by subscriptionId, customerId, status, and entityType. When subscriptionId is provided the result includes both the subscription's own activation session (entityType='subscription') and any session attached to invoices for that subscription (entityType='invoice').",
+        "description": "List payment sessions for the authenticated merchant with optional filters. Supports filtering by subscriptionId, customerId, status, and entityType. When subscriptionId is provided the result includes both the subscription's own activation session (entityType='subscription') and any session attached to invoices for that subscription (entityType='invoice'). When customerId is provided the result covers the customer's full payment history: payment-link sessions (entityType='payment'), the activation sessions of the customer's subscriptions, and the sessions of those subscriptions' invoices.",
         "parameters": [
           {
             "name": "merchantId",
@@ -7831,7 +7831,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Filter to sessions linked to a payment for this customer."
+            "description": "Filter to sessions for this customer: payment-link sessions plus the activation and invoice sessions of the customer's subscriptions."
           },
           {
             "name": "status",
@@ -13301,6 +13301,11 @@
             "type": "string",
             "description": "ID of the entity the session pays for."
           },
+          "entityLabel": {
+            "type": "string",
+            "nullable": true,
+            "description": "Display label for the entity — invoice number, payment-link reference, or subscription name. Null when no label is available."
+          },
           "amount": {
             "type": "string",
             "description": "Amount in decimal dollars."
@@ -13325,6 +13330,11 @@
             "type": "string",
             "nullable": true,
             "description": "Stripe Connect account ID (acct_*) when the session is routed to a connected account."
+          },
+          "providerPaymentRef": {
+            "type": "string",
+            "nullable": true,
+            "description": "Provider payment intent reference — Stripe PaymentIntent ID (pi_*) or Airwallex intent ID (int_*). Null until the intent is created on first checkout load."
           },
           "completedAt": {
             "type": "string",

@@ -51,7 +51,7 @@ export type ListPaymentSessionsRequest = {
    */
   subscriptionId?: string | undefined;
   /**
-   * Filter to sessions linked to a payment for this customer.
+   * Filter to sessions for this customer: payment-link sessions plus the activation and invoice sessions of the customer's subscriptions.
    */
   customerId?: string | undefined;
   /**

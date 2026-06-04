@@ -48,6 +48,10 @@ export type SchemasPaymentSession = {
    */
   entityId: string;
   /**
+   * Display label for the entity — invoice number, payment-link reference, or subscription name. Null when no label is available.
+   */
+  entityLabel?: string | null | undefined;
+  /**
    * Amount in decimal dollars.
    */
   amount: string;
@@ -63,6 +67,10 @@ export type SchemasPaymentSession = {
    * Stripe Connect account ID (acct_*) when the session is routed to a connected account.
    */
   merchantPaymentAccountId?: string | null | undefined;
+  /**
+   * Provider payment intent reference — Stripe PaymentIntent ID (pi_*) or Airwallex intent ID (int_*). Null until the intent is created on first checkout load.
+   */
+  providerPaymentRef?: string | null | undefined;
   /**
    * Timestamp the session reached terminal completion. Null until the session completes.
    */
@@ -91,10 +99,12 @@ export const SchemasPaymentSession$inboundSchema: z.ZodType<
   id: z.string(),
   entityType: z.string(),
   entityId: z.string(),
+  entityLabel: z.nullable(z.string()).optional(),
   amount: z.string(),
   currency: z.string(),
   status: SchemasPaymentSessionStatus$inboundSchema,
   merchantPaymentAccountId: z.nullable(z.string()).optional(),
+  providerPaymentRef: z.nullable(z.string()).optional(),
   completedAt: z.nullable(
     z.string().datetime({ offset: true }).transform(v => new Date(v)),
   ).optional(),
