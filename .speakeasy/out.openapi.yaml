@@ -7979,6 +7979,9 @@
                     "type": "string",
                     "description": "User-provided deduplication key. If not provided, a unique key is generated."
                   },
+                  "externalId": {
+                    "$ref": "#/components/schemas/ExternalId"
+                  },
                   "data": {
                     "type": "object",
                     "additionalProperties": true,
@@ -10847,11 +10850,11 @@
           },
           "resetMaxRollover": {
             "type": "number",
-            "description": "Maximum balance carried over at the entitlement's reset boundary."
+            "description": "Maximum balance carried over at the entitlement's reset boundary. A value of 999999999999 represents effectively unlimited rollover (the default for direct and purchase grants). A value of 0 means any remaining balance is discarded at each reset."
           },
           "resetMinRollover": {
             "type": "number",
-            "description": "Minimum balance at the entitlement's reset boundary."
+            "description": "Minimum balance at the entitlement's reset boundary; balances below this are floored up. 0 means no floor."
           }
         }
       },
@@ -13384,6 +13387,9 @@
           },
           "idempotencyKey": {
             "type": "string"
+          },
+          "externalId": {
+            "$ref": "#/components/schemas/ExternalId"
           }
         }
       },

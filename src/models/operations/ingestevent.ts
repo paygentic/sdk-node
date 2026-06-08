@@ -30,6 +30,10 @@ export type IngestEventRequest = {
    */
   idempotencyKey?: string | undefined;
   /**
+   * Optional external identifier for cross-referencing with external systems. Alphanumeric characters, hyphens, and underscores only.
+   */
+  externalId?: string | undefined;
+  /**
    * Event payload containing the metering data.
    */
   data: { [k: string]: any };
@@ -43,6 +47,7 @@ export type IngestEventRequest$Outbound = {
   namespace?: string | undefined;
   timestamp?: string | undefined;
   idempotencyKey?: string | undefined;
+  externalId?: string | undefined;
   data: { [k: string]: any };
 };
 
@@ -58,6 +63,7 @@ export const IngestEventRequest$outboundSchema: z.ZodType<
   namespace: z.string().optional(),
   timestamp: z.date().transform(v => v.toISOString()).optional(),
   idempotencyKey: z.string().optional(),
+  externalId: z.string().optional(),
   data: z.record(z.any()),
 });
 

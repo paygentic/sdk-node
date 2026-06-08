@@ -52,11 +52,11 @@ export type Grant = {
    */
   idempotencyKey: string | null;
   /**
-   * Maximum balance carried over at the entitlement's reset boundary.
+   * Maximum balance carried over at the entitlement's reset boundary. A value of 999999999999 represents effectively unlimited rollover (the default for direct and purchase grants). A value of 0 means any remaining balance is discarded at each reset.
    */
   resetMaxRollover?: number | undefined;
   /**
-   * Minimum balance at the entitlement's reset boundary.
+   * Minimum balance at the entitlement's reset boundary; balances below this are floored up. 0 means no floor.
    */
   resetMinRollover?: number | undefined;
 };

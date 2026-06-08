@@ -25,6 +25,10 @@ export type EventResponse = {
   namespace?: string | undefined;
   timestamp?: Date | undefined;
   idempotencyKey?: string | undefined;
+  /**
+   * Optional external identifier for cross-referencing with external systems. Alphanumeric characters, hyphens, and underscores only.
+   */
+  externalId?: string | undefined;
 };
 
 /** @internal */
@@ -47,6 +51,7 @@ export const EventResponse$inboundSchema: z.ZodType<
   timestamp: z.string().datetime({ offset: true }).transform(v => new Date(v))
     .optional(),
   idempotencyKey: z.string().optional(),
+  externalId: z.string().optional(),
 });
 
 export function eventResponseFromJSON(
