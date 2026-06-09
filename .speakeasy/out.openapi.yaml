@@ -11148,7 +11148,7 @@
       },
       "PriceQuantity": {
         "type": "integer",
-        "minimum": 1,
+        "minimum": 0,
         "description": "Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1."
       },
       "FeePrice": {
