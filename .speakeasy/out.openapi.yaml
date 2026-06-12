@@ -103,6 +103,18 @@
     {
       "name": "Costs",
       "description": "A Cost represents the operational or infrastructure expense of serving customers for a given product. Costs are metered (driven by event-based usage) and are tracked in parallel with billable metrics to give merchants visibility into both revenue and cost per customer."
+    },
+    {
+      "name": "ExternalReferences",
+      "description": "An `ExternalReference` links a Paygentic entity (e.g. an `Item`) to a record in an external system such as Salesforce or NetSuite. Multiple external records may map to the same Paygentic entity, but each external id is the *primary* reference of at most one entity per merchant."
+    },
+    {
+      "name": "Items",
+      "description": "An `Item` is the canonical \"thing you sell\" that external-system mappings point at. It is fully decoupled from the billing `Product` and holds no pricing/plan/metering, and it is CRM/ERP agnostic — which providers map to it lives entirely in its `ExternalReference` rows."
+    },
+    {
+      "name": "MerchantIntegrations",
+      "description": "A `MerchantIntegration` records a merchant's connection to an external provider. One connection per `(merchant, provider)` — re-connecting upserts in place."
     }
   ],
   "paths": {
@@ -9495,6 +9507,862 @@
         },
         "x-speakeasy-name-override": "delete"
       }
+    },
+    "/v0/externalReferences": {
+      "post": {
+        "tags": [
+          "ExternalReferences"
+        ],
+        "summary": "Create",
+        "operationId": "createExternalReference",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "merchantId",
+                  "entityType",
+                  "entityId",
+                  "provider",
+                  "externalId"
+                ],
+                "properties": {
+                  "merchantId": {
+                    "$ref": "#/components/schemas/schemas-OrganizationId"
+                  },
+                  "entityType": {
+                    "$ref": "#/components/schemas/EntityType"
+                  },
+                  "entityId": {
+                    "type": "string",
+                    "description": "Paygentic id of the entity, e.g. `itm_xxx`"
+                  },
+                  "provider": {
+                    "$ref": "#/components/schemas/Provider"
+                  },
+                  "externalId": {
+                    "$ref": "#/components/schemas/schemas-ExternalId"
+                  },
+                  "externalLabel": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Human-friendly name shown in UIs (e.g. a NetSuite financial-treatment name)"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Provider-specific fields (e.g. `{ \"sfObject\": \"Product2\" }`)"
+                  },
+                  "isPrimary": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether this is the canonical reference for `(provider, externalId)`. The primary is unique per merchant; non-primary references are aliases."
+                  },
+                  "isDefault": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Whether this is the default target for the entity + provider. At most one default per `(entityType, entityId, provider)`."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "External reference created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalReference"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "ExternalReferences"
+        ],
+        "summary": "List",
+        "operationId": "listExternalReferences",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/schemas-OrganizationId"
+            },
+            "description": "Restrict results to a specific merchant. All active filters AND together."
+          },
+          {
+            "name": "entityType",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/EntityType"
+            },
+            "description": "Filter by the Paygentic entity type the reference points at (e.g. `item`). All active filters AND together."
+          },
+          {
+            "name": "entityId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by the Paygentic entity id (e.g. `itm_xxx`). This is the inverse of the `GET /v0/items?provider=&externalId=` resolution endpoint — look up references from the Paygentic side. All active filters AND together."
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Provider"
+            },
+            "description": "Filter by provider (e.g. `salesforce`, `netsuite`). All active filters AND together."
+          },
+          {
+            "name": "externalId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/schemas-ExternalId"
+            },
+            "description": "Filter by the external system's record id. Pair with `provider` to look up all Paygentic entities that carry a given external reference. All active filters AND together."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of external references",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ExternalReference"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/externalReferences/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The unique identifier of the external reference",
+          "schema": {
+            "type": "string",
+            "pattern": "^xrf_[a-zA-Z0-9]+$"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "ExternalReferences"
+        ],
+        "summary": "Get",
+        "operationId": "getExternalReference",
+        "responses": {
+          "200": {
+            "description": "External reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalReference"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "ExternalReferences"
+        ],
+        "summary": "Update",
+        "operationId": "updateExternalReference",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "externalLabel": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "nullable": true
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "isPrimary": {
+                    "type": "boolean"
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "External reference updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalReference"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "ExternalReferences"
+        ],
+        "summary": "Delete",
+        "operationId": "deleteExternalReference",
+        "responses": {
+          "204": {
+            "description": "External reference deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/items": {
+      "post": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Create",
+        "operationId": "createItem",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "merchantId"
+                ],
+                "properties": {
+                  "merchantId": {
+                    "$ref": "#/components/schemas/schemas-OrganizationId"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Canonical sellable name for the Item"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Optional key-value metadata"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "List",
+        "operationId": "listItems",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/schemas-OrganizationId"
+            },
+            "description": "Filter items by merchant organization id"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Provider whose external code to resolve (e.g. `salesforce`, `netsuite`). Must be supplied together with `externalId`."
+          },
+          {
+            "name": "externalId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Resolve every live Item mapped to this `(provider, externalId)` — the canonical primary plus any non-primary aliases. The primary Item is returned first and is identifiable by its matching reference's `isPrimary: true`. Empty list on no match. Must be supplied together with `provider`."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            },
+            "description": "Maximum items to return. In resolution mode (`provider`+`externalId` supplied) pagination is over the de-duplicated resolved Item set, primary Item first."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Zero-based offset for pagination. In resolution mode this paginates the de-duplicated resolved Item set."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Item"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/items/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The unique identifier of the item",
+          "schema": {
+            "type": "string",
+            "pattern": "^itm_[a-zA-Z0-9]+$"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Get",
+        "operationId": "getItem",
+        "responses": {
+          "200": {
+            "description": "Item details (including external references)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Update",
+        "operationId": "updateItem",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Items"
+        ],
+        "summary": "Delete",
+        "operationId": "deleteItem",
+        "responses": {
+          "204": {
+            "description": "Item soft-deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/merchantIntegrations": {
+      "get": {
+        "tags": [
+          "MerchantIntegrations"
+        ],
+        "summary": "List",
+        "operationId": "listMerchantIntegrations",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            },
+            "description": "Restrict results to a specific merchant. All active filters AND together."
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/MerchantIntegrationProvider"
+            },
+            "description": "Filter by provider (e.g. `salesforce`)."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of merchant integrations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MerchantIntegration"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "MerchantIntegrations"
+        ],
+        "summary": "Upsert",
+        "description": "Create or re-activate a merchant's connection to a provider. Idempotent on `(merchantId, provider)` — connecting an already-connected provider re-activates the existing row, never creating a duplicate.",
+        "operationId": "upsertMerchantIntegration",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "merchantId",
+                  "provider"
+                ],
+                "properties": {
+                  "merchantId": {
+                    "$ref": "#/components/schemas/OrganizationId"
+                  },
+                  "provider": {
+                    "$ref": "#/components/schemas/MerchantIntegrationProvider"
+                  },
+                  "externalId": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Ampersand installation id."
+                  },
+                  "status": {
+                    "$ref": "#/components/schemas/MerchantIntegrationStatus"
+                  },
+                  "config": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merchant integration upserted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantIntegration"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/merchantIntegrations/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The unique identifier of the merchant integration",
+          "schema": {
+            "type": "string",
+            "pattern": "^mint_[a-zA-Z0-9]+$"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "MerchantIntegrations"
+        ],
+        "summary": "Get",
+        "operationId": "getMerchantIntegration",
+        "responses": {
+          "200": {
+            "description": "Merchant integration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantIntegration"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/merchantIntegrations/{id}/disconnect": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "The unique identifier of the merchant integration",
+          "schema": {
+            "type": "string",
+            "pattern": "^mint_[a-zA-Z0-9]+$"
+          }
+        }
+      ],
+      "patch": {
+        "tags": [
+          "MerchantIntegrations"
+        ],
+        "summary": "Disconnect",
+        "description": "Soft-disconnect a connection (status `disconnected`, stamp `disconnectedAt`). Never hard-deletes — preserves the install id and `connectedAt` for audit.",
+        "operationId": "disconnectMerchantIntegration",
+        "responses": {
+          "200": {
+            "description": "Merchant integration disconnected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantIntegration"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -11268,6 +12136,7 @@
         "required": [
           "id",
           "object",
+          "merchantId",
           "model",
           "paymentTerm",
           "invoiceDisplayName",
@@ -11286,6 +12155,10 @@
               "price"
             ],
             "default": "price"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/OrganizationId",
+            "description": "The merchant organization that owns this price, derived from the associated fee or billable metric."
           },
           "billableMetricId": {
             "type": "string"
@@ -11604,6 +12477,7 @@
         "required": [
           "id",
           "object",
+          "merchantId",
           "invoiceDisplayName",
           "paymentTerm",
           "properties",
@@ -11629,6 +12503,10 @@
             "type": "string",
             "pattern": "^fee_[a-zA-Z0-9]+$",
             "description": "The unique identifier for the fee referred to by this price. Present when price is linked to a fee."
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/OrganizationId",
+            "description": "The merchant organization that owns this price, derived from the associated fee or billable metric. Present on single-price reads."
           },
           "billingCadence": {
             "type": "string",
@@ -12126,6 +13004,7 @@
         "required": [
           "id",
           "object",
+          "merchantId",
           "name",
           "customerId",
           "planId",
@@ -12144,6 +13023,10 @@
             "enum": [
               "subscription"
             ]
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/OrganizationId",
+            "description": "The merchant organization that owns this subscription, equal to the customer's merchant."
           },
           "autoCharge": {
             "type": "boolean",
@@ -14189,6 +15072,244 @@
           "createdAt",
           "updatedAt"
         ]
+      },
+      "schemas-OrganizationId": {
+        "type": "string",
+        "pattern": "^org_[a-zA-Z0-9]+$"
+      },
+      "EntityType": {
+        "type": "string",
+        "enum": [
+          "item"
+        ],
+        "description": "The type of Paygentic entity this external reference points at"
+      },
+      "Provider": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "maxLength": 64,
+        "description": "Lowercase snake_case provider identifier (e.g. `salesforce`, `netsuite`)"
+      },
+      "schemas-ExternalId": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_-]+$",
+        "maxLength": 255,
+        "description": "Identifier of the record in the external system"
+      },
+      "ExternalReferenceId": {
+        "type": "string",
+        "pattern": "^xrf_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for an external reference"
+      },
+      "ExternalReference": {
+        "type": "object",
+        "description": "Links a Paygentic entity to a record in an external system such as Salesforce or NetSuite.",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "entityType",
+          "entityId",
+          "provider",
+          "externalId",
+          "metadata",
+          "isPrimary",
+          "isDefault",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ExternalReferenceId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "externalReference"
+            ],
+            "default": "externalReference"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/OrganizationId"
+          },
+          "entityType": {
+            "$ref": "#/components/schemas/EntityType"
+          },
+          "entityId": {
+            "type": "string"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/Provider"
+          },
+          "externalId": {
+            "$ref": "#/components/schemas/ExternalId"
+          },
+          "externalLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "isPrimary": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ItemId": {
+        "type": "string",
+        "pattern": "^itm_[a-zA-Z0-9]+$"
+      },
+      "Item": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "name",
+          "metadata",
+          "externalReferences",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ItemId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "item"
+            ],
+            "default": "item"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/schemas-OrganizationId"
+          },
+          "name": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "externalReferences": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalReference"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MerchantIntegrationProvider": {
+        "type": "string",
+        "enum": [
+          "salesforce"
+        ],
+        "description": "External provider a merchant can connect at the tenant level"
+      },
+      "MerchantIntegrationId": {
+        "type": "string",
+        "pattern": "^mint_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for a merchant integration"
+      },
+      "MerchantIntegrationStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "disconnected",
+          "error"
+        ],
+        "description": "Connection lifecycle state. Live Ampersand health is separate and not stored here."
+      },
+      "MerchantIntegration": {
+        "type": "object",
+        "description": "A merchant's tenant-level connection to an external provider via Ampersand.",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "provider",
+          "externalId",
+          "status",
+          "config",
+          "metadata",
+          "connectedAt",
+          "disconnectedAt",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/MerchantIntegrationId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "merchantIntegration"
+            ],
+            "default": "merchantIntegration"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/OrganizationId"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/MerchantIntegrationProvider"
+          },
+          "externalId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Ampersand installation id."
+          },
+          "status": {
+            "$ref": "#/components/schemas/MerchantIntegrationStatus"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "connectedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "disconnectedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
       }
     },
     "responses": {

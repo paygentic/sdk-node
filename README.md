@@ -260,6 +260,14 @@ run();
 
 * [ingest](docs/sdks/events/README.md#ingest) - Ingest Event
 
+### [ExternalReferences](docs/sdks/externalreferences/README.md)
+
+* [createExternalReference](docs/sdks/externalreferences/README.md#createexternalreference) - Create
+* [listExternalReferences](docs/sdks/externalreferences/README.md#listexternalreferences) - List
+* [getExternalReference](docs/sdks/externalreferences/README.md#getexternalreference) - Get
+* [updateExternalReference](docs/sdks/externalreferences/README.md#updateexternalreference) - Update
+* [deleteExternalReference](docs/sdks/externalreferences/README.md#deleteexternalreference) - Delete
+
 ### [Features](docs/sdks/features/README.md)
 
 * [list](docs/sdks/features/README.md#list) - List
@@ -284,6 +292,21 @@ run();
 * [createLineItem](docs/sdks/invoicesv2/README.md#createlineitem) - Create Manual Line Item
 * [get](docs/sdks/invoicesv2/README.md#get) - Get
 * [getLineItems](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
+
+### [Items](docs/sdks/items/README.md)
+
+* [createItem](docs/sdks/items/README.md#createitem) - Create
+* [listItems](docs/sdks/items/README.md#listitems) - List
+* [getItem](docs/sdks/items/README.md#getitem) - Get
+* [updateItem](docs/sdks/items/README.md#updateitem) - Update
+* [deleteItem](docs/sdks/items/README.md#deleteitem) - Delete
+
+### [MerchantIntegrations](docs/sdks/merchantintegrations/README.md)
+
+* [listMerchantIntegrations](docs/sdks/merchantintegrations/README.md#listmerchantintegrations) - List
+* [upsertMerchantIntegration](docs/sdks/merchantintegrations/README.md#upsertmerchantintegration) - Upsert
+* [getMerchantIntegration](docs/sdks/merchantintegrations/README.md#getmerchantintegration) - Get
+* [disconnectMerchantIntegration](docs/sdks/merchantintegrations/README.md#disconnectmerchantintegration) - Disconnect
 
 ### [PaymentSessions](docs/sdks/paymentsessions/README.md)
 
@@ -418,6 +441,11 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`entitlementsIssue`](docs/sdks/entitlements/README.md#issue) - Issue Entitlement
 - [`entitlementsList`](docs/sdks/entitlements/README.md#list) - List Entitlements
 - [`eventsIngest`](docs/sdks/events/README.md#ingest) - Ingest Event
+- [`externalReferencesCreateExternalReference`](docs/sdks/externalreferences/README.md#createexternalreference) - Create
+- [`externalReferencesDeleteExternalReference`](docs/sdks/externalreferences/README.md#deleteexternalreference) - Delete
+- [`externalReferencesGetExternalReference`](docs/sdks/externalreferences/README.md#getexternalreference) - Get
+- [`externalReferencesListExternalReferences`](docs/sdks/externalreferences/README.md#listexternalreferences) - List
+- [`externalReferencesUpdateExternalReference`](docs/sdks/externalreferences/README.md#updateexternalreference) - Update
 - [`featuresCreate`](docs/sdks/features/README.md#create) - Create
 - [`featuresDelete`](docs/sdks/features/README.md#delete) - Delete
 - [`featuresGet`](docs/sdks/features/README.md#get) - Get
@@ -434,6 +462,15 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`invoicesV2GetLineItems`](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
 - [`invoicesV2List`](docs/sdks/invoicesv2/README.md#list) - List
 - [`invoicesV2ListLineItems`](docs/sdks/invoicesv2/README.md#listlineitems) - List Line Items
+- [`itemsCreateItem`](docs/sdks/items/README.md#createitem) - Create
+- [`itemsDeleteItem`](docs/sdks/items/README.md#deleteitem) - Delete
+- [`itemsGetItem`](docs/sdks/items/README.md#getitem) - Get
+- [`itemsListItems`](docs/sdks/items/README.md#listitems) - List
+- [`itemsUpdateItem`](docs/sdks/items/README.md#updateitem) - Update
+- [`merchantIntegrationsDisconnectMerchantIntegration`](docs/sdks/merchantintegrations/README.md#disconnectmerchantintegration) - Disconnect
+- [`merchantIntegrationsGetMerchantIntegration`](docs/sdks/merchantintegrations/README.md#getmerchantintegration) - Get
+- [`merchantIntegrationsListMerchantIntegrations`](docs/sdks/merchantintegrations/README.md#listmerchantintegrations) - List
+- [`merchantIntegrationsUpsertMerchantIntegration`](docs/sdks/merchantintegrations/README.md#upsertmerchantintegration) - Upsert
 - [`paymentsCreate`](docs/sdks/payments/README.md#create) - Create Payment
 - [`paymentSessionsListPaymentSessions`](docs/sdks/paymentsessions/README.md#listpaymentsessions) - List
 - [`paymentsGet`](docs/sdks/payments/README.md#get) - Get Payment
@@ -638,9 +675,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 56 of 92 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 92 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 92 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 64 of 106 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 106 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 106 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

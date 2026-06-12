@@ -8,9 +8,12 @@ import { Costs } from "./costs.js";
 import { Customers } from "./customers.js";
 import { Entitlements } from "./entitlements.js";
 import { Events } from "./events.js";
+import { ExternalReferences } from "./externalreferences.js";
 import { Features } from "./features.js";
 import { Fees } from "./fees.js";
 import { InvoicesV2 } from "./invoicesv2.js";
+import { Items } from "./items.js";
+import { MerchantIntegrations } from "./merchantintegrations.js";
 import { Payments } from "./payments.js";
 import { PaymentSessions } from "./paymentsessions.js";
 import { Plans } from "./plans.js";
@@ -117,5 +120,22 @@ export class Paygentic extends ClientSDK {
   private _testClocks?: TestClocks;
   get testClocks(): TestClocks {
     return (this._testClocks ??= new TestClocks(this._options));
+  }
+
+  private _externalReferences?: ExternalReferences;
+  get externalReferences(): ExternalReferences {
+    return (this._externalReferences ??= new ExternalReferences(this._options));
+  }
+
+  private _items?: Items;
+  get items(): Items {
+    return (this._items ??= new Items(this._options));
+  }
+
+  private _merchantIntegrations?: MerchantIntegrations;
+  get merchantIntegrations(): MerchantIntegrations {
+    return (this._merchantIntegrations ??= new MerchantIntegrations(
+      this._options,
+    ));
   }
 }

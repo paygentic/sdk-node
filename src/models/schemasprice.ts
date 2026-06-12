@@ -50,6 +50,10 @@ export type SchemasPrice = {
    */
   feeId?: string | undefined;
   /**
+   * Unique identifier for an organization
+   */
+  merchantId: string;
+  /**
    * ISO 8601 duration. 'P0D' for one-time, 'P1M' for monthly, 'P1Y' for yearly. Required for fees, optional for billable metrics. Defaults to plan's billingCadence if not specified.
    */
   billingCadence?: string | null | undefined;
@@ -98,6 +102,7 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   object: SchemasPriceObject$inboundSchema.default("price"),
   billableMetricId: z.string().optional(),
   feeId: z.string().optional(),
+  merchantId: z.string(),
   billingCadence: z.nullable(z.string()).optional(),
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   invoiceDisplayName: z.string(),

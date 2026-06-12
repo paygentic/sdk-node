@@ -712,7 +712,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z","grantDiscountEnabled":false,"quantity":252475}
+              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z","grantDiscountEnabled":false,"quantity":252475}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -749,7 +749,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false,"quantity":296918}
+              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false,"quantity":296918}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -769,7 +769,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z","grantDiscountEnabled":false,"quantity":616565}
+              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z","grantDiscountEnabled":false,"quantity":616565}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -1145,7 +1145,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z","paymentTermDays":186713}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z","paymentTermDays":186713}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1447,7 +1447,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z","paymentTermDays":868201}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z","paymentTermDays":868201}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1505,7 +1505,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z","paymentTermDays":472943}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z","paymentTermDays":472943}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -2986,7 +2986,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z","paymentTermDays":349693}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z","paymentTermDays":349693}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -3012,4 +3012,231 @@ workflows:
               {"object":"list","data":[{"entitlementId":"ent_c9d0e1f2g3h4i5j6","customerId":"cus_q3r4s5t6u7v8w9x0","featureId":"feat_api_calls","featureKey":"api_calls","featureType":"metered","productId":"prod_m5n6o7p8q9r0s1t2","subscriptionId":"sub_pro_plan","status":"active","activeFrom":"2024-03-01T00:00:00Z","activeTo":null,"hasAccess":true,"metadata":{},"config":null,"isSoftLimit":false,"balance":8340,"usageInPeriod":1660,"overage":0,"currentPeriodStart":"2024-03-01T00:00:00Z","currentPeriodEnd":"2024-04-01T00:00:00Z"}],"pagination":{"limit":10,"offset":0,"total":1}}
             type: simple
     x-speakeasy-test-group: Entitlements
+    x-speakeasy-test-rebuild: true
+  - workflowId: createExternalReference
+    steps:
+      - stepId: test
+        operationId: createExternalReference
+        requestBody:
+          contentType: application/json
+          payload:
+            entityId: <id>
+            entityType: item
+            externalId: <id>
+            isDefault: false
+            isPrimary: true
+            merchantId: <id>
+            provider: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"externalReference","merchantId":"<id>","entityType":"item","entityId":"<id>","provider":"<value>","externalId":"<id>","metadata":{"key":"<value>","key1":"<value>"},"isPrimary":false,"isDefault":false,"createdAt":"2026-04-30T13:31:53.599Z","updatedAt":"2026-08-15T02:42:12.355Z"}
+            type: simple
+    x-speakeasy-test-group: ExternalReferences
+    x-speakeasy-test-rebuild: true
+  - workflowId: listExternalReferences
+    steps:
+      - stepId: test
+        operationId: listExternalReferences
+        parameters:
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[{"id":"<id>","object":"externalReference","merchantId":"<id>","entityType":"item","entityId":"<id>","provider":"<value>","externalId":"<id>","metadata":{},"isPrimary":false,"isDefault":false,"createdAt":"2025-01-02T19:33:22.103Z","updatedAt":"2025-12-18T00:11:45.129Z"}],"pagination":{"limit":380837,"offset":766104,"total":348879}}
+            type: simple
+    x-speakeasy-test-group: ExternalReferences
+    x-speakeasy-test-rebuild: true
+  - workflowId: getExternalReference
+    steps:
+      - stepId: test
+        operationId: getExternalReference
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"externalReference","merchantId":"<id>","entityType":"item","entityId":"<id>","provider":"<value>","externalId":"<id>","metadata":{},"isPrimary":true,"isDefault":true,"createdAt":"2025-08-26T00:18:09.462Z","updatedAt":"2026-08-05T00:07:25.379Z"}
+            type: simple
+    x-speakeasy-test-group: ExternalReferences
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateExternalReference
+    steps:
+      - stepId: test
+        operationId: updateExternalReference
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"externalReference","merchantId":"<id>","entityType":"item","entityId":"<id>","provider":"<value>","externalId":"<id>","metadata":{"key":"<value>","key1":"<value>"},"isPrimary":false,"isDefault":false,"createdAt":"2026-10-06T21:33:03.539Z","updatedAt":"2026-07-08T21:42:02.236Z"}
+            type: simple
+    x-speakeasy-test-group: ExternalReferences
+    x-speakeasy-test-rebuild: true
+  - workflowId: createItem
+    steps:
+      - stepId: test
+        operationId: createItem
+        requestBody:
+          contentType: application/json
+          payload:
+            merchantId: <id>
+            name: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"externalReferences":[],"createdAt":"2024-11-27T23:00:06.977Z","updatedAt":"2025-09-11T18:00:08.142Z"}
+            type: simple
+    x-speakeasy-test-group: Items
+    x-speakeasy-test-rebuild: true
+  - workflowId: listItems
+    steps:
+      - stepId: test
+        operationId: listItems
+        parameters:
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[{"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{},"externalReferences":[],"createdAt":"2024-04-07T20:39:17.208Z","updatedAt":"2024-09-28T05:50:14.362Z"}],"pagination":{"limit":862651,"offset":514767,"total":228448}}
+            type: simple
+    x-speakeasy-test-group: Items
+    x-speakeasy-test-rebuild: true
+  - workflowId: getItem
+    steps:
+      - stepId: test
+        operationId: getItem
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"externalReferences":[],"createdAt":"2024-10-05T14:29:34.021Z","updatedAt":"2025-11-30T08:06:35.972Z"}
+            type: simple
+    x-speakeasy-test-group: Items
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateItem
+    steps:
+      - stepId: test
+        operationId: updateItem
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{},"externalReferences":[],"createdAt":"2025-09-25T06:54:53.978Z","updatedAt":"2025-07-05T12:55:48.270Z"}
+            type: simple
+    x-speakeasy-test-group: Items
+    x-speakeasy-test-rebuild: true
+  - workflowId: listMerchantIntegrations
+    steps:
+      - stepId: test
+        operationId: listMerchantIntegrations
+        parameters:
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[],"pagination":{"limit":219373,"offset":342689,"total":385499}}
+            type: simple
+    x-speakeasy-test-group: MerchantIntegrations
+    x-speakeasy-test-rebuild: true
+  - workflowId: upsertMerchantIntegration
+    steps:
+      - stepId: test
+        operationId: upsertMerchantIntegration
+        requestBody:
+          contentType: application/json
+          payload:
+            merchantId: <id>
+            provider: salesforce
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"merchantIntegration","merchantId":"<id>","provider":"salesforce","externalId":"<id>","status":"active","config":{"key":"<value>"},"metadata":{},"connectedAt":"2024-07-02T14:15:13.340Z","disconnectedAt":"2026-04-30T16:58:39.026Z","createdAt":"2026-05-05T14:07:29.322Z","updatedAt":"2024-10-02T12:46:24.248Z"}
+            type: simple
+    x-speakeasy-test-group: MerchantIntegrations
+    x-speakeasy-test-rebuild: true
+  - workflowId: getMerchantIntegration
+    steps:
+      - stepId: test
+        operationId: getMerchantIntegration
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"merchantIntegration","merchantId":"<id>","provider":"salesforce","externalId":"<id>","status":"disconnected","config":{"key":"<value>","key1":"<value>"},"metadata":{},"connectedAt":"2024-04-26T04:53:44.438Z","disconnectedAt":"2026-03-23T17:12:15.027Z","createdAt":"2025-10-23T16:39:59.557Z","updatedAt":"2025-09-30T11:41:03.253Z"}
+            type: simple
+    x-speakeasy-test-group: MerchantIntegrations
+    x-speakeasy-test-rebuild: true
+  - workflowId: disconnectMerchantIntegration
+    steps:
+      - stepId: test
+        operationId: disconnectMerchantIntegration
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"merchantIntegration","merchantId":"<id>","provider":"salesforce","externalId":"<id>","status":"active","config":{"key":"<value>","key1":"<value>"},"metadata":{"key":"<value>"},"connectedAt":"2025-07-01T11:56:59.952Z","disconnectedAt":null,"createdAt":"2025-04-17T19:15:58.360Z","updatedAt":"2025-06-19T06:01:10.858Z"}
+            type: simple
+    x-speakeasy-test-group: MerchantIntegrations
     x-speakeasy-test-rebuild: true

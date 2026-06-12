@@ -141,6 +141,10 @@ export type Subscription = {
   id: string;
   object: SubscriptionObject;
   /**
+   * Unique identifier for an organization
+   */
+  merchantId: string;
+  /**
    * Whether automatic charging is enabled for this subscription. When true, invoices will be automatically paid using stored payment methods.
    */
   autoCharge: boolean;
@@ -404,6 +408,7 @@ export const Subscription$inboundSchema: z.ZodType<
 > = z.object({
   id: z.string(),
   object: SubscriptionObject$inboundSchema,
+  merchantId: z.string(),
   autoCharge: z.boolean().default(false),
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   customerId: z.string(),

@@ -35,6 +35,10 @@ export type Price = {
    */
   id: string;
   object: PriceObject;
+  /**
+   * Unique identifier for an organization
+   */
+  merchantId: string;
   billableMetricId?: string | undefined;
   /**
    * The unique identifier for the fee referred to by this price
@@ -85,6 +89,7 @@ export const Price$inboundSchema: z.ZodType<Price, z.ZodTypeDef, unknown> = z
   .object({
     id: z.string(),
     object: PriceObject$inboundSchema.default("price"),
+    merchantId: z.string(),
     billableMetricId: z.string().optional(),
     feeId: z.string().optional(),
     billingCadence: z.nullable(z.string()).optional(),
