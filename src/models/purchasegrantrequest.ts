@@ -10,7 +10,7 @@ export type PurchaseGrantRequest = {
    */
   amount: number;
   /**
-   * The price in decimal format (e.g., '5.00' for $5.00 USD). Must be at least $0.50.
+   * The price in decimal format (e.g., '5.00' for $5.00 USD). A non-negative decimal with at most 9 fractional digits (nanodollar precision). Must be at least $0.50 and must not exceed 4503599.62 (the maximum supported grant purchase amount).
    */
   price: string;
   /**

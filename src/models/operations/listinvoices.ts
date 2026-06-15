@@ -63,6 +63,10 @@ export type ListInvoicesRequest = {
    */
   subscriptionId?: string | undefined;
   /**
+   * Filter invoices by customer ID. Authorizes against the customer's merchant; takes precedence as the merchant source when combined with other filters.
+   */
+  customerId?: string | undefined;
+  /**
    * Filter invoices by merchant ID
    */
   merchantId?: string | undefined;
@@ -101,6 +105,7 @@ export type ListInvoicesRequest$Outbound = {
   nextActionAt?: string | undefined;
   status?: string | undefined;
   subscriptionId?: string | undefined;
+  customerId?: string | undefined;
   merchantId?: string | undefined;
 };
 
@@ -115,6 +120,7 @@ export const ListInvoicesRequest$outboundSchema: z.ZodType<
   nextActionAt: NextActionAt$outboundSchema.optional(),
   status: ListInvoicesStatus$outboundSchema.optional(),
   subscriptionId: z.string().optional(),
+  customerId: z.string().optional(),
   merchantId: z.string().optional(),
 });
 

@@ -10,6 +10,7 @@ import { ClosedEnum } from "../types/enums.js";
  */
 export const EntityType = {
   Item: "item",
+  Customer: "customer",
 } as const;
 /**
  * The type of Paygentic entity this external reference points at

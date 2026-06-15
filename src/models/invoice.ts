@@ -210,6 +210,10 @@ export type Invoice = {
    */
   subscriptionId: string;
   /**
+   * The customer ID that owns this invoice
+   */
+  customerId: string;
+  /**
    * Subtotal in decimal dollars (real-time for ACTIVE/CLOSING/CLOSED, cached otherwise)
    */
   subtotal: string;
@@ -333,6 +337,7 @@ export const Invoice$inboundSchema: z.ZodType<Invoice, z.ZodTypeDef, unknown> =
     sequenceNumber: z.number().int(),
     status: InvoiceStatus$inboundSchema,
     subscriptionId: z.string(),
+    customerId: z.string(),
     subtotal: z.string(),
     tax: z.nullable(z.lazy(() => Tax$inboundSchema)).optional(),
     totalTax: z.string(),

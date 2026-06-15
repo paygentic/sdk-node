@@ -26,18 +26,19 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * List
+ * List Salesforce accounts
  *
  * @remarks
- * List invoices with optional filters. Platform users can use nextActionAt=ready to get invoices ready for processing.
+ * Returns Accounts from the merchant's connected Salesforce org via live proxy SOQL.
  */
-export function invoicesV2List(
+export function salesforceListSalesforceAccounts(
   client: PaygenticCore,
-  request?: operations.ListInvoicesRequest | undefined,
+  request: operations.ListSalesforceAccountsRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    operations.ListInvoicesResponse,
+    operations.ListSalesforceAccountsResponse,
+    | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -58,12 +59,13 @@ export function invoicesV2List(
 
 async function $do(
   client: PaygenticCore,
-  request?: operations.ListInvoicesRequest | undefined,
+  request: operations.ListSalesforceAccountsRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      operations.ListInvoicesResponse,
+      operations.ListSalesforceAccountsResponse,
+      | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
       | ResponseValidationError
@@ -80,7 +82,7 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      operations.ListInvoicesRequest$outboundSchema.optional().parse(value),
+      operations.ListSalesforceAccountsRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -89,16 +91,13 @@ async function $do(
   const payload = parsed.value;
   const body = null;
 
-  const path = pathToFunc("/v2/invoices")();
+  const path = pathToFunc("/v0/integrations/salesforce/accounts")();
 
   const query = encodeFormQuery({
-    "customerId": payload?.customerId,
-    "limit": payload?.limit,
-    "merchantId": payload?.merchantId,
-    "nextActionAt": payload?.nextActionAt,
-    "offset": payload?.offset,
-    "status": payload?.status,
-    "subscriptionId": payload?.subscriptionId,
+    "limit": payload.limit,
+    "merchantId": payload.merchantId,
+    "offset": payload.offset,
+    "q": payload.q,
   });
 
   const headers = new Headers(compactMap({
@@ -112,7 +111,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "listInvoices",
+    operationID: "listSalesforceAccounts",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -142,7 +141,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["403", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -156,7 +155,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    operations.ListInvoicesResponse,
+    operations.ListSalesforceAccountsResponse,
+    | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -167,8 +167,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, operations.ListInvoicesResponse$inboundSchema),
-    M.jsonErr(403, errors.ErrorT$inboundSchema),
+    M.json(200, operations.ListSalesforceAccountsResponse$inboundSchema),
+    M.jsonErr(400, errors.BadRequest$inboundSchema),
+    M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

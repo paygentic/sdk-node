@@ -82,6 +82,7 @@ export * from "./listpaymentsessions.js";
 export * from "./listplans.js";
 export * from "./listprices.js";
 export * from "./listproducts.js";
+export * from "./listsalesforceaccounts.js";
 export * from "./listsourceevents.js";
 export * from "./listsourcerules.js";
 export * from "./listsources.js";

@@ -56,6 +56,10 @@ export type LineItem = {
    */
   subscriptionId: string;
   /**
+   * The customer ID that owns this line item
+   */
+  customerId: string;
+  /**
    * The price ID associated with this line item
    */
   priceId?: string | null | undefined;
@@ -167,6 +171,7 @@ export const LineItem$inboundSchema: z.ZodType<
 > = z.object({
   id: z.string(),
   subscriptionId: z.string(),
+  customerId: z.string(),
   priceId: z.nullable(z.string()).optional(),
   invoiceId: z.nullable(z.string()).optional(),
   type: LineItemType$inboundSchema,

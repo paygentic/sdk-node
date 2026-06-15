@@ -7,7 +7,7 @@ import { CreateExternalReferenceRequest } from "@paygentic/sdk/models/operations
 
 let value: CreateExternalReferenceRequest = {
   merchantId: "<id>",
-  entityType: "item",
+  entityType: "customer",
   entityId: "<id>",
   provider: "<value>",
   externalId: "<id>",

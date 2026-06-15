@@ -21,6 +21,7 @@ import { Prices } from "./prices.js";
 import { Products } from "./products.js";
 import { Profitability } from "./profitability.js";
 import { Revenue } from "./revenue.js";
+import { Salesforce } from "./salesforce.js";
 import { Sources } from "./sources.js";
 import { Subscriptions } from "./subscriptions.js";
 import { TestClocks } from "./testclocks.js";
@@ -130,6 +131,11 @@ export class Paygentic extends ClientSDK {
   private _items?: Items;
   get items(): Items {
     return (this._items ??= new Items(this._options));
+  }
+
+  private _salesforce?: Salesforce;
+  get salesforce(): Salesforce {
+    return (this._salesforce ??= new Salesforce(this._options));
   }
 
   private _merchantIntegrations?: MerchantIntegrations;

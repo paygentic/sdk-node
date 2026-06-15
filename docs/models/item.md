@@ -16,22 +16,23 @@ let value: Item = {
     {
       id: "<id>",
       merchantId: "<id>",
-      entityType: "item",
+      entityType: "customer",
       entityId: "<id>",
       provider: "<value>",
       externalId: "<id>",
       metadata: {
         "key": "<value>",
         "key1": "<value>",
+        "key2": "<value>",
       },
-      isPrimary: false,
+      isPrimary: true,
       isDefault: true,
-      createdAt: new Date("2024-04-26T00:59:15.058Z"),
-      updatedAt: new Date("2025-07-31T11:07:44.107Z"),
+      createdAt: new Date("2025-07-31T11:07:44.107Z"),
+      updatedAt: new Date("2026-04-23T20:22:22.390Z"),
     },
   ],
-  createdAt: new Date("2026-04-23T20:22:22.390Z"),
-  updatedAt: new Date("2024-07-08T04:24:00.354Z"),
+  createdAt: new Date("2024-07-08T04:24:00.354Z"),
+  updatedAt: new Date("2026-12-15T02:58:19.832Z"),
 };
 ```
 

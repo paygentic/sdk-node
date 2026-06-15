@@ -13,5 +13,5 @@ let value: EntityType = "item";
 ## Values
 
 ```typescript
-"item"
+"item" | "customer"
 ```

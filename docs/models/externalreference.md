@@ -14,11 +14,13 @@ let value: ExternalReference = {
   entityId: "<id>",
   provider: "<value>",
   externalId: "<id>",
-  metadata: {},
-  isPrimary: true,
-  isDefault: false,
-  createdAt: new Date("2025-01-22T20:26:52.973Z"),
-  updatedAt: new Date("2025-08-29T06:45:51.723Z"),
+  metadata: {
+    "key": "<value>",
+  },
+  isPrimary: false,
+  isDefault: true,
+  createdAt: new Date("2025-08-29T06:45:51.723Z"),
+  updatedAt: new Date("2026-12-07T18:25:19.013Z"),
 };
 ```
 

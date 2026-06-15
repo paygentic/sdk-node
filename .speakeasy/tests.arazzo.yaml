@@ -1545,7 +1545,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"invoice","autoApprove":true,"billingAnchor":"2026-09-05T07:35:48.967Z","billingCadence":"<value>","createdAt":"2026-05-07T17:21:44.913Z","currency":"Syrian Pound","gracePeriodEnd":"2026-09-09T07:32:58.606Z","grandTotal":"<value>","itemCount":618603,"merchantId":"<id>","paidAmount":"<value>","periodEnd":"2025-03-26T10:35:15.865Z","periodStart":"2026-12-13T23:28:43.227Z","sequenceNumber":649898,"status":"ACTIVE","subscriptionId":"<id>","subtotal":"<value>","totalTax":"<value>","unpaidAmount":"<value>","updatedAt":"2025-01-05T14:26:49.311Z"}
+              {"id":"<id>","object":"invoice","autoApprove":true,"billingAnchor":"2026-09-05T07:35:48.967Z","billingCadence":"<value>","createdAt":"2026-05-07T17:21:44.913Z","currency":"Syrian Pound","gracePeriodEnd":"2026-09-09T07:32:58.606Z","grandTotal":"<value>","itemCount":618603,"merchantId":"<id>","paidAmount":"<value>","periodEnd":"2025-03-26T10:35:15.865Z","periodStart":"2026-12-13T23:28:43.227Z","sequenceNumber":649898,"status":"ACTIVE","subscriptionId":"<id>","customerId":"<id>","subtotal":"<value>","totalTax":"<value>","unpaidAmount":"<value>","updatedAt":"2025-01-05T14:26:49.311Z"}
             type: simple
     x-speakeasy-test-group: Invoices V2
     x-speakeasy-test-rebuild: true
@@ -2719,7 +2719,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","data":[{"id":"<id>","subscriptionId":"<id>","type":"metered","status":"invoiced","displayName":"Ruthe20","currency":"Tenge","periodStart":"2026-09-04T02:49:10.376Z","periodEnd":"2026-09-15T08:12:34.337Z","invoiceAt":"2024-10-05T12:55:27.688Z","unitPrice":"<value>","createdAt":"2024-05-18T12:29:19.850Z","updatedAt":"2024-07-26T23:40:10.281Z"}],"totalCount":585166,"summary":{"feeSubtotal":"<value>","meteredEstimatedSubtotal":"<value>","currency":"Swedish Krona"}}
+              {"object":"list","data":[{"id":"<id>","subscriptionId":"<id>","customerId":"<id>","type":"metered","status":"invoiced","displayName":"Ruthe20","currency":"Tenge","periodStart":"2026-09-04T02:49:10.376Z","periodEnd":"2026-09-15T08:12:34.337Z","invoiceAt":"2024-10-05T12:55:27.688Z","unitPrice":"<value>","createdAt":"2024-05-18T12:29:19.850Z","updatedAt":"2024-07-26T23:40:10.281Z"}],"totalCount":585166,"summary":{"feeSubtotal":"<value>","meteredEstimatedSubtotal":"<value>","currency":"Swedish Krona"}}
             type: simple
     x-speakeasy-test-group: Invoices V2
     x-speakeasy-test-rebuild: true
@@ -2739,7 +2739,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","subscriptionId":"<id>","type":"discount","status":"pending","displayName":"Roscoe_Haag","currency":"Belize Dollar","periodStart":"2025-06-18T03:33:03.362Z","periodEnd":"2025-11-09T02:25:51.382Z","invoiceAt":"2024-04-26T04:27:52.258Z","unitPrice":"<value>","createdAt":"2025-10-18T18:51:06.413Z","updatedAt":"2025-04-29T04:46:04.080Z"}
+              {"id":"<id>","subscriptionId":"<id>","customerId":"<id>","type":"discount","status":"pending","displayName":"Roscoe_Haag","currency":"Belize Dollar","periodStart":"2025-06-18T03:33:03.362Z","periodEnd":"2025-11-09T02:25:51.382Z","invoiceAt":"2024-04-26T04:27:52.258Z","unitPrice":"<value>","createdAt":"2025-10-18T18:51:06.413Z","updatedAt":"2025-04-29T04:46:04.080Z"}
             type: simple
     x-speakeasy-test-group: Invoices V2
     x-speakeasy-test-rebuild: true
@@ -3239,4 +3239,27 @@ workflows:
               {"id":"<id>","object":"merchantIntegration","merchantId":"<id>","provider":"salesforce","externalId":"<id>","status":"active","config":{"key":"<value>","key1":"<value>"},"metadata":{"key":"<value>"},"connectedAt":"2025-07-01T11:56:59.952Z","disconnectedAt":null,"createdAt":"2025-04-17T19:15:58.360Z","updatedAt":"2025-06-19T06:01:10.858Z"}
             type: simple
     x-speakeasy-test-group: MerchantIntegrations
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSalesforceAccounts
+    steps:
+      - stepId: test
+        operationId: listSalesforceAccounts
+        parameters:
+          - name: merchantId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[],"totalSize":871992,"done":false}
+            type: simple
+    x-speakeasy-test-group: Salesforce
     x-speakeasy-test-rebuild: true

@@ -6998,6 +6998,14 @@
           },
           {
             "in": "query",
+            "name": "customerId",
+            "schema": {
+              "$ref": "#/components/schemas/CustomerId"
+            },
+            "description": "Filter invoices by customer ID. Authorizes against the customer's merchant; takes precedence as the merchant source when combined with other filters."
+          },
+          {
+            "in": "query",
             "name": "merchantId",
             "schema": {
               "$ref": "#/components/schemas/OrganizationId"
@@ -10118,6 +10126,102 @@
         }
       }
     },
+    "/v0/integrations/salesforce/accounts": {
+      "get": {
+        "tags": [
+          "Salesforce"
+        ],
+        "summary": "List Salesforce accounts",
+        "description": "Returns Accounts from the merchant's connected Salesforce org via live proxy SOQL.",
+        "operationId": "listSalesforceAccounts",
+        "x-rate-limit": {
+          "max": 30,
+          "timeWindow": "1 minute"
+        },
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            },
+            "description": "Merchant whose Salesforce connection to use."
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "maxLength": 255
+            },
+            "description": "Optional name filter (LIKE match)."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Salesforce accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "totalSize",
+                    "done"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SalesforceAccount"
+                      }
+                    },
+                    "totalSize": {
+                      "type": "integer"
+                    },
+                    "done": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v0/merchantIntegrations": {
       "get": {
         "tags": [
@@ -10506,6 +10610,11 @@
         "type": "string",
         "pattern": "^price_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a price"
+      },
+      "SalesforceAccount": {
+        "type": "object",
+        "description": "A Salesforce Account record. Fields vary by org and are passed through verbatim.",
+        "additionalProperties": true
       },
       "BillableMetric": {
         "type": "object",
@@ -11785,7 +11894,8 @@
           },
           "price": {
             "type": "string",
-            "description": "The price in decimal format (e.g., '5.00' for $5.00 USD). Must be at least $0.50."
+            "pattern": "^\\d+(\\.\\d{1,9})?$",
+            "description": "The price in decimal format (e.g., '5.00' for $5.00 USD). A non-negative decimal with at most 9 fractional digits (nanodollar precision). Must be at least $0.50 and must not exceed 4503599.62 (the maximum supported grant purchase amount)."
           },
           "idempotencyKey": {
             "type": "string",
@@ -13681,6 +13791,10 @@
             "type": "string",
             "description": "The subscription ID this invoice belongs to"
           },
+          "customerId": {
+            "type": "string",
+            "description": "The customer ID that owns this invoice"
+          },
           "subtotal": {
             "type": "string",
             "description": "Subtotal in decimal dollars (real-time for ACTIVE/CLOSING/CLOSED, cached otherwise)"
@@ -13740,6 +13854,7 @@
           "merchantId",
           "object",
           "subscriptionId",
+          "customerId",
           "sequenceNumber",
           "status",
           "currency",
@@ -13764,6 +13879,7 @@
         "required": [
           "id",
           "subscriptionId",
+          "customerId",
           "type",
           "status",
           "displayName",
@@ -13783,6 +13899,10 @@
           "subscriptionId": {
             "type": "string",
             "description": "The subscription this line item belongs to"
+          },
+          "customerId": {
+            "type": "string",
+            "description": "The customer ID that owns this line item"
           },
           "priceId": {
             "type": "string",
@@ -15080,7 +15200,8 @@
       "EntityType": {
         "type": "string",
         "enum": [
-          "item"
+          "item",
+          "customer"
         ],
         "description": "The type of Paygentic entity this external reference points at"
       },
