@@ -13657,6 +13657,10 @@
             "type": "string",
             "description": "Machine-readable reason code for the most recent failure (e.g. CALCULATION_FAILED). Present only when status is FAILED or PAYMENT_FAILED."
           },
+          "paymentInFlight": {
+            "type": "boolean",
+            "description": "Whether a payment for this invoice is currently being processed (the payment session is in the 'processing' state). Clients should not offer manual 'mark as paid' while true. Only populated by GET /invoices/{id}."
+          },
           "gracePeriodEnd": {
             "type": "string",
             "format": "date-time",

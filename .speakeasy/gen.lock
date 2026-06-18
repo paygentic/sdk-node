@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: 6008bb11c139545b253312e2e964fddb
+  docChecksum: e45a61dca958530627f827a20a925751
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.7.16
-  configChecksum: d46a3c76c20786bea89bab3b86fd0a68
+  releaseVersion: 0.7.17
+  configChecksum: d32f11ca534d7752c3f6b96058cc5e33
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: f443c0dd-7cad-42e6-99fe-f9fe292ccdc9
-  pristine_commit_hash: c3fac1202cf6f056d406b144cb86f3defcbbe580
-  pristine_tree_hash: b36e17c5f5b8357955a8b45f65f4ccc6cf2ee65f
+  generation_id: 7c526d85-a8ac-4c81-9e3c-9280b35ac99e
+  pristine_commit_hash: d4f4c0204b99bf22cc32cedfcc554e0c17201ad6
+  pristine_tree_hash: 44c7b708c042ad895725726f2ed1dbb985cb128f
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -333,8 +333,8 @@ trackedFiles:
     pristine_git_object: 8cb2d91551082e365e6723ca98bd7c989d69f1e8
   docs/models/invoice.md:
     id: 18e2034f11ad
-    last_write_checksum: sha1:54d957e25fc3b6a5faf2ff8ed40e67bfa39dc79d
-    pristine_git_object: cad4a1c4f8070d70fcae6edd8f3fcd2b0d19ce4b
+    last_write_checksum: sha1:eadcab8ae19a83689ea29bdf721bd915a4b4439e
+    pristine_git_object: 929b28f77ecfca89562cb7f4abe6bd59d7a25b06
   docs/models/invoicecategorysummary.md:
     id: 028b6380d691
     last_write_checksum: sha1:90d749e89166850a4468f3ea8aaff4a288961ad3
@@ -1889,12 +1889,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:6d31700f5bb14969faa93e90dd661525d63869bd
-    pristine_git_object: bab4337ee80d0a1d0b4ffc42652e7a472fc7caba
+    last_write_checksum: sha1:d2557d06c1d4dbfc344642521fd525e21798c2cd
+    pristine_git_object: 3ef3bb209a92b780b2c30524d67c7342d9b3836e
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:e6a07b9cc580a69941055bdc1d0c29339262a6c9
-    pristine_git_object: 393580dce8ad83e7405ae310f3d3b58d30920f33
+    last_write_checksum: sha1:eaa8a0873217c8d206825193a91be55fcc6adf42
+    pristine_git_object: 71d71b137b75b183ee179b07d468a422a642966b
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -2349,8 +2349,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:253bcaa2cd320d7095bc10623690e860723ee625
-    pristine_git_object: 4115da24267e070cc74dac154a699f26c8a167da
+    last_write_checksum: sha1:0874ff0fe3f5ebf2f56374157a0fe9e8337ed5b8
+    pristine_git_object: 49d42804fbb38112c110ff5680f66bd41790f68a
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -2565,8 +2565,8 @@ trackedFiles:
     pristine_git_object: c77352717c32899503c2ca474854c9ca9f4eeaad
   src/models/invoice.ts:
     id: 1c5037fcdce9
-    last_write_checksum: sha1:ef4201d01f97cf595758c39c5c7f90f799a367b0
-    pristine_git_object: 31cc52088b84b3d17205738b9ed94f4d45be53ae
+    last_write_checksum: sha1:1c5b5c3a78cae205135cc87428cad5fad2ba818e
+    pristine_git_object: 87aad19d491002d1806054a9f22197dea9acbf49
   src/models/invoicecategorysummary.ts:
     id: 7c518b7788be
     last_write_checksum: sha1:34a8a5d8a8b851e4fccb9fa67057615460c69329
@@ -5331,4 +5331,7 @@ generatedTests:
   getMerchantIntegration: "2026-06-12T09:40:29Z"
   disconnectMerchantIntegration: "2026-06-12T09:40:29Z"
   listSalesforceAccounts: "2026-06-15T10:37:25Z"
-releaseNotes: "## Typescript SDK Changes:\n* `paygentic.items.createItem()`:  `response.externalReferences[].entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.externalReferences.createExternalReference()`: \n  *  `request.entityType.enum(customer)` **Added**\n  *  `response.entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.externalReferences.listExternalReferences()`: \n  *  `request.entityType` **Changed**\n  *  `response.data[].entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.externalReferences.getExternalReference()`:  `response.entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.externalReferences.updateExternalReference()`:  `response.entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.items.listItems()`:  `response.data[].externalReferences[].entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.items.getItem()`:  `response.externalReferences[].entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.items.updateItem()`:  `response.externalReferences[].entityType.enum(customer)` **Added** (Breaking ⚠️)\n* `paygentic.invoicesV2.list()`: \n  *  `request.customerId` **Added**\n  *  `response.data[].customerId` **Added**\n* `paygentic.invoicesV2.listLineItems()`:  `response.data[].customerId` **Added**\n* `paygentic.invoicesV2.createLineItem()`:  `response.customerId` **Added**\n* `paygentic.invoicesV2.get()`:  `response.customerId` **Added**\n* `paygentic.salesforce.listSalesforceAccounts()`: **Added**\n"
+releaseNotes: |
+  ## Typescript SDK Changes:
+  * `paygentic.invoicesV2.list()`:  `response.data[].paymentInFlight` **Added**
+  * `paygentic.invoicesV2.get()`:  `response.paymentInFlight` **Added**

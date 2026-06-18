@@ -134,6 +134,10 @@ export type Invoice = {
    */
   failureReason?: string | undefined;
   /**
+   * Whether a payment for this invoice is currently being processed (the payment session is in the 'processing' state). Clients should not offer manual 'mark as paid' while true. Only populated by GET /invoices/{id}.
+   */
+  paymentInFlight?: boolean | undefined;
+  /**
    * The end of the grace period for accepting usage events
    */
   gracePeriodEnd: Date;
@@ -306,6 +310,7 @@ export const Invoice$inboundSchema: z.ZodType<Invoice, z.ZodTypeDef, unknown> =
     ),
     currency: z.string(),
     failureReason: z.string().optional(),
+    paymentInFlight: z.boolean().optional(),
     gracePeriodEnd: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),
