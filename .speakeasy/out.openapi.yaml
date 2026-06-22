@@ -1466,6 +1466,11 @@
                     "type": "object",
                     "additionalProperties": true,
                     "description": "Arbitrary key/value pairs to attach to the session."
+                  },
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Absolute time the generated link expires. Optional; defaults to the server's configured session expiry (30 days) when omitted. Must be in the future and no more than 30 days ahead."
                   }
                 }
               }
@@ -1510,12 +1515,34 @@
           {
             "name": "customerId",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "$ref": "#/components/schemas/CustomerId"
             },
-            "description": "The unique identifier of the customer to retrieve entitlements for.",
+            "description": "The Paygentic customer id to retrieve entitlements for. Supply exactly one of `customerId` or `externalCustomerId`. When combined with `merchantId`, the customer must belong to that merchant or the request resolves to not found.",
             "example": "cus_q3r4s5t6u7v8w9x0"
+          },
+          {
+            "name": "externalCustomerId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "description": "The merchant's own external customer reference (`Customer.externalId`, exact match), used to retrieve entitlements without first resolving it to a `cus_` id. Matches the `externalId` filter on `GET /v1/customers` (plain string, exact match — no pattern constraint, so any stored `externalId` is addressable). Supply exactly one of `customerId` or `externalCustomerId`. `externalId` is unique only within a merchant, so an effective merchant scope is required: either pass `merchantId`, or authenticate with a single-merchant API key. With no resolvable merchant scope the request is rejected.",
+            "example": "ext-customer-123"
+          },
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            },
+            "description": "Optional merchant scope. With `externalCustomerId` it selects the merchant the external id is resolved within (required for the platform key, which has no single merchant). With `customerId` it acts as a tenant guard — the resolved customer must belong to this merchant, otherwise the request resolves to not found. A passed `merchantId` is only a filter and never grants access the caller does not already hold; authorization is always evaluated against the resolved customer's merchant.",
+            "example": "org_a1b2c3d4e5f6g7h8"
           },
           {
             "name": "featureKey",

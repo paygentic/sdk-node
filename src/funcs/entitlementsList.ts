@@ -37,7 +37,7 @@ import { Result } from "../types/fp.js";
  */
 export function entitlementsList(
   client: PaygenticCore,
-  request: operations.ListEntitlementsRequest,
+  request?: operations.ListEntitlementsRequest | undefined,
   options?: RequestOptions,
 ): APIPromise<
   Result<
@@ -63,7 +63,7 @@ export function entitlementsList(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.ListEntitlementsRequest,
+  request?: operations.ListEntitlementsRequest | undefined,
   options?: RequestOptions,
 ): Promise<
   [
@@ -85,7 +85,8 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.ListEntitlementsRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.ListEntitlementsRequest$outboundSchema.optional().parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -97,13 +98,15 @@ async function $do(
   const path = pathToFunc("/v1/entitlements")();
 
   const query = encodeFormQuery({
-    "at": payload.at,
-    "customerId": payload.customerId,
-    "featureKey": payload.featureKey,
-    "limit": payload.limit,
-    "offset": payload.offset,
-    "productId": payload.productId,
-    "subscriptionId": payload.subscriptionId,
+    "at": payload?.at,
+    "customerId": payload?.customerId,
+    "externalCustomerId": payload?.externalCustomerId,
+    "featureKey": payload?.featureKey,
+    "limit": payload?.limit,
+    "merchantId": payload?.merchantId,
+    "offset": payload?.offset,
+    "productId": payload?.productId,
+    "subscriptionId": payload?.subscriptionId,
   });
 
   const headers = new Headers(compactMap({

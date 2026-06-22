@@ -28,7 +28,7 @@ export class Entitlements extends ClientSDK {
    * For metered entitlements, each item carries live balance/usage fields, which the API resolves with one grant-engine balance lookup per metered item (bounded concurrency, up to `limit` items per page).
    */
   async list(
-    request: operations.ListEntitlementsRequest,
+    request?: operations.ListEntitlementsRequest | undefined,
     options?: RequestOptions,
   ): Promise<operations.ListEntitlementsResponse> {
     return unwrapAsync(entitlementsList(

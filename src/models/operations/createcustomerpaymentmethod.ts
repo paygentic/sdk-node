@@ -18,6 +18,10 @@ export type CreateCustomerPaymentMethodRequestBody = {
    * Arbitrary key/value pairs to attach to the session.
    */
   metadata?: { [k: string]: any } | undefined;
+  /**
+   * Absolute time the generated link expires. Optional; defaults to the server's configured session expiry (30 days) when omitted. Must be in the future and no more than 30 days ahead.
+   */
+  expiresAt?: Date | undefined;
 };
 
 export type CreateCustomerPaymentMethodRequest = {
@@ -33,6 +37,7 @@ export type CreateCustomerPaymentMethodRequestBody$Outbound = {
   successRedirectUrl?: string | undefined;
   failureRedirectUrl?: string | undefined;
   metadata?: { [k: string]: any } | undefined;
+  expiresAt?: string | undefined;
 };
 
 /** @internal */
@@ -44,6 +49,7 @@ export const CreateCustomerPaymentMethodRequestBody$outboundSchema: z.ZodType<
   successRedirectUrl: z.string().optional(),
   failureRedirectUrl: z.string().optional(),
   metadata: z.record(z.any()).optional(),
+  expiresAt: z.date().transform(v => v.toISOString()).optional(),
 });
 
 export function createCustomerPaymentMethodRequestBodyToJSON(

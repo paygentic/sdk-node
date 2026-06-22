@@ -29,6 +29,8 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
 
   console.log(result);
@@ -54,6 +56,8 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
   if (res.ok) {
     const { value: result } = res;
@@ -78,6 +82,8 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
 
   console.log(result);
@@ -103,6 +109,8 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
   if (res.ok) {
     const { value: result } = res;
@@ -127,6 +135,8 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
 
   console.log(result);
@@ -152,6 +162,8 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
   if (res.ok) {
     const { value: result } = res;
@@ -176,6 +188,8 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
 
   console.log(result);
@@ -201,6 +215,8 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
   if (res.ok) {
     const { value: result } = res;
@@ -225,6 +241,8 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.entitlements.list({
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
 
   console.log(result);
@@ -250,6 +268,8 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await entitlementsList(paygentic, {
     customerId: "cus_q3r4s5t6u7v8w9x0",
+    externalCustomerId: "ext-customer-123",
+    merchantId: "org_a1b2c3d4e5f6g7h8",
   });
   if (res.ok) {
     const { value: result } = res;

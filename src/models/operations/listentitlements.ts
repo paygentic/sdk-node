@@ -11,9 +11,17 @@ import * as models from "../index.js";
 
 export type ListEntitlementsRequest = {
   /**
-   * The unique identifier of the customer to retrieve entitlements for.
+   * The Paygentic customer id to retrieve entitlements for. Supply exactly one of `customerId` or `externalCustomerId`. When combined with `merchantId`, the customer must belong to that merchant or the request resolves to not found.
    */
-  customerId: string;
+  customerId?: string | undefined;
+  /**
+   * The merchant's own external customer reference (`Customer.externalId`, exact match), used to retrieve entitlements without first resolving it to a `cus_` id. Matches the `externalId` filter on `GET /v1/customers` (plain string, exact match — no pattern constraint, so any stored `externalId` is addressable). Supply exactly one of `customerId` or `externalCustomerId`. `externalId` is unique only within a merchant, so an effective merchant scope is required: either pass `merchantId`, or authenticate with a single-merchant API key. With no resolvable merchant scope the request is rejected.
+   */
+  externalCustomerId?: string | undefined;
+  /**
+   * Optional merchant scope. With `externalCustomerId` it selects the merchant the external id is resolved within (required for the platform key, which has no single merchant). With `customerId` it acts as a tenant guard — the resolved customer must belong to this merchant, otherwise the request resolves to not found. A passed `merchantId` is only a filter and never grants access the caller does not already hold; authorization is always evaluated against the resolved customer's merchant.
+   */
+  merchantId?: string | undefined;
   /**
    * Filter results to a specific feature by its key. When specified, `productId` is also required. Use this to check access to a single feature.
    */
@@ -62,7 +70,9 @@ export type ListEntitlementsResponse = {
 
 /** @internal */
 export type ListEntitlementsRequest$Outbound = {
-  customerId: string;
+  customerId?: string | undefined;
+  externalCustomerId?: string | undefined;
+  merchantId?: string | undefined;
   featureKey?: string | undefined;
   productId?: string | undefined;
   subscriptionId?: string | undefined;
@@ -77,7 +87,9 @@ export const ListEntitlementsRequest$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   ListEntitlementsRequest
 > = z.object({
-  customerId: z.string(),
+  customerId: z.string().optional(),
+  externalCustomerId: z.string().optional(),
+  merchantId: z.string().optional(),
   featureKey: z.string().optional(),
   productId: z.string().optional(),
   subscriptionId: z.string().optional(),

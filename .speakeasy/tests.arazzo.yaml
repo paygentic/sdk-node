@@ -1583,6 +1583,12 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: externalCustomerId
+            in: query
+            value: ext-customer-123
+          - name: merchantId
+            in: query
+            value: org_a1b2c3d4e5f6g7h8
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -1606,6 +1612,12 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: externalCustomerId
+            in: query
+            value: ext-customer-123
+          - name: merchantId
+            in: query
+            value: org_a1b2c3d4e5f6g7h8
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -1629,6 +1641,12 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: externalCustomerId
+            in: query
+            value: ext-customer-123
+          - name: merchantId
+            in: query
+            value: org_a1b2c3d4e5f6g7h8
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -1652,6 +1670,12 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: externalCustomerId
+            in: query
+            value: ext-customer-123
+          - name: merchantId
+            in: query
+            value: org_a1b2c3d4e5f6g7h8
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -1675,6 +1699,12 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: externalCustomerId
+            in: query
+            value: ext-customer-123
+          - name: merchantId
+            in: query
+            value: org_a1b2c3d4e5f6g7h8
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -3004,6 +3034,12 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: externalCustomerId
+            in: query
+            value: ext-customer-123
+          - name: merchantId
+            in: query
+            value: org_a1b2c3d4e5f6g7h8
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
