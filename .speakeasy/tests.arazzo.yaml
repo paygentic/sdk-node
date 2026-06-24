@@ -3299,3 +3299,57 @@ workflows:
             type: simple
     x-speakeasy-test-group: Salesforce
     x-speakeasy-test-rebuild: true
+  - workflowId: createInvoiceRefund
+    steps:
+      - stepId: test
+        operationId: createInvoiceRefund
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"invoice_refund","id":"<id>","invoiceId":"<id>","merchantId":"<id>","amount":"540.59","taxAmount":"<value>","total":"<value>","currency":"Lempira","status":"VOIDED","externalCreditNoteId":"<id>","createdAt":"2025-05-17T05:45:46.603Z"}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: listInvoiceRefunds
+    steps:
+      - stepId: test
+        operationId: listInvoiceRefunds
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"object":"invoice_refund","id":"<id>","invoiceId":"<id>","merchantId":"<id>","amount":"189.78","taxAmount":"<value>","total":"<value>","currency":"Guarani","status":"VOIDED","externalCreditNoteId":"<id>","createdAt":"2024-06-28T14:26:21.144Z"}]}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: voidInvoiceRefund
+    steps:
+      - stepId: test
+        operationId: voidInvoiceRefund
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: refundId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"invoice_refund","id":"<id>","invoiceId":"<id>","merchantId":"<id>","amount":"757.76","taxAmount":"<value>","total":"<value>","currency":"Colombian Peso","status":"VOIDED","externalCreditNoteId":"<id>","createdAt":"2024-11-27T14:03:24.372Z"}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true

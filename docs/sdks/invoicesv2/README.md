@@ -11,6 +11,9 @@ Invoice V2 operations supporting billing cycles organized by time periods. Warni
 * [createLineItem](#createlineitem) - Create Manual Line Item
 * [get](#get) - Get
 * [getLineItems](#getlineitems) - Get Line Items
+* [createInvoiceRefund](#createinvoicerefund) - Refund Invoice
+* [listInvoiceRefunds](#listinvoicerefunds) - List Invoice Refunds
+* [voidInvoiceRefund](#voidinvoicerefund) - Void Invoice Refund
 
 ## list
 
@@ -389,6 +392,237 @@ run();
 
 | Error Type                   | Status Code                  | Content Type                 |
 | ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 403, 404                     | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## createInvoiceRefund
+
+Issue a full refund against a paid invoice by creating a credit note. The invoice stays PAID; the refund is recorded as a child credit note. Accessible to the owning merchant or platform operators. Only works for invoices in PAID status that have not already been refunded. Full refund only — the entire invoice (subtotal + tax) is credited.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="createInvoiceRefund" method="post" path="/v2/invoices/{id}/refunds" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.invoicesV2.createInvoiceRefund({
+    id: "<id>",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { invoicesV2CreateInvoiceRefund } from "@paygentic/sdk/funcs/invoicesV2CreateInvoiceRefund.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await invoicesV2CreateInvoiceRefund(paygentic, {
+    id: "<id>",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("invoicesV2CreateInvoiceRefund failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.CreateInvoiceRefundRequest](../../models/operations/createinvoicerefundrequest.md)                                                                                 | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.InvoiceRefund](../../models/invoicerefund.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 403, 404                     | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## listInvoiceRefunds
+
+List the credit notes (refunds) recorded against an invoice. Accessible to the owning merchant or platform operators.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="listInvoiceRefunds" method="get" path="/v2/invoices/{id}/refunds" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.invoicesV2.listInvoiceRefunds({
+    id: "<id>",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { invoicesV2ListInvoiceRefunds } from "@paygentic/sdk/funcs/invoicesV2ListInvoiceRefunds.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await invoicesV2ListInvoiceRefunds(paygentic, {
+    id: "<id>",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("invoicesV2ListInvoiceRefunds failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.ListInvoiceRefundsRequest](../../models/operations/listinvoicerefundsrequest.md)                                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.InvoiceRefundList](../../models/invoicerefundlist.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 403, 404                     | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## voidInvoiceRefund
+
+Void a previously-issued refund (credit note). Reverses the credit note in the tax provider and excludes it from revenue. Accessible to the owning merchant or platform operators.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="voidInvoiceRefund" method="post" path="/v2/invoices/{id}/refunds/{refundId}/void" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.invoicesV2.voidInvoiceRefund({
+    id: "<id>",
+    refundId: "<id>",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { invoicesV2VoidInvoiceRefund } from "@paygentic/sdk/funcs/invoicesV2VoidInvoiceRefund.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await invoicesV2VoidInvoiceRefund(paygentic, {
+    id: "<id>",
+    refundId: "<id>",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("invoicesV2VoidInvoiceRefund failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.VoidInvoiceRefundRequest](../../models/operations/voidinvoicerefundrequest.md)                                                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.InvoiceRefund](../../models/invoicerefund.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
 | errors.ErrorT                | 403, 404                     | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |

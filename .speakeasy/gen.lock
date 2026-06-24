@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: bb3f4556a655e91547a4f63b00c08f98
+  docChecksum: ed89689aec67d6585980b19b0abce00d
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.7.18
-  configChecksum: 8fd34abd36442af5331cbfec55cadce3
+  releaseVersion: 0.7.19
+  configChecksum: e8bb6e51fbe80a311d40d5e2140ca52f
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: 5d990a3a-5a39-4161-9b6a-ce8f4e96ea60
-  pristine_commit_hash: 5d1a6cfccf7bf41272e19008bb84d3e2288eeb6b
-  pristine_tree_hash: 949fe25199c9133a2a7c1b646ce7e1097cb4dcdd
+  generation_id: 58e9edf1-6fa2-4726-9951-19e18d8bd700
+  pristine_commit_hash: 90f1842e25f39859e5de7b5c5317e34dc43311c5
+  pristine_tree_hash: 7f3a9127fbeb2caf76e6227600df77dc35b653d0
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -355,6 +355,26 @@ trackedFiles:
     id: 23d4bc17a5c1
     last_write_checksum: sha1:8a8e2142ea75996601b4f171b18524ae6765373d
     pristine_git_object: 586eb0f4f8ebac3af90ca104ac96d21e1578e650
+  docs/models/invoicerefund.md:
+    id: 0cbd51ac472f
+    last_write_checksum: sha1:44bd687e7bfe2aefca4fe8a99baffaf9808e723c
+    pristine_git_object: 5e43eb7e036c8183149bb2d4b2d1ef24571f202a
+  docs/models/invoicerefundlist.md:
+    id: 73ec030f18d4
+    last_write_checksum: sha1:c774cf1e4339f248744ad8e428251acd4f7307e4
+    pristine_git_object: 4596f3188e8c647b7d44696caf69124a05b9abbb
+  docs/models/invoicerefundlistobject.md:
+    id: 800eaf5bc5e4
+    last_write_checksum: sha1:3d89a0b69cccb3597ea1b915725af2c733801e50
+    pristine_git_object: 26405557bf3269e27336bb2fa90e6454de6a9ab5
+  docs/models/invoicerefundobject.md:
+    id: 260d48aac61d
+    last_write_checksum: sha1:923e73a072e35fb1d557ee4cc62b62b5ac90ea5e
+    pristine_git_object: a6787970702fbe7d6bab8e75d31800b809f723ca
+  docs/models/invoicerefundstatus.md:
+    id: 811e52b6e2b4
+    last_write_checksum: sha1:2dc1ff6c7674dffb10075f80c1b6d471445b4642
+    pristine_git_object: 7998e3316a930d32cfe6f9e92e349dd74cde76dd
   docs/models/invoicestatus.md:
     id: 8398e0530511
     last_write_checksum: sha1:90b9bd8c420006b548b3ae1bff8828ca8009f78d
@@ -583,6 +603,14 @@ trackedFiles:
     id: d78bfcc12458
     last_write_checksum: sha1:ca58a4bcdc4846ca8b847fa5427aee3e3a2dfb1d
     pristine_git_object: 8bbc327a0aa1b9a7acf06794154674538a98bd81
+  docs/models/operations/createinvoicerefundrequest.md:
+    id: c4e0808f7a24
+    last_write_checksum: sha1:fa37cd42c152158760f0c478e66347a98eb59d92
+    pristine_git_object: eac6064fb4e0d1961ae22f15b17c08d1053688f8
+  docs/models/operations/createinvoicerefundrequestbody.md:
+    id: 4fdbcf43f59a
+    last_write_checksum: sha1:acd9aefe4f35ca4c94097d8da3588d1c335c8b7f
+    pristine_git_object: 356ca892c82aae803383da6e9fca8466174680a4
   docs/models/operations/createitemrequest.md:
     id: 092f38dab1e4
     last_write_checksum: sha1:15e1ce4d04498bb446e74531cea42923a713c3c1
@@ -1015,6 +1043,10 @@ trackedFiles:
     id: 885abd5ec7d9
     last_write_checksum: sha1:a4667d45bebce4bd017f1f3ae72b18c61fd4444f
     pristine_git_object: 18ec8d1f465c70ce36580724e4b4e2676ff2f8e5
+  docs/models/operations/listinvoicerefundsrequest.md:
+    id: 083ee28306f6
+    last_write_checksum: sha1:ed9757f89d3e86fdebca6fb6913028bd9e074341
+    pristine_git_object: fea87dd2829ac3ad8455e246d6b4254b973228e6
   docs/models/operations/listinvoicesobject.md:
     id: e83332c69d28
     last_write_checksum: sha1:6f0a46a403a2475e3131e29692dfefdfa9a28f82
@@ -1387,6 +1419,14 @@ trackedFiles:
     id: 1f70ce9a4b3d
     last_write_checksum: sha1:4fc395f62b3101f40e7bfb341d86b3c25acf9ce3
     pristine_git_object: 9cf410c5b8df4b717c01c8e06fae537984a39a4e
+  docs/models/operations/voidinvoicerefundrequest.md:
+    id: 8c3e75804e97
+    last_write_checksum: sha1:ed625a93992281f5ea81adb3487b41eebc5760c7
+    pristine_git_object: 1507260aa1a9d2447093769b65e67c8f72bf08b4
+  docs/models/operations/voidinvoicerefundrequestbody.md:
+    id: aa201d86a920
+    last_write_checksum: sha1:d91bba1e995ea52a4236085eacea8c14d8e1e2c7
+    pristine_git_object: 92d24459c5d33151769fc1e9e54153b2dd145599
   docs/models/operations/window.md:
     id: 22a97bd1759f
     last_write_checksum: sha1:65dbec6189c9535b2e6d99f75a7fd3f28efdc309
@@ -1577,8 +1617,8 @@ trackedFiles:
     pristine_git_object: 24673c4034aa36af49e90b601e2384bd384d265f
   docs/models/revenuesummaryresponse.md:
     id: 500b08d365b7
-    last_write_checksum: sha1:76c9530243d56b251861fe306e4c5692a6d98802
-    pristine_git_object: 4d9514c9d2380369056f47e37c4a93ef4cc842ed
+    last_write_checksum: sha1:d25104c2ad940c25fd1add4a08680d00938bc38a
+    pristine_git_object: 6e503556673dede4b014569a11e58cabf10dd49e
   docs/models/revenuetrendbucket.md:
     id: 5043c4af1aab
     last_write_checksum: sha1:31dc3860c872530a31dcbe32dea5666d578e219a
@@ -1797,8 +1837,8 @@ trackedFiles:
     pristine_git_object: 36487147e8d148565cdba5c3f125d7179c12a8ae
   docs/sdks/invoicesv2/README.md:
     id: 671851b727bc
-    last_write_checksum: sha1:088dafa1d9c05f5c3f70e825801eee648ae636ce
-    pristine_git_object: 099a64a03746c49c86df04394308f10f9d5d46ba
+    last_write_checksum: sha1:75e5f1f546288dfcb9d39b37fad110addc7ea4ce
+    pristine_git_object: fd420619682fc69b4ff7b1167f4dbf11736fd001
   docs/sdks/items/README.md:
     id: 88a5da5379a5
     last_write_checksum: sha1:a570700486ae2085054bf26d64c86b04966a1696
@@ -1889,12 +1929,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:9fa2db1770a71275946895557e30a97da5883a84
-    pristine_git_object: e77ebe89c1b4e57106ebb70b01cc6d203cca1141
+    last_write_checksum: sha1:84b57d07037fcaa5d87506332dec63b27b3defda
+    pristine_git_object: e518022210d47c5de85f4809cc3484a1714acf1b
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:ad1e881d1237ad263fab0995714a78c4f83b315e
-    pristine_git_object: dd524ae33928d6ef4c66cb97a4890ba1a8f5a2f2
+    last_write_checksum: sha1:4b02291593b22b6330f0fa6d995b71dceefb6178
+    pristine_git_object: 88ef13c792723905a01b61bbf7e6a478a5ce7230
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -2079,6 +2119,10 @@ trackedFiles:
     id: 07188326771b
     last_write_checksum: sha1:13c95dc60511399ee20c668bc41cd23e2e540906
     pristine_git_object: b52db8a971fbe78190194fd28308bbc284540d15
+  src/funcs/invoicesV2CreateInvoiceRefund.ts:
+    id: 449fe10555b5
+    last_write_checksum: sha1:6da90b9fc4ab18af4ca8d6f5f0765b4ab4764009
+    pristine_git_object: 1728272332d1621ef8bc2922e5f78a5981aba17e
   src/funcs/invoicesV2CreateLineItem.ts:
     id: 0e66edec0906
     last_write_checksum: sha1:05eadef173f212da11250bcabd61a1cee9c3b1f6
@@ -2095,10 +2139,18 @@ trackedFiles:
     id: 776a444e02d4
     last_write_checksum: sha1:4e423ee5de9643339b28a68e823a24c8fea7ae97
     pristine_git_object: 632ad2fd3d6e43c15e76e45056e849eae2dd61c6
+  src/funcs/invoicesV2ListInvoiceRefunds.ts:
+    id: 45fbc8a97845
+    last_write_checksum: sha1:326f31a21b1a0aca1ec03704434c577937cb8f47
+    pristine_git_object: a07845538446c681f554d5b54f309d4092744bf1
   src/funcs/invoicesV2ListLineItems.ts:
     id: 744f7a2fb0e4
     last_write_checksum: sha1:87d945b0664e27e44e5e18e1a73ebfd931a88b51
     pristine_git_object: ed15c2d52146442abdba77d6f82f7650b97daed7
+  src/funcs/invoicesV2VoidInvoiceRefund.ts:
+    id: a7dbb791595e
+    last_write_checksum: sha1:ac27dafec49cdbac14f5d334cfa3c8fba5521c1d
+    pristine_git_object: 6b3800786dfae155119c63d898cd41552a9a7149
   src/funcs/itemsCreateItem.ts:
     id: 42ac1e5566a0
     last_write_checksum: sha1:a142a6b7deda88c281148d13f9853a8beaca0619
@@ -2349,8 +2401,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:f87df0e3c6cf041ede83588120a7dfabe49c7ad9
-    pristine_git_object: edcfc3c9022b4bb34e4f511c7dce5c6018ba08a3
+    last_write_checksum: sha1:6558648ef0475ebd89a158098050a4a78f62e943
+    pristine_git_object: 83f119bd79d773dcd038837d4edfc9c7717acfce
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -2561,8 +2613,8 @@ trackedFiles:
     pristine_git_object: bace15facff1a15cb64c951d106bc340e0cc602f
   src/models/index.ts:
     id: f93644b0f37e
-    last_write_checksum: sha1:3e54b3d907dddd8257d20b4a9e9e9632ce7933e8
-    pristine_git_object: c77352717c32899503c2ca474854c9ca9f4eeaad
+    last_write_checksum: sha1:e3a2fa64ce38f99d23f47c14f1eba4f09ce234e1
+    pristine_git_object: fdd37aabaaf69430f9c8d6337e401a9a0c2ecfd5
   src/models/invoice.ts:
     id: 1c5037fcdce9
     last_write_checksum: sha1:1c5b5c3a78cae205135cc87428cad5fad2ba818e
@@ -2579,6 +2631,14 @@ trackedFiles:
     id: 56e98dd1d047
     last_write_checksum: sha1:9fa2bc8366a3893145904f1556f5cd7a48507d0a
     pristine_git_object: 8cb1a3c39a93cad7a12eba9341d97ff63b6e91cd
+  src/models/invoicerefund.ts:
+    id: 895f74699090
+    last_write_checksum: sha1:222183fe0f5d46c8fd2a28b75b21701ce3e4e1c2
+    pristine_git_object: d71e3aff406a1b1f9055881f2a10aeb6686f3e9e
+  src/models/invoicerefundlist.ts:
+    id: cc10872a0e3b
+    last_write_checksum: sha1:116640676c1432d7697aab757f142483d67075a3
+    pristine_git_object: 2a7143683d2cf7efc86ee267fc01cb88bd483c2a
   src/models/invoicesummary.ts:
     id: 55bf0005d5bd
     last_write_checksum: sha1:8fafc7cf1d56ddcf20f622eb1928d7c7e8f433e7
@@ -2683,6 +2743,10 @@ trackedFiles:
     id: 7cf0ef26d350
     last_write_checksum: sha1:2dfd81af13f9979b653eec5ce2efb82db0ea77bd
     pristine_git_object: 973db3fd755f17d8adeb10b21ca3413b340ce7a5
+  src/models/operations/createinvoicerefund.ts:
+    id: 1edae37afd34
+    last_write_checksum: sha1:173f295887e70031e93a19ab3eac10b6e34b6594
+    pristine_git_object: 46acf60c08c4fefff9afc35ddccde944d0851c7f
   src/models/operations/createitem.ts:
     id: 2d77c05e3258
     last_write_checksum: sha1:1ec7848306f58b94c0a5801dd26f2e4dd30233cc
@@ -2873,8 +2937,8 @@ trackedFiles:
     pristine_git_object: 2176ce836a6359d4d1c4ba89d806d228d606d9e6
   src/models/operations/index.ts:
     id: 0d9ffaf774d2
-    last_write_checksum: sha1:453736fb556f1d9afe373bd5aa21fe11a4787074
-    pristine_git_object: 6996743088090c532807f090bef44fa69d49b4cb
+    last_write_checksum: sha1:10170ed0c2823206706a102bd48c06041a2805b8
+    pristine_git_object: 00b61d2df2a5055175c7a1975decabc0ac6dfe3b
   src/models/operations/ingestevent.ts:
     id: 81cd5f49f1f5
     last_write_checksum: sha1:60cbbeaea054d230906b9bb9be641d23a241d835
@@ -2923,6 +2987,10 @@ trackedFiles:
     id: fc5707e4a50c
     last_write_checksum: sha1:f3dc65ca676b9ce8f6aee93a677fec73f7ec3e52
     pristine_git_object: efb701ffa8dec621a1cdab17a5d233647da5c75a
+  src/models/operations/listinvoicerefunds.ts:
+    id: a45c5b5f76de
+    last_write_checksum: sha1:0089ede71fbf6aa2f2b4993497096d434907a04c
+    pristine_git_object: 96b1e30b9a638ef226acc595f86b6640499bae24
   src/models/operations/listinvoices.ts:
     id: b70c7995d94f
     last_write_checksum: sha1:459338e5f31dcf55e3217101bdb38c1c1c5a9d47
@@ -3059,6 +3127,10 @@ trackedFiles:
     id: 51fa61b83eea
     last_write_checksum: sha1:b45052b53c0bd1a9c624cab9d3076afea5ad90f1
     pristine_git_object: 6e5f01c662e7cf0f521b41741ed134a46a49b5b2
+  src/models/operations/voidinvoicerefund.ts:
+    id: 565a9a53fddf
+    last_write_checksum: sha1:06274493db819352e1df51995b23348d0079c416
+    pristine_git_object: aa0689a3f8e0c6fca215599eccdd2efa8c020748
   src/models/payment.ts:
     id: aa98f2320aec
     last_write_checksum: sha1:3a4c437a416313839c09eae8e4cc853e13951555
@@ -3121,8 +3193,8 @@ trackedFiles:
     pristine_git_object: 7b9ede6e0b5aac3c86a57ad1ca7b076b19994acd
   src/models/revenuesummaryresponse.ts:
     id: 2d46fd2248af
-    last_write_checksum: sha1:4cd2b66cd017547ea68c78c44eaa7940fe753a5e
-    pristine_git_object: 5678162985ce4c56d16c7c9de39c435bbd4419af
+    last_write_checksum: sha1:43f9138dbccbaa3a544e7c0a5cfe83875441827c
+    pristine_git_object: b3e9a86f7bec12a5738ffc315cbe7f20e86389bf
   src/models/revenuetrendbucket.ts:
     id: b52578099427
     last_write_checksum: sha1:677fbeb419e7787f52db5f089c13c378b9b81755
@@ -3241,8 +3313,8 @@ trackedFiles:
     pristine_git_object: ecac2264817bb369ff2dbf0f0e9029807e67ff77
   src/sdk/invoicesv2.ts:
     id: 8e82e28f1ab1
-    last_write_checksum: sha1:7bacd1c704e47e7b30b4414f6184e042b27ec2d2
-    pristine_git_object: 40480267c955887f474a03b6c4cba5edb6834044
+    last_write_checksum: sha1:dbc5bd38a8c6cda9e783e5808aacd76f90cfb82a
+    pristine_git_object: 6ca2f76974bfebfcc1ed7d5478bbc205dfefcd09
   src/sdk/items.ts:
     id: fe05b7419384
     last_write_checksum: sha1:a210c7f43ba1aa76606e9974bbb7914158efac7e
@@ -5190,6 +5262,47 @@ examples:
           application/json: {"error": "not_found", "message": "The requested resource was not found"}
         "500":
           application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  createInvoiceRefund:
+    speakeasy-default-create-invoice-refund:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "201":
+          application/json: {"object": "invoice_refund", "id": "<id>", "invoiceId": "<id>", "merchantId": "<id>", "amount": "540.59", "taxAmount": "<value>", "total": "<value>", "currency": "Lempira", "status": "VOIDED", "externalCreditNoteId": "<id>", "createdAt": "2025-05-17T05:45:46.603Z"}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "403":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  listInvoiceRefunds:
+    speakeasy-default-list-invoice-refunds:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"object": "list", "data": [{"object": "invoice_refund", "id": "<id>", "invoiceId": "<id>", "merchantId": "<id>", "amount": "189.78", "taxAmount": "<value>", "total": "<value>", "currency": "Guarani", "status": "VOIDED", "externalCreditNoteId": "<id>", "createdAt": "2024-06-28T14:26:21.144Z"}]}
+        "403":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  voidInvoiceRefund:
+    speakeasy-default-void-invoice-refund:
+      parameters:
+        path:
+          id: "<id>"
+          refundId: "<id>"
+      responses:
+        "200":
+          application/json: {"object": "invoice_refund", "id": "<id>", "invoiceId": "<id>", "merchantId": "<id>", "amount": "757.76", "taxAmount": "<value>", "total": "<value>", "currency": "Colombian Peso", "status": "VOIDED", "externalCreditNoteId": "<id>", "createdAt": "2024-11-27T14:03:24.372Z"}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "403":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
 examplesVersion: 1.0.2
 generatedTests:
   getMerchant: "2026-04-17T16:13:08Z"
@@ -5343,4 +5456,12 @@ generatedTests:
   getMerchantIntegration: "2026-06-12T09:40:29Z"
   disconnectMerchantIntegration: "2026-06-12T09:40:29Z"
   listSalesforceAccounts: "2026-06-15T10:37:25Z"
-releaseNotes: "## Typescript SDK Changes:\n* `paygentic.customers.createCustomerPaymentMethod()`: \n  *  `request.requestBody.expiresAt` **Added**\n* `paygentic.entitlements.list()`:  `request` **Changed**\n"
+  createInvoiceRefund: "2026-06-24T17:01:11Z"
+  listInvoiceRefunds: "2026-06-24T17:01:11Z"
+  voidInvoiceRefund: "2026-06-24T17:01:11Z"
+releaseNotes: |
+  ## Typescript SDK Changes:
+  * `paygentic.invoicesV2.createInvoiceRefund()`: **Added**
+  * `paygentic.invoicesV2.listInvoiceRefunds()`: **Added**
+  * `paygentic.invoicesV2.voidInvoiceRefund()`: **Added**
+  * `paygentic.revenue.get()`:  `response` **Changed**

@@ -7534,6 +7534,175 @@
         "x-speakeasy-name-override": "getLineItems"
       }
     },
+    "/v2/invoices/{id}/refunds": {
+      "post": {
+        "tags": [
+          "Invoices V2"
+        ],
+        "summary": "Refund Invoice",
+        "description": "Issue a full refund against a paid invoice by creating a credit note. The invoice stays PAID; the refund is recorded as a child credit note. Accessible to the owning merchant or platform operators. Only works for invoices in PAID status that have not already been refunded. Full refund only — the entire invoice (subtotal + tax) is credited.",
+        "operationId": "createInvoiceRefund",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The invoice ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "description": "Optional reason for the refund (recorded on the credit note)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Credit note created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceRefund"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Invoices V2"
+        ],
+        "summary": "List Invoice Refunds",
+        "description": "List the credit notes (refunds) recorded against an invoice. Accessible to the owning merchant or platform operators.",
+        "operationId": "listInvoiceRefunds",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The invoice ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of refunds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceRefundList"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v2/invoices/{id}/refunds/{refundId}/void": {
+      "post": {
+        "tags": [
+          "Invoices V2"
+        ],
+        "summary": "Void Invoice Refund",
+        "description": "Void a previously-issued refund (credit note). Reverses the credit note in the tax provider and excludes it from revenue. Accessible to the owning merchant or platform operators.",
+        "operationId": "voidInvoiceRefund",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The invoice ID"
+          },
+          {
+            "in": "path",
+            "name": "refundId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The refund (credit note) ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "description": "Optional reason for voiding the refund (recorded on the credit note)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Refund voided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvoiceRefund"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v0/payments": {
       "get": {
         "tags": [
@@ -10642,6 +10811,120 @@
         "type": "object",
         "description": "A Salesforce Account record. Fields vary by org and are passed through verbatim.",
         "additionalProperties": true
+      },
+      "InvoiceRefund": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "invoiceId",
+          "merchantId",
+          "amount",
+          "taxAmount",
+          "total",
+          "currency",
+          "status",
+          "externalCreditNoteId",
+          "createdAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "invoice_refund"
+            ],
+            "description": "The object type"
+          },
+          "id": {
+            "type": "string",
+            "description": "The credit note ID (crn_*)"
+          },
+          "invoiceId": {
+            "type": "string",
+            "description": "The invoice this refund credits"
+          },
+          "merchantId": {
+            "type": "string",
+            "description": "The merchant that owns the invoice"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Refunded subtotal (pre-tax) in decimal dollars"
+          },
+          "taxAmount": {
+            "type": "string",
+            "description": "Reversed tax in decimal dollars"
+          },
+          "total": {
+            "type": "string",
+            "description": "Total refunded (amount + taxAmount) in decimal dollars"
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ISSUED",
+              "VOIDED"
+            ],
+            "description": "Credit note status"
+          },
+          "externalCreditNoteId": {
+            "type": "string",
+            "description": "Credit note id in the tax provider"
+          },
+          "permalink": {
+            "type": "string",
+            "nullable": true,
+            "description": "Public URL to view the credit note document"
+          },
+          "pdfUrl": {
+            "type": "string",
+            "nullable": true,
+            "description": "Direct PDF download link"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true,
+            "description": "Optional refund reason"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the refund was issued"
+          },
+          "voidedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "When the refund was voided, if applicable"
+          }
+        }
+      },
+      "InvoiceRefundList": {
+        "type": "object",
+        "required": [
+          "object",
+          "data"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "list"
+            ],
+            "description": "The object type"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvoiceRefund"
+            },
+            "description": "The refunds for this invoice"
+          }
+        }
       },
       "BillableMetric": {
         "type": "object",
@@ -15029,7 +15312,15 @@
           },
           "netRevenue": {
             "type": "string",
-            "description": "Net collected revenue in dollars (paid invoices + completed payments). Omitted when groupBy=currency is active."
+            "description": "Net collected revenue in dollars (paid invoices + completed payments), already net of non-voided refunds. Omitted when groupBy=currency is active."
+          },
+          "totalRefunds": {
+            "type": "string",
+            "description": "Gross total of non-voided refunds (credit notes) issued in the period, in dollars. Already subtracted from netRevenue and invoice totals. Omitted when groupBy=currency is active."
+          },
+          "refundCount": {
+            "type": "number",
+            "description": "Number of non-voided refunds (credit notes) issued in the period. Omitted when groupBy=currency is active."
           },
           "invoices": {
             "$ref": "#/components/schemas/InvoiceSummary",

@@ -33,9 +33,17 @@ export type RevenueSummaryResponse = {
    */
   object: "revenue_summary";
   /**
-   * Net collected revenue in dollars (paid invoices + completed payments). Omitted when groupBy=currency is active.
+   * Net collected revenue in dollars (paid invoices + completed payments), already net of non-voided refunds. Omitted when groupBy=currency is active.
    */
   netRevenue?: string | undefined;
+  /**
+   * Gross total of non-voided refunds (credit notes) issued in the period, in dollars. Already subtracted from netRevenue and invoice totals. Omitted when groupBy=currency is active.
+   */
+  totalRefunds?: string | undefined;
+  /**
+   * Number of non-voided refunds (credit notes) issued in the period. Omitted when groupBy=currency is active.
+   */
+  refundCount?: number | undefined;
   invoices?: InvoiceSummary | undefined;
   payments?: PaymentSummary | undefined;
   /**
@@ -60,6 +68,8 @@ export const RevenueSummaryResponse$inboundSchema: z.ZodType<
 > = z.object({
   object: z.literal("revenue_summary"),
   netRevenue: z.string().optional(),
+  totalRefunds: z.string().optional(),
+  refundCount: z.number().optional(),
   invoices: InvoiceSummary$inboundSchema.optional(),
   payments: PaymentSummary$inboundSchema.optional(),
   trend: z.array(RevenueTrendBucket$inboundSchema).optional(),

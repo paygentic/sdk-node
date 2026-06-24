@@ -33,6 +33,8 @@ export * from "./invoice.js";
 export * from "./invoicecategorysummary.js";
 export * from "./invoicelineitem.js";
 export * from "./invoicelineitemsresponse.js";
+export * from "./invoicerefund.js";
+export * from "./invoicerefundlist.js";
 export * from "./invoicesummary.js";
 export * from "./issueentitlementrequest.js";
 export * from "./item.js";
