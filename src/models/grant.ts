@@ -59,6 +59,10 @@ export type Grant = {
    * Minimum balance at the entitlement's reset boundary; balances below this are floored up. 0 means no floor.
    */
   resetMinRollover?: number | undefined;
+  /**
+   * Burn-down priority. Grants with a lower priority are consumed before grants with a higher priority; ties break on earliest expiration, then creation order. Defaults to 0.
+   */
+  priority?: number | undefined;
 };
 
 /** @internal */
@@ -88,6 +92,7 @@ export const Grant$inboundSchema: z.ZodType<Grant, z.ZodTypeDef, unknown> = z
     idempotencyKey: z.nullable(z.string()),
     resetMaxRollover: z.number().optional(),
     resetMinRollover: z.number().optional(),
+    priority: z.number().int().optional(),
   });
 
 export function grantFromJSON(

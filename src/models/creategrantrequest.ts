@@ -29,6 +29,10 @@ export type CreateGrantRequest = {
    * Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor). Ignored when the target entitlement has no `usagePeriod` (one-time entitlement).
    */
   resetMinRollover?: number | undefined;
+  /**
+   * Burn-down priority. Grants with a lower priority are consumed before grants with a higher priority; ties break on earliest expiration, then creation order. Negative values are allowed and can be used to make a grant burn ahead of existing priority-0 grants (e.g. a correction grant absorbing erroneous usage before a recurring allowance). Defaults to 0.
+   */
+  priority?: number | undefined;
 };
 
 /** @internal */
@@ -39,6 +43,7 @@ export type CreateGrantRequest$Outbound = {
   idempotencyKey: string;
   resetMaxRollover?: number | undefined;
   resetMinRollover?: number | undefined;
+  priority?: number | undefined;
 };
 
 /** @internal */
@@ -53,6 +58,7 @@ export const CreateGrantRequest$outboundSchema: z.ZodType<
   idempotencyKey: z.string(),
   resetMaxRollover: z.number().optional(),
   resetMinRollover: z.number().optional(),
+  priority: z.number().int().optional(),
 });
 
 export function createGrantRequestToJSON(

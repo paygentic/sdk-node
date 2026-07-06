@@ -115,6 +115,18 @@
     {
       "name": "MerchantIntegrations",
       "description": "A `MerchantIntegration` records a merchant's connection to an external provider. One connection per `(merchant, provider)` — re-connecting upserts in place."
+    },
+    {
+      "name": "Approvals",
+      "description": "Submit, decide, cancel, and read maker-checker approvals."
+    },
+    {
+      "name": "Orders",
+      "description": "Manage Orders, their line items, and billing schedules."
+    },
+    {
+      "name": "Billing Schedules",
+      "description": "Owner-polymorphic billing schedules with intervals and staged invoice projections. A BillingSchedule belongs to exactly one Order or one Subscription (XOR). Cadence lives on ScheduleIntervals (cadence-on-the-line)."
     }
   ],
   "paths": {
@@ -10322,6 +10334,1034 @@
         }
       }
     },
+    "/v0/orders": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Create an order",
+        "operationId": "createOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "List orders",
+        "operationId": "listOrders",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by merchant"
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by customer"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "pending",
+                "approved",
+                "rejected",
+                "cancelled"
+              ]
+            },
+            "description": "Filter by status"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "new_business",
+                "renewal",
+                "expansion"
+              ]
+            },
+            "description": "Filter by type"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/orders/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get an order",
+        "operationId": "getOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Update an order",
+        "operationId": "updateOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Delete an order",
+        "operationId": "deleteOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Order deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/orders/{orderId}/lineItems": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Add a line item",
+        "operationId": "createOrderLineItem",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderLineItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Line item created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderLineItem"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/orders/{orderId}/lineItems/{id}": {
+      "patch": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Update a line item",
+        "operationId": "updateOrderLineItem",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOrderLineItemRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated line item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderLineItem"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Delete a line item",
+        "operationId": "deleteOrderLineItem",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Line item deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/orders/{orderId}/approvals": {
+      "post": {
+        "operationId": "createOrderApproval",
+        "summary": "Create an approval for the order",
+        "description": "Submit the order for maker-checker approval. Returns 409 if a pending approval already exists.",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderApprovalRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Approval created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Approval"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found"
+          },
+          "409": {
+            "description": "Conflict — pending approval already exists or order has no line items"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v0/billingSchedules": {
+      "get": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "List billing schedules",
+        "operationId": "listBillingSchedules",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by owning order (XOR with subscriptionId)"
+          },
+          {
+            "name": "subscriptionId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by owning subscription (XOR with orderId)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of billing schedules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/schemas-BillingSchedule"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "Create a billing schedule",
+        "operationId": "createBillingSchedule",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBillingScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "BillingSchedule created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/schemas-BillingSchedule"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/billingSchedules/{id}": {
+      "get": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "Get a billing schedule",
+        "operationId": "getBillingSchedule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "BillingSchedule",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/schemas-BillingSchedule"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "Update a billing schedule",
+        "operationId": "updateBillingSchedule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBillingScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "BillingSchedule updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/schemas-BillingSchedule"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "Delete a billing schedule",
+        "operationId": "deleteBillingSchedule",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/billingSchedules/{id}/intervals": {
+      "get": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "List schedule intervals",
+        "operationId": "listScheduleIntervals",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of schedule intervals",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ScheduleInterval"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "Replace schedule intervals",
+        "description": "Replace (PUT semantics) the full interval set for a schedule. Wipes existing intervals and recreates from the supplied list. Reverts any in-flight order approval for order-owned schedules.",
+        "operationId": "replaceScheduleIntervals",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplaceScheduleIntervalsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Intervals replaced",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ScheduleInterval"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/billingSchedules/{id}/invoices": {
+      "get": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "List staged invoices",
+        "description": "List the staged invoice projections for a schedule, newest period first.",
+        "operationId": "listScheduleInvoices",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of staged invoices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ScheduleInvoice"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Billing Schedules"
+        ],
+        "summary": "Generate staged invoices",
+        "description": "Generate (or regenerate) staged invoice projections for a schedule from its current intervals. Idempotent — replaces any existing staged rows. Schedule must have at least one interval.",
+        "operationId": "generateScheduleInvoices",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Staged invoices generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ScheduleInvoice"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v0/integrations/salesforce/accounts": {
       "get": {
         "tags": [
@@ -10657,6 +11697,262 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/approvals": {
+      "post": {
+        "tags": [
+          "Approvals"
+        ],
+        "summary": "Submit a resource for approval",
+        "operationId": "createApproval",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApprovalRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Approval created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/schemas-Approval"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Approvals"
+        ],
+        "summary": "List approvals",
+        "operationId": "listApprovals",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by merchant"
+          },
+          {
+            "name": "resourceType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "order",
+                "invoice"
+              ]
+            },
+            "description": "Filter by resource type"
+          },
+          {
+            "name": "resourceId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by resource id"
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "data_review",
+                "financial_review",
+                "push"
+              ]
+            },
+            "description": "Filter by kind"
+          },
+          {
+            "name": "decision",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "approved",
+                "rejected",
+                "cancelled"
+              ]
+            },
+            "description": "Filter by decision"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of approvals",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApprovalList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/approvals/{id}": {
+      "get": {
+        "tags": [
+          "Approvals"
+        ],
+        "summary": "Get an approval",
+        "operationId": "getApproval",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Approval",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/schemas-Approval"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Approvals"
+        ],
+        "summary": "Update an approval (approve, reject, or cancel)",
+        "operationId": "updateApproval",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateApprovalRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Approval updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/schemas-Approval"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -12142,6 +13438,10 @@
           "resetMinRollover": {
             "type": "number",
             "description": "Minimum balance at the entitlement's reset boundary; balances below this are floored up. 0 means no floor."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Burn-down priority. Grants with a lower priority are consumed before grants with a higher priority; ties break on earliest expiration, then creation order. Defaults to 0."
           }
         }
       },
@@ -12184,6 +13484,12 @@
             "minimum": 0,
             "maximum": 9.99999999999e+11,
             "description": "Minimum balance at the entitlement's reset boundary; balances below this are floored up. Defaults to 0 (no floor). Ignored when the target entitlement has no `usagePeriod` (one-time entitlement)."
+          },
+          "priority": {
+            "type": "integer",
+            "minimum": -32768,
+            "maximum": 32767,
+            "description": "Burn-down priority. Grants with a lower priority are consumed before grants with a higher priority; ties break on earliest expiration, then creation order. Negative values are allowed and can be used to make a grant burn ahead of existing priority-0 grants (e.g. a correction grant absorbing erroneous usage before a recurring allowance). Defaults to 0."
           }
         }
       },
@@ -15664,6 +16970,1188 @@
           }
         }
       },
+      "OrderLineItem": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "orderId",
+          "quantity",
+          "listUnitPrice",
+          "discountUnitAmount",
+          "unitPrice",
+          "totalPrice",
+          "metadata",
+          "createdAt",
+          "updatedAt",
+          "termStartDate",
+          "termEndDate"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "order_line_item"
+            ]
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "string",
+            "description": "Decimal string"
+          },
+          "listUnitPrice": {
+            "type": "string",
+            "description": "Decimal string"
+          },
+          "discountUnitAmount": {
+            "type": "string",
+            "description": "Decimal string"
+          },
+          "unitPrice": {
+            "type": "string",
+            "description": "Decimal string"
+          },
+          "totalPrice": {
+            "type": "string",
+            "description": "Decimal string"
+          },
+          "termStartDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "termEndDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "BillingSchedule": {
+        "type": "object",
+        "description": "Summary of a billing schedule owned by this order. The full schedule (with intervals + staged invoices) is served under /billingSchedules. Owner-polymorphic: a schedule belongs to exactly one Order or one Subscription (XOR); cadence lives on ScheduleIntervals, not the header.",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "status",
+          "startDate",
+          "endDate",
+          "billingAnchor",
+          "alignmentPolicy",
+          "prorationPolicy",
+          "periodPreset",
+          "metadata",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "billing_schedule"
+            ]
+          },
+          "orderId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subscriptionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchantId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "completed",
+              "cancelled"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "billingAnchor": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "alignmentPolicy": {
+            "type": "string",
+            "enum": [
+              "anchor",
+              "calendar",
+              "coterm"
+            ]
+          },
+          "prorationPolicy": {
+            "type": "string",
+            "enum": [
+              "none",
+              "daily"
+            ]
+          },
+          "paymentTermDays": {
+            "type": "integer",
+            "nullable": true
+          },
+          "periodPreset": {
+            "type": "string",
+            "enum": [
+              "single",
+              "P1M",
+              "P3M",
+              "P6M",
+              "P1Y",
+              "custom"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "customerId",
+          "currency",
+          "termStartDate",
+          "termEndDate",
+          "totalAmount",
+          "defaultPaymentTermDays",
+          "metadata",
+          "lineItems",
+          "billingSchedules",
+          "createdAt",
+          "updatedAt",
+          "resellerId",
+          "taxExempt",
+          "sellingEntity",
+          "approvalStatus",
+          "cancelledAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "order"
+            ]
+          },
+          "merchantId": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "resellerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxExempt": {
+            "type": "boolean"
+          },
+          "sellingEntity": {
+            "type": "string",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string"
+          },
+          "approvalStatus": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "pending",
+              "approved",
+              "rejected"
+            ]
+          },
+          "cancelledAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "new_business",
+              "renewal",
+              "expansion"
+            ],
+            "nullable": true
+          },
+          "termStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "termEndDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closeDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "string",
+            "description": "Decimal string (TCV)"
+          },
+          "defaultPaymentTermDays": {
+            "type": "integer"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "lineItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderLineItem"
+            }
+          },
+          "billingSchedules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BillingSchedule"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "OrderList": {
+        "type": "object",
+        "required": [
+          "object",
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "list"
+            ]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
+          }
+        }
+      },
+      "CreateOrderLineItemRequest": {
+        "type": "object",
+        "required": [
+          "quantity",
+          "listUnitPrice",
+          "unitPrice",
+          "totalPrice"
+        ],
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "string"
+          },
+          "listUnitPrice": {
+            "type": "string"
+          },
+          "discountUnitAmount": {
+            "type": "string"
+          },
+          "unitPrice": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "termStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "termEndDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateOrderRequest": {
+        "type": "object",
+        "required": [
+          "customerId",
+          "currency",
+          "termStartDate",
+          "termEndDate",
+          "totalAmount"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "new_business",
+              "renewal",
+              "expansion"
+            ],
+            "nullable": true
+          },
+          "termStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "termEndDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closeDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "string"
+          },
+          "defaultPaymentTermDays": {
+            "type": "integer"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "lineItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateOrderLineItemRequest"
+            }
+          },
+          "resellerId": {
+            "type": "string"
+          },
+          "taxExempt": {
+            "type": "boolean"
+          },
+          "sellingEntity": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateOrderRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "new_business",
+              "renewal",
+              "expansion"
+            ],
+            "nullable": true
+          },
+          "termStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "termEndDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closeDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "string"
+          },
+          "defaultPaymentTermDays": {
+            "type": "integer"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "cancelledAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "resellerId": {
+            "type": "string",
+            "nullable": true
+          },
+          "taxExempt": {
+            "type": "boolean"
+          },
+          "sellingEntity": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateOrderLineItemRequest": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "string"
+          },
+          "listUnitPrice": {
+            "type": "string"
+          },
+          "discountUnitAmount": {
+            "type": "string"
+          },
+          "unitPrice": {
+            "type": "string"
+          },
+          "totalPrice": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "termStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "termEndDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateOrderApprovalRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requester": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional. The maker submitting the order. Derived from the authenticated principal; only a platform key may set it explicitly."
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Approval": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "resourceType",
+          "resourceId",
+          "kind",
+          "decision",
+          "requester",
+          "dataSnapshotHash",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "approval"
+            ]
+          },
+          "merchantId": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string"
+          },
+          "resourceId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "approved",
+              "rejected",
+              "cancelled"
+            ]
+          },
+          "requester": {
+            "type": "string"
+          },
+          "reviewer": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataSnapshotHash": {
+            "type": "string"
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "schemas-BillingSchedule": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "status",
+          "startDate",
+          "endDate",
+          "billingAnchor",
+          "alignmentPolicy",
+          "prorationPolicy",
+          "periodPreset",
+          "customPeriodWindows",
+          "metadata",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "billing_schedule"
+            ]
+          },
+          "orderId": {
+            "type": "string",
+            "nullable": true
+          },
+          "subscriptionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchantId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "completed",
+              "cancelled"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "billingAnchor": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "alignmentPolicy": {
+            "type": "string",
+            "enum": [
+              "anchor",
+              "calendar",
+              "coterm"
+            ]
+          },
+          "prorationPolicy": {
+            "type": "string",
+            "enum": [
+              "none",
+              "daily"
+            ]
+          },
+          "paymentTermDays": {
+            "type": "integer",
+            "nullable": true
+          },
+          "periodPreset": {
+            "type": "string",
+            "enum": [
+              "single",
+              "P1M",
+              "P3M",
+              "P6M",
+              "P1Y",
+              "custom"
+            ]
+          },
+          "customPeriodWindows": {
+            "type": "array",
+            "items": {}
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deletedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "CreateBillingScheduleRequest": {
+        "type": "object",
+        "required": [
+          "startDate",
+          "endDate",
+          "billingAnchor"
+        ],
+        "properties": {
+          "orderId": {
+            "type": "string"
+          },
+          "subscriptionId": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "billingAnchor": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "alignmentPolicy": {
+            "type": "string",
+            "enum": [
+              "anchor",
+              "calendar",
+              "coterm"
+            ]
+          },
+          "prorationPolicy": {
+            "type": "string",
+            "enum": [
+              "none",
+              "daily"
+            ]
+          },
+          "paymentTermDays": {
+            "type": "integer",
+            "nullable": true
+          },
+          "periodPreset": {
+            "type": "string",
+            "enum": [
+              "single",
+              "P1M",
+              "P3M",
+              "P6M",
+              "P1Y",
+              "custom"
+            ]
+          },
+          "customPeriodWindows": {
+            "type": "array",
+            "items": {}
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "UpdateBillingScheduleRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "active",
+              "completed",
+              "cancelled"
+            ]
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "billingAnchor": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "alignmentPolicy": {
+            "type": "string",
+            "enum": [
+              "anchor",
+              "calendar",
+              "coterm"
+            ]
+          },
+          "prorationPolicy": {
+            "type": "string",
+            "enum": [
+              "none",
+              "daily"
+            ]
+          },
+          "paymentTermDays": {
+            "type": "integer",
+            "nullable": true
+          },
+          "periodPreset": {
+            "type": "string",
+            "enum": [
+              "single",
+              "P1M",
+              "P3M",
+              "P6M",
+              "P1Y",
+              "custom"
+            ]
+          },
+          "customPeriodWindows": {
+            "type": "array",
+            "items": {}
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "ScheduleInterval": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "scheduleId",
+          "baseQuantity",
+          "quantityTransitions",
+          "billingCadence",
+          "billingMode",
+          "startDate",
+          "endDate",
+          "metadata",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "schedule_interval"
+            ]
+          },
+          "scheduleId": {
+            "type": "string"
+          },
+          "orderLineItemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true
+          },
+          "priceId": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "unitPrice": {
+            "type": "string",
+            "nullable": true,
+            "description": "Signed per-period net unit price as decimal string"
+          },
+          "baseQuantity": {
+            "type": "string",
+            "description": "Quantity at interval start"
+          },
+          "quantityTransitions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "effectiveDate",
+                "quantity"
+              ],
+              "properties": {
+                "effectiveDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "quantity": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "billingCadence": {
+            "type": "string",
+            "description": "ISO-8601 duration or 'one_off'"
+          },
+          "billingMode": {
+            "type": "string",
+            "enum": [
+              "advance",
+              "arrears"
+            ]
+          },
+          "billDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usageFilter": {
+            "type": "object",
+            "nullable": true,
+            "additionalProperties": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReplaceScheduleIntervalsRequest": {
+        "type": "object",
+        "required": [
+          "intervals"
+        ],
+        "properties": {
+          "intervals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "baseQuantity",
+                "billingCadence",
+                "startDate",
+                "endDate"
+              ],
+              "properties": {
+                "orderLineItemId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "itemId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "priceId": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "unitPrice": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "baseQuantity": {
+                  "type": "string"
+                },
+                "quantityTransitions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "effectiveDate",
+                      "quantity"
+                    ],
+                    "properties": {
+                      "effectiveDate": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "quantity": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "billingCadence": {
+                  "type": "string"
+                },
+                "billingMode": {
+                  "type": "string",
+                  "enum": [
+                    "advance",
+                    "arrears"
+                  ]
+                },
+                "billDate": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "startDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "endDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "usageFilter": {
+                  "type": "object",
+                  "nullable": true,
+                  "additionalProperties": true
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "orderLineItemId": {
+            "type": "string",
+            "description": "When set, scope the wipe to this line's intervals only (per-line cell-edit path)"
+          }
+        }
+      },
+      "ScheduleInvoice": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "orderId",
+          "billingScheduleId",
+          "merchantId",
+          "periodStart",
+          "periodEnd",
+          "dueDate",
+          "amount",
+          "status",
+          "lineItems",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "schedule_invoice"
+            ]
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "billingScheduleId": {
+            "type": "string"
+          },
+          "merchantId": {
+            "type": "string"
+          },
+          "periodStart": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Net invoice amount as decimal string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "staged",
+              "pushed",
+              "cancelled"
+            ]
+          },
+          "lineItems": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "description",
+                "quantity",
+                "unitPrice",
+                "subtotal"
+              ],
+              "properties": {
+                "lineKey": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "description": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "string"
+                },
+                "unitPrice": {
+                  "type": "string"
+                },
+                "subtotal": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "MerchantIntegrationProvider": {
         "type": "string",
         "enum": [
@@ -15751,6 +18239,187 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "schemas-Approval": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "resourceType",
+          "resourceId",
+          "kind",
+          "decision",
+          "requester",
+          "dataSnapshotHash",
+          "createdAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "approval"
+            ]
+          },
+          "merchantId": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "order",
+              "invoice"
+            ]
+          },
+          "resourceId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "data_review",
+              "financial_review",
+              "push"
+            ]
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "approved",
+              "rejected",
+              "cancelled"
+            ]
+          },
+          "requester": {
+            "type": "string"
+          },
+          "reviewer": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "dataSnapshotHash": {
+            "type": "string"
+          },
+          "decidedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApprovalList": {
+        "type": "object",
+        "required": [
+          "object",
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "list"
+            ]
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/schemas-Approval"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
+          }
+        }
+      },
+      "CreateApprovalRequest": {
+        "type": "object",
+        "required": [
+          "merchantId",
+          "resourceType",
+          "resourceId",
+          "dataSnapshotHash"
+        ],
+        "properties": {
+          "merchantId": {
+            "type": "string",
+            "description": "The merchant that owns the resource being approved."
+          },
+          "resourceType": {
+            "type": "string",
+            "enum": [
+              "order",
+              "invoice"
+            ]
+          },
+          "resourceId": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "dataSnapshotHash": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "A precomputed hash of the resource state being approved. The resource-owning domain builds this snapshot; approvals stays decoupled from any specific resource shape."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "data_review",
+              "financial_review",
+              "push"
+            ],
+            "description": "Defaults to data_review."
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 2000,
+            "nullable": true
+          },
+          "actorId": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "Optional. The real user id to record as the requester. Used when the request is made via a platform-level key on behalf of a human user (e.g. from the platform Next.js frontend). When supplied and the authenticated principal is 'platform', this value overrides the derived principal as the requester. Ignored when the caller is a non-platform API key."
+          }
+        }
+      },
+      "UpdateApprovalRequest": {
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "properties": {
+          "decision": {
+            "type": "string",
+            "enum": [
+              "approved",
+              "rejected",
+              "cancelled"
+            ],
+            "description": "approved/rejected: reviewer decision (maker-checker enforced). cancelled: recall a pending approval or reopen an approved one."
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 2000,
+            "nullable": true
+          },
+          "actorId": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "Optional. The real user id performing the action. Used when the request is made via a platform-level key on behalf of a human user. Ignored when the caller is a non-platform API key."
           }
         }
       }

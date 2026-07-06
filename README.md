@@ -213,6 +213,13 @@ run();
 <details open>
 <summary>Available methods</summary>
 
+### [Approvals](docs/sdks/approvals/README.md)
+
+* [createApproval](docs/sdks/approvals/README.md#createapproval) - Submit a resource for approval
+* [listApprovals](docs/sdks/approvals/README.md#listapprovals) - List approvals
+* [getApproval](docs/sdks/approvals/README.md#getapproval) - Get an approval
+* [updateApproval](docs/sdks/approvals/README.md#updateapproval) - Update an approval (approve, reject, or cancel)
+
 ### [BillableMetrics](docs/sdks/billablemetrics/README.md)
 
 * [create](docs/sdks/billablemetrics/README.md#create) - Create
@@ -221,6 +228,18 @@ run();
 * [update](docs/sdks/billablemetrics/README.md#update) - Update
 * [meter](docs/sdks/billablemetrics/README.md#meter) - Query Meter Usage
 * [listEvents](docs/sdks/billablemetrics/README.md#listevents) - List Meter Events
+
+### [BillingSchedules](docs/sdks/billingschedules/README.md)
+
+* [listBillingSchedules](docs/sdks/billingschedules/README.md#listbillingschedules) - List billing schedules
+* [createBillingSchedule](docs/sdks/billingschedules/README.md#createbillingschedule) - Create a billing schedule
+* [getBillingSchedule](docs/sdks/billingschedules/README.md#getbillingschedule) - Get a billing schedule
+* [updateBillingSchedule](docs/sdks/billingschedules/README.md#updatebillingschedule) - Update a billing schedule
+* [deleteBillingSchedule](docs/sdks/billingschedules/README.md#deletebillingschedule) - Delete a billing schedule
+* [listScheduleIntervals](docs/sdks/billingschedules/README.md#listscheduleintervals) - List schedule intervals
+* [replaceScheduleIntervals](docs/sdks/billingschedules/README.md#replacescheduleintervals) - Replace schedule intervals
+* [listScheduleInvoices](docs/sdks/billingschedules/README.md#listscheduleinvoices) - List staged invoices
+* [generateScheduleInvoices](docs/sdks/billingschedules/README.md#generatescheduleinvoices) - Generate staged invoices
 
 ### [Costs](docs/sdks/costs/README.md)
 
@@ -310,6 +329,18 @@ run();
 * [upsertMerchantIntegration](docs/sdks/merchantintegrations/README.md#upsertmerchantintegration) - Upsert
 * [getMerchantIntegration](docs/sdks/merchantintegrations/README.md#getmerchantintegration) - Get
 * [disconnectMerchantIntegration](docs/sdks/merchantintegrations/README.md#disconnectmerchantintegration) - Disconnect
+
+### [Orders](docs/sdks/orders/README.md)
+
+* [createOrder](docs/sdks/orders/README.md#createorder) - Create an order
+* [listOrders](docs/sdks/orders/README.md#listorders) - List orders
+* [getOrder](docs/sdks/orders/README.md#getorder) - Get an order
+* [updateOrder](docs/sdks/orders/README.md#updateorder) - Update an order
+* [deleteOrder](docs/sdks/orders/README.md#deleteorder) - Delete an order
+* [createOrderLineItem](docs/sdks/orders/README.md#createorderlineitem) - Add a line item
+* [updateOrderLineItem](docs/sdks/orders/README.md#updateorderlineitem) - Update a line item
+* [deleteOrderLineItem](docs/sdks/orders/README.md#deleteorderlineitem) - Delete a line item
+* [createOrderApproval](docs/sdks/orders/README.md#createorderapproval) - Create an approval for the order
 
 ### [PaymentSessions](docs/sdks/paymentsessions/README.md)
 
@@ -419,12 +450,25 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 
 <summary>Available standalone functions</summary>
 
+- [`approvalsCreateApproval`](docs/sdks/approvals/README.md#createapproval) - Submit a resource for approval
+- [`approvalsGetApproval`](docs/sdks/approvals/README.md#getapproval) - Get an approval
+- [`approvalsListApprovals`](docs/sdks/approvals/README.md#listapprovals) - List approvals
+- [`approvalsUpdateApproval`](docs/sdks/approvals/README.md#updateapproval) - Update an approval (approve, reject, or cancel)
 - [`billableMetricsCreate`](docs/sdks/billablemetrics/README.md#create) - Create
 - [`billableMetricsGet`](docs/sdks/billablemetrics/README.md#get) - Get
 - [`billableMetricsList`](docs/sdks/billablemetrics/README.md#list) - List
 - [`billableMetricsListEvents`](docs/sdks/billablemetrics/README.md#listevents) - List Meter Events
 - [`billableMetricsMeter`](docs/sdks/billablemetrics/README.md#meter) - Query Meter Usage
 - [`billableMetricsUpdate`](docs/sdks/billablemetrics/README.md#update) - Update
+- [`billingSchedulesCreateBillingSchedule`](docs/sdks/billingschedules/README.md#createbillingschedule) - Create a billing schedule
+- [`billingSchedulesDeleteBillingSchedule`](docs/sdks/billingschedules/README.md#deletebillingschedule) - Delete a billing schedule
+- [`billingSchedulesGenerateScheduleInvoices`](docs/sdks/billingschedules/README.md#generatescheduleinvoices) - Generate staged invoices
+- [`billingSchedulesGetBillingSchedule`](docs/sdks/billingschedules/README.md#getbillingschedule) - Get a billing schedule
+- [`billingSchedulesListBillingSchedules`](docs/sdks/billingschedules/README.md#listbillingschedules) - List billing schedules
+- [`billingSchedulesListScheduleIntervals`](docs/sdks/billingschedules/README.md#listscheduleintervals) - List schedule intervals
+- [`billingSchedulesListScheduleInvoices`](docs/sdks/billingschedules/README.md#listscheduleinvoices) - List staged invoices
+- [`billingSchedulesReplaceScheduleIntervals`](docs/sdks/billingschedules/README.md#replacescheduleintervals) - Replace schedule intervals
+- [`billingSchedulesUpdateBillingSchedule`](docs/sdks/billingschedules/README.md#updatebillingschedule) - Update a billing schedule
 - [`costsCreateCost`](docs/sdks/costs/README.md#createcost) - Create
 - [`costsDeleteCost`](docs/sdks/costs/README.md#deletecost) - Delete
 - [`costsGetCost`](docs/sdks/costs/README.md#getcost) - Get
@@ -481,6 +525,15 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`merchantIntegrationsGetMerchantIntegration`](docs/sdks/merchantintegrations/README.md#getmerchantintegration) - Get
 - [`merchantIntegrationsListMerchantIntegrations`](docs/sdks/merchantintegrations/README.md#listmerchantintegrations) - List
 - [`merchantIntegrationsUpsertMerchantIntegration`](docs/sdks/merchantintegrations/README.md#upsertmerchantintegration) - Upsert
+- [`ordersCreateOrder`](docs/sdks/orders/README.md#createorder) - Create an order
+- [`ordersCreateOrderApproval`](docs/sdks/orders/README.md#createorderapproval) - Create an approval for the order
+- [`ordersCreateOrderLineItem`](docs/sdks/orders/README.md#createorderlineitem) - Add a line item
+- [`ordersDeleteOrder`](docs/sdks/orders/README.md#deleteorder) - Delete an order
+- [`ordersDeleteOrderLineItem`](docs/sdks/orders/README.md#deleteorderlineitem) - Delete a line item
+- [`ordersGetOrder`](docs/sdks/orders/README.md#getorder) - Get an order
+- [`ordersListOrders`](docs/sdks/orders/README.md#listorders) - List orders
+- [`ordersUpdateOrder`](docs/sdks/orders/README.md#updateorder) - Update an order
+- [`ordersUpdateOrderLineItem`](docs/sdks/orders/README.md#updateorderlineitem) - Update a line item
 - [`paymentsCreate`](docs/sdks/payments/README.md#create) - Create Payment
 - [`paymentSessionsListPaymentSessions`](docs/sdks/paymentsessions/README.md#listpaymentsessions) - List
 - [`paymentsGet`](docs/sdks/payments/README.md#get) - Get Payment
@@ -671,7 +724,7 @@ run();
 ### Error Classes
 **Primary errors:**
 * [`PaygenticError`](./src/models/errors/paygenticerror.ts): The base class for HTTP error responses.
-  * [`ErrorT`](./src/models/errors/errort.ts): Generic error.
+  * [`ErrorT`](./src/models/errors/errort.ts): *
 
 <details><summary>Less common errors (9)</summary>
 
@@ -686,9 +739,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 67 of 110 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 110 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 110 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 80 of 132 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 132 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 132 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

@@ -1,0 +1,19 @@
+# UpdateApprovalRequest
+
+## Example Usage
+
+```typescript
+import { UpdateApprovalRequest } from "@paygentic/sdk/models";
+
+let value: UpdateApprovalRequest = {
+  decision: "cancelled",
+};
+```
+
+## Fields
+
+| Field                                                                                                                                                                                  | Type                                                                                                                                                                                   | Required                                                                                                                                                                               | Description                                                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `decision`                                                                                                                                                                             | [models.UpdateApprovalRequestDecision](../models/updateapprovalrequestdecision.md)                                                                                                     | :heavy_check_mark:                                                                                                                                                                     | approved/rejected: reviewer decision (maker-checker enforced). cancelled: recall a pending approval or reopen an approved one.                                                         |
+| `note`                                                                                                                                                                                 | *string*                                                                                                                                                                               | :heavy_minus_sign:                                                                                                                                                                     | N/A                                                                                                                                                                                    |
+| `actorId`                                                                                                                                                                              | *string*                                                                                                                                                                               | :heavy_minus_sign:                                                                                                                                                                     | Optional. The real user id performing the action. Used when the request is made via a platform-level key on behalf of a human user. Ignored when the caller is a non-platform API key. |

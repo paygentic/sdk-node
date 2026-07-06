@@ -3,7 +3,9 @@
  */
 
 import { ClientSDK } from "../lib/sdks.js";
+import { Approvals } from "./approvals.js";
 import { BillableMetrics } from "./billablemetrics.js";
+import { BillingSchedules } from "./billingschedules.js";
 import { Costs } from "./costs.js";
 import { Customers } from "./customers.js";
 import { Entitlements } from "./entitlements.js";
@@ -14,6 +16,7 @@ import { Fees } from "./fees.js";
 import { InvoicesV2 } from "./invoicesv2.js";
 import { Items } from "./items.js";
 import { MerchantIntegrations } from "./merchantintegrations.js";
+import { Orders } from "./orders.js";
 import { Payments } from "./payments.js";
 import { PaymentSessions } from "./paymentsessions.js";
 import { Plans } from "./plans.js";
@@ -133,6 +136,16 @@ export class Paygentic extends ClientSDK {
     return (this._items ??= new Items(this._options));
   }
 
+  private _orders?: Orders;
+  get orders(): Orders {
+    return (this._orders ??= new Orders(this._options));
+  }
+
+  private _billingSchedules?: BillingSchedules;
+  get billingSchedules(): BillingSchedules {
+    return (this._billingSchedules ??= new BillingSchedules(this._options));
+  }
+
   private _salesforce?: Salesforce;
   get salesforce(): Salesforce {
     return (this._salesforce ??= new Salesforce(this._options));
@@ -143,5 +156,10 @@ export class Paygentic extends ClientSDK {
     return (this._merchantIntegrations ??= new MerchantIntegrations(
       this._options,
     ));
+  }
+
+  private _approvals?: Approvals;
+  get approvals(): Approvals {
+    return (this._approvals ??= new Approvals(this._options));
   }
 }
