@@ -49,14 +49,14 @@ export const CreatePlanTaxBehavior = {
 export type CreatePlanTaxBehavior = ClosedEnum<typeof CreatePlanTaxBehavior>;
 
 /**
- * Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard).
+ * Billing engine version. Only 1 (Standard, line-item billing with metered usage support) is accepted for new plans; omitting the field defaults to 1. 0 (Legacy, fee-schedule billing) is rejected — it exists only on plans created before this restriction.
  */
 export const BillingVersion = {
   Zero: 0,
   One: 1,
 } as const;
 /**
- * Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard).
+ * Billing engine version. Only 1 (Standard, line-item billing with metered usage support) is accepted for new plans; omitting the field defaults to 1. 0 (Legacy, fee-schedule billing) is rejected — it exists only on plans created before this restriction.
  */
 export type BillingVersion = ClosedEnum<typeof BillingVersion>;
 
@@ -118,7 +118,7 @@ export type CreatePlanRequest = {
    */
   renewalReminderDays?: number | undefined;
   /**
-   * Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard).
+   * Billing engine version. Only 1 (Standard, line-item billing with metered usage support) is accepted for new plans; omitting the field defaults to 1. 0 (Legacy, fee-schedule billing) is rejected — it exists only on plans created before this restriction.
    */
   billingVersion?: BillingVersion | undefined;
   /**
@@ -187,7 +187,7 @@ export const CreatePlanRequest$outboundSchema: z.ZodType<
   taxBehavior: CreatePlanTaxBehavior$outboundSchema.default("exclusive"),
   renewalReminderEnabled: z.boolean().default(true),
   renewalReminderDays: z.number().int().default(3),
-  billingVersion: BillingVersion$outboundSchema.default(0),
+  billingVersion: BillingVersion$outboundSchema.default(1),
   billingAnchor: z.nullable(z.date().transform(v => v.toISOString()))
     .optional(),
 });

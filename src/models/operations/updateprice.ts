@@ -8,20 +8,6 @@ import { ClosedEnum } from "../../types/enums.js";
 import * as models from "../index.js";
 
 /**
- * The pricing model to be used, which can be standard, dynamic, volume-based, or percentage-based.
- */
-export const UpdatePriceModel = {
-  Standard: "standard",
-  Dynamic: "dynamic",
-  Volume: "volume",
-  Percentage: "percentage",
-} as const;
-/**
- * The pricing model to be used, which can be standard, dynamic, volume-based, or percentage-based.
- */
-export type UpdatePriceModel = ClosedEnum<typeof UpdatePriceModel>;
-
-/**
  * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
  */
 export const UpdatePricePaymentTerm = {
@@ -40,13 +26,17 @@ export type UpdatePriceRequestBody = {
    */
   billableMetricId?: string | undefined;
   /**
+   * Denominate this metered price in a pricing unit (credits). Set to a pricing unit ID to draw down a credit pool, null to revert to real currency, or omit to leave unchanged.
+   */
+  pricingUnitId?: string | null | undefined;
+  /**
    * Updated invoice line item label. Sample values: 'LLM Token Usage', 'Storage Charges', 'API Call Fees'
    */
   invoiceDisplayName?: string | undefined;
   /**
-   * The pricing model to be used, which can be standard, dynamic, volume-based, or percentage-based.
+   * The pricing model to set. Only 'standard' is accepted. Legacy 'dynamic'/'volume'/'percentage' prices can still be edited (other fields) but cannot be switched to those models. Percentage/revenue-share is expressed via 'standard' with a unit-price multiplier.
    */
-  model?: UpdatePriceModel | undefined;
+  model?: models.PriceModelInput | undefined;
   properties?: models.PricePropertiesUnion | undefined;
   /**
    * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
@@ -79,11 +69,6 @@ export type UpdatePriceRequest = {
 };
 
 /** @internal */
-export const UpdatePriceModel$outboundSchema: z.ZodNativeEnum<
-  typeof UpdatePriceModel
-> = z.nativeEnum(UpdatePriceModel);
-
-/** @internal */
 export const UpdatePricePaymentTerm$outboundSchema: z.ZodNativeEnum<
   typeof UpdatePricePaymentTerm
 > = z.nativeEnum(UpdatePricePaymentTerm);
@@ -91,6 +76,7 @@ export const UpdatePricePaymentTerm$outboundSchema: z.ZodNativeEnum<
 /** @internal */
 export type UpdatePriceRequestBody$Outbound = {
   billableMetricId?: string | undefined;
+  pricingUnitId?: string | null | undefined;
   invoiceDisplayName?: string | undefined;
   model?: string | undefined;
   properties?: models.PricePropertiesUnion$Outbound | undefined;
@@ -108,8 +94,9 @@ export const UpdatePriceRequestBody$outboundSchema: z.ZodType<
   UpdatePriceRequestBody
 > = z.object({
   billableMetricId: z.string().optional(),
+  pricingUnitId: z.nullable(z.string()).optional(),
   invoiceDisplayName: z.string().optional(),
-  model: UpdatePriceModel$outboundSchema.optional(),
+  model: models.PriceModelInput$outboundSchema.optional(),
   properties: models.PricePropertiesUnion$outboundSchema.optional(),
   paymentTerm: UpdatePricePaymentTerm$outboundSchema.optional(),
   billingCadence: z.nullable(z.string()).optional(),

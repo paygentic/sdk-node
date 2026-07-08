@@ -78,23 +78,27 @@ export type MeteredEntitlementDetail = {
    */
   isSoftLimit: boolean;
   /**
-   * Remaining grant balance for the current period.
+   * Remaining balance for the current period. When `pricingUnitId` is set, this is expressed in that pricing unit's credits (a balance shared across every feature drawing the same unit); otherwise it is in the feature's native metered units.
    */
   balance: number;
   /**
-   * Total usage consumed in the current billing period.
+   * Total usage consumed in the current billing period, in the same unit as `balance` (credits when `pricingUnitId` is set, otherwise native metered units). When `pricingUnitId` is set, this is the shared-pool aggregate across every feature drawing the same unit, not usage specific to this feature.
    */
   usageInPeriod: number;
   /**
-   * Amount of usage exceeding the granted balance.
+   * Amount of usage exceeding the balance, in the same unit as `balance` (credits when `pricingUnitId` is set, otherwise native metered units).
    */
   overage: number;
   /**
-   * Start of the current usage period. Before the entitlement activates (the pre-activation "dark window", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription.
+   * The pricing unit this feature is denominated in when it draws a credit pool. When set, `balance`/`usageInPeriod`/`overage` are in that unit's credits and reflect a balance shared across all features on the same unit. `null` for currency-denominated features (native metered units).
+   */
+  pricingUnitId: string | null;
+  /**
+   * Start of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation "dark window", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription.
    */
   currentPeriodStart: Date | null;
   /**
-   * End of the current usage period. Before the entitlement activates (the pre-activation "dark window", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window.
+   * End of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation "dark window", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window.
    */
   currentPeriodEnd: Date | null;
 };
@@ -130,6 +134,7 @@ export const MeteredEntitlementDetail$inboundSchema: z.ZodType<
   balance: z.number(),
   usageInPeriod: z.number(),
   overage: z.number(),
+  pricingUnitId: z.nullable(z.string()),
   currentPeriodStart: z.nullable(
     z.string().datetime({ offset: true }).transform(v => new Date(v)),
   ),

@@ -8,6 +8,7 @@ import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import { PriceFeature, PriceFeature$inboundSchema } from "./pricefeature.js";
+import { PriceModel, PriceModel$inboundSchema } from "./pricemodel.js";
 import {
   PricePropertiesUnion,
   PricePropertiesUnion$inboundSchema,
@@ -17,14 +18,6 @@ export const SchemasPriceObject = {
   Price: "price",
 } as const;
 export type SchemasPriceObject = ClosedEnum<typeof SchemasPriceObject>;
-
-export const SchemasPriceModel = {
-  Standard: "standard",
-  Dynamic: "dynamic",
-  Volume: "volume",
-  Percentage: "percentage",
-} as const;
-export type SchemasPriceModel = ClosedEnum<typeof SchemasPriceModel>;
 
 export const SchemasPricePaymentTerm = {
   Instant: "instant",
@@ -50,6 +43,10 @@ export type SchemasPrice = {
    */
   feeId?: string | undefined;
   /**
+   * Unique identifier for a pricing unit
+   */
+  pricingUnitId?: string | undefined;
+  /**
    * Unique identifier for an organization
    */
   merchantId: string;
@@ -59,7 +56,10 @@ export type SchemasPrice = {
   billingCadence?: string | null | undefined;
   createdAt: Date;
   invoiceDisplayName: string;
-  model?: SchemasPriceModel | undefined;
+  /**
+   * Pricing model of a price as returned by the API. Includes legacy models ('dynamic', 'volume', 'percentage') retained for existing prices; only 'standard' can be created (see PriceModelInput).
+   */
+  model?: PriceModel | undefined;
   paymentTerm: SchemasPricePaymentTerm;
   properties: PricePropertiesUnion;
   updatedAt: Date;
@@ -83,11 +83,6 @@ export const SchemasPriceObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(SchemasPriceObject);
 
 /** @internal */
-export const SchemasPriceModel$inboundSchema: z.ZodNativeEnum<
-  typeof SchemasPriceModel
-> = z.nativeEnum(SchemasPriceModel);
-
-/** @internal */
 export const SchemasPricePaymentTerm$inboundSchema: z.ZodNativeEnum<
   typeof SchemasPricePaymentTerm
 > = z.nativeEnum(SchemasPricePaymentTerm);
@@ -102,11 +97,12 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   object: SchemasPriceObject$inboundSchema.default("price"),
   billableMetricId: z.string().optional(),
   feeId: z.string().optional(),
+  pricingUnitId: z.string().optional(),
   merchantId: z.string(),
   billingCadence: z.nullable(z.string()).optional(),
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   invoiceDisplayName: z.string(),
-  model: SchemasPriceModel$inboundSchema.optional(),
+  model: PriceModel$inboundSchema.optional(),
   paymentTerm: SchemasPricePaymentTerm$inboundSchema,
   properties: PricePropertiesUnion$inboundSchema,
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),

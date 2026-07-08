@@ -7,20 +7,6 @@ import { ClosedEnum } from "../../types/enums.js";
 import * as models from "../index.js";
 
 /**
- * Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard').
- */
-export const CreatePriceModel = {
-  Standard: "standard",
-  Dynamic: "dynamic",
-  Volume: "volume",
-  Percentage: "percentage",
-} as const;
-/**
- * Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard').
- */
-export type CreatePriceModel = ClosedEnum<typeof CreatePriceModel>;
-
-/**
  * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
  */
 export const CreatePricePaymentTerm = {
@@ -43,9 +29,13 @@ export type CreatePriceRequest = {
    */
   feeId?: string | undefined;
   /**
-   * Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard').
+   * Unique identifier for a pricing unit
    */
-  model?: CreatePriceModel | undefined;
+  pricingUnitId?: string | undefined;
+  /**
+   * Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard'). Only 'standard' is accepted; for percentage/revenue-share use 'standard' with a unit-price multiplier. Legacy prices using 'dynamic'/'volume'/'percentage' stay readable and billable but cannot be created.
+   */
+  model?: models.PriceModelInput | undefined;
   /**
    * Line item label shown on customer invoices. Sample values: 'Claude Token Consumption', 'Storage Usage (GB)', 'Inference API Calls', 'Image Generation Count', 'Training Compute Hours', 'Data Transfer (TB)'
    */
@@ -71,11 +61,6 @@ export type CreatePriceRequest = {
 };
 
 /** @internal */
-export const CreatePriceModel$outboundSchema: z.ZodNativeEnum<
-  typeof CreatePriceModel
-> = z.nativeEnum(CreatePriceModel);
-
-/** @internal */
 export const CreatePricePaymentTerm$outboundSchema: z.ZodNativeEnum<
   typeof CreatePricePaymentTerm
 > = z.nativeEnum(CreatePricePaymentTerm);
@@ -84,6 +69,7 @@ export const CreatePricePaymentTerm$outboundSchema: z.ZodNativeEnum<
 export type CreatePriceRequest$Outbound = {
   billableMetricId?: string | undefined;
   feeId?: string | undefined;
+  pricingUnitId?: string | undefined;
   model?: string | undefined;
   invoiceDisplayName: string;
   paymentTerm: string;
@@ -102,7 +88,8 @@ export const CreatePriceRequest$outboundSchema: z.ZodType<
 > = z.object({
   billableMetricId: z.string().optional(),
   feeId: z.string().optional(),
-  model: CreatePriceModel$outboundSchema.optional(),
+  pricingUnitId: z.string().optional(),
+  model: models.PriceModelInput$outboundSchema.optional(),
   invoiceDisplayName: z.string(),
   paymentTerm: CreatePricePaymentTerm$outboundSchema,
   billingCadence: z.nullable(z.string()).optional(),

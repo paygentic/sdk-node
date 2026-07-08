@@ -82,8 +82,9 @@ const value: models.MeteredEntitlementListItem = {
   balance: 3186.94,
   usageInPeriod: 8712.03,
   overage: 9218.27,
-  currentPeriodStart: new Date("2026-07-22T14:38:00.638Z"),
-  currentPeriodEnd: new Date("2024-02-04T15:44:04.496Z"),
+  pricingUnitId: "<id>",
+  currentPeriodStart: new Date("2025-06-15T11:35:12.121Z"),
+  currentPeriodEnd: null,
 };
 ```
 

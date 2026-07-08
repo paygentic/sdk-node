@@ -1788,7 +1788,8 @@
                           "usageInPeriod": 1660,
                           "overage": 0,
                           "currentPeriodStart": "2024-03-01T00:00:00Z",
-                          "currentPeriodEnd": "2024-04-01T00:00:00Z"
+                          "currentPeriodEnd": "2024-04-01T00:00:00Z",
+                          "pricingUnitId": null
                         }
                       ],
                       "pagination": {
@@ -2033,6 +2034,7 @@
                       "overage": 0,
                       "currentPeriodStart": "2024-03-01T00:00:00Z",
                       "currentPeriodEnd": "2024-04-01T00:00:00Z",
+                      "pricingUnitId": null,
                       "metadata": {}
                     }
                   }
@@ -3467,8 +3469,8 @@
                       0,
                       1
                     ],
-                    "default": 0,
-                    "description": "Billing engine version. 0 = legacy fee-schedule billing (Legacy), 1 = line-item billing with metered usage support (Standard)."
+                    "default": 1,
+                    "description": "Billing engine version. Only 1 (Standard, line-item billing with metered usage support) is accepted for new plans; omitting the field defaults to 1. 0 (Legacy, fee-schedule billing) is rejected — it exists only on plans created before this restriction."
                   },
                   "billingAnchor": {
                     "type": "string",
@@ -4059,15 +4061,17 @@
                     "pattern": "^fee_[a-zA-Z0-9]+$",
                     "description": "The unique identifier for the fee referred to by this price. Either billableMetricId or feeId must be provided."
                   },
+                  "pricingUnitId": {
+                    "$ref": "#/components/schemas/PricingUnitId",
+                    "description": "Denominate this metered price in a pricing unit (credits) instead of real currency. When set, the price draws down the customer's credit pool for that unit. Only valid on metered prices that carry a metered feature. Omit for a normal currency price."
+                  },
                   "model": {
-                    "type": "string",
-                    "enum": [
-                      "standard",
-                      "dynamic",
-                      "volume",
-                      "percentage"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/PriceModelInput"
+                      }
                     ],
-                    "description": "Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard')."
+                    "description": "Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard'). Only 'standard' is accepted; for percentage/revenue-share use 'standard' with a unit-price multiplier. Legacy prices using 'dynamic'/'volume'/'percentage' stay readable and billable but cannot be created."
                   },
                   "invoiceDisplayName": {
                     "type": "string",
@@ -4143,6 +4147,9 @@
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -4360,19 +4367,28 @@
                     "$ref": "#/components/schemas/BillableMetricId",
                     "description": "The unique identifier for the billable metric referred to by this price."
                   },
+                  "pricingUnitId": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/PricingUnitId"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ],
+                    "description": "Denominate this metered price in a pricing unit (credits). Set to a pricing unit ID to draw down a credit pool, null to revert to real currency, or omit to leave unchanged."
+                  },
                   "invoiceDisplayName": {
                     "type": "string",
                     "description": "Updated invoice line item label. Sample values: 'LLM Token Usage', 'Storage Charges', 'API Call Fees'"
                   },
                   "model": {
-                    "type": "string",
-                    "enum": [
-                      "standard",
-                      "dynamic",
-                      "volume",
-                      "percentage"
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/PriceModelInput"
+                      }
                     ],
-                    "description": "The pricing model to be used, which can be standard, dynamic, volume-based, or percentage-based."
+                    "description": "The pricing model to set. Only 'standard' is accepted. Legacy 'dynamic'/'volume'/'percentage' prices can still be edited (other fields) but cannot be switched to those models. Percentage/revenue-share is expressed via 'standard' with a unit-price multiplier."
                   },
                   "properties": {
                     "$ref": "#/components/schemas/PriceProperties"
@@ -12934,7 +12950,8 @@
               "isSoftLimit",
               "config",
               "currentPeriodStart",
-              "currentPeriodEnd"
+              "currentPeriodEnd",
+              "pricingUnitId"
             ],
             "properties": {
               "featureType": {
@@ -12955,27 +12972,33 @@
               },
               "balance": {
                 "type": "number",
-                "description": "Remaining grant balance for the current period."
+                "description": "Remaining balance for the current period. When `pricingUnitId` is set, this is expressed in that pricing unit's credits (a balance shared across every feature drawing the same unit); otherwise it is in the feature's native metered units."
               },
               "usageInPeriod": {
                 "type": "number",
-                "description": "Total usage consumed in the current billing period."
+                "description": "Total usage consumed in the current billing period, in the same unit as `balance` (credits when `pricingUnitId` is set, otherwise native metered units). When `pricingUnitId` is set, this is the shared-pool aggregate across every feature drawing the same unit, not usage specific to this feature."
               },
               "overage": {
                 "type": "number",
-                "description": "Amount of usage exceeding the granted balance."
+                "description": "Amount of usage exceeding the balance, in the same unit as `balance` (credits when `pricingUnitId` is set, otherwise native metered units)."
+              },
+              "pricingUnitId": {
+                "type": "string",
+                "nullable": true,
+                "pattern": "^pu_[a-zA-Z0-9]+$",
+                "description": "The pricing unit this feature is denominated in when it draws a credit pool. When set, `balance`/`usageInPeriod`/`overage` are in that unit's credits and reflect a balance shared across all features on the same unit. `null` for currency-denominated features (native metered units)."
               },
               "currentPeriodStart": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "description": "Start of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription."
+                "description": "Start of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription."
               },
               "currentPeriodEnd": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "description": "End of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
+                "description": "End of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
               }
             }
           }
@@ -13296,7 +13319,8 @@
               "isSoftLimit",
               "config",
               "currentPeriodStart",
-              "currentPeriodEnd"
+              "currentPeriodEnd",
+              "pricingUnitId"
             ],
             "properties": {
               "featureType": {
@@ -13317,27 +13341,33 @@
               },
               "balance": {
                 "type": "number",
-                "description": "Remaining grant balance for the current period."
+                "description": "Remaining balance for the current period. When `pricingUnitId` is set, this is expressed in that pricing unit's credits (a balance shared across every feature drawing the same unit); otherwise it is in the feature's native metered units."
               },
               "usageInPeriod": {
                 "type": "number",
-                "description": "Total usage consumed in the current billing period."
+                "description": "Total usage consumed in the current billing period, in the same unit as `balance` (credits when `pricingUnitId` is set, otherwise native metered units). When `pricingUnitId` is set, this is the shared-pool aggregate across every feature drawing the same unit, not usage specific to this feature."
               },
               "overage": {
                 "type": "number",
-                "description": "Amount of usage exceeding the granted balance."
+                "description": "Amount of usage exceeding the balance, in the same unit as `balance` (credits when `pricingUnitId` is set, otherwise native metered units)."
+              },
+              "pricingUnitId": {
+                "type": "string",
+                "nullable": true,
+                "pattern": "^pu_[a-zA-Z0-9]+$",
+                "description": "The pricing unit this feature is denominated in when it draws a credit pool. When set, `balance`/`usageInPeriod`/`overage` are in that unit's credits and reflect a balance shared across all features on the same unit. `null` for currency-denominated features (native metered units)."
               },
               "currentPeriodStart": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "description": "Start of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription."
+                "description": "Start of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead describes the pre-activation `[subscription start, activation)` window and may be `null` when there is no associated subscription."
               },
               "currentPeriodEnd": {
                 "type": "string",
                 "format": "date-time",
                 "nullable": true,
-                "description": "End of the current usage period. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
+                "description": "End of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
               }
             }
           }
@@ -14093,6 +14123,22 @@
           }
         }
       },
+      "PricingUnitId": {
+        "type": "string",
+        "pattern": "^pu_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for a pricing unit"
+      },
+      "PriceModel": {
+        "type": "string",
+        "enum": [
+          "standard",
+          "dynamic",
+          "volume",
+          "percentage"
+        ],
+        "x-speakeasy-unknown-values": "allow",
+        "description": "Pricing model of a price as returned by the API. Includes legacy models ('dynamic', 'volume', 'percentage') retained for existing prices; only 'standard' can be created (see PriceModelInput)."
+      },
       "PriceProperties": {
         "type": "object",
         "oneOf": [
@@ -14230,6 +14276,10 @@
             "pattern": "^fee_[a-zA-Z0-9]+$",
             "description": "The unique identifier for the fee referred to by this price. Present when price is linked to a fee."
           },
+          "pricingUnitId": {
+            "$ref": "#/components/schemas/PricingUnitId",
+            "description": "The pricing unit this price is denominated in (credits). Present when the price draws down a credit pool instead of charging real currency."
+          },
           "merchantId": {
             "$ref": "#/components/schemas/OrganizationId",
             "description": "The merchant organization that owns this price, derived from the associated fee or billable metric. Present on single-price reads."
@@ -14247,13 +14297,7 @@
             "type": "string"
           },
           "model": {
-            "type": "string",
-            "enum": [
-              "standard",
-              "dynamic",
-              "volume",
-              "percentage"
-            ]
+            "$ref": "#/components/schemas/PriceModel"
           },
           "paymentTerm": {
             "type": "string",
@@ -14286,6 +14330,13 @@
             "$ref": "#/components/schemas/PriceQuantity"
           }
         }
+      },
+      "PriceModelInput": {
+        "type": "string",
+        "enum": [
+          "standard"
+        ],
+        "description": "Pricing model accepted when creating or updating a price. Only 'standard' is creatable. Percentage-style and revenue-share pricing are expressed with 'standard' plus a unit-price multiplier (e.g. 10% ⇒ unitPrice '0.1'). The legacy 'dynamic', 'volume', and 'percentage' models remain billable and readable on existing prices but can no longer be created."
       },
       "PriceFeatureInput": {
         "type": "object",

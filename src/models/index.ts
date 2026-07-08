@@ -68,6 +68,8 @@ export * from "./plan.js";
 export * from "./price.js";
 export * from "./pricefeature.js";
 export * from "./pricefeatureinput.js";
+export * from "./pricemodel.js";
+export * from "./pricemodelinput.js";
 export * from "./pricepropertiesunion.js";
 export * from "./product.js";
 export * from "./profitabilityrow.js";
