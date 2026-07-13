@@ -26,7 +26,7 @@ export type InvoiceObject = ClosedEnum<typeof InvoiceObject>;
 /**
  * Line items (only present if expand=lineItems query parameter is provided)
  */
-export type LineItems = {
+export type InvoiceLineItems = {
   /**
    * The invoice ID
    */
@@ -156,7 +156,7 @@ export type Invoice = {
   /**
    * Line items (only present if expand=lineItems query parameter is provided)
    */
-  lineItems?: LineItems | null | undefined;
+  lineItems?: InvoiceLineItems | null | undefined;
   /**
    * The merchant organization ID
    */
@@ -245,8 +245,8 @@ export const InvoiceObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(InvoiceObject);
 
 /** @internal */
-export const LineItems$inboundSchema: z.ZodType<
-  LineItems,
+export const InvoiceLineItems$inboundSchema: z.ZodType<
+  InvoiceLineItems,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -256,13 +256,13 @@ export const LineItems$inboundSchema: z.ZodType<
   totalCount: z.number().int(),
 });
 
-export function lineItemsFromJSON(
+export function invoiceLineItemsFromJSON(
   jsonString: string,
-): SafeParseResult<LineItems, SDKValidationError> {
+): SafeParseResult<InvoiceLineItems, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => LineItems$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'LineItems' from JSON`,
+    (x) => InvoiceLineItems$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'InvoiceLineItems' from JSON`,
   );
 }
 
@@ -317,7 +317,8 @@ export const Invoice$inboundSchema: z.ZodType<Invoice, z.ZodTypeDef, unknown> =
     grandTotal: z.string(),
     invoiceNumber: z.nullable(z.string()).optional(),
     itemCount: z.number().int(),
-    lineItems: z.nullable(z.lazy(() => LineItems$inboundSchema)).optional(),
+    lineItems: z.nullable(z.lazy(() => InvoiceLineItems$inboundSchema))
+      .optional(),
     merchantId: z.string(),
     metadata: z.record(z.any()).optional(),
     nextActionAt: z.nullable(

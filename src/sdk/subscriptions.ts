@@ -6,6 +6,7 @@ import { subscriptionsCreate } from "../funcs/subscriptionsCreate.js";
 import { subscriptionsGeneratePortalLink } from "../funcs/subscriptionsGeneratePortalLink.js";
 import { subscriptionsGet } from "../funcs/subscriptionsGet.js";
 import { subscriptionsList } from "../funcs/subscriptionsList.js";
+import { subscriptionsReconcileSubscriptionFeatures } from "../funcs/subscriptionsReconcileSubscriptionFeatures.js";
 import { subscriptionsTerminate } from "../funcs/subscriptionsTerminate.js";
 import { subscriptionsUpdateSubscription } from "../funcs/subscriptionsUpdateSubscription.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -101,6 +102,23 @@ export class Subscriptions extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.Subscription> {
     return unwrapAsync(subscriptionsTerminate(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Reconcile Features
+   *
+   * @remarks
+   * Creates a reconciliation that converges a subscription's feature entitlements to its current plan. Provisions a missing entitlement (and, for metered features, its initial grant) for every plan feature the subscription does not already have; cancels the entitlement and voids the grants of any feature no longer on the plan; then synchronizes the corresponding prices' billing. An already-present feature is left unchanged. Restricted to active subscriptions billed on their plan's line-item schedule.
+   */
+  async reconcileSubscriptionFeatures(
+    request: operations.ReconcileSubscriptionFeaturesRequest,
+    options?: RequestOptions,
+  ): Promise<models.SubscriptionReconciliation> {
+    return unwrapAsync(subscriptionsReconcileSubscriptionFeatures(
       this,
       request,
       options,

@@ -621,6 +621,7 @@ workflows:
             defaultTaxRate: 0
             merchantId: <id>
             name: <value>
+            productId: <id>
             renewalReminderDays: 3
             renewalReminderEnabled: true
             taxBehavior: exclusive
@@ -3716,4 +3717,21 @@ workflows:
               {"id":"<id>","object":"approval","merchantId":"<id>","resourceType":"invoice","resourceId":"<id>","kind":"push","decision":"pending","requester":"<value>","dataSnapshotHash":"<value>","createdAt":"2025-12-21T04:52:09.215Z"}
             type: simple
     x-speakeasy-test-group: Approvals
+    x-speakeasy-test-rebuild: true
+  - workflowId: reconcileSubscriptionFeatures
+    steps:
+      - stepId: test
+        operationId: reconcileSubscriptionFeatures
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"subscriptionReconciliation","dryRun":true,"features":{"added":[],"skipped":[],"removed":[],"failed":[]},"lineItems":{"created":965800,"removed":718117}}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true

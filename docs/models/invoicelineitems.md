@@ -1,13 +1,13 @@
-# LineItems
+# InvoiceLineItems
 
 Line items (only present if expand=lineItems query parameter is provided)
 
 ## Example Usage
 
 ```typescript
-import { LineItems } from "@paygentic/sdk/models";
+import { InvoiceLineItems } from "@paygentic/sdk/models";
 
-let value: LineItems = {
+let value: InvoiceLineItems = {
   invoiceId: "<id>",
   lineItems: [
     {
@@ -16,20 +16,20 @@ let value: LineItems = {
       eventSourceId: "<id>",
       billableMetricId: "<id>",
       invoiceDisplayName: "<value>",
-      lineItemType: "charge",
+      lineItemType: "refund",
       meterEventId: "<id>",
       metricDescription: "<value>",
       metricName: "<value>",
       metricUnit: "<value>",
-      quantity: 6610.91,
-      taxRate: 4880.84,
+      quantity: 2984.24,
+      taxRate: 5627.65,
       totalAmount: "<value>",
       totalPrice: "<value>",
       totalTax: "<value>",
       unitPrice: "<value>",
     },
   ],
-  totalCount: 210482,
+  totalCount: 8408,
 };
 ```
 

@@ -8,6 +8,10 @@ import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  PlanCreditAllocation,
+  PlanCreditAllocation$inboundSchema,
+} from "./plancreditallocation.js";
 import { Price, Price$inboundSchema } from "./price.js";
 
 export const PlanObject = {
@@ -110,6 +114,10 @@ export type Plan = {
    * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present at the time of creation or update. When set, all subscriptions created under this plan align their first billing period to the next recurrence of this anchor. Null means each subscription uses its own start time (hour-rounded) as the anchor.
    */
   billingAnchor?: Date | null | undefined;
+  /**
+   * Credit-pool funding declarations for this plan. Each entry funds a distinct pricing unit's credit pool when a subscription to this plan activates: the allocated amount is minted as a credit grant on the customer's pool for that pricing unit, once at activation, or on a recurring basis only when that allocation explicitly sets recurrencePeriod. A plan may declare zero or more allocations; no two allocations on the same plan target the same pricingUnitId.
+   */
+  creditAllocations?: Array<PlanCreditAllocation> | undefined;
 };
 
 /** @internal */
@@ -182,6 +190,7 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
     billingAnchor: z.nullable(
       z.string().datetime({ offset: true }).transform(v => new Date(v)),
     ).optional(),
+    creditAllocations: z.array(PlanCreditAllocation$inboundSchema).optional(),
   });
 
 export function planFromJSON(

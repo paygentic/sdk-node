@@ -105,6 +105,7 @@ export * from "./listsources.js";
 export * from "./listsubscriptions.js";
 export * from "./listtestclocks.js";
 export * from "./purchaseentitlementgrant.js";
+export * from "./reconcilesubscriptionfeatures.js";
 export * from "./rejectsourceevent.js";
 export * from "./replacescheduleintervals.js";
 export * from "./terminatesubscription.js";

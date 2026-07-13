@@ -31,6 +31,7 @@ async function run() {
     currency: "Won",
     merchantId: "<id>",
     name: "<value>",
+    productId: "<id>",
   });
 
   console.log(result);
@@ -58,6 +59,7 @@ async function run() {
     currency: "Won",
     merchantId: "<id>",
     name: "<value>",
+    productId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;

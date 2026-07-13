@@ -4,6 +4,7 @@
 
 import * as z from "zod/v3";
 import { ClosedEnum } from "../../types/enums.js";
+import * as models from "../index.js";
 
 /**
  * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
@@ -104,7 +105,7 @@ export type CreatePlanRequest = {
   /**
    * Unique identifier for a product
    */
-  productId?: string | undefined;
+  productId: string;
   /**
    * Whether tax is added on top of the price (exclusive) or included in the price (inclusive)
    */
@@ -125,6 +126,10 @@ export type CreatePlanRequest = {
    * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. When set, subscriptions created under this plan align their first billing period to the next recurrence of this anchor.
    */
   billingAnchor?: Date | null | undefined;
+  /**
+   * Credit-pool funding declarations for this plan. Each entry funds a distinct pricing unit's credit pool when a subscription to this plan activates: the allocated amount is minted as a credit grant on the customer's pool for that pricing unit, once at activation, or on a recurring basis only when that allocation explicitly sets recurrencePeriod. A plan may declare zero or more allocations; no two allocations on the same plan may target the same pricingUnitId.
+   */
+  creditAllocations?: Array<models.PlanCreditAllocation> | undefined;
 };
 
 /** @internal */
@@ -159,12 +164,13 @@ export type CreatePlanRequest$Outbound = {
   merchantId: string;
   name: string;
   prices?: Array<string> | undefined;
-  productId?: string | undefined;
+  productId: string;
   taxBehavior: string;
   renewalReminderEnabled: boolean;
   renewalReminderDays: number;
   billingVersion: number;
   billingAnchor?: string | null | undefined;
+  creditAllocations?: Array<models.PlanCreditAllocation$Outbound> | undefined;
 };
 
 /** @internal */
@@ -183,12 +189,14 @@ export const CreatePlanRequest$outboundSchema: z.ZodType<
   merchantId: z.string(),
   name: z.string(),
   prices: z.array(z.string()).optional(),
-  productId: z.string().optional(),
+  productId: z.string(),
   taxBehavior: CreatePlanTaxBehavior$outboundSchema.default("exclusive"),
   renewalReminderEnabled: z.boolean().default(true),
   renewalReminderDays: z.number().int().default(3),
   billingVersion: BillingVersion$outboundSchema.default(1),
   billingAnchor: z.nullable(z.date().transform(v => v.toISOString()))
+    .optional(),
+  creditAllocations: z.array(models.PlanCreditAllocation$outboundSchema)
     .optional(),
 });
 

@@ -5,6 +5,7 @@
 import * as z from "zod/v3";
 import { remap as remap$ } from "../../lib/primitives.js";
 import { ClosedEnum } from "../../types/enums.js";
+import * as models from "../index.js";
 
 /**
  * ISO 8601 duration for the billing period. Takes precedence over billingInterval when both are provided.
@@ -98,6 +99,10 @@ export type UpdatePlanRequestBody = {
    * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. Set to null to clear the anchor and revert to start-time-based anchoring.
    */
   billingAnchor?: Date | null | undefined;
+  /**
+   * Credit-pool funding declarations for this plan. Each entry funds a distinct pricing unit's credit pool when a subscription to this plan activates: the allocated amount is minted as a credit grant on the customer's pool for that pricing unit, once at activation, or on a recurring basis only when that allocation explicitly sets recurrencePeriod. A plan may declare zero or more allocations; no two allocations on the same plan may target the same pricingUnitId.
+   */
+  creditAllocations?: Array<models.PlanCreditAllocation> | undefined;
 };
 
 export type UpdatePlanRequest = {
@@ -137,6 +142,7 @@ export type UpdatePlanRequestBody$Outbound = {
   renewalReminderEnabled?: boolean | undefined;
   renewalReminderDays?: number | undefined;
   billingAnchor?: string | null | undefined;
+  creditAllocations?: Array<models.PlanCreditAllocation$Outbound> | undefined;
 };
 
 /** @internal */
@@ -157,6 +163,8 @@ export const UpdatePlanRequestBody$outboundSchema: z.ZodType<
   renewalReminderEnabled: z.boolean().optional(),
   renewalReminderDays: z.number().int().optional(),
   billingAnchor: z.nullable(z.date().transform(v => v.toISOString()))
+    .optional(),
+  creditAllocations: z.array(models.PlanCreditAllocation$outboundSchema)
     .optional(),
 });
 
