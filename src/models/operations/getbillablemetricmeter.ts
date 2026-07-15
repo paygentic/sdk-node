@@ -44,9 +44,17 @@ export type GetBillableMetricMeterRequest = {
    */
   filterGroupBy?: string | undefined;
   /**
-   * Comma-separated dimension keys
+   * Comma-separated dimension keys. Configure keys for the grouping on the metric. Only the "subject" grouping is supported by default.
    */
   groupBy?: string | undefined;
+  /**
+   * Cap groupedValues to the top-N by value (descending). With windowSize, restricts the windowed series to those top-N groups. Bounds the payload for high-cardinality groupings; groupCount reports the untruncated distinct-group count.
+   */
+  groupLimit?: number | undefined;
+  /**
+   * Offset into the value-descending group ordering; requires groupLimit to page through grouped results. With windowSize set, pages the windowed series through the ranked groups (offset 0 yields the top-N).
+   */
+  groupOffset?: number | undefined;
 };
 
 /** @internal */
@@ -63,6 +71,8 @@ export type GetBillableMetricMeterRequest$Outbound = {
   windowSize?: string | undefined;
   filterGroupBy?: string | undefined;
   groupBy?: string | undefined;
+  groupLimit?: number | undefined;
+  groupOffset?: number | undefined;
 };
 
 /** @internal */
@@ -78,6 +88,8 @@ export const GetBillableMetricMeterRequest$outboundSchema: z.ZodType<
   windowSize: GetBillableMetricMeterWindowSize$outboundSchema.optional(),
   filterGroupBy: z.string().optional(),
   groupBy: z.string().optional(),
+  groupLimit: z.number().int().optional(),
+  groupOffset: z.number().int().optional(),
 });
 
 export function getBillableMetricMeterRequestToJSON(

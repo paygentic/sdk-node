@@ -22,6 +22,10 @@ export type WindowedValue = {
 export type GroupedValue = {
   groupBy: { [k: string]: string };
   value: number;
+  /**
+   * Number of raw events in this group
+   */
+  eventCount?: number | undefined;
 };
 
 export type UsageResponse = {
@@ -35,13 +39,17 @@ export type UsageResponse = {
    */
   totalValue: number;
   /**
-   * Time-bucketed values. Only present when windowSize is specified.
+   * Time-bucketed values. Only present when windowSize is specified. When both windowSize and groupBy are set, windowedValues[i] is index-aligned with groupedValues[i] (same window and group).
    */
   windowedValues?: Array<WindowedValue> | undefined;
   /**
-   * Dimension-grouped values. Only present when groupBy is specified.
+   * Dimension-grouped values. Only present when groupBy is specified. When both windowSize and groupBy are set, groupedValues[i] is index-aligned with windowedValues[i] (same window and group).
    */
   groupedValues?: Array<GroupedValue> | undefined;
+  /**
+   * Total distinct groups before groupLimit/groupOffset truncation. Only present when groupLimit is specified; use it to drive pagination totals.
+   */
+  groupCount?: number | undefined;
 };
 
 /** @internal */
@@ -80,6 +88,7 @@ export const GroupedValue$inboundSchema: z.ZodType<
 > = z.object({
   groupBy: z.record(z.string()),
   value: z.number(),
+  eventCount: z.number().int().optional(),
 });
 
 export function groupedValueFromJSON(
@@ -103,6 +112,7 @@ export const UsageResponse$inboundSchema: z.ZodType<
   totalValue: z.number(),
   windowedValues: z.array(z.lazy(() => WindowedValue$inboundSchema)).optional(),
   groupedValues: z.array(z.lazy(() => GroupedValue$inboundSchema)).optional(),
+  groupCount: z.number().int().optional(),
 });
 
 export function usageResponseFromJSON(

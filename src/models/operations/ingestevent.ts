@@ -4,7 +4,7 @@
 
 import * as z from "zod/v3";
 
-export type IngestEventRequest = {
+export type IngestEventRequestBody2 = {
   /**
    * CloudEvents type. Must match an eventType configured on a BillableMetric.
    */
@@ -14,9 +14,13 @@ export type IngestEventRequest = {
    */
   source: string;
   /**
-   * Customer or entity ID this event relates to.
+   * Customer or entity ID this event relates to. Required unless externalSubject is provided.
    */
-  subject: string;
+  subject?: string | undefined;
+  /**
+   * Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, events may resolve to the previous customer for up to one hour. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.
+   */
+  externalSubject: string;
   /**
    * Organization/merchant ID. Defaults to the authenticated user's organization. Platform users can specify a different organization.
    */
@@ -39,11 +43,55 @@ export type IngestEventRequest = {
   data: { [k: string]: any };
 };
 
+export type IngestEventRequestBody1 = {
+  /**
+   * CloudEvents type. Must match an eventType configured on a BillableMetric.
+   */
+  type: string;
+  /**
+   * Event source URI identifying the application.
+   */
+  source: string;
+  /**
+   * Customer or entity ID this event relates to. Required unless externalSubject is provided.
+   */
+  subject: string;
+  /**
+   * Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, events may resolve to the previous customer for up to one hour. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.
+   */
+  externalSubject?: string | undefined;
+  /**
+   * Organization/merchant ID. Defaults to the authenticated user's organization. Platform users can specify a different organization.
+   */
+  namespace?: string | undefined;
+  /**
+   * Event timestamp. Defaults to server time if not provided.
+   */
+  timestamp?: Date | undefined;
+  /**
+   * User-provided deduplication key. If not provided, a unique key is generated.
+   */
+  idempotencyKey?: string | undefined;
+  /**
+   * Optional external identifier for cross-referencing with external systems. Alphanumeric characters, hyphens, and underscores only.
+   */
+  externalId?: string | undefined;
+  /**
+   * Event payload containing the metering data.
+   */
+  data: { [k: string]: any };
+};
+
+export type IngestEventRequest =
+  | IngestEventRequestBody1
+  | IngestEventRequestBody2;
+
 /** @internal */
-export type IngestEventRequest$Outbound = {
+export type IngestEventRequestBody2$Outbound = {
   type: string;
   source: string;
-  subject: string;
+  subject?: string | undefined;
+  externalSubject: string;
   namespace?: string | undefined;
   timestamp?: string | undefined;
   idempotencyKey?: string | undefined;
@@ -52,20 +100,82 @@ export type IngestEventRequest$Outbound = {
 };
 
 /** @internal */
-export const IngestEventRequest$outboundSchema: z.ZodType<
-  IngestEventRequest$Outbound,
+export const IngestEventRequestBody2$outboundSchema: z.ZodType<
+  IngestEventRequestBody2$Outbound,
   z.ZodTypeDef,
-  IngestEventRequest
+  IngestEventRequestBody2
 > = z.object({
   type: z.string(),
   source: z.string(),
-  subject: z.string(),
+  subject: z.string().optional(),
+  externalSubject: z.string(),
   namespace: z.string().optional(),
   timestamp: z.date().transform(v => v.toISOString()).optional(),
   idempotencyKey: z.string().optional(),
   externalId: z.string().optional(),
   data: z.record(z.any()),
 });
+
+export function ingestEventRequestBody2ToJSON(
+  ingestEventRequestBody2: IngestEventRequestBody2,
+): string {
+  return JSON.stringify(
+    IngestEventRequestBody2$outboundSchema.parse(ingestEventRequestBody2),
+  );
+}
+
+/** @internal */
+export type IngestEventRequestBody1$Outbound = {
+  type: string;
+  source: string;
+  subject: string;
+  externalSubject?: string | undefined;
+  namespace?: string | undefined;
+  timestamp?: string | undefined;
+  idempotencyKey?: string | undefined;
+  externalId?: string | undefined;
+  data: { [k: string]: any };
+};
+
+/** @internal */
+export const IngestEventRequestBody1$outboundSchema: z.ZodType<
+  IngestEventRequestBody1$Outbound,
+  z.ZodTypeDef,
+  IngestEventRequestBody1
+> = z.object({
+  type: z.string(),
+  source: z.string(),
+  subject: z.string(),
+  externalSubject: z.string().optional(),
+  namespace: z.string().optional(),
+  timestamp: z.date().transform(v => v.toISOString()).optional(),
+  idempotencyKey: z.string().optional(),
+  externalId: z.string().optional(),
+  data: z.record(z.any()),
+});
+
+export function ingestEventRequestBody1ToJSON(
+  ingestEventRequestBody1: IngestEventRequestBody1,
+): string {
+  return JSON.stringify(
+    IngestEventRequestBody1$outboundSchema.parse(ingestEventRequestBody1),
+  );
+}
+
+/** @internal */
+export type IngestEventRequest$Outbound =
+  | IngestEventRequestBody1$Outbound
+  | IngestEventRequestBody2$Outbound;
+
+/** @internal */
+export const IngestEventRequest$outboundSchema: z.ZodType<
+  IngestEventRequest$Outbound,
+  z.ZodTypeDef,
+  IngestEventRequest
+> = z.union([
+  z.lazy(() => IngestEventRequestBody1$outboundSchema),
+  z.lazy(() => IngestEventRequestBody2$outboundSchema),
+]);
 
 export function ingestEventRequestToJSON(
   ingestEventRequest: IngestEventRequest,

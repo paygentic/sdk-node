@@ -16,7 +16,8 @@ let value: GroupedValue = {
 
 ## Fields
 
-| Field                    | Type                     | Required                 | Description              |
-| ------------------------ | ------------------------ | ------------------------ | ------------------------ |
-| `groupBy`                | Record<string, *string*> | :heavy_check_mark:       | N/A                      |
-| `value`                  | *number*                 | :heavy_check_mark:       | N/A                      |
+| Field                              | Type                               | Required                           | Description                        |
+| ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- |
+| `groupBy`                          | Record<string, *string*>           | :heavy_check_mark:                 | N/A                                |
+| `value`                            | *number*                           | :heavy_check_mark:                 | N/A                                |
+| `eventCount`                       | *number*                           | :heavy_minus_sign:                 | Number of raw events in this group |

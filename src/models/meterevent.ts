@@ -47,6 +47,10 @@ export type MeterEvent = {
    * Optional external identifier for cross-referencing with external systems. Alphanumeric characters, hyphens, and underscores only.
    */
   externalId?: string | undefined;
+  /**
+   * The merchant's own customer identifier the event was reported with. Empty subject with an externalSubject means the event is not linked to a customer yet.
+   */
+  externalSubject?: string | undefined;
 };
 
 /** @internal */
@@ -69,6 +73,7 @@ export const MeterEvent$inboundSchema: z.ZodType<
   idempotencyKey: z.string(),
   data: z.record(z.any()),
   externalId: z.string().optional(),
+  externalSubject: z.string().optional(),
 });
 
 export function meterEventFromJSON(

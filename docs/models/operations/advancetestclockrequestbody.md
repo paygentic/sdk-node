@@ -3,18 +3,18 @@
 
 ## Supported Types
 
-### `operations.RequestBody1`
+### `operations.AdvanceTestClockRequestBody1`
 
 ```typescript
-const value: operations.RequestBody1 = {
-  currentTime: new Date("2024-01-02T01:10:36.384Z"),
+const value: operations.AdvanceTestClockRequestBody1 = {
+  currentTime: new Date("2025-07-19T03:15:59.942Z"),
 };
 ```
 
-### `operations.RequestBody2`
+### `operations.AdvanceTestClockRequestBody2`
 
 ```typescript
-const value: operations.RequestBody2 = {
+const value: operations.AdvanceTestClockRequestBody2 = {
   advanceBy: "<value>",
 };
 ```

@@ -1,12 +1,12 @@
-# RequestBody1
+# AdvanceTestClockRequestBody1
 
 ## Example Usage
 
 ```typescript
-import { RequestBody1 } from "@paygentic/sdk/models/operations";
+import { AdvanceTestClockRequestBody1 } from "@paygentic/sdk/models/operations";
 
-let value: RequestBody1 = {
-  currentTime: new Date("2024-01-02T01:10:36.384Z"),
+let value: AdvanceTestClockRequestBody1 = {
+  currentTime: new Date("2025-07-19T03:15:59.942Z"),
 };
 ```
 

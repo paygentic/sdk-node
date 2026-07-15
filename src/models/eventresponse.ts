@@ -21,7 +21,14 @@ export type EventResponse = {
   object: EventResponseObject;
   type?: string | undefined;
   source?: string | undefined;
+  /**
+   * Resolved customer ID. Absent when the event was reported with an externalSubject that does not match a customer yet.
+   */
   subject?: string | undefined;
+  /**
+   * The merchant's own customer identifier the event was reported with.
+   */
+  externalSubject?: string | undefined;
   namespace?: string | undefined;
   timestamp?: Date | undefined;
   idempotencyKey?: string | undefined;
@@ -47,6 +54,7 @@ export const EventResponse$inboundSchema: z.ZodType<
   type: z.string().optional(),
   source: z.string().optional(),
   subject: z.string().optional(),
+  externalSubject: z.string().optional(),
   namespace: z.string().optional(),
   timestamp: z.string().datetime({ offset: true }).transform(v => new Date(v))
     .optional(),

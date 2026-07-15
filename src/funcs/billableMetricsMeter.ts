@@ -104,6 +104,8 @@ async function $do(
     "filterGroupBy": payload.filterGroupBy,
     "from": payload.from,
     "groupBy": payload.groupBy,
+    "groupLimit": payload.groupLimit,
+    "groupOffset": payload.groupOffset,
     "subject": payload.subject,
     "to": payload.to,
     "windowSize": payload.windowSize,

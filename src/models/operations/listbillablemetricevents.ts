@@ -30,6 +30,10 @@ export type ListBillableMetricEventsRequest = {
    * Filter by external identifier. Alphanumeric characters, hyphens, and underscores only.
    */
   externalId?: string | undefined;
+  /**
+   * Filter by the merchant's own customer identifier the event was reported with.
+   */
+  externalSubject?: string | undefined;
 };
 
 /** @internal */
@@ -41,6 +45,7 @@ export type ListBillableMetricEventsRequest$Outbound = {
   limit: number;
   offset: number;
   externalId?: string | undefined;
+  externalSubject?: string | undefined;
 };
 
 /** @internal */
@@ -56,6 +61,7 @@ export const ListBillableMetricEventsRequest$outboundSchema: z.ZodType<
   limit: z.number().int().default(20),
   offset: z.number().int().default(0),
   externalId: z.string().optional(),
+  externalSubject: z.string().optional(),
 });
 
 export function listBillableMetricEventsRequestToJSON(

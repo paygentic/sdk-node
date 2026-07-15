@@ -1,11 +1,11 @@
-# RequestBody2
+# AdvanceTestClockRequestBody2
 
 ## Example Usage
 
 ```typescript
-import { RequestBody2 } from "@paygentic/sdk/models/operations";
+import { AdvanceTestClockRequestBody2 } from "@paygentic/sdk/models/operations";
 
-let value: RequestBody2 = {
+let value: AdvanceTestClockRequestBody2 = {
   advanceBy: "<value>",
 };
 ```

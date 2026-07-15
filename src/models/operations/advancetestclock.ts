@@ -5,70 +5,84 @@
 import * as z from "zod/v3";
 import { remap as remap$ } from "../../lib/primitives.js";
 
-export type RequestBody2 = {
+export type AdvanceTestClockRequestBody2 = {
   /**
    * ISO 8601 duration format indicating clock advancement distance. Sample values: 'P1M' moves forward one month, 'P7D' moves forward seven days, 'PT2H' moves forward two hours, 'P1Y2M3DT4H5M6S' moves forward one year, two months, three days, four hours, five minutes, and six seconds
    */
   advanceBy: string;
 };
 
-export type RequestBody1 = {
+export type AdvanceTestClockRequestBody1 = {
   /**
    * New absolute time for the test clock (must be forward in time)
    */
   currentTime: Date;
 };
 
-export type AdvanceTestClockRequestBody = RequestBody1 | RequestBody2;
+export type AdvanceTestClockRequestBody =
+  | AdvanceTestClockRequestBody1
+  | AdvanceTestClockRequestBody2;
 
 export type AdvanceTestClockRequest = {
   /**
    * Test clock ID
    */
   id: string;
-  requestBody: RequestBody1 | RequestBody2;
+  requestBody: AdvanceTestClockRequestBody1 | AdvanceTestClockRequestBody2;
 };
 
 /** @internal */
-export type RequestBody2$Outbound = {
+export type AdvanceTestClockRequestBody2$Outbound = {
   advanceBy: string;
 };
 
 /** @internal */
-export const RequestBody2$outboundSchema: z.ZodType<
-  RequestBody2$Outbound,
+export const AdvanceTestClockRequestBody2$outboundSchema: z.ZodType<
+  AdvanceTestClockRequestBody2$Outbound,
   z.ZodTypeDef,
-  RequestBody2
+  AdvanceTestClockRequestBody2
 > = z.object({
   advanceBy: z.string(),
 });
 
-export function requestBody2ToJSON(requestBody2: RequestBody2): string {
-  return JSON.stringify(RequestBody2$outboundSchema.parse(requestBody2));
+export function advanceTestClockRequestBody2ToJSON(
+  advanceTestClockRequestBody2: AdvanceTestClockRequestBody2,
+): string {
+  return JSON.stringify(
+    AdvanceTestClockRequestBody2$outboundSchema.parse(
+      advanceTestClockRequestBody2,
+    ),
+  );
 }
 
 /** @internal */
-export type RequestBody1$Outbound = {
+export type AdvanceTestClockRequestBody1$Outbound = {
   currentTime: string;
 };
 
 /** @internal */
-export const RequestBody1$outboundSchema: z.ZodType<
-  RequestBody1$Outbound,
+export const AdvanceTestClockRequestBody1$outboundSchema: z.ZodType<
+  AdvanceTestClockRequestBody1$Outbound,
   z.ZodTypeDef,
-  RequestBody1
+  AdvanceTestClockRequestBody1
 > = z.object({
   currentTime: z.date().transform(v => v.toISOString()),
 });
 
-export function requestBody1ToJSON(requestBody1: RequestBody1): string {
-  return JSON.stringify(RequestBody1$outboundSchema.parse(requestBody1));
+export function advanceTestClockRequestBody1ToJSON(
+  advanceTestClockRequestBody1: AdvanceTestClockRequestBody1,
+): string {
+  return JSON.stringify(
+    AdvanceTestClockRequestBody1$outboundSchema.parse(
+      advanceTestClockRequestBody1,
+    ),
+  );
 }
 
 /** @internal */
 export type AdvanceTestClockRequestBody$Outbound =
-  | RequestBody1$Outbound
-  | RequestBody2$Outbound;
+  | AdvanceTestClockRequestBody1$Outbound
+  | AdvanceTestClockRequestBody2$Outbound;
 
 /** @internal */
 export const AdvanceTestClockRequestBody$outboundSchema: z.ZodType<
@@ -76,8 +90,8 @@ export const AdvanceTestClockRequestBody$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   AdvanceTestClockRequestBody
 > = z.union([
-  z.lazy(() => RequestBody1$outboundSchema),
-  z.lazy(() => RequestBody2$outboundSchema),
+  z.lazy(() => AdvanceTestClockRequestBody1$outboundSchema),
+  z.lazy(() => AdvanceTestClockRequestBody2$outboundSchema),
 ]);
 
 export function advanceTestClockRequestBodyToJSON(
@@ -93,7 +107,9 @@ export function advanceTestClockRequestBodyToJSON(
 /** @internal */
 export type AdvanceTestClockRequest$Outbound = {
   id: string;
-  RequestBody: RequestBody1$Outbound | RequestBody2$Outbound;
+  RequestBody:
+    | AdvanceTestClockRequestBody1$Outbound
+    | AdvanceTestClockRequestBody2$Outbound;
 };
 
 /** @internal */
@@ -104,8 +120,8 @@ export const AdvanceTestClockRequest$outboundSchema: z.ZodType<
 > = z.object({
   id: z.string(),
   requestBody: z.union([
-    z.lazy(() => RequestBody1$outboundSchema),
-    z.lazy(() => RequestBody2$outboundSchema),
+    z.lazy(() => AdvanceTestClockRequestBody1$outboundSchema),
+    z.lazy(() => AdvanceTestClockRequestBody2$outboundSchema),
   ]),
 }).transform((v) => {
   return remap$(v, {

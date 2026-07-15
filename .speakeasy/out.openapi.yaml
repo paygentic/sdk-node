@@ -634,7 +634,29 @@
             "schema": {
               "type": "string"
             },
-            "description": "Comma-separated dimension keys"
+            "description": "Comma-separated dimension keys. Configure keys for the grouping on the metric. Only the \"subject\" grouping is supported by default."
+          },
+          {
+            "name": "groupLimit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            },
+            "description": "Cap groupedValues to the top-N by value (descending). With windowSize, restricts the windowed series to those top-N groups. Bounds the payload for high-cardinality groupings; groupCount reports the untruncated distinct-group count."
+          },
+          {
+            "name": "groupOffset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            },
+            "description": "Offset into the value-descending group ordering; requires groupLimit to page through grouped results. With windowSize set, pages the windowed series through the ranked groups (offset 0 yields the top-N)."
           }
         ],
         "responses": {
@@ -661,7 +683,8 @@
                       "groupBy": {
                         "model": "gpt-4"
                       },
-                      "value": 30
+                      "value": 30,
+                      "eventCount": 3
                     }
                   ]
                 }
@@ -761,6 +784,15 @@
               "$ref": "#/components/schemas/ExternalId"
             },
             "description": "Filter by external identifier. Alphanumeric characters, hyphens, and underscores only."
+          },
+          {
+            "name": "externalSubject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/ExternalId"
+            },
+            "description": "Filter by the merchant's own customer identifier the event was reported with."
           }
         ],
         "responses": {
@@ -8317,8 +8349,19 @@
                 "required": [
                   "type",
                   "source",
-                  "subject",
                   "data"
+                ],
+                "anyOf": [
+                  {
+                    "required": [
+                      "subject"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "externalSubject"
+                    ]
+                  }
                 ],
                 "properties": {
                   "type": {
@@ -8333,8 +8376,16 @@
                   },
                   "subject": {
                     "type": "string",
-                    "description": "Customer or entity ID this event relates to.",
+                    "description": "Customer or entity ID this event relates to. Required unless externalSubject is provided.",
                     "example": "cus_abc123"
+                  },
+                  "externalSubject": {
+                    "description": "Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, events may resolve to the previous customer for up to one hour. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/ExternalId"
+                      }
+                    ]
                   },
                   "namespace": {
                     "type": "string",
@@ -12524,7 +12575,7 @@
                 }
               }
             },
-            "description": "Time-bucketed values. Only present when windowSize is specified."
+            "description": "Time-bucketed values. Only present when windowSize is specified. When both windowSize and groupBy are set, windowedValues[i] is index-aligned with groupedValues[i] (same window and group)."
           },
           "groupedValues": {
             "type": "array",
@@ -12543,10 +12594,18 @@
                 },
                 "value": {
                   "type": "number"
+                },
+                "eventCount": {
+                  "type": "integer",
+                  "description": "Number of raw events in this group"
                 }
               }
             },
-            "description": "Dimension-grouped values. Only present when groupBy is specified."
+            "description": "Dimension-grouped values. Only present when groupBy is specified. When both windowSize and groupBy are set, groupedValues[i] is index-aligned with windowedValues[i] (same window and group)."
+          },
+          "groupCount": {
+            "type": "integer",
+            "description": "Total distinct groups before groupLimit/groupOffset truncation. Only present when groupLimit is specified; use it to drive pagination totals."
           }
         }
       },
@@ -12608,6 +12667,10 @@
           },
           "externalId": {
             "$ref": "#/components/schemas/ExternalId"
+          },
+          "externalSubject": {
+            "type": "string",
+            "description": "The merchant's own customer identifier the event was reported with. Empty subject with an externalSubject means the event is not linked to a customer yet."
           }
         }
       },
@@ -16359,7 +16422,12 @@
             "type": "string"
           },
           "subject": {
-            "type": "string"
+            "type": "string",
+            "description": "Resolved customer ID. Absent when the event was reported with an externalSubject that does not match a customer yet."
+          },
+          "externalSubject": {
+            "type": "string",
+            "description": "The merchant's own customer identifier the event was reported with."
           },
           "namespace": {
             "type": "string"

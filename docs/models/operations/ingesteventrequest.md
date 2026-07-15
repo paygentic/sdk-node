@@ -1,11 +1,12 @@
 # IngestEventRequest
 
-## Example Usage
+
+## Supported Types
+
+### `operations.IngestEventRequestBody1`
 
 ```typescript
-import { IngestEventRequest } from "@paygentic/sdk/models/operations";
-
-let value: IngestEventRequest = {
+const value: operations.IngestEventRequestBody1 = {
   type: "ai.inference",
   source: "https://api.myapp.com",
   subject: "cus_abc123",
@@ -16,15 +17,18 @@ let value: IngestEventRequest = {
 };
 ```
 
-## Fields
+### `operations.IngestEventRequestBody2`
 
-| Field                                                                                                                             | Type                                                                                                                              | Required                                                                                                                          | Description                                                                                                                       | Example                                                                                                                           |
-| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `type`                                                                                                                            | *string*                                                                                                                          | :heavy_check_mark:                                                                                                                | CloudEvents type. Must match an eventType configured on a BillableMetric.                                                         | ai.inference                                                                                                                      |
-| `source`                                                                                                                          | *string*                                                                                                                          | :heavy_check_mark:                                                                                                                | Event source URI identifying the application.                                                                                     | https://api.myapp.com                                                                                                             |
-| `subject`                                                                                                                         | *string*                                                                                                                          | :heavy_check_mark:                                                                                                                | Customer or entity ID this event relates to.                                                                                      | cus_abc123                                                                                                                        |
-| `namespace`                                                                                                                       | *string*                                                                                                                          | :heavy_minus_sign:                                                                                                                | Organization/merchant ID. Defaults to the authenticated user's organization. Platform users can specify a different organization. |                                                                                                                                   |
-| `timestamp`                                                                                                                       | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                     | :heavy_minus_sign:                                                                                                                | Event timestamp. Defaults to server time if not provided.                                                                         |                                                                                                                                   |
-| `idempotencyKey`                                                                                                                  | *string*                                                                                                                          | :heavy_minus_sign:                                                                                                                | User-provided deduplication key. If not provided, a unique key is generated.                                                      |                                                                                                                                   |
-| `externalId`                                                                                                                      | *string*                                                                                                                          | :heavy_minus_sign:                                                                                                                | Optional external identifier for cross-referencing with external systems. Alphanumeric characters, hyphens, and underscores only. |                                                                                                                                   |
-| `data`                                                                                                                            | Record<string, *any*>                                                                                                             | :heavy_check_mark:                                                                                                                | Event payload containing the metering data.                                                                                       | {<br/>"tokens": 1500,<br/>"model": "gpt-4o"<br/>}                                                                                 |
+```typescript
+const value: operations.IngestEventRequestBody2 = {
+  type: "ai.inference",
+  source: "https://api.myapp.com",
+  subject: "cus_abc123",
+  externalSubject: "<value>",
+  data: {
+    "tokens": 1500,
+    "model": "gpt-4o",
+  },
+};
+```
+
