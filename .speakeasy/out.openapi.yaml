@@ -7624,7 +7624,7 @@
           "Invoices V2"
         ],
         "summary": "Get Line Items",
-        "description": "Get paginated line items for an invoice from the analytics service",
+        "description": "Get paginated line items for an invoice",
         "operationId": "getInvoiceLineItems",
         "parameters": [
           {

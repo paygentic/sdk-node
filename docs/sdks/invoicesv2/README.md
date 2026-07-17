@@ -323,7 +323,7 @@ run();
 
 ## getLineItems
 
-Get paginated line items for an invoice from the analytics service
+Get paginated line items for an invoice
 
 ### Example Usage
 

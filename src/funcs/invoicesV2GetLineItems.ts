@@ -30,7 +30,7 @@ import { Result } from "../types/fp.js";
  * Get Line Items
  *
  * @remarks
- * Get paginated line items for an invoice from the analytics service
+ * Get paginated line items for an invoice
  */
 export function invoicesV2GetLineItems(
   client: PaygenticCore,

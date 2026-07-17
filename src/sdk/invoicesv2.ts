@@ -88,7 +88,7 @@ export class InvoicesV2 extends ClientSDK {
    * Get Line Items
    *
    * @remarks
-   * Get paginated line items for an invoice from the analytics service
+   * Get paginated line items for an invoice
    */
   async getLineItems(
     request: operations.GetInvoiceLineItemsRequest,
