@@ -33,7 +33,6 @@ export * from "./eventresponse.js";
 export * from "./externalreference.js";
 export * from "./feature.js";
 export * from "./fee.js";
-export * from "./feeprice.js";
 export * from "./grant.js";
 export * from "./groupinvoicesummary.js";
 export * from "./grouptrendentry.js";

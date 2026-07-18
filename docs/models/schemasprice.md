@@ -10,7 +10,7 @@ let value: SchemasPrice = {
   merchantId: "<id>",
   createdAt: new Date("2025-05-20T04:56:11.465Z"),
   invoiceDisplayName: "<value>",
-  paymentTerm: "instant",
+  paymentTerm: "in_arrears",
   properties: {
     unitPrice: "<value>",
   },

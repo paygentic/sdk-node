@@ -3327,71 +3327,6 @@
         "x-speakeasy-name-override": "delete"
       }
     },
-    "/v0/fees/{id}/price/{subscriptionId}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "pattern": "^fee_[a-zA-Z0-9]+$"
-          },
-          "description": "The unique identifier of the fee."
-        },
-        {
-          "name": "subscriptionId",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "pattern": "^sub_[a-zA-Z0-9]+$"
-          },
-          "description": "The unique identifier of the subscription."
-        }
-      ],
-      "get": {
-        "tags": [
-          "Fees"
-        ],
-        "summary": "Get Fee Price",
-        "description": "Get the price for a fee in the context of a subscription. This returns the price configured for the fee in the subscription's plan, including the tax rate.",
-        "operationId": "getFeePrice",
-        "responses": {
-          "200": {
-            "description": "Fee price details",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FeePrice"
-                },
-                "example": {
-                  "id": "price_abc123",
-                  "feeId": "fee_w9x0y1z2a3b4c5d6",
-                  "model": "standard",
-                  "paymentTerm": "in_advance",
-                  "invoiceDisplayName": "Setup Fee",
-                  "properties": {
-                    "unitPrice": "10.00"
-                  },
-                  "taxRate": 10
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        },
-        "x-speakeasy-name-override": "getPrice"
-      }
-    },
     "/v0/plans": {
       "post": {
         "tags": [
@@ -3668,7 +3603,7 @@
                           "createdAt": "2024-01-12T10:00:00Z",
                           "invoiceDisplayName": "Token Usage",
                           "model": "standard",
-                          "paymentTerm": "instant",
+                          "paymentTerm": "in_arrears",
                           "updatedAt": "2024-01-12T10:00:00Z"
                         }
                       ],
@@ -4127,11 +4062,10 @@
                   "paymentTerm": {
                     "type": "string",
                     "enum": [
-                      "instant",
                       "in_arrears",
                       "in_advance"
                     ],
-                    "description": "Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end)."
+                    "description": "Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end)."
                   },
                   "billingCadence": {
                     "type": "string",
@@ -4176,7 +4110,7 @@
                   "description": "Per-token pricing for Claude API",
                   "invoiceDisplayName": "Claude Token Consumption",
                   "model": "standard",
-                  "paymentTerm": "instant",
+                  "paymentTerm": "in_arrears",
                   "properties": {
                     "unitPrice": "0.00002"
                   },
@@ -4283,7 +4217,7 @@
                       "description": "Per-token pricing for Claude API",
                       "invoiceDisplayName": "Claude Token Consumption",
                       "model": "standard",
-                      "paymentTerm": "instant",
+                      "paymentTerm": "in_arrears",
                       "properties": {
                         "unitPrice": "0.00002"
                       },
@@ -4443,11 +4377,10 @@
                   "paymentTerm": {
                     "type": "string",
                     "enum": [
-                      "instant",
                       "in_arrears",
                       "in_advance"
                     ],
-                    "description": "Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end)."
+                    "description": "Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end)."
                   },
                   "billingCadence": {
                     "type": "string",
@@ -4494,7 +4427,7 @@
                   "description": "Per-call pricing for ML inference",
                   "invoiceDisplayName": "Inference API Calls",
                   "model": "standard",
-                  "paymentTerm": "instant",
+                  "paymentTerm": "in_arrears",
                   "properties": {
                     "unitPrice": "0.05"
                   },
@@ -13959,74 +13892,6 @@
           }
         }
       },
-      "PriceQuantity": {
-        "type": "integer",
-        "minimum": 0,
-        "description": "Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1."
-      },
-      "FeePrice": {
-        "type": "object",
-        "description": "The price configuration for a fee within a subscription context.",
-        "required": [
-          "id",
-          "feeId",
-          "model",
-          "paymentTerm",
-          "invoiceDisplayName",
-          "properties",
-          "quantity"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^price_[a-zA-Z0-9]+$",
-            "description": "The unique identifier of the price."
-          },
-          "feeId": {
-            "type": "string",
-            "pattern": "^fee_[a-zA-Z0-9]+$",
-            "description": "The unique identifier of the fee."
-          },
-          "model": {
-            "type": "string",
-            "enum": [
-              "standard"
-            ],
-            "description": "The pricing model. Fees only support standard pricing."
-          },
-          "paymentTerm": {
-            "type": "string",
-            "enum": [
-              "in_advance",
-              "in_arrears"
-            ],
-            "description": "When the fee is charged relative to the billing period."
-          },
-          "invoiceDisplayName": {
-            "type": "string",
-            "description": "The name to display on invoices for this fee."
-          },
-          "properties": {
-            "type": "object",
-            "required": [
-              "unitPrice"
-            ],
-            "properties": {
-              "unitPrice": {
-                "type": "string",
-                "description": "The unit price in dollars (e.g., '10.00'). Per unit. Total per period = quantity × unitPrice; see the `quantity` field."
-              }
-            }
-          },
-          "quantity": {
-            "$ref": "#/components/schemas/PriceQuantity"
-          },
-          "taxRate": {
-            "type": "number",
-            "description": "The tax rate as a percentage (e.g., 10 for 10%)."
-          }
-        }
-      },
       "schemas-PlanId": {
         "type": "string",
         "pattern": "^plan_[a-zA-Z0-9]+$",
@@ -14143,7 +14008,6 @@
           "paymentTerm": {
             "type": "string",
             "enum": [
-              "instant",
               "in_arrears",
               "in_advance"
             ]
@@ -14289,7 +14153,7 @@
               "in_arrears": {
                 "type": "boolean"
               },
-              "instant": {
+              "in_advance": {
                 "type": "boolean"
               }
             }
@@ -14462,6 +14326,11 @@
           }
         ]
       },
+      "PriceQuantity": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1."
+      },
       "schemas-Price": {
         "type": "object",
         "required": [
@@ -14520,7 +14389,6 @@
           "paymentTerm": {
             "type": "string",
             "enum": [
-              "instant",
               "in_arrears",
               "in_advance"
             ]
@@ -15323,7 +15191,7 @@
           },
           "billed": {
             "type": "boolean",
-            "description": "False when this feature's price never produces a recurring line item (an instant price, a credit-denominated price, or an already-elapsed one-time charge) — the feature is entitled but not billed by this reconciliation."
+            "description": "False when this feature's price never produces a recurring line item (a credit-denominated price, or an already-elapsed one-time charge) — the feature is entitled but not billed by this reconciliation."
           }
         },
         "required": [

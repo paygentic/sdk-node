@@ -700,7 +700,7 @@ workflows:
           payload:
             grantDiscountEnabled: false
             invoiceDisplayName: <value>
-            paymentTerm: instant
+            paymentTerm: in_arrears
             properties:
               default: <value>
               parameters:
@@ -750,7 +750,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"instant","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false,"quantity":296918}
+              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"in_arrears","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false,"quantity":296918}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true

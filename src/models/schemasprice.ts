@@ -20,7 +20,6 @@ export const SchemasPriceObject = {
 export type SchemasPriceObject = ClosedEnum<typeof SchemasPriceObject>;
 
 export const SchemasPricePaymentTerm = {
-  Instant: "instant",
   InArrears: "in_arrears",
   InAdvance: "in_advance",
 } as const;

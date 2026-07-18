@@ -54,7 +54,6 @@ export * from "./getentitlementgrant.js";
 export * from "./getexternalreference.js";
 export * from "./getfeature.js";
 export * from "./getfee.js";
-export * from "./getfeeprice.js";
 export * from "./getinvoice.js";
 export * from "./getinvoicelineitems.js";
 export * from "./getitem.js";

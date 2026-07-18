@@ -7,15 +7,14 @@ import { ClosedEnum } from "../../types/enums.js";
 import * as models from "../index.js";
 
 /**
- * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
+ * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
  */
 export const CreatePricePaymentTerm = {
-  Instant: "instant",
   InArrears: "in_arrears",
   InAdvance: "in_advance",
 } as const;
 /**
- * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
+ * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
  */
 export type CreatePricePaymentTerm = ClosedEnum<typeof CreatePricePaymentTerm>;
 
@@ -41,7 +40,7 @@ export type CreatePriceRequest = {
    */
   invoiceDisplayName: string;
   /**
-   * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
+   * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
    */
   paymentTerm: CreatePricePaymentTerm;
   /**

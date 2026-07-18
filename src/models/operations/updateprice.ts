@@ -8,15 +8,14 @@ import { ClosedEnum } from "../../types/enums.js";
 import * as models from "../index.js";
 
 /**
- * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
+ * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
  */
 export const UpdatePricePaymentTerm = {
-  Instant: "instant",
   InArrears: "in_arrears",
   InAdvance: "in_advance",
 } as const;
 /**
- * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
+ * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
  */
 export type UpdatePricePaymentTerm = ClosedEnum<typeof UpdatePricePaymentTerm>;
 
@@ -39,7 +38,7 @@ export type UpdatePriceRequestBody = {
   model?: models.PriceModelInput | undefined;
   properties?: models.PricePropertiesUnion | undefined;
   /**
-   * Billing timing preference. For billable metrics: 'instant' (charges immediately) or 'in_arrears' (charges at period end). For fees: 'in_advance' (charges upfront) or 'in_arrears' (charges at period end).
+   * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
    */
   paymentTerm?: UpdatePricePaymentTerm | undefined;
   /**

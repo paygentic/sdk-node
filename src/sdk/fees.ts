@@ -5,7 +5,6 @@
 import { feesCreate } from "../funcs/feesCreate.js";
 import { feesDelete } from "../funcs/feesDelete.js";
 import { feesGet } from "../funcs/feesGet.js";
-import { feesGetPrice } from "../funcs/feesGetPrice.js";
 import { feesList } from "../funcs/feesList.js";
 import { feesUpdate } from "../funcs/feesUpdate.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
@@ -81,23 +80,6 @@ export class Fees extends ClientSDK {
     options?: RequestOptions,
   ): Promise<void> {
     return unwrapAsync(feesDelete(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Get Fee Price
-   *
-   * @remarks
-   * Get the price for a fee in the context of a subscription. This returns the price configured for the fee in the subscription's plan, including the tax rate.
-   */
-  async getPrice(
-    request: operations.GetFeePriceRequest,
-    options?: RequestOptions,
-  ): Promise<models.FeePrice> {
-    return unwrapAsync(feesGetPrice(
       this,
       request,
       options,

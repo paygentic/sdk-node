@@ -1,11 +1,11 @@
-# PriceModel1
+# Model
 
 ## Example Usage
 
 ```typescript
-import { PriceModel1 } from "@paygentic/sdk/models";
+import { Model } from "@paygentic/sdk/models";
 
-let value: PriceModel1 = "standard";
+let value: Model = "volume";
 ```
 
 ## Values

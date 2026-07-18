@@ -302,7 +302,6 @@ run();
 * [get](docs/sdks/fees/README.md#get) - Get
 * [update](docs/sdks/fees/README.md#update) - Update
 * [delete](docs/sdks/fees/README.md#delete) - Delete
-* [getPrice](docs/sdks/fees/README.md#getprice) - Get Fee Price
 
 ### [InvoicesV2](docs/sdks/invoicesv2/README.md)
 
@@ -506,7 +505,6 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`feesCreate`](docs/sdks/fees/README.md#create) - Create
 - [`feesDelete`](docs/sdks/fees/README.md#delete) - Delete
 - [`feesGet`](docs/sdks/fees/README.md#get) - Get
-- [`feesGetPrice`](docs/sdks/fees/README.md#getprice) - Get Fee Price
 - [`feesList`](docs/sdks/fees/README.md#list) - List
 - [`feesUpdate`](docs/sdks/fees/README.md#update) - Update
 - [`invoicesV2CreateInvoiceRefund`](docs/sdks/invoicesv2/README.md#createinvoicerefund) - Refund Invoice
@@ -741,9 +739,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 81 of 133 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 133 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 133 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 81 of 132 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 132 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 132 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

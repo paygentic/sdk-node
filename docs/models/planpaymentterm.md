@@ -13,4 +13,4 @@ let value: PlanPaymentTerm = {};
 | Field              | Type               | Required           | Description        |
 | ------------------ | ------------------ | ------------------ | ------------------ |
 | `inArrears`        | *boolean*          | :heavy_minus_sign: | N/A                |
-| `instant`          | *boolean*          | :heavy_minus_sign: | N/A                |
+| `inAdvance`        | *boolean*          | :heavy_minus_sign: | N/A                |

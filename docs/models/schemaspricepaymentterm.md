@@ -11,5 +11,5 @@ let value: SchemasPricePaymentTerm = "in_arrears";
 ## Values
 
 ```typescript
-"instant" | "in_arrears" | "in_advance"
+"in_arrears" | "in_advance"
 ```

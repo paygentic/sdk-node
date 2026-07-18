@@ -14,16 +14,15 @@ export const PriceObject = {
 } as const;
 export type PriceObject = ClosedEnum<typeof PriceObject>;
 
-export const PriceModel1 = {
+export const Model = {
   Standard: "standard",
   Dynamic: "dynamic",
   Volume: "volume",
   Percentage: "percentage",
 } as const;
-export type PriceModel1 = ClosedEnum<typeof PriceModel1>;
+export type Model = ClosedEnum<typeof Model>;
 
 export const PricePaymentTerm = {
-  Instant: "instant",
   InArrears: "in_arrears",
   InAdvance: "in_advance",
 } as const;
@@ -52,7 +51,7 @@ export type Price = {
   currency?: string | undefined;
   description?: string | undefined;
   invoiceDisplayName: string;
-  model: PriceModel1;
+  model: Model;
   paymentTerm: PricePaymentTerm;
   properties: { [k: string]: any };
   unitAmount?: string | undefined;
@@ -76,8 +75,9 @@ export const PriceObject$inboundSchema: z.ZodNativeEnum<typeof PriceObject> = z
   .nativeEnum(PriceObject);
 
 /** @internal */
-export const PriceModel1$inboundSchema: z.ZodNativeEnum<typeof PriceModel1> = z
-  .nativeEnum(PriceModel1);
+export const Model$inboundSchema: z.ZodNativeEnum<typeof Model> = z.nativeEnum(
+  Model,
+);
 
 /** @internal */
 export const PricePaymentTerm$inboundSchema: z.ZodNativeEnum<
@@ -99,7 +99,7 @@ export const Price$inboundSchema: z.ZodType<Price, z.ZodTypeDef, unknown> = z
     currency: z.string().optional(),
     description: z.string().optional(),
     invoiceDisplayName: z.string(),
-    model: PriceModel1$inboundSchema,
+    model: Model$inboundSchema,
     paymentTerm: PricePaymentTerm$inboundSchema,
     properties: z.record(z.any()),
     unitAmount: z.string().optional(),

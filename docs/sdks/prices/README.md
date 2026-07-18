@@ -29,7 +29,7 @@ const paygentic = new Paygentic({
 async function run() {
   const result = await paygentic.prices.create({
     invoiceDisplayName: "<value>",
-    paymentTerm: "instant",
+    paymentTerm: "in_arrears",
     properties: {
       default: "<value>",
       parameters: {
@@ -64,7 +64,7 @@ const paygentic = new PaygenticCore({
 async function run() {
   const res = await pricesCreate(paygentic, {
     invoiceDisplayName: "<value>",
-    paymentTerm: "instant",
+    paymentTerm: "in_arrears",
     properties: {
       default: "<value>",
       parameters: {

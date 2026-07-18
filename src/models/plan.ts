@@ -34,7 +34,7 @@ export type BillingCadence = ClosedEnum<typeof BillingCadence>;
 
 export type PlanPaymentTerm = {
   inArrears?: boolean | undefined;
-  instant?: boolean | undefined;
+  inAdvance?: boolean | undefined;
 };
 
 /**
@@ -136,10 +136,11 @@ export const PlanPaymentTerm$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   in_arrears: z.boolean().optional(),
-  instant: z.boolean().optional(),
+  in_advance: z.boolean().optional(),
 }).transform((v) => {
   return remap$(v, {
     "in_arrears": "inArrears",
+    "in_advance": "inAdvance",
   });
 });
 
