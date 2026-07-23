@@ -358,6 +358,7 @@ run();
 * [listAvailable](docs/sdks/plans/README.md#listavailable) - List Available Plans
 * [get](docs/sdks/plans/README.md#get) - Get
 * [update](docs/sdks/plans/README.md#update) - Update
+* [listPlanVersions](docs/sdks/plans/README.md#listplanversions) - List versions
 
 ### [Prices](docs/sdks/prices/README.md)
 
@@ -541,6 +542,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`plansGet`](docs/sdks/plans/README.md#get) - Get
 - [`plansList`](docs/sdks/plans/README.md#list) - List
 - [`plansListAvailable`](docs/sdks/plans/README.md#listavailable) - List Available Plans
+- [`plansListPlanVersions`](docs/sdks/plans/README.md#listplanversions) - List versions
 - [`plansUpdate`](docs/sdks/plans/README.md#update) - Update
 - [`pricesCreate`](docs/sdks/prices/README.md#create) - Create
 - [`pricesDelete`](docs/sdks/prices/README.md#delete) - Delete
@@ -739,9 +741,9 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 81 of 132 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 132 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 132 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 82 of 133 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 133 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 133 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

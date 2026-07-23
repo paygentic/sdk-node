@@ -65,6 +65,7 @@ export * from "./paymentsession.js";
 export * from "./paymentsummary.js";
 export * from "./plan.js";
 export * from "./plancreditallocation.js";
+export * from "./planversionsummary.js";
 export * from "./price.js";
 export * from "./pricefeature.js";
 export * from "./pricefeatureinput.js";

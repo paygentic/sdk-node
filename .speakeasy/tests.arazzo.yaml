@@ -3735,3 +3735,26 @@ workflows:
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
+  - workflowId: listPlanVersions
+    steps:
+      - stepId: test
+        operationId: listPlanVersions
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"id":"<id>","object":"plan_version","versionNumber":329936,"status":"draft","isDefault":false,"subscriptionCount":298928}],"pagination":{"limit":293358,"offset":432982,"total":477530}}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true

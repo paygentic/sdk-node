@@ -6,6 +6,7 @@ import { plansCreate } from "../funcs/plansCreate.js";
 import { plansGet } from "../funcs/plansGet.js";
 import { plansList } from "../funcs/plansList.js";
 import { plansListAvailable } from "../funcs/plansListAvailable.js";
+import { plansListPlanVersions } from "../funcs/plansListPlanVersions.js";
 import { plansUpdate } from "../funcs/plansUpdate.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
@@ -80,6 +81,23 @@ export class Plans extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.Plan> {
     return unwrapAsync(plansUpdate(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * List versions
+   *
+   * @remarks
+   * List the versions of a plan, newest first. Only accounts that can manage this plan may list its versions; versions can expose in-progress pricing, so read-only access is not sufficient.
+   */
+  async listPlanVersions(
+    request: operations.ListPlanVersionsRequest,
+    options?: RequestOptions,
+  ): Promise<operations.ListPlanVersionsResponse> {
+    return unwrapAsync(plansListPlanVersions(
       this,
       request,
       options,

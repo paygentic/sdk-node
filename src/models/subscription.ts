@@ -166,6 +166,14 @@ export type Subscription = {
   payment?: PaymentPending | PaymentPaid | PaymentAwaitingApproval | undefined;
   planId: string;
   /**
+   * The plan version pinned to this subscription at creation.
+   */
+  planVersionId?: string | undefined;
+  /**
+   * The version number of the plan version referenced by planVersionId, as of subscription creation.
+   */
+  versionNumber?: number | undefined;
+  /**
    * @deprecated Use minimumAccountBalance instead. Minimum required wallet balance in atomic units. Sample values: '200000000000' equals $200.00 minimum, '1000000000000' equals $1000.00 minimum
    */
   prefundAmount?: string | undefined;
@@ -423,6 +431,8 @@ export const Subscription$inboundSchema: z.ZodType<
     z.lazy(() => PaymentAwaitingApproval$inboundSchema),
   ]).optional(),
   planId: z.string(),
+  planVersionId: z.string().optional(),
+  versionNumber: z.number().int().optional(),
   prefundAmount: z.string().optional(),
   minimumAccountBalance: z.string().optional(),
   startedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),

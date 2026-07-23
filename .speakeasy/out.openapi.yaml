@@ -4015,6 +4015,100 @@
         "x-speakeasy-name-override": "update"
       }
     },
+    "/v0/plans/{id}/versions": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/PlanId"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Plans"
+        ],
+        "summary": "List versions",
+        "description": "List the versions of a plan, newest first. Only accounts that can manage this plan may list its versions; versions can expose in-progress pricing, so read-only access is not sufficient.",
+        "operationId": "listPlanVersions",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            },
+            "description": "Maximum number of versions to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Number of versions to skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of plan versions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PlanVersionSummary"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v0/prices": {
       "post": {
         "tags": [
@@ -14075,6 +14169,11 @@
           }
         }
       },
+      "PlanVersionId": {
+        "type": "string",
+        "pattern": "^pver_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for a plan version"
+      },
       "Plan": {
         "type": "object",
         "required": [
@@ -14207,6 +14306,60 @@
               "$ref": "#/components/schemas/PlanCreditAllocation"
             },
             "description": "Credit-pool funding declarations for this plan. Each entry funds a distinct pricing unit's credit pool when a subscription to this plan activates: the allocated amount is minted as a credit grant on the customer's pool for that pricing unit, once at activation, or on a recurring basis only when that allocation explicitly sets recurrencePeriod. A plan may declare zero or more allocations; no two allocations on the same plan target the same pricingUnitId."
+          },
+          "defaultVersionId": {
+            "$ref": "#/components/schemas/PlanVersionId",
+            "description": "The plan version currently served as the plan's live definition. New subscriptions pin to this version. Absent for plans that have never been versioned."
+          }
+        }
+      },
+      "PlanVersionSummary": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "versionNumber",
+          "status",
+          "isDefault",
+          "subscriptionCount"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/PlanVersionId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "plan_version"
+            ]
+          },
+          "versionNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Monotonic version number within the plan, starting at 1."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "archived"
+            ],
+            "description": "Lifecycle status of the version."
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this version was published. Absent for draft versions."
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Whether this version is the plan's current default (live) version."
+          },
+          "subscriptionCount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of committed-status subscriptions (active or pending payment) pinned to this version at creation time. This is a count of pins recorded when each subscription was created, not a live-billing cohort: for billing, subscriptions follow the plan's current default version regardless of the version they were pinned to."
           }
         }
       },
@@ -15031,6 +15184,15 @@
           },
           "planId": {
             "type": "string"
+          },
+          "planVersionId": {
+            "type": "string",
+            "description": "The plan version pinned to this subscription at creation."
+          },
+          "versionNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The version number of the plan version referenced by planVersionId, as of subscription creation."
           },
           "prefundAmount": {
             "type": "string",

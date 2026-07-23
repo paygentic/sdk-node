@@ -118,6 +118,10 @@ export type Plan = {
    * Credit-pool funding declarations for this plan. Each entry funds a distinct pricing unit's credit pool when a subscription to this plan activates: the allocated amount is minted as a credit grant on the customer's pool for that pricing unit, once at activation, or on a recurring basis only when that allocation explicitly sets recurrencePeriod. A plan may declare zero or more allocations; no two allocations on the same plan target the same pricingUnitId.
    */
   creditAllocations?: Array<PlanCreditAllocation> | undefined;
+  /**
+   * Unique identifier for a plan version
+   */
+  defaultVersionId?: string | undefined;
 };
 
 /** @internal */
@@ -192,6 +196,7 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
       z.string().datetime({ offset: true }).transform(v => new Date(v)),
     ).optional(),
     creditAllocations: z.array(PlanCreditAllocation$inboundSchema).optional(),
+    defaultVersionId: z.string().optional(),
   });
 
 export function planFromJSON(
