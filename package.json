@@ -2,6 +2,7 @@
   "name": "@paygentic/sdk",
   "version": "0.8.5",
   "author": "Speakeasy",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/paygentic/sdk-node.git"
