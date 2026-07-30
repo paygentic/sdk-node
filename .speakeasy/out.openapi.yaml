@@ -3452,6 +3452,11 @@
                       "$ref": "#/components/schemas/PlanCreditAllocation"
                     },
                     "description": "Credit-pool funding declarations for this plan. Each entry funds a distinct pricing unit's credit pool when a subscription to this plan activates: the allocated amount is minted as a credit grant on the customer's pool for that pricing unit, once at activation, or on a recurring basis only when that allocation explicitly sets recurrencePeriod. A plan may declare zero or more allocations; no two allocations on the same plan may target the same pricingUnitId."
+                  },
+                  "stablePriceIds": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Governs price identity when a price on this plan's default version is replaced. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id."
                   }
                 }
               }
@@ -3959,6 +3964,10 @@
                       "$ref": "#/components/schemas/PlanCreditAllocation"
                     },
                     "description": "Credit-pool funding declarations for this plan. Each entry funds a distinct pricing unit's credit pool when a subscription to this plan activates: the allocated amount is minted as a credit grant on the customer's pool for that pricing unit, once at activation, or on a recurring basis only when that allocation explicitly sets recurrencePeriod. A plan may declare zero or more allocations; no two allocations on the same plan may target the same pricingUnitId."
+                  },
+                  "stablePriceIds": {
+                    "type": "boolean",
+                    "description": "Governs price identity when a price is replaced by minting a new plan version and making it default. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id. Has no effect on this request's own prices field: prices carried over keep their ids, but swapping one price for another there moves the plan to the new price's id rather than keeping the original live."
                   }
                 }
               }
@@ -4007,6 +4016,9 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -4102,6 +4114,159 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Plans"
+        ],
+        "summary": "Mint a plan version",
+        "description": "Mint a new plan version from a price diff and make it the version the plan bills from, in one step. The diff references existing prices by id: create prices beforehand with POST /prices, then add, remove, or replace them here. To return to an earlier price set, make that version the default with a PATCH on the version.",
+        "operationId": "mintPlanVersion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MintPlanVersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The newly minted version, published and now the plan's default",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanVersion"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/plans/{id}/versions/{versionNumber}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/PlanId"
+          }
+        },
+        {
+          "name": "versionNumber",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "description": "The version number within the plan (1-based)."
+        }
+      ],
+      "get": {
+        "tags": [
+          "Plans"
+        ],
+        "summary": "Get a version",
+        "description": "Get a single plan version, including its price slots. Only accounts that can manage this plan may read its versions; versions can expose in-progress pricing, so read-only access is not sufficient.",
+        "operationId": "getPlanVersion",
+        "responses": {
+          "200": {
+            "description": "The requested plan version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanVersion"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Plans"
+        ],
+        "summary": "Set the default version",
+        "description": "Point the plan's default at this version, so its floating subscriptions bill from it. Any version may become default, in either direction — this is how you roll a plan back to (or forward to) an earlier price set. Idempotent when the version is already the default.",
+        "operationId": "transitionPlanVersion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransitionPlanVersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The transitioned plan version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanVersion"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -6486,6 +6651,9 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
@@ -7586,7 +7754,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Pagination token for line items when expand=lineItems"
+            "description": "Opaque pagination token for line items when expand=lineItems, taken from a previous response's nextPageToken. Do not construct or parse this value."
           }
         ],
         "responses": {
@@ -7631,6 +7799,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
@@ -7680,7 +7851,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Token for pagination to fetch the next page of results"
+            "description": "Opaque pagination token to fetch the next page of results, taken from a previous response's nextPageToken. Do not construct or parse this value."
           }
         ],
         "responses": {
@@ -7733,6 +7904,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
@@ -14310,6 +14484,11 @@
           "defaultVersionId": {
             "$ref": "#/components/schemas/PlanVersionId",
             "description": "The plan version currently served as the plan's live definition. New subscriptions pin to this version. Absent for plans that have never been versioned."
+          },
+          "stablePriceIds": {
+            "type": "boolean",
+            "default": true,
+            "description": "Governs price identity when a price on this plan's default version is replaced. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id."
           }
         }
       },
@@ -14363,6 +14542,147 @@
           }
         }
       },
+      "MintPlanVersionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "A reference-by-id price diff applied to the prices of the plan's current version. Every id references an existing price created via POST /prices; inline price definitions are not accepted. An empty body copies the current prices into the new version unchanged. A version must carry at least one price, so a diff that would leave none is rejected.",
+        "properties": {
+          "addPrices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/schemas-PriceId"
+            },
+            "description": "Prices to add to the version. Each must not already be on the plan's current version."
+          },
+          "removePrices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/schemas-PriceId"
+            },
+            "description": "Prices to remove. Each must be on the plan's current version."
+          },
+          "replacePrices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "replacesPriceId",
+                "withPriceId"
+              ],
+              "properties": {
+                "replacesPriceId": {
+                  "$ref": "#/components/schemas/schemas-PriceId"
+                },
+                "withPriceId": {
+                  "$ref": "#/components/schemas/schemas-PriceId"
+                }
+              }
+            },
+            "description": "Prices to swap in place, preserving the slot's lineage so the price keeps its identity where the plan is configured for stable price ids. replacesPriceId must be on the plan's current version; withPriceId is the new price."
+          }
+        }
+      },
+      "PlanVersionPriceSlot": {
+        "description": "One price slot on a plan version. Every `Price` field is present, plus `priceDeleted` layered on top.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Price"
+          },
+          {
+            "type": "object",
+            "required": [
+              "priceDeleted"
+            ],
+            "properties": {
+              "priceDeleted": {
+                "type": "boolean",
+                "description": "True when the underlying price this slot references has been soft-deleted. The slot can still be removed or replaced to repair the draft; it cannot be published while any slot remains dead."
+              }
+            }
+          }
+        ]
+      },
+      "PlanVersion": {
+        "type": "object",
+        "description": "A single plan version, including its price slots. Extends the list summary with the version's prices for draft review.",
+        "required": [
+          "id",
+          "object",
+          "versionNumber",
+          "status",
+          "isDefault",
+          "subscriptionCount",
+          "updatedAt",
+          "prices"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/PlanVersionId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "plan_version"
+            ]
+          },
+          "versionNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Monotonic version number within the plan, starting at 1."
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "published",
+              "archived"
+            ],
+            "description": "Lifecycle status of the version."
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this version was published. Absent for draft versions."
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Whether this version is the plan's current default (live) version."
+          },
+          "subscriptionCount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of committed-status subscriptions pinned to this version at creation time. Not a live-billing cohort."
+          },
+          "basedOnVersionId": {
+            "$ref": "#/components/schemas/PlanVersionId",
+            "description": "The version this one follows on from — the version that was live when this one was created, and whose prices it was built from. Absent for versions created before this field existed."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this version was last modified. Optimistic-concurrency token: read this value and echo it back as an `If-Match` header on a draft-price-mutation request to reject the write (412) if the draft changed since this read."
+          },
+          "prices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlanVersionPriceSlot"
+            },
+            "description": "The price slots that make up this version."
+          }
+        }
+      },
+      "TransitionPlanVersionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Sets this version as the plan's default.",
+        "properties": {
+          "default": {
+            "type": "boolean",
+            "description": "Set to true to point the plan's default at this version. Idempotent on the already-default version."
+          }
+        }
+      },
       "PriceModel": {
         "type": "string",
         "enum": [
@@ -14383,7 +14703,7 @@
             "properties": {
               "unitPrice": {
                 "type": "string",
-                "description": "Per-unit cost in decimal format for fixed-rate pricing. Sample values: '0.00002' represents $0.00002 per token, '0.15' represents $0.15 per gigabyte stored, '0.05' represents $0.05 per API call. Per unit. Total per period = quantity × unitPrice; see the `quantity` field."
+                "description": "Per-unit cost in decimal format for fixed-rate pricing. Sample values: '0.00002' represents $0.00002 per token, '0.15' represents $0.15 per gigabyte stored, '0.05' represents $0.05 per API call. Per unit. Total per period = quantity × unitPrice; see the `quantity` field. A negative value defines a usage-scaled rebate: the line's subtotal is negative and reduces the invoice. A rebate never drives an invoice total below zero, so set rebate rates below the charges they offset. A negative unitPrice is only valid on a metered price (a billableMetricId is required — there is no usage to scale on a fee price) and cannot be combined with grantDiscountEnabled, a hard-limit feature, or a pricingUnitId. When a rebate and a charge price share a billable metric, they must share feature attachment (both on the same feature, or both featureless) or they will compute against different quantity bases."
               }
             },
             "required": [
@@ -16972,7 +17292,8 @@
           "timestamp",
           "issuedInvoices",
           "writtenOffInvoices",
-          "completedPayments"
+          "completedPayments",
+          "rebates"
         ],
         "properties": {
           "timestamp": {
@@ -16991,6 +17312,10 @@
           "completedPayments": {
             "type": "string",
             "description": "Revenue from completed payments in dollars for this bucket"
+          },
+          "rebates": {
+            "type": "string",
+            "description": "Gross magnitude of usage-scaled rebates (negative metered line items) on invoices issued in this bucket, in dollars. Netted into issuedInvoices; surfaced here for visibility."
           },
           "groupBreakdown": {
             "type": "array",
@@ -17085,6 +17410,14 @@
           "refundCount": {
             "type": "number",
             "description": "Number of non-voided refunds (credit notes) issued in the period. Omitted when groupBy=currency is active."
+          },
+          "totalRebates": {
+            "type": "string",
+            "description": "Gross total of usage-scaled rebates (negative metered line items) on invoices issued in the period, in dollars. Already netted into issued invoice grandTotals, so surfaced here for visibility. Omitted when groupBy=currency is active."
+          },
+          "rebateCount": {
+            "type": "number",
+            "description": "Number of rebate line items on invoices issued in the period. Omitted when groupBy=currency is active."
           },
           "invoices": {
             "$ref": "#/components/schemas/InvoiceSummary",
@@ -18105,7 +18438,9 @@
           },
           "endDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true,
+            "description": "Null for an open-ended subscription-owned schedule; order-owned schedules always have a concrete end."
           },
           "billingAnchor": {
             "type": "string",
@@ -18389,7 +18724,9 @@
           },
           "endDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true,
+            "description": "Null for an open-ended subscription-owned interval; order-owned intervals always have a concrete end."
           },
           "usageFilter": {
             "type": "object",

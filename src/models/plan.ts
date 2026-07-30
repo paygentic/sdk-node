@@ -122,6 +122,10 @@ export type Plan = {
    * Unique identifier for a plan version
    */
   defaultVersionId?: string | undefined;
+  /**
+   * Governs price identity when a price on this plan's default version is replaced. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id.
+   */
+  stablePriceIds: boolean;
 };
 
 /** @internal */
@@ -197,6 +201,7 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
     ).optional(),
     creditAllocations: z.array(PlanCreditAllocation$inboundSchema).optional(),
     defaultVersionId: z.string().optional(),
+    stablePriceIds: z.boolean().default(true),
   });
 
 export function planFromJSON(

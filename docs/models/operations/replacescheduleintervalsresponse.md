@@ -19,10 +19,12 @@ let value: ReplaceScheduleIntervalsResponse = {
       billingCadence: "<value>",
       billingMode: "arrears",
       startDate: new Date("2026-01-11T08:11:01.394Z"),
-      endDate: new Date("2025-07-15T03:52:03.180Z"),
-      metadata: {},
-      createdAt: new Date("2024-11-19T16:06:11.364Z"),
-      updatedAt: new Date("2026-05-21T13:29:09.064Z"),
+      endDate: new Date("2024-05-21T20:59:18.871Z"),
+      metadata: {
+        "key": "<value>",
+      },
+      createdAt: new Date("2026-05-21T13:29:09.064Z"),
+      updatedAt: new Date("2025-08-02T06:48:56.749Z"),
     },
   ],
   pagination: {

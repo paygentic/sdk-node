@@ -62,7 +62,10 @@ export type SchemasBillingSchedule = {
   merchantId: string;
   status: SchemasBillingScheduleStatus;
   startDate: Date;
-  endDate: Date;
+  /**
+   * Null for an open-ended subscription-owned schedule; order-owned schedules always have a concrete end.
+   */
+  endDate: Date | null;
   billingAnchor: Date;
   alignmentPolicy: SchemasBillingScheduleAlignmentPolicy;
   prorationPolicy: SchemasBillingScheduleProrationPolicy;
@@ -115,7 +118,9 @@ export const SchemasBillingSchedule$inboundSchema: z.ZodType<
   merchantId: z.string(),
   status: SchemasBillingScheduleStatus$inboundSchema,
   startDate: z.string().datetime({ offset: true }).transform(v => new Date(v)),
-  endDate: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  endDate: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ),
   billingAnchor: z.string().datetime({ offset: true }).transform(v =>
     new Date(v)
   ),

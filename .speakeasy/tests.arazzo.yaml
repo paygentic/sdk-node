@@ -624,13 +624,14 @@ workflows:
             productId: <id>
             renewalReminderDays: 3
             renewalReminderEnabled: true
+            stablePriceIds: true
             taxBehavior: exclusive
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-01-04T18:47:28.165Z","currency":"North Korean Won","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-06-07T06:34:20.265Z"}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-01-04T18:47:28.165Z","currency":"North Korean Won","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-06-07T06:34:20.265Z","stablePriceIds":true}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -667,7 +668,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-11-12T08:13:08.969Z","currency":"Moldovan Leu","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-05-14T02:22:53.032Z"}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-11-12T08:13:08.969Z","currency":"Moldovan Leu","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-05-14T02:22:53.032Z","stablePriceIds":true}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -687,7 +688,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-02-25T08:23:09.829Z","currency":"Lek","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2025-09-29T06:50:28.959Z"}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-02-25T08:23:09.829Z","currency":"Lek","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2025-09-29T06:50:28.959Z","stablePriceIds":true}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -3755,6 +3756,69 @@ workflows:
           - context: $response.body
             condition: |
               {"object":"list","data":[{"id":"<id>","object":"plan_version","versionNumber":329936,"status":"draft","isDefault":false,"subscriptionCount":298928}],"pagination":{"limit":293358,"offset":432982,"total":477530}}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: mintPlanVersion
+    steps:
+      - stepId: test
+        operationId: mintPlanVersion
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"plan_version","versionNumber":591959,"status":"published","isDefault":false,"subscriptionCount":692471,"updatedAt":"2026-05-20T11:58:30.688Z","prices":[]}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPlanVersion
+    steps:
+      - stepId: test
+        operationId: getPlanVersion
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: versionNumber
+            in: path
+            value: 541574
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"plan_version","versionNumber":969073,"status":"draft","isDefault":true,"subscriptionCount":265555,"updatedAt":"2026-12-13T23:04:42.440Z","prices":[{"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-02-20T18:42:50.017Z","invoiceDisplayName":"<value>","model":"dynamic","paymentTerm":"in_advance","properties":{"key":"<value>"},"updatedAt":"2024-10-10T06:17:20.359Z","grantDiscountEnabled":false,"quantity":1,"priceDeleted":true}]}
+            type: simple
+    x-speakeasy-test-group: Plans
+    x-speakeasy-test-rebuild: true
+  - workflowId: transitionPlanVersion
+    steps:
+      - stepId: test
+        operationId: transitionPlanVersion
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: versionNumber
+            in: path
+            value: 414716
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"plan_version","versionNumber":544555,"status":"published","isDefault":false,"subscriptionCount":765460,"updatedAt":"2026-06-21T04:04:44.360Z","prices":[]}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true

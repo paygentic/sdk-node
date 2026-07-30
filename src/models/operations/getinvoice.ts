@@ -18,7 +18,7 @@ export type GetInvoiceRequest = {
    */
   lineItemsLimit?: number | undefined;
   /**
-   * Pagination token for line items when expand=lineItems
+   * Opaque pagination token for line items when expand=lineItems, taken from a previous response's nextPageToken. Do not construct or parse this value.
    */
   lineItemsPageToken?: string | undefined;
 };

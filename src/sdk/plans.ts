@@ -4,9 +4,12 @@
 
 import { plansCreate } from "../funcs/plansCreate.js";
 import { plansGet } from "../funcs/plansGet.js";
+import { plansGetPlanVersion } from "../funcs/plansGetPlanVersion.js";
 import { plansList } from "../funcs/plansList.js";
 import { plansListAvailable } from "../funcs/plansListAvailable.js";
 import { plansListPlanVersions } from "../funcs/plansListPlanVersions.js";
+import { plansMintPlanVersion } from "../funcs/plansMintPlanVersion.js";
+import { plansTransitionPlanVersion } from "../funcs/plansTransitionPlanVersion.js";
 import { plansUpdate } from "../funcs/plansUpdate.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
@@ -98,6 +101,57 @@ export class Plans extends ClientSDK {
     options?: RequestOptions,
   ): Promise<operations.ListPlanVersionsResponse> {
     return unwrapAsync(plansListPlanVersions(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Mint a plan version
+   *
+   * @remarks
+   * Mint a new plan version from a price diff and make it the version the plan bills from, in one step. The diff references existing prices by id: create prices beforehand with POST /prices, then add, remove, or replace them here. To return to an earlier price set, make that version the default with a PATCH on the version.
+   */
+  async mintPlanVersion(
+    request: operations.MintPlanVersionRequest,
+    options?: RequestOptions,
+  ): Promise<models.PlanVersion> {
+    return unwrapAsync(plansMintPlanVersion(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get a version
+   *
+   * @remarks
+   * Get a single plan version, including its price slots. Only accounts that can manage this plan may read its versions; versions can expose in-progress pricing, so read-only access is not sufficient.
+   */
+  async getPlanVersion(
+    request: operations.GetPlanVersionRequest,
+    options?: RequestOptions,
+  ): Promise<models.PlanVersion> {
+    return unwrapAsync(plansGetPlanVersion(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Set the default version
+   *
+   * @remarks
+   * Point the plan's default at this version, so its floating subscriptions bill from it. Any version may become default, in either direction — this is how you roll a plan back to (or forward to) an earlier price set. Idempotent when the version is already the default.
+   */
+  async transitionPlanVersion(
+    request: operations.TransitionPlanVersionRequest,
+    options?: RequestOptions,
+  ): Promise<models.PlanVersion> {
+    return unwrapAsync(plansTransitionPlanVersion(
       this,
       request,
       options,

@@ -12,6 +12,9 @@ A `Plan` links a collection of `Prices` to a `Product`. It functions as a pricin
 * [get](#get) - Get
 * [update](#update) - Update
 * [listPlanVersions](#listplanversions) - List versions
+* [mintPlanVersion](#mintplanversion) - Mint a plan version
+* [getPlanVersion](#getplanversion) - Get a version
+* [transitionPlanVersion](#transitionplanversion) - Set the default version
 
 ## create
 
@@ -398,7 +401,7 @@ run();
 | ---------------------------- | ---------------------------- | ---------------------------- |
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
-| errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 401, 403, 404, 409           | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
@@ -476,5 +479,244 @@ run();
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
 | errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## mintPlanVersion
+
+Mint a new plan version from a price diff and make it the version the plan bills from, in one step. The diff references existing prices by id: create prices beforehand with POST /prices, then add, remove, or replace them here. To return to an earlier price set, make that version the default with a PATCH on the version.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="mintPlanVersion" method="post" path="/v0/plans/{id}/versions" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.plans.mintPlanVersion({
+    id: "<id>",
+    mintPlanVersionRequest: {},
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { plansMintPlanVersion } from "@paygentic/sdk/funcs/plansMintPlanVersion.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await plansMintPlanVersion(paygentic, {
+    id: "<id>",
+    mintPlanVersionRequest: {},
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("plansMintPlanVersion failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.MintPlanVersionRequest](../../models/operations/mintplanversionrequest.md)                                                                                         | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.PlanVersion](../../models/planversion.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 401, 403, 404, 409           | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## getPlanVersion
+
+Get a single plan version, including its price slots. Only accounts that can manage this plan may read its versions; versions can expose in-progress pricing, so read-only access is not sufficient.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="getPlanVersion" method="get" path="/v0/plans/{id}/versions/{versionNumber}" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.plans.getPlanVersion({
+    id: "<id>",
+    versionNumber: 541574,
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { plansGetPlanVersion } from "@paygentic/sdk/funcs/plansGetPlanVersion.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await plansGetPlanVersion(paygentic, {
+    id: "<id>",
+    versionNumber: 541574,
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("plansGetPlanVersion failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetPlanVersionRequest](../../models/operations/getplanversionrequest.md)                                                                                           | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.PlanVersion](../../models/planversion.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## transitionPlanVersion
+
+Point the plan's default at this version, so its floating subscriptions bill from it. Any version may become default, in either direction — this is how you roll a plan back to (or forward to) an earlier price set. Idempotent when the version is already the default.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="transitionPlanVersion" method="patch" path="/v0/plans/{id}/versions/{versionNumber}" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.plans.transitionPlanVersion({
+    id: "<id>",
+    versionNumber: 414716,
+    transitionPlanVersionRequest: {},
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { plansTransitionPlanVersion } from "@paygentic/sdk/funcs/plansTransitionPlanVersion.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await plansTransitionPlanVersion(paygentic, {
+    id: "<id>",
+    versionNumber: 414716,
+    transitionPlanVersionRequest: {},
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("plansTransitionPlanVersion failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.TransitionPlanVersionRequest](../../models/operations/transitionplanversionrequest.md)                                                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.PlanVersion](../../models/planversion.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 401, 403, 404, 409           | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |

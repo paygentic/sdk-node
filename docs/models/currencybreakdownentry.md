@@ -40,6 +40,7 @@ let value: CurrencyBreakdownEntry = {
       issuedInvoices: "<value>",
       writtenOffInvoices: "<value>",
       completedPayments: "<value>",
+      rebates: "<value>",
     },
   ],
 };

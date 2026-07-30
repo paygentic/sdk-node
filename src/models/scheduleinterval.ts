@@ -50,7 +50,10 @@ export type ScheduleInterval = {
   billingMode: ScheduleIntervalBillingMode;
   billDate?: Date | null | undefined;
   startDate: Date;
-  endDate: Date;
+  /**
+   * Null for an open-ended subscription-owned interval; order-owned intervals always have a concrete end.
+   */
+  endDate: Date | null;
   usageFilter?: { [k: string]: any } | null | undefined;
   metadata: { [k: string]: any };
   createdAt: Date;
@@ -114,7 +117,9 @@ export const ScheduleInterval$inboundSchema: z.ZodType<
     z.string().datetime({ offset: true }).transform(v => new Date(v)),
   ).optional(),
   startDate: z.string().datetime({ offset: true }).transform(v => new Date(v)),
-  endDate: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  endDate: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ),
   usageFilter: z.nullable(z.record(z.any())).optional(),
   metadata: z.record(z.any()),
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),

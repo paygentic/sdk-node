@@ -29,6 +29,10 @@ export type RevenueTrendBucket = {
    */
   completedPayments: string;
   /**
+   * Gross magnitude of usage-scaled rebates (negative metered line items) on invoices issued in this bucket, in dollars. Netted into issuedInvoices; surfaced here for visibility.
+   */
+  rebates: string;
+  /**
    * Per-group trend entries (present when groupBy=plan or groupBy=customer)
    */
   groupBreakdown?: Array<GroupTrendEntry> | undefined;
@@ -44,6 +48,7 @@ export const RevenueTrendBucket$inboundSchema: z.ZodType<
   issuedInvoices: z.string(),
   writtenOffInvoices: z.string(),
   completedPayments: z.string(),
+  rebates: z.string(),
   groupBreakdown: z.array(GroupTrendEntry$inboundSchema).optional(),
 });
 

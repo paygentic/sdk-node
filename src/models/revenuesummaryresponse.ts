@@ -44,6 +44,14 @@ export type RevenueSummaryResponse = {
    * Number of non-voided refunds (credit notes) issued in the period. Omitted when groupBy=currency is active.
    */
   refundCount?: number | undefined;
+  /**
+   * Gross total of usage-scaled rebates (negative metered line items) on invoices issued in the period, in dollars. Already netted into issued invoice grandTotals, so surfaced here for visibility. Omitted when groupBy=currency is active.
+   */
+  totalRebates?: string | undefined;
+  /**
+   * Number of rebate line items on invoices issued in the period. Omitted when groupBy=currency is active.
+   */
+  rebateCount?: number | undefined;
   invoices?: InvoiceSummary | undefined;
   payments?: PaymentSummary | undefined;
   /**
@@ -70,6 +78,8 @@ export const RevenueSummaryResponse$inboundSchema: z.ZodType<
   netRevenue: z.string().optional(),
   totalRefunds: z.string().optional(),
   refundCount: z.number().optional(),
+  totalRebates: z.string().optional(),
+  rebateCount: z.number().optional(),
   invoices: InvoiceSummary$inboundSchema.optional(),
   payments: PaymentSummary$inboundSchema.optional(),
   trend: z.array(RevenueTrendBucket$inboundSchema).optional(),

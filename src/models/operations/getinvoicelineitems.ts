@@ -14,7 +14,7 @@ export type GetInvoiceLineItemsRequest = {
    */
   limit?: number | undefined;
   /**
-   * Token for pagination to fetch the next page of results
+   * Opaque pagination token to fetch the next page of results, taken from a previous response's nextPageToken. Do not construct or parse this value.
    */
   pageToken?: string | undefined;
 };
