@@ -44,6 +44,10 @@ export type BillableMetric = {
    * Unique identifier for a product
    */
   productId: string;
+  /**
+   * The item this metric is tagged with, or null when untagged. Used to map this metric's invoice lines to an external accounting/tax identity.
+   */
+  itemId: string | null;
   unit: string;
   updatedAt: Date;
   eventType?: string | null | undefined;
@@ -76,6 +80,7 @@ export const BillableMetric$inboundSchema: z.ZodType<
   merchantId: z.string(),
   name: z.string(),
   productId: z.string(),
+  itemId: z.nullable(z.string()),
   unit: z.string(),
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   eventType: z.nullable(z.string()).optional(),

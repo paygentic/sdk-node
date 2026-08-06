@@ -7,6 +7,14 @@ import { remap as remap$ } from "../../lib/primitives.js";
 
 export type UpdateItemRequestBody = {
   name?: string | undefined;
+  /**
+   * The product this item belongs to.
+   */
+  catalogId?: string | null | undefined;
+  /**
+   * Set to true to retire this item from your catalog, or false to restore it. Archived items remain readable and continue to resolve on historical invoices.
+   */
+  archived?: boolean | undefined;
   metadata?: { [k: string]: any } | undefined;
 };
 
@@ -21,6 +29,8 @@ export type UpdateItemRequest = {
 /** @internal */
 export type UpdateItemRequestBody$Outbound = {
   name?: string | undefined;
+  catalogId?: string | null | undefined;
+  archived?: boolean | undefined;
   metadata?: { [k: string]: any } | undefined;
 };
 
@@ -31,6 +41,8 @@ export const UpdateItemRequestBody$outboundSchema: z.ZodType<
   UpdateItemRequestBody
 > = z.object({
   name: z.string().optional(),
+  catalogId: z.nullable(z.string()).optional(),
+  archived: z.boolean().optional(),
   metadata: z.record(z.any()).optional(),
 });
 

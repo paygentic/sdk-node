@@ -12,6 +12,7 @@ import {
   LineItemsSummary,
   LineItemsSummary$inboundSchema,
 } from "./lineitemssummary.js";
+import { ResolvedItem, ResolvedItem$inboundSchema } from "./resolveditem.js";
 
 /**
  * The object type
@@ -36,6 +37,10 @@ export type LineItemsResponse = {
    */
   data: Array<LineItem>;
   /**
+   * Items the returned lines were tagged with, each appearing once, ordered by id. Only present when expand=items is requested. Scoped to the lines in THIS response, not to any invoice as a whole — combine the collections across pages for a complete set. Join a line to its entry via the line's itemId. A line whose itemId has no entry here is a data-integrity fault — the tag points at an item that no longer resolves for this merchant. It is not the same as an untagged line and must not be counted as unmapped; report it.
+   */
+  items?: Array<ResolvedItem> | undefined;
+  /**
    * Total number of matching line items
    */
   totalCount: number;
@@ -55,6 +60,7 @@ export const LineItemsResponse$inboundSchema: z.ZodType<
 > = z.object({
   object: LineItemsResponseObject$inboundSchema,
   data: z.array(LineItem$inboundSchema),
+  items: z.array(ResolvedItem$inboundSchema).optional(),
   totalCount: z.number().int(),
   summary: LineItemsSummary$inboundSchema,
 });

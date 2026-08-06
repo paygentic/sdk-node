@@ -18,12 +18,23 @@ export const ItemObject = {
 export type ItemObject = ClosedEnum<typeof ItemObject>;
 
 export type Item = {
+  /**
+   * Unique identifier for an item
+   */
   id: string;
   object: ItemObject;
   merchantId: string;
   name: string;
   metadata: { [k: string]: any };
   externalReferences: Array<ExternalReference>;
+  /**
+   * The product this item belongs to.
+   */
+  catalogId: string | null;
+  /**
+   * When this item was retired from the catalog. Null while active.
+   */
+  archivedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -41,6 +52,10 @@ export const Item$inboundSchema: z.ZodType<Item, z.ZodTypeDef, unknown> = z
     name: z.string(),
     metadata: z.record(z.any()),
     externalReferences: z.array(ExternalReference$inboundSchema),
+    catalogId: z.nullable(z.string()),
+    archivedAt: z.nullable(
+      z.string().datetime({ offset: true }).transform(v => new Date(v)),
+    ),
     createdAt: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),

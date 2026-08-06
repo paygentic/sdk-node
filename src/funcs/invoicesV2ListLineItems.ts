@@ -95,9 +95,11 @@ async function $do(
   const path = pathToFunc("/v2/invoices/lineItems")();
 
   const query = encodeFormQuery({
+    "expand": payload?.expand,
     "invoiceId": payload?.invoiceId,
     "limit": payload?.limit,
     "offset": payload?.offset,
+    "provider": payload?.provider,
     "status": payload?.status,
     "subscriptionId": payload?.subscriptionId,
   });

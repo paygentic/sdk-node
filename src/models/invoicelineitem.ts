@@ -53,6 +53,14 @@ export type InvoiceLineItem = {
    */
   billableMetricId: string;
   /**
+   * Item the line's charge was tagged with, recorded when the line was generated and not re-resolved on read. A discount line carries the same item as the charge it offsets. `null` means the charge carried no tag at that moment, the line predates item stamping, or the line has no originating charge (a grant-credit purchase) — it is an expected value, not an error. Use `priceId` to tell those cases apart.
+   */
+  itemId?: string | null | undefined;
+  /**
+   * The price this line was generated from, or `null` when the line has no originating charge. With `itemId` it says whether a missing tag is fixable: `priceId` set and `itemId` null means the charge was simply untagged, which tagging it and restamping resolves; both null means the line records a grant-credit purchase, which is deferred revenue and is never tagged. Any measure of outstanding mapping work must exclude the latter or it can never reach zero.
+   */
+  priceId?: string | null | undefined;
+  /**
    * Display name for this line item on invoices
    */
   invoiceDisplayName: string;
@@ -121,6 +129,8 @@ export const InvoiceLineItem$inboundSchema: z.ZodType<
   eventId: z.string(),
   eventSourceId: z.string(),
   billableMetricId: z.string(),
+  itemId: z.nullable(z.string()).optional(),
+  priceId: z.nullable(z.string()).optional(),
   invoiceDisplayName: z.string(),
   lineItemType: InvoiceLineItemLineItemType$inboundSchema,
   meterEventId: z.string(),

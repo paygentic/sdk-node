@@ -16,7 +16,7 @@ export type ReplacePrice = {
 };
 
 /**
- * A reference-by-id price diff applied to the prices of the plan's current version. Every id references an existing price created via POST /prices; inline price definitions are not accepted. An empty body copies the current prices into the new version unchanged. A version must carry at least one price, so a diff that would leave none is rejected.
+ * A reference-by-id price diff applied to the prices of the plan's current version. Every id references an existing price created via POST /prices; inline price definitions are not accepted. A mint must carry at least one price change, so an empty body is rejected. A version must carry at least one price, so a diff that would leave none is rejected.
  */
 export type MintPlanVersionRequest = {
   /**

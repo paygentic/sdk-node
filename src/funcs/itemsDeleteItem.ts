@@ -36,6 +36,7 @@ export function itemsDeleteItem(
 ): APIPromise<
   Result<
     void,
+    | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -62,6 +63,7 @@ async function $do(
   [
     Result<
       void,
+      | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
       | ResponseValidationError
@@ -134,7 +136,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["401", "403", "404", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "404", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -149,6 +151,7 @@ async function $do(
 
   const [result] = await M.match<
     void,
+    | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -160,6 +163,7 @@ async function $do(
     | SDKValidationError
   >(
     M.nil(204, z.void()),
+    M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),

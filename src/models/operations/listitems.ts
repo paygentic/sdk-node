@@ -14,6 +14,10 @@ export type ListItemsRequest = {
    */
   merchantId?: string | undefined;
   /**
+   * Filter items by the product they are filed under
+   */
+  catalogId?: string | undefined;
+  /**
    * Provider whose external code to resolve (e.g. `salesforce`, `netsuite`). Must be supplied together with `externalId`.
    */
   provider?: string | undefined;
@@ -29,6 +33,10 @@ export type ListItemsRequest = {
    * Zero-based offset for pagination. In resolution mode this paginates the de-duplicated resolved Item set.
    */
   offset?: number | undefined;
+  /**
+   * Include archived items in the results. By default, archived items are omitted. This is ignored when resolving by `provider` and `externalId`, which always returns the matching item regardless of archived status.
+   */
+  includeArchived?: boolean | undefined;
 };
 
 /**
@@ -45,10 +53,12 @@ export type ListItemsResponse = {
 /** @internal */
 export type ListItemsRequest$Outbound = {
   merchantId?: string | undefined;
+  catalogId?: string | undefined;
   provider?: string | undefined;
   externalId?: string | undefined;
   limit: number;
   offset: number;
+  includeArchived: boolean;
 };
 
 /** @internal */
@@ -58,10 +68,12 @@ export const ListItemsRequest$outboundSchema: z.ZodType<
   ListItemsRequest
 > = z.object({
   merchantId: z.string().optional(),
+  catalogId: z.string().optional(),
   provider: z.string().optional(),
   externalId: z.string().optional(),
   limit: z.number().int().default(50),
   offset: z.number().int().default(0),
+  includeArchived: z.boolean().default(false),
 });
 
 export function listItemsRequestToJSON(

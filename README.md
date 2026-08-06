@@ -747,7 +747,7 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 87 of 136 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 88 of 136 methods.*
 * [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 136 methods.*
 * [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 136 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.

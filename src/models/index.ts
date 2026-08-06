@@ -86,6 +86,7 @@ export * from "./reconciledfeaturefailed.js";
 export * from "./reconciledfeatureremoved.js";
 export * from "./reconciledfeatureskipped.js";
 export * from "./replacescheduleintervalsrequest.js";
+export * from "./resolveditem.js";
 export * from "./revenuesummaryresponse.js";
 export * from "./revenuetrendbucket.js";
 export * from "./rulecondition.js";

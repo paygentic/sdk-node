@@ -16,14 +16,15 @@ let value: ListFeesResponse = {
       description: "since while ah why illusion regularly adventurously",
       merchantId: "<id>",
       productId: "<id>",
-      createdAt: new Date("2026-09-26T20:50:14.986Z"),
-      updatedAt: new Date("2024-04-13T08:30:31.889Z"),
+      itemId: "<id>",
+      createdAt: new Date("2024-04-13T08:30:31.889Z"),
+      updatedAt: new Date("2025-04-13T11:04:42.548Z"),
     },
   ],
   pagination: {
-    limit: 427428,
-    offset: 742322,
-    total: 297500,
+    limit: 742322,
+    offset: 297500,
+    total: 528685,
   },
 };
 ```

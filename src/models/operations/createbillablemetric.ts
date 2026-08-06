@@ -44,7 +44,11 @@ export type CreateBillableMetricRequest = {
   /**
    * Unique identifier for a product
    */
-  productId: string;
+  productId?: string | undefined;
+  /**
+   * Unique identifier for an item
+   */
+  itemId?: string | undefined;
   /**
    * Measurement unit used when aggregating this metric's values. Common examples: 'tokens', 'GB', 'calls', 'images', 'hours', 'TB', 'queries', 'requests'
    */
@@ -78,7 +82,8 @@ export type CreateBillableMetricRequest$Outbound = {
   description: string;
   merchantId: string;
   name: string;
-  productId: string;
+  productId?: string | undefined;
+  itemId?: string | undefined;
   unit: string;
   eventType?: string | undefined;
   valueProperty?: string | undefined;
@@ -96,7 +101,8 @@ export const CreateBillableMetricRequest$outboundSchema: z.ZodType<
   description: z.string(),
   merchantId: z.string(),
   name: z.string(),
-  productId: z.string(),
+  productId: z.string().optional(),
+  itemId: z.string().optional(),
   unit: z.string(),
   eventType: z.string().optional(),
   valueProperty: z.string().optional(),

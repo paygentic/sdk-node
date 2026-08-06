@@ -54,14 +54,13 @@ workflows:
             description: Tracks total tokens consumed per API call
             merchantId: <id>
             name: Token Counter
-            productId: <id>
             unit: tokens
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"billableMetric","aggregation":"AVG","createdAt":"2026-11-27T06:33:28.146Z","description":"odd drat spherical regularly","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"second","updatedAt":"2026-11-05T18:27:48.113Z"}
+              {"id":"<id>","object":"billableMetric","aggregation":"AVG","createdAt":"2026-11-27T06:33:28.146Z","description":"odd drat spherical regularly","merchantId":"<id>","name":"<value>","productId":"<id>","itemId":null,"unit":"second","updatedAt":"2026-11-05T18:27:48.113Z"}
             type: simple
     x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
@@ -101,7 +100,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"billableMetric","aggregation":"MIN","createdAt":"2024-04-29T10:20:07.224Z","description":"even weary pine","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"siemens","updatedAt":"2026-12-10T07:52:04.795Z"}
+              {"id":"<id>","object":"billableMetric","aggregation":"MIN","createdAt":"2024-04-29T10:20:07.224Z","description":"even weary pine","merchantId":"<id>","name":"<value>","productId":"<id>","itemId":"<id>","unit":"siemens","updatedAt":"2026-12-10T07:52:04.795Z"}
             type: simple
     x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
@@ -121,7 +120,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"billableMetric","aggregation":"MIN","createdAt":"2026-11-02T11:56:44.093Z","description":"self-assured provided fondly questionable","merchantId":"<id>","name":"<value>","productId":"<id>","unit":"weber","updatedAt":"2024-10-02T02:27:52.097Z"}
+              {"id":"<id>","object":"billableMetric","aggregation":"MIN","createdAt":"2026-11-02T11:56:44.093Z","description":"self-assured provided fondly questionable","merchantId":"<id>","name":"<value>","productId":"<id>","itemId":"<id>","unit":"weber","updatedAt":"2024-10-02T02:27:52.097Z"}
             type: simple
     x-speakeasy-test-group: billableMetrics
     x-speakeasy-test-rebuild: true
@@ -1807,13 +1806,12 @@ workflows:
             description: obnoxiously boldly that fort as minus bob adventurously
             merchantId: <id>
             name: <value>
-            productId: <id>
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"fee","name":"<value>","description":"flint once whoa where fellow rationalise pish piglet","merchantId":"<id>","productId":"<id>","createdAt":"2025-08-09T15:27:19.888Z","updatedAt":"2025-07-02T22:33:36.653Z"}
+              {"id":"<id>","object":"fee","name":"<value>","description":"flint once whoa where fellow rationalise pish piglet","merchantId":"<id>","productId":"<id>","itemId":"<id>","createdAt":"2025-08-09T15:27:19.888Z","updatedAt":"2025-07-02T22:33:36.653Z"}
             type: simple
     x-speakeasy-test-group: Fees
     x-speakeasy-test-rebuild: true
@@ -1853,7 +1851,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"fee","name":"<value>","description":"oof ham brandish abacus deserted quizzically hopelessly millet by partially","merchantId":"<id>","productId":"<id>","createdAt":"2025-10-05T23:24:29.123Z","updatedAt":"2025-06-01T07:40:57.830Z"}
+              {"id":"<id>","object":"fee","name":"<value>","description":"oof ham brandish abacus deserted quizzically hopelessly millet by partially","merchantId":"<id>","productId":"<id>","itemId":"<id>","createdAt":"2025-10-05T23:24:29.123Z","updatedAt":"2025-06-01T07:40:57.830Z"}
             type: simple
     x-speakeasy-test-group: Fees
     x-speakeasy-test-rebuild: true
@@ -1873,7 +1871,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"fee","name":"<value>","description":"by furiously seriously geez ah apostrophize overfeed","merchantId":"<id>","productId":"<id>","createdAt":"2025-11-25T14:54:19.062Z","updatedAt":"2025-08-23T20:11:48.508Z"}
+              {"id":"<id>","object":"fee","name":"<value>","description":"by furiously seriously geez ah apostrophize overfeed","merchantId":"<id>","productId":"<id>","itemId":"<id>","createdAt":"2025-11-25T14:54:19.062Z","updatedAt":"2025-08-23T20:11:48.508Z"}
             type: simple
     x-speakeasy-test-group: Fees
     x-speakeasy-test-rebuild: true
@@ -3145,7 +3143,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"externalReferences":[],"createdAt":"2024-11-27T23:00:06.977Z","updatedAt":"2025-09-11T18:00:08.142Z"}
+              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"externalReferences":[],"catalogId":"<id>","archivedAt":null,"createdAt":"2024-11-27T23:00:06.977Z","updatedAt":"2025-09-11T18:00:08.142Z"}
             type: simple
     x-speakeasy-test-group: Items
     x-speakeasy-test-rebuild: true
@@ -3160,12 +3158,15 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: includeArchived
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"data":[{"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{},"externalReferences":[],"createdAt":"2024-04-07T20:39:17.208Z","updatedAt":"2024-09-28T05:50:14.362Z"}],"pagination":{"limit":862651,"offset":514767,"total":228448}}
+              {"data":[{"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{},"externalReferences":[],"catalogId":"<id>","archivedAt":"2024-11-29T21:28:14.232Z","createdAt":"2024-04-07T20:39:17.208Z","updatedAt":"2024-09-28T05:50:14.362Z"}],"pagination":{"limit":862651,"offset":514767,"total":228448}}
             type: simple
     x-speakeasy-test-group: Items
     x-speakeasy-test-rebuild: true
@@ -3182,7 +3183,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"externalReferences":[],"createdAt":"2024-10-05T14:29:34.021Z","updatedAt":"2025-11-30T08:06:35.972Z"}
+              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{"key":"<value>","key1":"<value>","key2":"<value>"},"externalReferences":[],"catalogId":"<id>","archivedAt":"2024-10-05T14:29:34.021Z","createdAt":"2024-10-05T14:29:34.021Z","updatedAt":"2025-11-30T08:06:35.972Z"}
             type: simple
     x-speakeasy-test-group: Items
     x-speakeasy-test-rebuild: true
@@ -3202,7 +3203,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{},"externalReferences":[],"createdAt":"2025-09-25T06:54:53.978Z","updatedAt":"2025-07-05T12:55:48.270Z"}
+              {"id":"<id>","object":"item","merchantId":"<id>","name":"<value>","metadata":{},"externalReferences":[],"catalogId":"<id>","archivedAt":null,"createdAt":"2025-09-25T06:54:53.978Z","updatedAt":"2025-07-05T12:55:48.270Z"}
             type: simple
     x-speakeasy-test-group: Items
     x-speakeasy-test-rebuild: true

@@ -149,7 +149,6 @@
                   "description",
                   "unit",
                   "merchantId",
-                  "productId",
                   "aggregation"
                 ],
                 "properties": {
@@ -182,7 +181,11 @@
                   },
                   "productId": {
                     "$ref": "#/components/schemas/ProductId",
-                    "description": "The unique identifier of the product associated with the billable metric."
+                    "description": "The product this metric belongs to. Required unless `itemId` is supplied, in which case the product is derived from that item's catalog."
+                  },
+                  "itemId": {
+                    "$ref": "#/components/schemas/ItemId",
+                    "description": "Optional item tag, used to map this metric's invoice lines to an external accounting/tax identity. When supplied, `productId` is derived from the item's catalog and a supplied `productId` that disagrees is rejected."
                   },
                   "unit": {
                     "type": "string",
@@ -486,6 +489,12 @@
                   "unit": {
                     "type": "string",
                     "description": "Updated measurement unit. Common examples: 'tokens', 'GB', 'requests', 'items', 'hours'"
+                  },
+                  "itemId": {
+                    "type": "string",
+                    "pattern": "^itm_[a-zA-Z0-9]+$",
+                    "nullable": true,
+                    "description": "Optional item tag, used to map this metric's invoice lines to an external accounting/tax identity. Send a new id to re-tag — `productId` is re-derived from that item's catalog, and an archived item is rejected. Send `null` to untag."
                   },
                   "eventType": {
                     "type": "string",
@@ -2957,8 +2966,7 @@
                 "required": [
                   "name",
                   "description",
-                  "merchantId",
-                  "productId"
+                  "merchantId"
                 ],
                 "properties": {
                   "name": {
@@ -2975,7 +2983,11 @@
                   },
                   "productId": {
                     "$ref": "#/components/schemas/ProductId",
-                    "description": "The unique identifier of the product associated with the fee."
+                    "description": "The product this fee belongs to. Required unless `itemId` is supplied, in which case the product is derived from that item's catalog."
+                  },
+                  "itemId": {
+                    "$ref": "#/components/schemas/ItemId",
+                    "description": "Optional item tag, used to map this fee's invoice lines to an external accounting/tax identity. When supplied, `productId` is derived from the item's catalog and a supplied `productId` that disagrees is rejected."
                   }
                 }
               }
@@ -3228,6 +3240,12 @@
                   "name": {
                     "type": "string",
                     "description": "Updated label for the fee."
+                  },
+                  "itemId": {
+                    "type": "string",
+                    "pattern": "^itm_[a-zA-Z0-9]+$",
+                    "nullable": true,
+                    "description": "Optional item tag, used to map this fee's invoice lines to an external accounting/tax identity. Send a new id to re-tag — `productId` is re-derived from that item's catalog, and an archived item is rejected. Send `null` to untag."
                   }
                 }
               }
@@ -6358,14 +6376,12 @@
                       "name": "StartupXYZ - Image Generation Service",
                       "payment": null,
                       "planId": "plan_t9u0v1w2x3y4z5a6",
-                      "prefundAmount": "50000000000",
                       "startedAt": "2024-01-10T08:00:00Z",
                       "status": "active",
                       "terminatedAt": null,
                       "terminatedBy": null,
                       "terminationReason": null,
-                      "updatedAt": "2024-01-10T08:00:00Z",
-                      "walletId": "acc_b7c8d9e0f1g2h3i4"
+                      "updatedAt": "2024-01-10T08:00:00Z"
                     },
                     {
                       "id": "sub_j1k2l3m4n5o6p7q8",
@@ -6379,14 +6395,12 @@
                       "name": "Analytics Co - Data Platform Enterprise",
                       "payment": null,
                       "planId": "plan_z7a8b9c0d1e2f3g4",
-                      "prefundAmount": "1000000000000",
                       "startedAt": "2024-02-01T14:45:30Z",
                       "status": "active",
                       "terminatedAt": null,
                       "terminatedBy": null,
                       "terminationReason": null,
-                      "updatedAt": "2024-02-15T09:20:00Z",
-                      "walletId": "acc_h5i6j7k8l9m0n1o2"
+                      "updatedAt": "2024-02-15T09:20:00Z"
                     }
                   ],
                   "pagination": {
@@ -6500,11 +6514,13 @@
                   },
                   "prefundAmount": {
                     "type": "string",
-                    "description": "@deprecated Use minimumAccountBalance instead. Required initial wallet deposit amount. Sample values: '200.00' requires $200 prepaid balance for metered LLM usage, '1000.00' requires $1000 prepaid credits for data processing services, '50.00' requires $50 minimum for API call consumption"
+                    "deprecated": true,
+                    "description": "Deprecated. This field is ignored and has no effect."
                   },
                   "minimumAccountBalance": {
                     "type": "string",
-                    "description": "Minimum wallet balance requirement in decimal dollars (e.g., '100.00'). Can be set to '0' to disable. The system will calculate the difference between this minimum and the customer's current balance, charging only what's needed to reach the minimum. If the customer already has sufficient balance, no charge is made. Note: If the calculated charge amount is below payment processor minimums (typically $1.00), it will be automatically adjusted upward to meet the minimum requirement. Sample values: '200.00' requires minimum $200 balance for metered LLM usage, '1000.00' requires minimum $1000 balance for data processing services"
+                    "deprecated": true,
+                    "description": "Deprecated. This field is ignored and has no effect."
                   },
                   "redirectUrls": {
                     "type": "object",
@@ -6588,14 +6604,12 @@
                   "name": "StartupXYZ - Image Generation Service",
                   "payment": null,
                   "planId": "plan_t9u0v1w2x3y4z5a6",
-                  "prefundAmount": "50000000000",
                   "startedAt": "2024-01-10T08:00:00Z",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
                   "terminationReason": null,
-                  "updatedAt": "2024-01-10T08:00:00Z",
-                  "walletId": "acc_b7c8d9e0f1g2h3i4"
+                  "updatedAt": "2024-01-10T08:00:00Z"
                 }
               }
             }
@@ -6627,14 +6641,12 @@
                     "paymentSessionId": "ps_b3c4d5e6f7g8h9i0"
                   },
                   "planId": "plan_q7r8s9t0u1v2w3x4",
-                  "prefundAmount": "200000000000",
                   "startedAt": "2024-01-15T10:30:00Z",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
                   "terminationReason": null,
-                  "updatedAt": "2024-01-15T10:30:00Z",
-                  "walletId": "acc_y5z6a7b8c9d0e1f2"
+                  "updatedAt": "2024-01-15T10:30:00Z"
                 }
               }
             }
@@ -6703,14 +6715,12 @@
                   "name": "Analytics Co - Data Platform Enterprise",
                   "payment": null,
                   "planId": "plan_z7a8b9c0d1e2f3g4",
-                  "prefundAmount": "1000000000000",
                   "startedAt": "2024-02-01T14:45:30Z",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
                   "terminationReason": null,
-                  "updatedAt": "2024-02-15T09:20:00Z",
-                  "walletId": "acc_h5i6j7k8l9m0n1o2"
+                  "updatedAt": "2024-02-15T09:20:00Z"
                 }
               }
             }
@@ -6787,7 +6797,8 @@
                   },
                   "minimumAccountBalance": {
                     "type": "string",
-                    "description": "Minimum wallet balance requirement in decimal dollars (e.g., '100.00'). Can be set to '0' to disable. Maximum allowed is $5,000. Contact support for higher limits. Note: If the calculated charge amount at renewal is below payment processor minimums (typically $1.00), it will be automatically adjusted upward to meet the minimum requirement. Changes apply at next renewal."
+                    "deprecated": true,
+                    "description": "Deprecated. This field is ignored and has no effect."
                   },
                   "renewalReminderEnabled": {
                     "type": "boolean",
@@ -6832,14 +6843,12 @@
                   "name": "StartupXYZ - Image Generation Service",
                   "payment": null,
                   "planId": "plan_t9u0v1w2x3y4z5a6",
-                  "prefundAmount": "50000000000",
                   "startedAt": "2024-01-10T08:00:00Z",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
                   "terminationReason": null,
-                  "updatedAt": "2024-03-15T10:30:00Z",
-                  "walletId": "acc_b7c8d9e0f1g2h3i4"
+                  "updatedAt": "2024-03-15T10:30:00Z"
                 }
               }
             }
@@ -7005,14 +7014,12 @@
                   "name": "StartupXYZ - Image Generation Service",
                   "payment": null,
                   "planId": "plan_t9u0v1w2x3y4z5a6",
-                  "prefundAmount": "50000000000",
                   "startedAt": "2024-01-10T08:00:00Z",
                   "status": "terminated",
                   "terminatedAt": "2024-03-15T14:20:00Z",
                   "terminatedBy": "org_f7g8h9i0j1k2l3m4",
                   "terminationReason": "Customer requested cancellation",
-                  "updatedAt": "2024-03-15T14:20:00Z",
-                  "walletId": "acc_b7c8d9e0f1g2h3i4"
+                  "updatedAt": "2024-03-15T14:20:00Z"
                 }
               }
             }
@@ -7540,6 +7547,22 @@
           },
           {
             "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of fields to expand. Supports: items — resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call."
+          },
+          {
+            "in": "query",
+            "name": "provider",
+            "schema": {
+              "$ref": "#/components/schemas/Provider"
+            },
+            "description": "Narrows which external references are returned per item when expand=items. Matched exactly against the provider stored on the reference (e.g. accountsiq); there is no allowlist of known providers, but the value must satisfy the same format every stored provider does, so a malformed one is rejected rather than answered with an empty result that reads as \"nothing is mapped\". It never removes lines or items: an item with no reference for this provider comes back with an empty list, so unmapped SKUs stay visible. Ignored when the items expansion is not requested."
+          },
+          {
+            "in": "query",
             "name": "limit",
             "schema": {
               "type": "integer",
@@ -7735,7 +7758,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Comma-separated list of fields to expand. Currently supports: lineItems"
+            "description": "Comma-separated list of fields to expand. Supports: lineItems, items. `items` resolves each returned line's item and its external accounting codes into an `items` collection inside the lineItems block; because those ids come from the lines, requesting `items` also expands `lineItems` on its default paging."
           },
           {
             "in": "query",
@@ -7755,6 +7778,14 @@
               "type": "string"
             },
             "description": "Opaque pagination token for line items when expand=lineItems, taken from a previous response's nextPageToken. Do not construct or parse this value."
+          },
+          {
+            "in": "query",
+            "name": "provider",
+            "schema": {
+              "$ref": "#/components/schemas/Provider"
+            },
+            "description": "Narrows which external references are returned per item when expand=items. Matched exactly against the provider stored on the reference (e.g. accountsiq); there is no allowlist of known providers, but the value must satisfy the same format every stored provider does, so a malformed one is rejected rather than answered with an empty result that reads as \"nothing is mapped\". It never removes lines or items: an item with no reference for this provider comes back with an empty list, so unmapped SKUs stay visible. Ignored when the items expansion is not requested."
           }
         ],
         "responses": {
@@ -7852,6 +7883,22 @@
               "type": "string"
             },
             "description": "Opaque pagination token to fetch the next page of results, taken from a previous response's nextPageToken. Do not construct or parse this value."
+          },
+          {
+            "in": "query",
+            "name": "expand",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of fields to expand. Supports: items — resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call."
+          },
+          {
+            "in": "query",
+            "name": "provider",
+            "schema": {
+              "$ref": "#/components/schemas/Provider"
+            },
+            "description": "Narrows which external references are returned per item when expand=items. Matched exactly against the provider stored on the reference (e.g. accountsiq); there is no allowlist of known providers, but the value must satisfy the same format every stored provider does, so a malformed one is rejected rather than answered with an empty result that reads as \"nothing is mapped\". It never removes lines or items: an item with no reference for this provider comes back with an empty list, so unmapped SKUs stay visible. Ignored when the items expansion is not requested."
           }
         ],
         "responses": {
@@ -10477,6 +10524,10 @@
                     "type": "string",
                     "description": "Canonical sellable name for the Item"
                   },
+                  "catalogId": {
+                    "$ref": "#/components/schemas/ProductId",
+                    "description": "The product this item belongs to."
+                  },
                   "metadata": {
                     "type": "object",
                     "additionalProperties": true,
@@ -10507,6 +10558,9 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
@@ -10526,6 +10580,14 @@
               "$ref": "#/components/schemas/schemas-OrganizationId"
             },
             "description": "Filter items by merchant organization id"
+          },
+          {
+            "name": "catalogId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ProductId"
+            },
+            "description": "Filter items by the product they are filed under"
           },
           {
             "name": "provider",
@@ -10563,6 +10625,15 @@
               "default": 0
             },
             "description": "Zero-based offset for pagination. In resolution mode this paginates the de-duplicated resolved Item set."
+          },
+          {
+            "name": "includeArchived",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Include archived items in the results. By default, archived items are omitted. This is ignored when resolving by `provider` and `externalId`, which always returns the matching item regardless of archived status."
           }
         ],
         "responses": {
@@ -10666,6 +10737,16 @@
                   "name": {
                     "type": "string"
                   },
+                  "catalogId": {
+                    "type": "string",
+                    "pattern": "^prod_[a-zA-Z0-9]+$",
+                    "nullable": true,
+                    "description": "The product this item belongs to."
+                  },
+                  "archived": {
+                    "type": "boolean",
+                    "description": "Set to true to retire this item from your catalog, or false to restore it. Archived items remain readable and continue to resolve on historical invoices."
+                  },
                   "metadata": {
                     "type": "object",
                     "additionalProperties": true
@@ -10712,6 +10793,9 @@
         "responses": {
           "204": {
             "description": "Item soft-deleted"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -12626,6 +12710,7 @@
           "unit",
           "merchantId",
           "productId",
+          "itemId",
           "aggregation",
           "createdAt",
           "updatedAt"
@@ -12667,7 +12752,14 @@
             "type": "string"
           },
           "productId": {
-            "$ref": "#/components/schemas/ProductId"
+            "$ref": "#/components/schemas/ProductId",
+            "description": "The product this metric belongs to. Always populated; derived from the item's catalog when the metric is tagged with an item."
+          },
+          "itemId": {
+            "type": "string",
+            "pattern": "^itm_[a-zA-Z0-9]+$",
+            "description": "The item this metric is tagged with, or null when untagged. Used to map this metric's invoice lines to an external accounting/tax identity.",
+            "nullable": true
           },
           "unit": {
             "type": "string"
@@ -12730,6 +12822,11 @@
           "message": "The requested resource was not found",
           "error": "not_found"
         }
+      },
+      "ItemId": {
+        "type": "string",
+        "pattern": "^itm_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for an item"
       },
       "UsageResponse": {
         "type": "object",
@@ -14123,6 +14220,7 @@
           "description",
           "merchantId",
           "productId",
+          "itemId",
           "createdAt",
           "updatedAt"
         ],
@@ -14148,7 +14246,14 @@
             "$ref": "#/components/schemas/OrganizationId"
           },
           "productId": {
-            "$ref": "#/components/schemas/ProductId"
+            "$ref": "#/components/schemas/ProductId",
+            "description": "The product this fee belongs to. Always populated; derived from the item's catalog when the fee is tagged with an item."
+          },
+          "itemId": {
+            "type": "string",
+            "pattern": "^itm_[a-zA-Z0-9]+$",
+            "description": "The item this fee is tagged with, or null when untagged. Used to map this fee's invoice lines to an external accounting/tax identity.",
+            "nullable": true
           },
           "createdAt": {
             "type": "string",
@@ -14545,7 +14650,8 @@
       "MintPlanVersionRequest": {
         "type": "object",
         "additionalProperties": false,
-        "description": "A reference-by-id price diff applied to the prices of the plan's current version. Every id references an existing price created via POST /prices; inline price definitions are not accepted. An empty body copies the current prices into the new version unchanged. A version must carry at least one price, so a diff that would leave none is rejected.",
+        "minProperties": 1,
+        "description": "A reference-by-id price diff applied to the prices of the plan's current version. Every id references an existing price created via POST /prices; inline price definitions are not accepted. A mint must carry at least one price change, so an empty body is rejected. A version must carry at least one price, so a diff that would leave none is rejected.",
         "properties": {
           "addPrices": {
             "type": "array",
@@ -15516,11 +15622,13 @@
           },
           "prefundAmount": {
             "type": "string",
-            "description": "@deprecated Use minimumAccountBalance instead. Minimum required wallet balance in atomic units. Sample values: '200000000000' equals $200.00 minimum, '1000000000000' equals $1000.00 minimum"
+            "deprecated": true,
+            "description": "Deprecated. Legacy-only, not populated for new subscriptions."
           },
           "minimumAccountBalance": {
             "type": "string",
-            "description": "Minimum wallet balance requirement in nanodollars. Can be '0' to disable. The system calculates the difference between this minimum and the customer's current balance, charging only what's needed to reach the minimum. Note: If the calculated charge amount is below payment processor minimums (typically $1.00), the actual charged amount may be automatically adjusted upward to meet the minimum requirement. Sample values: '200000000000' equals $200.00 minimum, '1000000000000' equals $1000.00 minimum"
+            "deprecated": true,
+            "description": "Deprecated. Legacy-only, not populated for new subscriptions."
           },
           "startedAt": {
             "type": "string",
@@ -15556,7 +15664,8 @@
           },
           "walletId": {
             "type": "string",
-            "description": "Optional (virtual) wallet ID for the subscription"
+            "deprecated": true,
+            "description": "Deprecated. Legacy-only, not populated for new subscriptions."
           },
           "renewalReminderEnabled": {
             "type": "boolean",
@@ -15952,6 +16061,16 @@
             "type": "string",
             "description": "HOTFIX: Mirrors eventSourceId for backward compatibility"
           },
+          "itemId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Item the line's charge was tagged with, recorded when the line was generated and not re-resolved on read. A discount line carries the same item as the charge it offsets. `null` means the charge carried no tag at that moment, the line predates item stamping, or the line has no originating charge (a grant-credit purchase) — it is an expected value, not an error. Use `priceId` to tell those cases apart."
+          },
+          "priceId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The price this line was generated from, or `null` when the line has no originating charge. With `itemId` it says whether a missing tag is fixable: `priceId` set and `itemId` null means the charge was simply untagged, which tagging it and restamping resolves; both null means the line records a grant-credit purchase, which is deferred revenue and is never tagged. Any measure of outstanding mapping work must exclude the latter or it can never reach zero."
+          },
           "invoiceDisplayName": {
             "type": "string",
             "description": "Display name for this line item on invoices"
@@ -16003,6 +16122,130 @@
           "unitPrice": {
             "type": "string",
             "description": "Unit price in decimal dollars"
+          }
+        }
+      },
+      "ExternalReferenceId": {
+        "type": "string",
+        "pattern": "^xrf_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for an external reference"
+      },
+      "EntityType": {
+        "type": "string",
+        "enum": [
+          "item",
+          "customer"
+        ],
+        "description": "The type of Paygentic entity this external reference points at"
+      },
+      "Provider": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "maxLength": 64,
+        "description": "Lowercase snake_case provider identifier (e.g. `salesforce`, `netsuite`)"
+      },
+      "ExternalReference": {
+        "type": "object",
+        "description": "Links a Paygentic entity to a record in an external system such as Salesforce or NetSuite.",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "entityType",
+          "entityId",
+          "provider",
+          "externalId",
+          "metadata",
+          "isPrimary",
+          "isDefault",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ExternalReferenceId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "externalReference"
+            ],
+            "default": "externalReference"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/OrganizationId"
+          },
+          "entityType": {
+            "$ref": "#/components/schemas/EntityType"
+          },
+          "entityId": {
+            "type": "string"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/Provider"
+          },
+          "externalId": {
+            "$ref": "#/components/schemas/ExternalId"
+          },
+          "externalLabel": {
+            "type": "string",
+            "nullable": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "isPrimary": {
+            "type": "boolean"
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ResolvedItem": {
+        "type": "object",
+        "description": "An item a line was tagged with, together with its external accounting/tax codes. Deliberately narrower than the /v0/items Item resource: it carries what is needed to translate a line into a GL/SKU code, not the full record.",
+        "required": [
+          "id",
+          "name",
+          "catalogId",
+          "archivedAt",
+          "externalReferences"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ItemId"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable item name"
+          },
+          "catalogId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The product this item belongs to, for grouping lines by product"
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "When this item was retired from the catalog. Archived items still resolve here — invoices that already reference them have to keep resolving — but cannot be tagged onto new pricing. Null while active."
+          },
+          "externalReferences": {
+            "type": "array",
+            "description": "The item's external codes, narrowed to the requested provider when one is given. An empty list means the item is not yet mapped for that provider — an actionable state, not an error. More than one may be returned for a single provider, and more than one of those may carry `isPrimary: true`: the uniqueness constraint runs the other way round (an external id is the primary reference of at most one item per merchant), so it does not reduce an item's references to one per provider. Entries are ordered newest first, tie-broken by id, so the order is stable across reads — but a consumer that needs exactly one code must choose deliberately rather than assume there is only one.",
+            "items": {
+              "$ref": "#/components/schemas/ExternalReference"
+            }
           }
         }
       },
@@ -16071,7 +16314,7 @@
           "lineItems": {
             "type": "object",
             "nullable": true,
-            "description": "Line items (only present if expand=lineItems query parameter is provided)",
+            "description": "Line items (only present if expand=lineItems query parameter is provided, or if expand=items is, which implies it)",
             "properties": {
               "invoiceId": {
                 "type": "string",
@@ -16082,6 +16325,13 @@
                 "description": "Array of line items for this page",
                 "items": {
                   "$ref": "#/components/schemas/InvoiceLineItem"
+                }
+              },
+              "items": {
+                "type": "array",
+                "description": "Items the returned lines were tagged with, each appearing once, ordered by id. Only present when expand=items is requested. Scoped to the lines in THIS response, not the whole invoice — combine the collections across pages for an invoice-wide set. Join a line to its entry via the line's itemId. A line whose itemId has no entry here is a data-integrity fault — the tag points at an item that no longer resolves for this merchant. It is not the same as an untagged line and must not be counted as unmapped; report it.",
+                "items": {
+                  "$ref": "#/components/schemas/ResolvedItem"
                 }
               },
               "nextPageToken": {
@@ -16300,7 +16550,12 @@
           "priceId": {
             "type": "string",
             "nullable": true,
-            "description": "The price ID associated with this line item"
+            "description": "The price this line was generated from, or `null` when the line has no originating charge. With `itemId` it says whether a missing tag is fixable: `priceId` set and `itemId` null means the charge was simply untagged, which tagging it and restamping resolves; both null means the line records a grant-credit purchase, which is deferred revenue and is never tagged. Any measure of outstanding mapping work must exclude the latter or it can never reach zero."
+          },
+          "itemId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Item the line's charge was tagged with, recorded when the line was generated and not re-resolved on read. `null` means the charge carried no tag at that moment, the line predates item stamping, or the line has no originating charge (a grant-credit purchase) — it is an expected value, not an error. Use `priceId` to tell those cases apart."
           },
           "invoiceId": {
             "type": "string",
@@ -16377,10 +16632,11 @@
             "type": "string",
             "enum": [
               "in_advance",
-              "in_arrears"
+              "in_arrears",
+              null
             ],
             "nullable": true,
-            "description": "Payment term for fee items. Null for metered/manual lines"
+            "description": "Payment term for fee items. Null for metered/manual lines. `null` is listed in the enum as well as via `nullable` because OpenAPI 3.0 validators check the enum independently — `nullable: true` alone does not admit it, and createLineItem (which always returns null here) was emitting a schema-violating body."
           },
           "subtotal": {
             "type": "string",
@@ -16462,6 +16718,13 @@
               "$ref": "#/components/schemas/LineItem"
             }
           },
+          "items": {
+            "type": "array",
+            "description": "Items the returned lines were tagged with, each appearing once, ordered by id. Only present when expand=items is requested. Scoped to the lines in THIS response, not to any invoice as a whole — combine the collections across pages for a complete set. Join a line to its entry via the line's itemId. A line whose itemId has no entry here is a data-integrity fault — the tag points at an item that no longer resolves for this merchant. It is not the same as an untagged line and must not be counted as unmapped; report it.",
+            "items": {
+              "$ref": "#/components/schemas/ResolvedItem"
+            }
+          },
           "totalCount": {
             "type": "integer",
             "description": "Total number of matching line items"
@@ -16541,6 +16804,12 @@
             "maxLength": 255,
             "nullable": true,
             "description": "Optional caller-provided idempotency key. Auto-generated if not provided."
+          },
+          "itemId": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": true,
+            "description": "Optional item to tag this line with, for accounting/GL mapping. Must belong to the caller's merchant and must not be archived. A manual line has no price, so it is never reached by a later restamp — supplying it here is the only opportunity to tag it."
           }
         }
       },
@@ -16561,6 +16830,13 @@
             "description": "Array of line items for this page",
             "items": {
               "$ref": "#/components/schemas/InvoiceLineItem"
+            }
+          },
+          "items": {
+            "type": "array",
+            "description": "Items the returned lines were tagged with, each appearing once, ordered by id. Only present when expand=items is requested. Scoped to the lines in THIS response, not the whole invoice — combine the collections across pages for an invoice-wide set. Join a line to its entry via the line's itemId. A line whose itemId has no entry here is a data-integrity fault — the tag points at an item that no longer resolves for this merchant. It is not the same as an untagged line and must not be counted as unmapped; report it.",
+            "items": {
+              "$ref": "#/components/schemas/ResolvedItem"
             }
           },
           "nextPageToken": {
@@ -17616,101 +17892,11 @@
         "type": "string",
         "pattern": "^org_[a-zA-Z0-9]+$"
       },
-      "EntityType": {
-        "type": "string",
-        "enum": [
-          "item",
-          "customer"
-        ],
-        "description": "The type of Paygentic entity this external reference points at"
-      },
-      "Provider": {
-        "type": "string",
-        "pattern": "^[a-z][a-z0-9_]*$",
-        "maxLength": 64,
-        "description": "Lowercase snake_case provider identifier (e.g. `salesforce`, `netsuite`)"
-      },
       "schemas-ExternalId": {
         "type": "string",
         "pattern": "^[a-zA-Z0-9_-]+$",
         "maxLength": 255,
         "description": "Identifier of the record in the external system"
-      },
-      "ExternalReferenceId": {
-        "type": "string",
-        "pattern": "^xrf_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for an external reference"
-      },
-      "ExternalReference": {
-        "type": "object",
-        "description": "Links a Paygentic entity to a record in an external system such as Salesforce or NetSuite.",
-        "required": [
-          "id",
-          "object",
-          "merchantId",
-          "entityType",
-          "entityId",
-          "provider",
-          "externalId",
-          "metadata",
-          "isPrimary",
-          "isDefault",
-          "createdAt",
-          "updatedAt"
-        ],
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/ExternalReferenceId"
-          },
-          "object": {
-            "type": "string",
-            "enum": [
-              "externalReference"
-            ],
-            "default": "externalReference"
-          },
-          "merchantId": {
-            "$ref": "#/components/schemas/OrganizationId"
-          },
-          "entityType": {
-            "$ref": "#/components/schemas/EntityType"
-          },
-          "entityId": {
-            "type": "string"
-          },
-          "provider": {
-            "$ref": "#/components/schemas/Provider"
-          },
-          "externalId": {
-            "$ref": "#/components/schemas/ExternalId"
-          },
-          "externalLabel": {
-            "type": "string",
-            "nullable": true
-          },
-          "metadata": {
-            "type": "object",
-            "additionalProperties": true
-          },
-          "isPrimary": {
-            "type": "boolean"
-          },
-          "isDefault": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "ItemId": {
-        "type": "string",
-        "pattern": "^itm_[a-zA-Z0-9]+$"
       },
       "Item": {
         "type": "object",
@@ -17721,6 +17907,8 @@
           "name",
           "metadata",
           "externalReferences",
+          "catalogId",
+          "archivedAt",
           "createdAt",
           "updatedAt"
         ],
@@ -17750,6 +17938,19 @@
             "items": {
               "$ref": "#/components/schemas/ExternalReference"
             }
+          },
+          "catalogId": {
+            "type": "string",
+            "pattern": "^prod_[a-zA-Z0-9]+$",
+            "description": "The product this item belongs to.",
+            "nullable": true
+          },
+          "archivedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true,
+            "description": "When this item was retired from the catalog. Null while active."
           },
           "createdAt": {
             "type": "string",

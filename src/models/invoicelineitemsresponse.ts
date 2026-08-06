@@ -10,6 +10,7 @@ import {
   InvoiceLineItem,
   InvoiceLineItem$inboundSchema,
 } from "./invoicelineitem.js";
+import { ResolvedItem, ResolvedItem$inboundSchema } from "./resolveditem.js";
 
 export type InvoiceLineItemsResponse = {
   /**
@@ -20,6 +21,10 @@ export type InvoiceLineItemsResponse = {
    * Array of line items for this page
    */
   lineItems: Array<InvoiceLineItem>;
+  /**
+   * Items the returned lines were tagged with, each appearing once, ordered by id. Only present when expand=items is requested. Scoped to the lines in THIS response, not the whole invoice — combine the collections across pages for an invoice-wide set. Join a line to its entry via the line's itemId. A line whose itemId has no entry here is a data-integrity fault — the tag points at an item that no longer resolves for this merchant. It is not the same as an untagged line and must not be counted as unmapped; report it.
+   */
+  items?: Array<ResolvedItem> | undefined;
   /**
    * Token for fetching the next page, null if no more pages
    */
@@ -38,6 +43,7 @@ export const InvoiceLineItemsResponse$inboundSchema: z.ZodType<
 > = z.object({
   invoiceId: z.string(),
   lineItems: z.array(InvoiceLineItem$inboundSchema),
+  items: z.array(ResolvedItem$inboundSchema).optional(),
   nextPageToken: z.nullable(z.string()).optional(),
   totalCount: z.number().int(),
 });

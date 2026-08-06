@@ -35,14 +35,14 @@ export const LineItemStatus = {
 export type LineItemStatus = ClosedEnum<typeof LineItemStatus>;
 
 /**
- * Payment term for fee items. Null for metered/manual lines
+ * Payment term for fee items. Null for metered/manual lines. `null` is listed in the enum as well as via `nullable` because OpenAPI 3.0 validators check the enum independently — `nullable: true` alone does not admit it, and createLineItem (which always returns null here) was emitting a schema-violating body.
  */
 export const LineItemPaymentTerm = {
   InAdvance: "in_advance",
   InArrears: "in_arrears",
 } as const;
 /**
- * Payment term for fee items. Null for metered/manual lines
+ * Payment term for fee items. Null for metered/manual lines. `null` is listed in the enum as well as via `nullable` because OpenAPI 3.0 validators check the enum independently — `nullable: true` alone does not admit it, and createLineItem (which always returns null here) was emitting a schema-violating body.
  */
 export type LineItemPaymentTerm = ClosedEnum<typeof LineItemPaymentTerm>;
 
@@ -60,9 +60,13 @@ export type LineItem = {
    */
   customerId: string;
   /**
-   * The price ID associated with this line item
+   * The price this line was generated from, or `null` when the line has no originating charge. With `itemId` it says whether a missing tag is fixable: `priceId` set and `itemId` null means the charge was simply untagged, which tagging it and restamping resolves; both null means the line records a grant-credit purchase, which is deferred revenue and is never tagged. Any measure of outstanding mapping work must exclude the latter or it can never reach zero.
    */
   priceId?: string | null | undefined;
+  /**
+   * Item the line's charge was tagged with, recorded when the line was generated and not re-resolved on read. `null` means the charge carried no tag at that moment, the line predates item stamping, or the line has no originating charge (a grant-credit purchase) — it is an expected value, not an error. Use `priceId` to tell those cases apart.
+   */
+  itemId?: string | null | undefined;
   /**
    * The invoice ID if this item has been invoiced
    */
@@ -116,7 +120,7 @@ export type LineItem = {
    */
   meteredQuantity?: string | null | undefined;
   /**
-   * Payment term for fee items. Null for metered/manual lines
+   * Payment term for fee items. Null for metered/manual lines. `null` is listed in the enum as well as via `nullable` because OpenAPI 3.0 validators check the enum independently — `nullable: true` alone does not admit it, and createLineItem (which always returns null here) was emitting a schema-violating body.
    */
   paymentTerm?: LineItemPaymentTerm | null | undefined;
   /**
@@ -173,6 +177,7 @@ export const LineItem$inboundSchema: z.ZodType<
   subscriptionId: z.string(),
   customerId: z.string(),
   priceId: z.nullable(z.string()).optional(),
+  itemId: z.nullable(z.string()).optional(),
   invoiceId: z.nullable(z.string()).optional(),
   type: LineItemType$inboundSchema,
   status: LineItemStatus$inboundSchema,

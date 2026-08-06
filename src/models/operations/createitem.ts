@@ -11,6 +11,10 @@ export type CreateItemRequest = {
    */
   name: string;
   /**
+   * Unique identifier for a product
+   */
+  catalogId?: string | undefined;
+  /**
    * Optional key-value metadata
    */
   metadata?: { [k: string]: any } | undefined;
@@ -20,6 +24,7 @@ export type CreateItemRequest = {
 export type CreateItemRequest$Outbound = {
   merchantId: string;
   name: string;
+  catalogId?: string | undefined;
   metadata?: { [k: string]: any } | undefined;
 };
 
@@ -31,6 +36,7 @@ export const CreateItemRequest$outboundSchema: z.ZodType<
 > = z.object({
   merchantId: z.string(),
   name: z.string(),
+  catalogId: z.string().optional(),
   metadata: z.record(z.any()).optional(),
 });
 

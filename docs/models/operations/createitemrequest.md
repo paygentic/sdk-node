@@ -17,4 +17,5 @@ let value: CreateItemRequest = {
 | ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------ |
 | `merchantId`                         | *string*                             | :heavy_check_mark:                   | N/A                                  |
 | `name`                               | *string*                             | :heavy_check_mark:                   | Canonical sellable name for the Item |
+| `catalogId`                          | *string*                             | :heavy_minus_sign:                   | Unique identifier for a product      |
 | `metadata`                           | Record<string, *any*>                | :heavy_minus_sign:                   | Optional key-value metadata          |

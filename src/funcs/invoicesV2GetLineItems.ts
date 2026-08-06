@@ -101,8 +101,10 @@ async function $do(
   const path = pathToFunc("/v2/invoices/{id}/lineItems")(pathParams);
 
   const query = encodeFormQuery({
+    "expand": payload.expand,
     "limit": payload.limit,
     "pageToken": payload.pageToken,
+    "provider": payload.provider,
   });
 
   const headers = new Headers(compactMap({

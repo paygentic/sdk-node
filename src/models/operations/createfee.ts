@@ -20,7 +20,11 @@ export type CreateFeeRequest = {
   /**
    * Unique identifier for a product
    */
-  productId: string;
+  productId?: string | undefined;
+  /**
+   * Unique identifier for an item
+   */
+  itemId?: string | undefined;
 };
 
 /** @internal */
@@ -28,7 +32,8 @@ export type CreateFeeRequest$Outbound = {
   name: string;
   description: string;
   merchantId: string;
-  productId: string;
+  productId?: string | undefined;
+  itemId?: string | undefined;
 };
 
 /** @internal */
@@ -40,7 +45,8 @@ export const CreateFeeRequest$outboundSchema: z.ZodType<
   name: z.string(),
   description: z.string(),
   merchantId: z.string(),
-  productId: z.string(),
+  productId: z.string().optional(),
+  itemId: z.string().optional(),
 });
 
 export function createFeeRequestToJSON(

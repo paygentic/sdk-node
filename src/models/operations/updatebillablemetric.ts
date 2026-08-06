@@ -19,6 +19,10 @@ export type UpdateBillableMetricRequestBody = {
    */
   unit?: string | undefined;
   /**
+   * Optional item tag, used to map this metric's invoice lines to an external accounting/tax identity. Send a new id to re-tag — `productId` is re-derived from that item's catalog, and an archived item is rejected. Send `null` to untag.
+   */
+  itemId?: string | null | undefined;
+  /**
    * CloudEvents type for meter routing.
    */
   eventType?: string | null | undefined;
@@ -46,6 +50,7 @@ export type UpdateBillableMetricRequestBody$Outbound = {
   description?: string | undefined;
   name?: string | undefined;
   unit?: string | undefined;
+  itemId?: string | null | undefined;
   eventType?: string | null | undefined;
   valueProperty?: string | null | undefined;
   groupBy?: { [k: string]: string } | null | undefined;
@@ -61,6 +66,7 @@ export const UpdateBillableMetricRequestBody$outboundSchema: z.ZodType<
   description: z.string().optional(),
   name: z.string().optional(),
   unit: z.string().optional(),
+  itemId: z.nullable(z.string()).optional(),
   eventType: z.nullable(z.string()).optional(),
   valueProperty: z.nullable(z.string()).optional(),
   groupBy: z.nullable(z.record(z.string())).optional(),

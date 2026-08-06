@@ -31,7 +31,6 @@ async function run() {
     name: "<value>",
     description: "obnoxiously boldly that fort as minus bob adventurously",
     merchantId: "<id>",
-    productId: "<id>",
   });
 
   console.log(result);
@@ -59,7 +58,6 @@ async function run() {
     name: "<value>",
     description: "obnoxiously boldly that fort as minus bob adventurously",
     merchantId: "<id>",
-    productId: "<id>",
   });
   if (res.ok) {
     const { value: result } = res;

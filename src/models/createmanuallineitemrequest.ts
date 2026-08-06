@@ -49,6 +49,10 @@ export type CreateManualLineItemRequest = {
    * Optional caller-provided idempotency key. Auto-generated if not provided.
    */
   idempotencyKey?: string | null | undefined;
+  /**
+   * Optional item to tag this line with, for accounting/GL mapping. Must belong to the caller's merchant and must not be archived. A manual line has no price, so it is never reached by a later restamp — supplying it here is the only opportunity to tag it.
+   */
+  itemId?: string | null | undefined;
 };
 
 /** @internal */
@@ -64,6 +68,7 @@ export type CreateManualLineItemRequest$Outbound = {
   periodStart?: string | null | undefined;
   periodEnd?: string | null | undefined;
   idempotencyKey?: string | null | undefined;
+  itemId?: string | null | undefined;
 };
 
 /** @internal */
@@ -83,6 +88,7 @@ export const CreateManualLineItemRequest$outboundSchema: z.ZodType<
   periodStart: z.nullable(z.date().transform(v => v.toISOString())).optional(),
   periodEnd: z.nullable(z.date().transform(v => v.toISOString())).optional(),
   idempotencyKey: z.nullable(z.string()).optional(),
+  itemId: z.nullable(z.string()).optional(),
 });
 
 export function createManualLineItemRequestToJSON(

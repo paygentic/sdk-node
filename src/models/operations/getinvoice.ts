@@ -10,7 +10,7 @@ export type GetInvoiceRequest = {
    */
   id: string;
   /**
-   * Comma-separated list of fields to expand. Currently supports: lineItems
+   * Comma-separated list of fields to expand. Supports: lineItems, items. `items` resolves each returned line's item and its external accounting codes into an `items` collection inside the lineItems block; because those ids come from the lines, requesting `items` also expands `lineItems` on its default paging.
    */
   expand?: string | undefined;
   /**
@@ -21,6 +21,10 @@ export type GetInvoiceRequest = {
    * Opaque pagination token for line items when expand=lineItems, taken from a previous response's nextPageToken. Do not construct or parse this value.
    */
   lineItemsPageToken?: string | undefined;
+  /**
+   * Narrows which external references are returned per item when expand=items. Matched exactly against the provider stored on the reference (e.g. accountsiq); there is no allowlist of known providers, but the value must satisfy the same format every stored provider does, so a malformed one is rejected rather than answered with an empty result that reads as "nothing is mapped". It never removes lines or items: an item with no reference for this provider comes back with an empty list, so unmapped SKUs stay visible. Ignored when the items expansion is not requested.
+   */
+  provider?: string | undefined;
 };
 
 /** @internal */
@@ -29,6 +33,7 @@ export type GetInvoiceRequest$Outbound = {
   expand?: string | undefined;
   lineItemsLimit: number;
   lineItemsPageToken?: string | undefined;
+  provider?: string | undefined;
 };
 
 /** @internal */
@@ -41,6 +46,7 @@ export const GetInvoiceRequest$outboundSchema: z.ZodType<
   expand: z.string().optional(),
   lineItemsLimit: z.number().int().default(100),
   lineItemsPageToken: z.string().optional(),
+  provider: z.string().optional(),
 });
 
 export function getInvoiceRequestToJSON(

@@ -26,6 +26,10 @@ export type Fee = {
    * Unique identifier for a product
    */
   productId: string;
+  /**
+   * The item this fee is tagged with, or null when untagged. Used to map this fee's invoice lines to an external accounting/tax identity.
+   */
+  itemId: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -43,6 +47,7 @@ export const Fee$inboundSchema: z.ZodType<Fee, z.ZodTypeDef, unknown> = z
     description: z.string(),
     merchantId: z.string(),
     productId: z.string(),
+    itemId: z.nullable(z.string()),
     createdAt: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),

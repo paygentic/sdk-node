@@ -78,11 +78,15 @@ export type CreateSubscriptionRequest = {
    */
   planId: string;
   /**
-   * @deprecated Use minimumAccountBalance instead. Required initial wallet deposit amount. Sample values: '200.00' requires $200 prepaid balance for metered LLM usage, '1000.00' requires $1000 prepaid credits for data processing services, '50.00' requires $50 minimum for API call consumption
+   * Deprecated. This field is ignored and has no effect.
+   *
+   * @deprecated field: This will be removed in a future release, please migrate away from it as soon as possible.
    */
   prefundAmount?: string | undefined;
   /**
-   * Minimum wallet balance requirement in decimal dollars (e.g., '100.00'). Can be set to '0' to disable. The system will calculate the difference between this minimum and the customer's current balance, charging only what's needed to reach the minimum. If the customer already has sufficient balance, no charge is made. Note: If the calculated charge amount is below payment processor minimums (typically $1.00), it will be automatically adjusted upward to meet the minimum requirement. Sample values: '200.00' requires minimum $200 balance for metered LLM usage, '1000.00' requires minimum $1000 balance for data processing services
+   * Deprecated. This field is ignored and has no effect.
+   *
+   * @deprecated field: This will be removed in a future release, please migrate away from it as soon as possible.
    */
   minimumAccountBalance?: string | undefined;
   /**

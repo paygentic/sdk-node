@@ -38,7 +38,9 @@ export type UpdateSubscriptionRequestBody = {
    */
   taxExempt?: boolean | undefined;
   /**
-   * Minimum wallet balance requirement in decimal dollars (e.g., '100.00'). Can be set to '0' to disable. Maximum allowed is $5,000. Contact support for higher limits. Note: If the calculated charge amount at renewal is below payment processor minimums (typically $1.00), it will be automatically adjusted upward to meet the minimum requirement. Changes apply at next renewal.
+   * Deprecated. This field is ignored and has no effect.
+   *
+   * @deprecated field: This will be removed in a future release, please migrate away from it as soon as possible.
    */
   minimumAccountBalance?: string | undefined;
   /**

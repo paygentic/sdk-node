@@ -14,6 +14,10 @@ export type UpdateFeeRequestBody = {
    * Updated label for the fee.
    */
   name?: string | undefined;
+  /**
+   * Optional item tag, used to map this fee's invoice lines to an external accounting/tax identity. Send a new id to re-tag — `productId` is re-derived from that item's catalog, and an archived item is rejected. Send `null` to untag.
+   */
+  itemId?: string | null | undefined;
 };
 
 export type UpdateFeeRequest = {
@@ -28,6 +32,7 @@ export type UpdateFeeRequest = {
 export type UpdateFeeRequestBody$Outbound = {
   description?: string | undefined;
   name?: string | undefined;
+  itemId?: string | null | undefined;
 };
 
 /** @internal */
@@ -38,6 +43,7 @@ export const UpdateFeeRequestBody$outboundSchema: z.ZodType<
 > = z.object({
   description: z.string().optional(),
   name: z.string().optional(),
+  itemId: z.nullable(z.string()).optional(),
 });
 
 export function updateFeeRequestBodyToJSON(
