@@ -12,19 +12,22 @@ let value: ListMerchantIntegrationsResponse = {
     {
       id: "<id>",
       merchantId: "<id>",
-      provider: "salesforce",
+      provider: "accountsiq",
+      capabilities: {
+        resolvesItemCodes: true,
+        sendsItemCodes: false,
+      },
       externalId: "<id>",
-      status: "disconnected",
+      status: "error",
       config: {
         "key": "<value>",
-        "key1": "<value>",
-        "key2": "<value>",
       },
       metadata: {
         "key": "<value>",
+        "key1": "<value>",
       },
-      connectedAt: new Date("2025-09-15T17:12:16.525Z"),
-      disconnectedAt: new Date("2024-03-24T08:28:07.211Z"),
+      connectedAt: new Date("2025-03-18T11:32:10.780Z"),
+      disconnectedAt: null,
       createdAt: new Date("2025-08-17T01:31:12.771Z"),
       updatedAt: new Date("2024-10-16T20:08:03.176Z"),
     },

@@ -23,6 +23,10 @@ export type ListBillableMetricsRequest = {
    */
   offset?: number | undefined;
   /**
+   * Filter to the charges tagged with this item. Lets a surface that needs only one item's charges read exactly those, rather than reading the whole product's and filtering — which makes its completeness a function of how large the product is.
+   */
+  itemId?: string | undefined;
+  /**
    * Filter billable metrics by product ID.
    */
   productId?: string | undefined;
@@ -55,6 +59,7 @@ export type ListBillableMetricsRequest$Outbound = {
   limit: number;
   merchantId: string;
   offset: number;
+  itemId?: string | undefined;
   productId?: string | undefined;
 };
 
@@ -67,6 +72,7 @@ export const ListBillableMetricsRequest$outboundSchema: z.ZodType<
   limit: z.number().int().default(10),
   merchantId: z.string(),
   offset: z.number().int().default(0),
+  itemId: z.string().optional(),
   productId: z.string().optional(),
 });
 

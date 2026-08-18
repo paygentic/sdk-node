@@ -12,7 +12,7 @@ export type UpdateItemRequestBody = {
    */
   catalogId?: string | null | undefined;
   /**
-   * Set to true to retire this item from your catalog, or false to restore it. Archived items remain readable and continue to resolve on historical invoices.
+   * Set to true to retire this item from your catalog, or false to restore it. Archived items remain readable and continue to resolve on historical invoices. Archiving also releases this item's claim on its external codes: any reference it holds as primary becomes non-primary, freeing that (provider, externalId) for a replacement item while the reference stays attached so this item's own invoice lines keep resolving it. Restoring the item does not reclaim primary status. Archiving is rejected while live billableMetrics or fees are anchored to the item — re-tag or retire those charges first.
    */
   archived?: boolean | undefined;
   metadata?: { [k: string]: any } | undefined;

@@ -47,6 +47,10 @@ export type CostUsageResponse = {
    */
   eventType?: string | undefined;
   /**
+   * Unit label for metered costs (e.g. 'token', 'request'). Absent when the cost defines no unit.
+   */
+  unit?: string | undefined;
+  /**
    * Total cost for the query window. Null if usage data could not be computed.
    */
   totalCost: number | null;
@@ -128,6 +132,7 @@ export const CostUsageResponse$inboundSchema: z.ZodType<
   type: CostUsageResponseType$inboundSchema,
   currency: z.string(),
   eventType: z.string().optional(),
+  unit: z.string().optional(),
   totalCost: z.nullable(z.number()),
   totalQuantity: z.nullable(z.number()).optional(),
   groups: z.array(z.lazy(() => Group$inboundSchema)).optional(),

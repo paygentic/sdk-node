@@ -4,6 +4,7 @@
 
 import { invoicesV2CreateInvoiceRefund } from "../funcs/invoicesV2CreateInvoiceRefund.js";
 import { invoicesV2CreateLineItem } from "../funcs/invoicesV2CreateLineItem.js";
+import { invoicesV2DownloadInvoicePdf } from "../funcs/invoicesV2DownloadInvoicePdf.js";
 import { invoicesV2Get } from "../funcs/invoicesV2Get.js";
 import { invoicesV2GetLineItems } from "../funcs/invoicesV2GetLineItems.js";
 import { invoicesV2List } from "../funcs/invoicesV2List.js";
@@ -95,6 +96,23 @@ export class InvoicesV2 extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.InvoiceLineItemsResponse> {
     return unwrapAsync(invoicesV2GetLineItems(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Download Invoice PDF
+   *
+   * @remarks
+   * Downloads the Paygentic-rendered invoice document. The caller must be authenticated and entitled to the invoice; the stored document is streamed back, so no storage URL is ever handed out. Returns 404 when the invoice's document is the tax provider's rather than ours — in that case the invoice resource reports pdfSource `tax_provider` and its pdfUrl points at the provider's link instead.
+   */
+  async downloadInvoicePdf(
+    request: operations.DownloadInvoicePdfRequest,
+    options?: RequestOptions,
+  ): Promise<ReadableStream<Uint8Array>> {
+    return unwrapAsync(invoicesV2DownloadInvoicePdf(
       this,
       request,
       options,

@@ -78,7 +78,7 @@ export type PlanVersionPriceSlot = {
    */
   quantity: number;
   /**
-   * True when the underlying price this slot references has been soft-deleted. The slot can still be removed or replaced to repair the draft; it cannot be published while any slot remains dead.
+   * True when the underlying price this slot references has been soft-deleted.
    */
   priceDeleted: boolean;
 };

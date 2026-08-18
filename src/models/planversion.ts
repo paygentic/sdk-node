@@ -21,7 +21,6 @@ export type PlanVersionObject = ClosedEnum<typeof PlanVersionObject>;
  * Lifecycle status of the version.
  */
 export const PlanVersionStatus = {
-  Draft: "draft",
   Published: "published",
   Archived: "archived",
 } as const;
@@ -31,7 +30,7 @@ export const PlanVersionStatus = {
 export type PlanVersionStatus = ClosedEnum<typeof PlanVersionStatus>;
 
 /**
- * A single plan version, including its price slots. Extends the list summary with the version's prices for draft review.
+ * A single plan version, including its price slots. Extends the list summary with the version's prices.
  */
 export type PlanVersion = {
   /**
@@ -48,7 +47,7 @@ export type PlanVersion = {
    */
   status: PlanVersionStatus;
   /**
-   * When this version was published. Absent for draft versions.
+   * When this version was published.
    */
   publishedAt?: Date | undefined;
   /**
@@ -64,7 +63,7 @@ export type PlanVersion = {
    */
   basedOnVersionId?: string | undefined;
   /**
-   * When this version was last modified. Optimistic-concurrency token: read this value and echo it back as an `If-Match` header on a draft-price-mutation request to reject the write (412) if the draft changed since this read.
+   * When this version was last modified.
    */
   updatedAt: Date;
   /**

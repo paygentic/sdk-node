@@ -88,6 +88,7 @@ async function $do(
   const path = pathToFunc("/v0/fees")();
 
   const query = encodeFormQuery({
+    "itemId": payload.itemId,
     "limit": payload.limit,
     "merchantId": payload.merchantId,
     "offset": payload.offset,

@@ -36,6 +36,9 @@ export type CreateBillingScheduleRequestPeriodPreset = ClosedEnum<
 
 export type CreateBillingScheduleRequest = {
   orderId?: string | undefined;
+  /**
+   * Not supported for creating a billing schedule. Use orderId — every billing schedule belongs to an order.
+   */
   subscriptionId?: string | undefined;
   startDate: Date;
   endDate: Date;

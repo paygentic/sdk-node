@@ -1,11 +1,11 @@
-# Item
+# DeleteCustomerItem
 
 ## Example Usage
 
 ```typescript
-import { Item } from "@paygentic/sdk/models/operations";
+import { DeleteCustomerItem } from "@paygentic/sdk/models/operations";
 
-let value: Item = {};
+let value: DeleteCustomerItem = {};
 ```
 
 ## Fields

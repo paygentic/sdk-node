@@ -3,12 +3,32 @@
  */
 
 import * as z from "zod/v3";
+import { safeParse } from "../../lib/schemas.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
 export type DeletePriceRequest = {
   /**
    * The unique identifier of the price
    */
   id: string;
+};
+
+export type DeletePriceItem = {
+  id?: string | undefined;
+  name?: string | undefined;
+  versionNumber?: number | undefined;
+  versionNumbers?: Array<number> | undefined;
+};
+
+export type DeletePriceBlocker = {
+  type?: string | undefined;
+  count?: number | undefined;
+  items?: Array<DeletePriceItem> | undefined;
+};
+
+export type DeletePriceDetails = {
+  blockers?: Array<DeletePriceBlocker> | undefined;
 };
 
 /** @internal */
@@ -30,5 +50,67 @@ export function deletePriceRequestToJSON(
 ): string {
   return JSON.stringify(
     DeletePriceRequest$outboundSchema.parse(deletePriceRequest),
+  );
+}
+
+/** @internal */
+export const DeletePriceItem$inboundSchema: z.ZodType<
+  DeletePriceItem,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  id: z.string().optional(),
+  name: z.string().optional(),
+  versionNumber: z.number().int().optional(),
+  versionNumbers: z.array(z.number().int()).optional(),
+});
+
+export function deletePriceItemFromJSON(
+  jsonString: string,
+): SafeParseResult<DeletePriceItem, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeletePriceItem$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeletePriceItem' from JSON`,
+  );
+}
+
+/** @internal */
+export const DeletePriceBlocker$inboundSchema: z.ZodType<
+  DeletePriceBlocker,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  type: z.string().optional(),
+  count: z.number().int().optional(),
+  items: z.array(z.lazy(() => DeletePriceItem$inboundSchema)).optional(),
+});
+
+export function deletePriceBlockerFromJSON(
+  jsonString: string,
+): SafeParseResult<DeletePriceBlocker, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeletePriceBlocker$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeletePriceBlocker' from JSON`,
+  );
+}
+
+/** @internal */
+export const DeletePriceDetails$inboundSchema: z.ZodType<
+  DeletePriceDetails,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  blockers: z.array(z.lazy(() => DeletePriceBlocker$inboundSchema)).optional(),
+});
+
+export function deletePriceDetailsFromJSON(
+  jsonString: string,
+): SafeParseResult<DeletePriceDetails, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeletePriceDetails$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeletePriceDetails' from JSON`,
   );
 }

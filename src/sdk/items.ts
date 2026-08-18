@@ -3,7 +3,6 @@
  */
 
 import { itemsCreateItem } from "../funcs/itemsCreateItem.js";
-import { itemsDeleteItem } from "../funcs/itemsDeleteItem.js";
 import { itemsGetItem } from "../funcs/itemsGetItem.js";
 import { itemsListItems } from "../funcs/itemsListItems.js";
 import { itemsUpdateItem } from "../funcs/itemsUpdateItem.js";
@@ -63,20 +62,6 @@ export class Items extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.Item> {
     return unwrapAsync(itemsUpdateItem(
-      this,
-      request,
-      options,
-    ));
-  }
-
-  /**
-   * Delete
-   */
-  async deleteItem(
-    request: operations.DeleteItemRequest,
-    options?: RequestOptions,
-  ): Promise<void> {
-    return unwrapAsync(itemsDeleteItem(
       this,
       request,
       options,

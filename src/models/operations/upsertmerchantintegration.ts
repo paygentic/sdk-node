@@ -11,7 +11,7 @@ export type UpsertMerchantIntegrationRequest = {
    */
   merchantId: string;
   /**
-   * External provider a merchant can connect at the tenant level
+   * External provider a merchant can connect at the tenant level. `netsuite` and `accountsiq` are returned on reads wherever a connection exists, but connecting them is accepted only in local and development environments; elsewhere the connect request is refused with 404.
    */
   provider: models.MerchantIntegrationProvider;
   /**

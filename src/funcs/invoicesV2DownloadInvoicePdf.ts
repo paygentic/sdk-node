@@ -27,16 +27,18 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Delete
+ * Download Invoice PDF
+ *
+ * @remarks
+ * Downloads the Paygentic-rendered invoice document. The caller must be authenticated and entitled to the invoice; the stored document is streamed back, so no storage URL is ever handed out. Returns 404 when the invoice's document is the tax provider's rather than ours — in that case the invoice resource reports pdfSource `tax_provider` and its pdfUrl points at the provider's link instead.
  */
-export function itemsDeleteItem(
+export function invoicesV2DownloadInvoicePdf(
   client: PaygenticCore,
-  request: operations.DeleteItemRequest,
+  request: operations.DownloadInvoicePdfRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    void,
-    | errors.BadRequest
+    ReadableStream<Uint8Array>,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -57,13 +59,12 @@ export function itemsDeleteItem(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.DeleteItemRequest,
+  request: operations.DownloadInvoicePdfRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      void,
-      | errors.BadRequest
+      ReadableStream<Uint8Array>,
       | errors.ErrorT
       | PaygenticError
       | ResponseValidationError
@@ -79,7 +80,7 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.DeleteItemRequest$outboundSchema.parse(value),
+    (value) => operations.DownloadInvoicePdfRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -94,10 +95,10 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-  const path = pathToFunc("/v0/items/{id}")(pathParams);
+  const path = pathToFunc("/v2/invoices/{id}/pdf")(pathParams);
 
   const headers = new Headers(compactMap({
-    Accept: "application/json",
+    Accept: "application/pdf",
   }));
 
   const secConfig = await extractSecurity(client._options.bearerAuth);
@@ -107,7 +108,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "deleteItem",
+    operationID: "downloadInvoicePdf",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -121,7 +122,7 @@ async function $do(
 
   const requestRes = client._createRequest(context, {
     security: requestSecurity,
-    method: "DELETE",
+    method: "GET",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
@@ -136,7 +137,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "404", "4XX", "500", "5XX"],
+    errorCodes: ["401", "403", "404", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -150,8 +151,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    void,
-    | errors.BadRequest
+    ReadableStream<Uint8Array>,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -162,8 +162,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.nil(204, z.void()),
-    M.jsonErr(400, errors.BadRequest$inboundSchema),
+    M.stream(200, z.instanceof(ReadableStream<Uint8Array>), {
+      ctype: "application/pdf",
+    }),
     M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),

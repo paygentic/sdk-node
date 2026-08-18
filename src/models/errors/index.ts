@@ -5,6 +5,7 @@
 export * from "./badrequest.js";
 export * from "./deletecustomer.js";
 export * from "./deletefee.js";
+export * from "./deleteprice.js";
 export * from "./error.js";
 export * from "./httpclienterrors.js";
 export * from "./paygenticdefaulterror.js";

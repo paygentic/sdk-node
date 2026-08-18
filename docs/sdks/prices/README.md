@@ -178,7 +178,7 @@ run();
 | ---------------------------- | ---------------------------- | ---------------------------- |
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
-| errors.ErrorT                | 401, 403                     | application/json             |
+| errors.ErrorT                | 401, 403, 404                | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
@@ -407,10 +407,11 @@ run();
 
 ### Errors
 
-| Error Type                   | Status Code                  | Content Type                 |
-| ---------------------------- | ---------------------------- | ---------------------------- |
-| errors.ErrorT                | 400                          | application/json             |
-| errors.ValidationError       | 400                          | application/json             |
-| errors.ErrorT                | 401, 403, 404                | application/json             |
-| errors.ErrorT                | 500                          | application/json             |
-| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+| Error Type                      | Status Code                     | Content Type                    |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| errors.ErrorT                   | 400                             | application/json                |
+| errors.ValidationError          | 400                             | application/json                |
+| errors.ErrorT                   | 401, 403, 404                   | application/json                |
+| errors.DeletePriceConflictError | 409                             | application/json                |
+| errors.ErrorT                   | 500                             | application/json                |
+| errors.PaygenticDefaultError    | 4XX, 5XX                        | \*/\*                           |

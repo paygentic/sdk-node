@@ -28,7 +28,7 @@ export const DeleteCustomerType = {
 } as const;
 export type DeleteCustomerType = ClosedEnum<typeof DeleteCustomerType>;
 
-export type Item = {
+export type DeleteCustomerItem = {
   id?: string | undefined;
   status?: string | undefined;
 };
@@ -36,7 +36,7 @@ export type Item = {
 export type DeleteCustomerBlocker = {
   type: DeleteCustomerType;
   count: number;
-  items: Array<Item>;
+  items: Array<DeleteCustomerItem>;
 };
 
 export type DeleteCustomerDetails = {
@@ -75,19 +75,22 @@ export const DeleteCustomerType$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(DeleteCustomerType);
 
 /** @internal */
-export const Item$inboundSchema: z.ZodType<Item, z.ZodTypeDef, unknown> = z
-  .object({
-    id: z.string().optional(),
-    status: z.string().optional(),
-  });
+export const DeleteCustomerItem$inboundSchema: z.ZodType<
+  DeleteCustomerItem,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  id: z.string().optional(),
+  status: z.string().optional(),
+});
 
-export function itemFromJSON(
+export function deleteCustomerItemFromJSON(
   jsonString: string,
-): SafeParseResult<Item, SDKValidationError> {
+): SafeParseResult<DeleteCustomerItem, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => Item$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'Item' from JSON`,
+    (x) => DeleteCustomerItem$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteCustomerItem' from JSON`,
   );
 }
 
@@ -99,7 +102,7 @@ export const DeleteCustomerBlocker$inboundSchema: z.ZodType<
 > = z.object({
   type: DeleteCustomerType$inboundSchema,
   count: z.number().int(),
-  items: z.array(z.lazy(() => Item$inboundSchema)),
+  items: z.array(z.lazy(() => DeleteCustomerItem$inboundSchema)),
 });
 
 export function deleteCustomerBlockerFromJSON(

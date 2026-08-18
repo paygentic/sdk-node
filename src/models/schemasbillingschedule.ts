@@ -63,7 +63,7 @@ export type SchemasBillingSchedule = {
   status: SchemasBillingScheduleStatus;
   startDate: Date;
   /**
-   * Null for an open-ended subscription-owned schedule; order-owned schedules always have a concrete end.
+   * The schedule's end date. Always present.
    */
   endDate: Date | null;
   billingAnchor: Date;

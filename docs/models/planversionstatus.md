@@ -13,5 +13,5 @@ let value: PlanVersionStatus = "published";
 ## Values
 
 ```typescript
-"draft" | "published" | "archived"
+"published" | "archived"
 ```

@@ -305,6 +305,15 @@
             "description": "Number of billable metrics to skip."
           },
           {
+            "name": "itemId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter to the charges tagged with this item. Lets a surface that needs only one item's charges read exactly those, rather than reading the whole product's and filtering — which makes its completeness a function of how large the product is."
+          },
+          {
             "name": "productId",
             "in": "query",
             "required": false,
@@ -494,7 +503,7 @@
                     "type": "string",
                     "pattern": "^itm_[a-zA-Z0-9]+$",
                     "nullable": true,
-                    "description": "Optional item tag, used to map this metric's invoice lines to an external accounting/tax identity. Send a new id to re-tag — `productId` is re-derived from that item's catalog, and an archived item is rejected. Send `null` to untag."
+                    "description": "Optional item tag, used to map this metric's invoice lines to an external accounting/tax identity. Send a new id to re-tag — the item must be filed under this charge's own product, and an archived item is rejected. An item from another product is refused with `ITEM_PRODUCT_MISMATCH`: a tag is an accounting grouping and does not move the charge between products, and no field here could move it back. Re-file the item to move every charge anchored to it together. Send `null` to untag. Every line item whose invoice has not closed reports this charge's current tag, so a re-tag takes effect on the bill in progress and on any generated ahead of it — no further action, and no window to wait for. Lines on a closed invoice keep the item recorded at close and never move. Un-tagging works the same way: those lines report no item."
                   },
                   "eventType": {
                     "type": "string",
@@ -550,11 +559,17 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -3068,6 +3083,15 @@
             "description": "Number of fees to skip."
           },
           {
+            "name": "itemId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter to the charges tagged with this item. Lets a surface that needs only one item's charges read exactly those, rather than reading the whole product's and filtering — which makes its completeness a function of how large the product is."
+          },
+          {
             "name": "productId",
             "in": "query",
             "required": false,
@@ -3245,7 +3269,7 @@
                     "type": "string",
                     "pattern": "^itm_[a-zA-Z0-9]+$",
                     "nullable": true,
-                    "description": "Optional item tag, used to map this fee's invoice lines to an external accounting/tax identity. Send a new id to re-tag — `productId` is re-derived from that item's catalog, and an archived item is rejected. Send `null` to untag."
+                    "description": "Optional item tag, used to map this fee's invoice lines to an external accounting/tax identity. Send a new id to re-tag — the item must be filed under this charge's own product, and an archived item is rejected. An item from another product is refused with `ITEM_PRODUCT_MISMATCH`: a tag is an accounting grouping and does not move the charge between products, and no field here could move it back. Re-file the item to move every charge anchored to it together. Send `null` to untag. Every line item whose invoice has not closed reports this charge's current tag, so a re-tag takes effect on the bill in progress and on any generated ahead of it — no further action, and no window to wait for. Lines on a closed invoice keep the item recorded at close and never move. Un-tagging works the same way: those lines report no item."
                   }
                 }
               }
@@ -3273,11 +3297,17 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -3327,6 +3357,20 @@
                               },
                               "count": {
                                 "type": "integer"
+                              },
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "invoiceDisplayName": {
+                                      "type": "string"
+                                    }
+                                  }
+                                }
                               }
                             }
                           }
@@ -4432,6 +4476,15 @@
             "description": "Filter prices by billable metric ID"
           },
           {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            },
+            "description": "Filter prices by merchant organization ID. Matches prices reached via either a billable metric or a fee belonging to that merchant. Unlike the unfiltered listing, this includes prices whose billable metric or fee has been deleted — deleting a parent does not delete its prices, and they can still bill. Returns 404 if the merchant does not exist."
+          },
+          {
             "name": "limit",
             "in": "query",
             "schema": {
@@ -4536,6 +4589,9 @@
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -4753,6 +4809,66 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "Price cannot be deleted because a live plan still references it",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "object",
+                      "properties": {
+                        "blockers": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "count": {
+                                "type": "integer"
+                              },
+                              "items": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "versionNumber": {
+                                      "type": "integer"
+                                    },
+                                    "versionNumbers": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "integer"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -7475,6 +7591,7 @@
                       "paidAmount": "0.00",
                       "paymentUrl": null,
                       "pdfUrl": null,
+                      "pdfSource": null,
                       "periodEnd": "2024-03-31T23:59:59Z",
                       "periodStart": "2024-03-01T00:00:00Z",
                       "permalink": null,
@@ -7809,7 +7926,8 @@
                   "nextActionAt": null,
                   "paidAmount": "0.00",
                   "paymentUrl": "https://checkout.paygentic.com/invoice/inv_r1s2t3u4v5w6x7y8",
-                  "pdfUrl": "https://quaderno.io/invoices/12345.pdf",
+                  "pdfUrl": "https://api.paygentic.io/v2/invoices/inv_r1s2t3u4v5w6x7y8/pdf",
+                  "pdfSource": "paygentic",
                   "periodEnd": "2024-02-29T23:59:59Z",
                   "periodStart": "2024-02-01T00:00:00Z",
                   "permalink": "https://quaderno.io/invoices/12345",
@@ -7966,6 +8084,52 @@
           }
         },
         "x-speakeasy-name-override": "getLineItems"
+      }
+    },
+    "/v2/invoices/{id}/pdf": {
+      "get": {
+        "tags": [
+          "Invoices V2"
+        ],
+        "summary": "Download Invoice PDF",
+        "description": "Downloads the Paygentic-rendered invoice document. The caller must be authenticated and entitled to the invoice; the stored document is streamed back, so no storage URL is ever handed out. Returns 404 when the invoice's document is the tax provider's rather than ours — in that case the invoice resource reports pdfSource `tax_provider` and its pdfUrl points at the provider's link instead.",
+        "operationId": "downloadInvoicePdf",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The invoice ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The invoice document",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
       }
     },
     "/v2/invoices/{id}/refunds": {
@@ -10214,13 +10378,15 @@
                   },
                   "isPrimary": {
                     "type": "boolean",
-                    "default": true,
-                    "description": "Whether this is the canonical reference for `(provider, externalId)`. The primary is unique per merchant; non-primary references are aliases."
+                    "description": "Whether this reference claims `(provider, externalId)` — the code resolves back to this one entity. Unique per merchant; unclaimed references are aliases. **Omitting it claims the code.** Send `false` for a code that is only ever sent outward, such as a ledger account several items post to — claiming that refuses the second item to use it. The default is not derived from the provider: what a code is for is a property of the operation recording it, and one provider can both resolve an arriving code and be sent a selected one. Declaring a schema default here would defeat the distinction, because a generated client materialises the default into the request body and the caller can no longer express \"I did not say\"."
                   },
                   "isDefault": {
                     "type": "boolean",
-                    "default": false,
-                    "description": "Whether this is the default target for the entity + provider. At most one default per `(entityType, entityId, provider)`."
+                    "description": "Whether this is the code sent *to* the provider for this entity. At most one per `(entityType, entityId, provider)`. **Omit** to have the entity's first code for the provider designated automatically — see the note on `isPrimary` for why this carries no schema default."
+                  },
+                  "moveClaim": {
+                    "type": "boolean",
+                    "description": "Take this code's claim from whichever entity currently holds it, in the same transaction.\n\nWithout it, claiming a code another entity claims is a `409` identifying the holder — the right answer to an accident, and the common case. With it, the reassignment is the point.\n\nIt exists because the alternative route — remove the old claim, then create the new one — leaves a window in which the code resolves to nothing. An arrival in that window is still recorded, untagged rather than rejected, so nothing is lost; but it is silent while it lasts and leaves work to repair.\n\nDeliberately opt-in, unlike moving a designation. A designation moves within one entity; a claim moves *between* entities and changes what future arrivals resolve to, which should never be a side effect of recording a code. Ignored when the write is not claiming the code."
                   }
                 }
               }
@@ -10745,7 +10911,7 @@
                   },
                   "archived": {
                     "type": "boolean",
-                    "description": "Set to true to retire this item from your catalog, or false to restore it. Archived items remain readable and continue to resolve on historical invoices."
+                    "description": "Set to true to retire this item from your catalog, or false to restore it. Archived items remain readable and continue to resolve on historical invoices. Archiving also releases this item's claim on its external codes: any reference it holds as primary becomes non-primary, freeing that (provider, externalId) for a replacement item while the reference stays attached so this item's own invoice lines keep resolving it. Restoring the item does not reclaim primary status. Archiving is rejected while live billableMetrics or fees are anchored to the item — re-tag or retire those charges first."
                   },
                   "metadata": {
                     "type": "object",
@@ -10766,33 +10932,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "$ref": "#/components/responses/BadRequest"
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          },
-          "404": {
-            "$ref": "#/components/responses/NotFound"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Items"
-        ],
-        "summary": "Delete",
-        "operationId": "deleteItem",
-        "responses": {
-          "204": {
-            "description": "Item soft-deleted"
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
@@ -13586,6 +13725,7 @@
               "issueAfterReset": {
                 "type": "number",
                 "minimum": 0,
+                "maximum": 1e+09,
                 "description": "Credits issued at each period reset. Set to 0 for entitlements without included credits; top-ups may be supplied via direct grants or grant purchases."
               },
               "issueAfterResetPriority": {
@@ -14625,7 +14765,6 @@
           "status": {
             "type": "string",
             "enum": [
-              "draft",
               "published",
               "archived"
             ],
@@ -14634,7 +14773,7 @@
           "publishedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "When this version was published. Absent for draft versions."
+            "description": "When this version was published."
           },
           "isDefault": {
             "type": "boolean",
@@ -14703,7 +14842,7 @@
             "properties": {
               "priceDeleted": {
                 "type": "boolean",
-                "description": "True when the underlying price this slot references has been soft-deleted. The slot can still be removed or replaced to repair the draft; it cannot be published while any slot remains dead."
+                "description": "True when the underlying price this slot references has been soft-deleted."
               }
             }
           }
@@ -14711,7 +14850,7 @@
       },
       "PlanVersion": {
         "type": "object",
-        "description": "A single plan version, including its price slots. Extends the list summary with the version's prices for draft review.",
+        "description": "A single plan version, including its price slots. Extends the list summary with the version's prices.",
         "required": [
           "id",
           "object",
@@ -14740,7 +14879,6 @@
           "status": {
             "type": "string",
             "enum": [
-              "draft",
               "published",
               "archived"
             ],
@@ -14749,7 +14887,7 @@
           "publishedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "When this version was published. Absent for draft versions."
+            "description": "When this version was published."
           },
           "isDefault": {
             "type": "boolean",
@@ -14767,7 +14905,7 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "When this version was last modified. Optimistic-concurrency token: read this value and echo it back as an `If-Match` header on a draft-price-mutation request to reject the write (412) if the draft changed since this read."
+            "description": "When this version was last modified."
           },
           "prices": {
             "type": "array",
@@ -15834,9 +15972,10 @@
             "type": "string",
             "enum": [
               "entitlement_failed",
-              "grant_mint_failed"
+              "grant_mint_failed",
+              "reset_cycle_misaligned"
             ],
-            "description": "Coded failure reason. `grant_mint_failed` means the entitlement was created but its initial metered grant could not be minted; re-running this reconciliation retries the mint."
+            "description": "Coded failure reason. `entitlement_failed` means the entitlement itself could not be created. `grant_mint_failed` means the entitlement was created but its initial metered grant could not be minted; re-running this reconciliation retries the mint. `reset_cycle_misaligned` means the feature grants a credit discount on a reset cycle that is not the window it would be billed on, so re-running cannot succeed until the plan or the price is corrected."
           }
         },
         "required": [
@@ -16391,7 +16530,17 @@
             "type": "string",
             "format": "uri",
             "nullable": true,
-            "description": "Direct PDF download link for tax invoice"
+            "description": "Link to the invoice document, or null when there is none. For Paygentic-rendered documents this is GET /v2/invoices/{id}/pdf, which requires authentication; for documents supplied by the tax provider it is the provider's own direct link. The URL is stable and does not expire. Branch on pdfSource rather than on the shape of this URL."
+          },
+          "pdfSource": {
+            "type": "string",
+            "enum": [
+              "paygentic",
+              "tax_provider",
+              null
+            ],
+            "nullable": true,
+            "description": "Who produced the document at pdfUrl, or null when there is none. `paygentic` means pdfUrl is this API's download endpoint and the request must carry your API key; `tax_provider` means it is the provider's own link, which opens directly in a browser."
           },
           "periodEnd": {
             "type": "string",
@@ -17201,6 +17350,10 @@
           "eventType": {
             "type": "string",
             "description": "CloudEvents type for metered costs."
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit label for metered costs (e.g. 'token', 'request'). Absent when the cost defines no unit."
           },
           "totalCost": {
             "type": [
@@ -18641,7 +18794,7 @@
             "type": "string",
             "format": "date-time",
             "nullable": true,
-            "description": "Null for an open-ended subscription-owned schedule; order-owned schedules always have a concrete end."
+            "description": "The schedule's end date. Always present."
           },
           "billingAnchor": {
             "type": "string",
@@ -18712,7 +18865,8 @@
             "type": "string"
           },
           "subscriptionId": {
-            "type": "string"
+            "type": "string",
+            "description": "Not supported for creating a billing schedule. Use orderId — every billing schedule belongs to an order."
           },
           "startDate": {
             "type": "string",
@@ -19151,14 +19305,35 @@
       "MerchantIntegrationProvider": {
         "type": "string",
         "enum": [
-          "salesforce"
+          "salesforce",
+          "netsuite",
+          "accountsiq"
         ],
-        "description": "External provider a merchant can connect at the tenant level"
+        "description": "External provider a merchant can connect at the tenant level. `netsuite` and `accountsiq` are returned on reads wherever a connection exists, but connecting them is accepted only in local and development environments; elsewhere the connect request is refused with 404."
       },
       "MerchantIntegrationId": {
         "type": "string",
         "pattern": "^mint_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a merchant integration"
+      },
+      "MappingCapabilities": {
+        "type": "object",
+        "required": [
+          "resolvesItemCodes",
+          "sendsItemCodes"
+        ],
+        "additionalProperties": false,
+        "description": "What this provider does with an item's external codes.\n\nTwo independent capabilities, not one direction: the behaviours are not alternatives. An integration can resolve an incoming item code *and* be sent a selected one on a different path, so a single `inbound`/`outbound` value would have to misdescribe it or forbid one of its operations.\n\nA capability that is not declared is unavailable rather than inferred. Declaring one does not make a provider connectable — that still requires its credentials and connection lifecycle.",
+        "properties": {
+          "resolvesItemCodes": {
+            "type": "boolean",
+            "description": "A code arriving from this provider must name exactly one of the merchant's items. The lookup key is the code, so several codes may point at one item while each code resolves to one — which is why a code recorded for this purpose is claimed, and a second item claiming it is a conflict."
+          },
+          "sendsItemCodes": {
+            "type": "boolean",
+            "description": "A consumer needs one of an item's codes to send to this provider, and takes the item's designated one (`isDefault`). Because the lookup key is the item, several items may share one code — a chart of accounts exists so that many things sold roll into one account."
+          }
+        }
       },
       "MerchantIntegrationStatus": {
         "type": "string",
@@ -19179,6 +19354,7 @@
           "provider",
           "externalId",
           "status",
+          "capabilities",
           "config",
           "metadata",
           "connectedAt",
@@ -19202,6 +19378,9 @@
           },
           "provider": {
             "$ref": "#/components/schemas/MerchantIntegrationProvider"
+          },
+          "capabilities": {
+            "$ref": "#/components/schemas/MappingCapabilities"
           },
           "externalId": {
             "type": "string",

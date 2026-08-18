@@ -51,6 +51,18 @@ export type InvoiceLineItems = {
 };
 
 /**
+ * Who produced the document at pdfUrl, or null when there is none. `paygentic` means pdfUrl is this API's download endpoint and the request must carry your API key; `tax_provider` means it is the provider's own link, which opens directly in a browser.
+ */
+export const PdfSource = {
+  Paygentic: "paygentic",
+  TaxProvider: "tax_provider",
+} as const;
+/**
+ * Who produced the document at pdfUrl, or null when there is none. `paygentic` means pdfUrl is this API's download endpoint and the request must carry your API key; `tax_provider` means it is the provider's own link, which opens directly in a browser.
+ */
+export type PdfSource = ClosedEnum<typeof PdfSource>;
+
+/**
  * The current status of the invoice
  */
 export const InvoiceStatus = {
@@ -191,9 +203,13 @@ export type Invoice = {
    */
   paymentUrl?: string | null | undefined;
   /**
-   * Direct PDF download link for tax invoice
+   * Link to the invoice document, or null when there is none. For Paygentic-rendered documents this is GET /v2/invoices/{id}/pdf, which requires authentication; for documents supplied by the tax provider it is the provider's own direct link. The URL is stable and does not expire. Branch on pdfSource rather than on the shape of this URL.
    */
   pdfUrl?: string | null | undefined;
+  /**
+   * Who produced the document at pdfUrl, or null when there is none. `paygentic` means pdfUrl is this API's download endpoint and the request must carry your API key; `tax_provider` means it is the provider's own link, which opens directly in a browser.
+   */
+  pdfSource?: PdfSource | null | undefined;
   /**
    * The end of the billing period
    */
@@ -273,6 +289,10 @@ export function invoiceLineItemsFromJSON(
 }
 
 /** @internal */
+export const PdfSource$inboundSchema: z.ZodNativeEnum<typeof PdfSource> = z
+  .nativeEnum(PdfSource);
+
+/** @internal */
 export const InvoiceStatus$inboundSchema: z.ZodNativeEnum<
   typeof InvoiceStatus
 > = z.nativeEnum(InvoiceStatus);
@@ -339,6 +359,7 @@ export const Invoice$inboundSchema: z.ZodType<Invoice, z.ZodTypeDef, unknown> =
     ).optional(),
     paymentUrl: z.nullable(z.string()).optional(),
     pdfUrl: z.nullable(z.string()).optional(),
+    pdfSource: z.nullable(PdfSource$inboundSchema).optional(),
     periodEnd: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),

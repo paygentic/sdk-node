@@ -14,9 +14,15 @@ export type DeleteFeeRequest = {
   id: string;
 };
 
+export type DeleteFeeItem = {
+  id?: string | undefined;
+  invoiceDisplayName?: string | undefined;
+};
+
 export type DeleteFeeBlocker = {
   type?: string | undefined;
   count?: number | undefined;
+  items?: Array<DeleteFeeItem> | undefined;
 };
 
 export type DeleteFeeDetails = {
@@ -46,6 +52,26 @@ export function deleteFeeRequestToJSON(
 }
 
 /** @internal */
+export const DeleteFeeItem$inboundSchema: z.ZodType<
+  DeleteFeeItem,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  id: z.string().optional(),
+  invoiceDisplayName: z.string().optional(),
+});
+
+export function deleteFeeItemFromJSON(
+  jsonString: string,
+): SafeParseResult<DeleteFeeItem, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => DeleteFeeItem$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'DeleteFeeItem' from JSON`,
+  );
+}
+
+/** @internal */
 export const DeleteFeeBlocker$inboundSchema: z.ZodType<
   DeleteFeeBlocker,
   z.ZodTypeDef,
@@ -53,6 +79,7 @@ export const DeleteFeeBlocker$inboundSchema: z.ZodType<
 > = z.object({
   type: z.string().optional(),
   count: z.number().int().optional(),
+  items: z.array(z.lazy(() => DeleteFeeItem$inboundSchema)).optional(),
 });
 
 export function deleteFeeBlockerFromJSON(

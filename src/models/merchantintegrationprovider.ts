@@ -6,13 +6,15 @@ import * as z from "zod/v3";
 import { ClosedEnum } from "../types/enums.js";
 
 /**
- * External provider a merchant can connect at the tenant level
+ * External provider a merchant can connect at the tenant level. `netsuite` and `accountsiq` are returned on reads wherever a connection exists, but connecting them is accepted only in local and development environments; elsewhere the connect request is refused with 404.
  */
 export const MerchantIntegrationProvider = {
   Salesforce: "salesforce",
+  Netsuite: "netsuite",
+  Accountsiq: "accountsiq",
 } as const;
 /**
- * External provider a merchant can connect at the tenant level
+ * External provider a merchant can connect at the tenant level. `netsuite` and `accountsiq` are returned on reads wherever a connection exists, but connecting them is accepted only in local and development environments; elsewhere the connect request is refused with 404.
  */
 export type MerchantIntegrationProvider = ClosedEnum<
   typeof MerchantIntegrationProvider

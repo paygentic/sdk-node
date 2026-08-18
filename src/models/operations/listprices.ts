@@ -14,6 +14,10 @@ export type ListPricesRequest = {
    */
   billableMetricId?: string | undefined;
   /**
+   * Filter prices by merchant organization ID. Matches prices reached via either a billable metric or a fee belonging to that merchant. Unlike the unfiltered listing, this includes prices whose billable metric or fee has been deleted — deleting a parent does not delete its prices, and they can still bill. Returns 404 if the merchant does not exist.
+   */
+  merchantId?: string | undefined;
+  /**
    * Number of prices to return
    */
   limit?: number | undefined;
@@ -40,6 +44,7 @@ export type ListPricesResponse = {
 /** @internal */
 export type ListPricesRequest$Outbound = {
   billableMetricId?: string | undefined;
+  merchantId?: string | undefined;
   limit: number;
   offset: number;
 };
@@ -51,6 +56,7 @@ export const ListPricesRequest$outboundSchema: z.ZodType<
   ListPricesRequest
 > = z.object({
   billableMetricId: z.string().optional(),
+  merchantId: z.string().optional(),
   limit: z.number().int().default(10),
   offset: z.number().int().default(0),
 });

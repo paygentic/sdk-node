@@ -19,7 +19,6 @@ export type PlanVersionSummaryObject = ClosedEnum<
  * Lifecycle status of the version.
  */
 export const PlanVersionSummaryStatus = {
-  Draft: "draft",
   Published: "published",
   Archived: "archived",
 } as const;
@@ -45,7 +44,7 @@ export type PlanVersionSummary = {
    */
   status: PlanVersionSummaryStatus;
   /**
-   * When this version was published. Absent for draft versions.
+   * When this version was published.
    */
   publishedAt?: Date | undefined;
   /**

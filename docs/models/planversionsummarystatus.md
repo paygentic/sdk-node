@@ -7,11 +7,11 @@ Lifecycle status of the version.
 ```typescript
 import { PlanVersionSummaryStatus } from "@paygentic/sdk/models";
 
-let value: PlanVersionSummaryStatus = "draft";
+let value: PlanVersionSummaryStatus = "published";
 ```
 
 ## Values
 
 ```typescript
-"draft" | "published" | "archived"
+"published" | "archived"
 ```

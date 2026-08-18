@@ -48,6 +48,7 @@ export * from "./item.js";
 export * from "./lineitem.js";
 export * from "./lineitemsresponse.js";
 export * from "./lineitemssummary.js";
+export * from "./mappingcapabilities.js";
 export * from "./merchantintegration.js";
 export * from "./merchantintegrationprovider.js";
 export * from "./merchantintegrationstatus.js";

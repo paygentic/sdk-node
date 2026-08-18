@@ -8,6 +8,10 @@ import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import {
+  MappingCapabilities,
+  MappingCapabilities$inboundSchema,
+} from "./mappingcapabilities.js";
+import {
   MerchantIntegrationProvider,
   MerchantIntegrationProvider$inboundSchema,
 } from "./merchantintegrationprovider.js";
@@ -37,9 +41,19 @@ export type MerchantIntegration = {
    */
   merchantId: string;
   /**
-   * External provider a merchant can connect at the tenant level
+   * External provider a merchant can connect at the tenant level. `netsuite` and `accountsiq` are returned on reads wherever a connection exists, but connecting them is accepted only in local and development environments; elsewhere the connect request is refused with 404.
    */
   provider: MerchantIntegrationProvider;
+  /**
+   * What this provider does with an item's external codes.
+   *
+   * @remarks
+   *
+   * Two independent capabilities, not one direction: the behaviours are not alternatives. An integration can resolve an incoming item code *and* be sent a selected one on a different path, so a single `inbound`/`outbound` value would have to misdescribe it or forbid one of its operations.
+   *
+   * A capability that is not declared is unavailable rather than inferred. Declaring one does not make a provider connectable — that still requires its credentials and connection lifecycle.
+   */
+  capabilities: MappingCapabilities;
   /**
    * Ampersand installation id.
    */
@@ -73,6 +87,7 @@ export const MerchantIntegration$inboundSchema: z.ZodType<
   ),
   merchantId: z.string(),
   provider: MerchantIntegrationProvider$inboundSchema,
+  capabilities: MappingCapabilities$inboundSchema,
   externalId: z.nullable(z.string()),
   status: MerchantIntegrationStatus$inboundSchema,
   config: z.record(z.any()),

@@ -11,6 +11,7 @@ Invoice V2 operations supporting billing cycles organized by time periods. Warni
 * [createLineItem](#createlineitem) - Create Manual Line Item
 * [get](#get) - Get
 * [getLineItems](#getlineitems) - Get Line Items
+* [downloadInvoicePdf](#downloadinvoicepdf) - Download Invoice PDF
 * [createInvoiceRefund](#createinvoicerefund) - Refund Invoice
 * [listInvoiceRefunds](#listinvoicerefunds) - List Invoice Refunds
 * [voidInvoiceRefund](#voidinvoicerefund) - Void Invoice Refund
@@ -397,6 +398,81 @@ run();
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
 | errors.ErrorT                | 403, 404                     | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## downloadInvoicePdf
+
+Downloads the Paygentic-rendered invoice document. The caller must be authenticated and entitled to the invoice; the stored document is streamed back, so no storage URL is ever handed out. Returns 404 when the invoice's document is the tax provider's rather than ours — in that case the invoice resource reports pdfSource `tax_provider` and its pdfUrl points at the provider's link instead.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="downloadInvoicePdf" method="get" path="/v2/invoices/{id}/pdf" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.invoicesV2.downloadInvoicePdf({
+    id: "<id>",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { invoicesV2DownloadInvoicePdf } from "@paygentic/sdk/funcs/invoicesV2DownloadInvoicePdf.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await invoicesV2DownloadInvoicePdf(paygentic, {
+    id: "<id>",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("invoicesV2DownloadInvoicePdf failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.DownloadInvoicePdfRequest](../../models/operations/downloadinvoicepdfrequest.md)                                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[ReadableStream<Uint8Array>](../../models/.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 401, 403, 404                | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
