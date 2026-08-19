@@ -14127,6 +14127,7 @@
           },
           "idempotencyKey": {
             "type": "string",
+            "minLength": 1,
             "maxLength": 255,
             "description": "Idempotency key to prevent duplicate grants. Must be unique per entitlement."
           },

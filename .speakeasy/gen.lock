@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: cb0a72e9762255f1a5ecffe5b16b53ca
+  docChecksum: 2305f519c14b20a67613b658c3b06b9d
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.9.0
-  configChecksum: 6db50483604653213d38cb7d383885dc
+  releaseVersion: 0.9.1
+  configChecksum: e259b56252cc348cc9a83097bdbae1b9
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: 3daf7b61-4ae6-4875-99c9-62dda4f01744
-  pristine_commit_hash: 86794ac7eba944aff6424216fee37864117db0aa
-  pristine_tree_hash: c8f4898355a145f5f7f119eaf1a0279253b4f7b4
+  generation_id: 7b1e9fdb-f92e-4df8-9c72-60248c17f9cf
+  pristine_commit_hash: 3e37e116ce66a86d55d6b025ae5b4a14d983aa12
+  pristine_tree_hash: abf2d2296af72b0175c1f9aaec1bebbf69348049
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -2471,12 +2471,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:c663fcad41e708496ace1a6f90248ff8251b7305
-    pristine_git_object: b3c38c08cfa1b58cec60c323b19bad71f73dd308
+    last_write_checksum: sha1:35075643260f240ec146cd1cc3486cc8c4c3836b
+    pristine_git_object: f08007c66524a4b55ff0cb4a170d1ce6a678a1ea
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:fc643eb820436cff0ad63ef5dcaf66ae65dc88ef
-    pristine_git_object: fdaa31d4844f19f32a585d191767d021af0fd70f
+    last_write_checksum: sha1:acfbd016689e25f3cfee5b484cc6a90d74a5bc91
+    pristine_git_object: e18c5c31a0e947c1269b7d4c96f4af5a5c28ed9a
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -3047,8 +3047,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:f8810d9a84f3c8c67e4909096d52149105b3462a
-    pristine_git_object: e4e093b54afc28af1198f933766ff3a643e86ca1
+    last_write_checksum: sha1:bdca9c5f67c3d267f7dc96bcff2bf92fdcb8adf8
+    pristine_git_object: 2001c21d8e4ce6498d8da81769d220dd4a7f8c98
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -6770,4 +6770,3 @@ generatedTests:
   getPlanVersion: "2026-07-30T16:01:37Z"
   transitionPlanVersion: "2026-07-30T16:01:37Z"
   downloadInvoicePdf: "2026-08-18T13:02:40Z"
-releaseNotes: "## Typescript SDK Changes:\n* `paygentic.plans.getPlanVersion()`:  `response.status.enum(draft)` **Removed** (Breaking ⚠️)\n* `paygentic.merchantIntegrations.disconnectMerchantIntegration()`:  `response` **Changed** (Breaking ⚠️)\n* `paygentic.merchantIntegrations.getMerchantIntegration()`:  `response` **Changed** (Breaking ⚠️)\n* `paygentic.merchantIntegrations.upsertMerchantIntegration()`: \n  *  `request.provider` **Changed**\n  *  `response` **Changed** (Breaking ⚠️)\n* `paygentic.merchantIntegrations.listMerchantIntegrations()`: \n  *  `request.provider` **Changed**\n  *  `response.data[]` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.reconcileSubscriptionFeatures()`:  `response.features.failed[].reason.enum(resetCycleMisaligned)` **Added** (Breaking ⚠️)\n* `paygentic.plans.transitionPlanVersion()`:  `response.status.enum(draft)` **Removed** (Breaking ⚠️)\n* `paygentic.plans.listPlanVersions()`:  `response.data[].status.enum(draft)` **Removed** (Breaking ⚠️)\n* `paygentic.plans.mintPlanVersion()`:  `response.status.enum(draft)` **Removed** (Breaking ⚠️)\n* `paygentic.fees.update()`:  `error` **Changed**\n* `paygentic.fees.delete()`:  `error.details.blockers[].items` **Added**\n* `paygentic.prices.list()`: \n  *  `request.merchantId` **Added**\n  *  `error.status[404]` **Added**\n* `paygentic.prices.delete()`:  `error.status[409]` **Added**\n* `paygentic.invoicesV2.downloadInvoicePdf()`: **Added**\n* `paygentic.invoicesV2.list()`:  `response.data[].pdfSource` **Added**\n* `paygentic.invoicesV2.get()`:  `response.pdfSource` **Added**\n* `paygentic.costs.getCostSummary()`:  `response.unit` **Added**\n* `paygentic.externalReferences.createExternalReference()`:  `request` **Changed**\n* `paygentic.fees.list()`: \n  *  `request.itemId` **Added**\n* `paygentic.billableMetrics.update()`:  `error` **Changed**\n* `paygentic.billableMetrics.list()`: \n  *  `request.itemId` **Added**\n* `paygentic.items.deleteItem()`: **Removed** (Breaking ⚠️)\n"
