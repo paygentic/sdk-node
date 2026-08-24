@@ -5,15 +5,15 @@ management:
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.9.2
-  configChecksum: 746284ffa13ccce8d0e14b8df091a4b9
+  releaseVersion: 0.9.3
+  configChecksum: 5899cfcc6cbd9b91998ced63b4d1b235
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: f317d979-2061-464b-85f0-4fe454bd9848
-  pristine_commit_hash: 0283cb00fa0ff86b45c2a4abebdad1429000b571
-  pristine_tree_hash: 94af2f4d6f921b2851dbbcaaeea969d185e820be
+  generation_id: 6a3346ae-ba5e-48f3-bac1-6e8c0e64a3a5
+  pristine_commit_hash: 4e92416f45c963c3d499ab300d5d0be59ccd96e8
+  pristine_tree_hash: 56628c7a7ea6b2c5464f1c3b38f3d76aab5456a9
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -2471,12 +2471,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:cb416681f37e83340e9d6d70ad7a5914a54e559d
-    pristine_git_object: 09c98f6562cd12af63c484298388b61a58398f26
+    last_write_checksum: sha1:eed107143f49c0ecfdee638cf05365c8afb618c8
+    pristine_git_object: e51a9d6733a01bf7b8e1d7b334e84944b10d7c21
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:0d2be8e2a0f8ae825b9189350026b07bf44fc3c3
-    pristine_git_object: a9591d97559618379c6a733da367948fdab1f54c
+    last_write_checksum: sha1:3c1a91b5a22b0d23e956fd2e37dee304f6a2f337
+    pristine_git_object: e8358837b527f093cf8eee733773fe225b58809a
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -3047,8 +3047,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:2823226a6743ba4f55361488f421539fc8b2a5eb
-    pristine_git_object: e12c804e3dfcb4f7dc422f62852c800a704710a1
+    last_write_checksum: sha1:488795d6f4530d993600105e89d7946fbc10aa65
+    pristine_git_object: a3d1795316122ff9084ce4d27c5fb83e973cdd18
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -6770,7 +6770,3 @@ generatedTests:
   getPlanVersion: "2026-07-30T16:01:37Z"
   transitionPlanVersion: "2026-07-30T16:01:37Z"
   downloadInvoicePdf: "2026-08-18T13:02:40Z"
-releaseNotes: |
-  ## Typescript SDK Changes:
-  * `paygentic.invoicesV2.listLineItems()`:  `response.data[].type.enum(adjustment)` **Added** (Breaking ⚠️)
-  * `paygentic.invoicesV2.createLineItem()`:  `response.type.enum(adjustment)` **Added** (Breaking ⚠️)
