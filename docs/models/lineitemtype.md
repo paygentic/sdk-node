@@ -1,6 +1,6 @@
 # LineItemType
 
-The type of line item. 'discount' line items represent grant discounts with negative subtotal/total amounts.
+The type of line item. 'discount' and 'adjustment' line items have negative subtotal/total amounts: 'discount' is a grant discount, 'adjustment' is a discount agreed on the subscription.
 
 ## Example Usage
 
@@ -13,5 +13,5 @@ let value: LineItemType = "metered";
 ## Values
 
 ```typescript
-"fee" | "metered" | "manual" | "discount"
+"fee" | "metered" | "manual" | "discount" | "adjustment"
 ```

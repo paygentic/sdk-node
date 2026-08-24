@@ -10,7 +10,7 @@ export type PriceFeatureInput = {
    */
   featureId: string;
   /**
-   * Template for entitlement values when this feature is provisioned
+   * Template for entitlement values when this feature is provisioned. Omit the field to attach the feature without declaring an allowance. An explicit empty object declares an allowance with default values.
    */
   entitlementTemplate?: { [k: string]: any } | undefined;
 };

@@ -24,6 +24,9 @@ export type PriceFeatureFeature = {
 export type PriceFeature = {
   id: string;
   featureId: string;
+  /**
+   * The allowance this price declares for the feature. An empty object where the price attaches the feature without declaring one.
+   */
   entitlementTemplate: { [k: string]: any };
   feature?: PriceFeatureFeature | undefined;
 };

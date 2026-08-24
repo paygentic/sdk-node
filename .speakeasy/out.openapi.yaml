@@ -14432,7 +14432,8 @@
           },
           "entitlementTemplate": {
             "type": "object",
-            "additionalProperties": true
+            "additionalProperties": true,
+            "description": "The allowance this price declares for the feature. An empty object where the price attaches the feature without declaring one."
           },
           "feature": {
             "type": "object",
@@ -14948,7 +14949,7 @@
             "properties": {
               "unitPrice": {
                 "type": "string",
-                "description": "Per-unit cost in decimal format for fixed-rate pricing. Sample values: '0.00002' represents $0.00002 per token, '0.15' represents $0.15 per gigabyte stored, '0.05' represents $0.05 per API call. Per unit. Total per period = quantity × unitPrice; see the `quantity` field. A negative value defines a usage-scaled rebate: the line's subtotal is negative and reduces the invoice. A rebate never drives an invoice total below zero, so set rebate rates below the charges they offset. A negative unitPrice is only valid on a metered price (a billableMetricId is required — there is no usage to scale on a fee price) and cannot be combined with grantDiscountEnabled, a hard-limit feature, or a pricingUnitId. When a rebate and a charge price share a billable metric, they must share feature attachment (both on the same feature, or both featureless) or they will compute against different quantity bases."
+                "description": "Per-unit cost in decimal format for fixed-rate pricing. Sample values: '0.00002' represents $0.00002 per token, '0.15' represents $0.15 per gigabyte stored, '0.05' represents $0.05 per API call. Per unit. Total per period = quantity × unitPrice; see the `quantity` field. A negative value defines a usage-scaled rebate: the line's subtotal is negative and reduces the invoice. A rebate never drives an invoice total below zero, so set rebate rates below the charges they offset. A negative unitPrice is only valid on a metered price (a billableMetricId is required — there is no usage to scale on a fee price) and cannot be combined with grantDiscountEnabled, a hard-limit feature, or a pricingUnitId. When a rebate and a charge price share a billable metric but attach to different features, they compute against different quantity bases: a price attached to a feature bills the overage against its allowance, while a featureless price bills the raw metered usage. That is a permitted configuration, not an error. Attach both to the same feature to bill them against one basis."
               }
             },
             "required": [
@@ -15156,7 +15157,7 @@
           "entitlementTemplate": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Template for entitlement values when this feature is provisioned"
+            "description": "Template for entitlement values when this feature is provisioned. Omit the field to attach the feature without declaring an allowance. An explicit empty object declares an allowance with default values."
           }
         }
       },
@@ -16718,9 +16719,10 @@
               "fee",
               "metered",
               "manual",
-              "discount"
+              "discount",
+              "adjustment"
             ],
-            "description": "The type of line item. 'discount' line items represent grant discounts with negative subtotal/total amounts."
+            "description": "The type of line item. 'discount' and 'adjustment' line items have negative subtotal/total amounts: 'discount' is a grant discount, 'adjustment' is a discount agreed on the subscription."
           },
           "status": {
             "type": "string",
