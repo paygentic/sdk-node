@@ -7592,6 +7592,7 @@
                       "paymentUrl": null,
                       "pdfUrl": null,
                       "pdfSource": null,
+                      "documentWithheldReason": null,
                       "periodEnd": "2024-03-31T23:59:59Z",
                       "periodStart": "2024-03-01T00:00:00Z",
                       "permalink": null,
@@ -7928,6 +7929,7 @@
                   "paymentUrl": "https://checkout.paygentic.com/invoice/inv_r1s2t3u4v5w6x7y8",
                   "pdfUrl": "https://api.paygentic.io/v2/invoices/inv_r1s2t3u4v5w6x7y8/pdf",
                   "pdfSource": "paygentic",
+                  "documentWithheldReason": null,
                   "periodEnd": "2024-02-29T23:59:59Z",
                   "periodStart": "2024-02-01T00:00:00Z",
                   "permalink": "https://quaderno.io/invoices/12345",
@@ -16543,6 +16545,20 @@
             ],
             "nullable": true,
             "description": "Who produced the document at pdfUrl, or null when there is none. `paygentic` means pdfUrl is this API's download endpoint and the request must carry your API key; `tax_provider` means it is the provider's own link, which opens directly in a browser."
+          },
+          "documentWithheldReason": {
+            "type": "string",
+            "enum": [
+              "tax_unreconciled",
+              "issuer_identity_incomplete",
+              "tax_component_unpriceable",
+              "ledger_mismatch",
+              "tax_provider_disagrees",
+              null
+            ],
+            "nullable": true,
+            "x-speakeasy-unknown-values": "allow",
+            "description": "Why no Paygentic-rendered document exists for this invoice, or null when none was withheld. A tax-registered merchant's document is a compliance artefact, so it is withheld unless the recorded tax reconciles with the provider exactly and the registered issuer identity is complete. Non-null therefore always accompanies pdfSource `tax_provider` or null, and never `paygentic`. Use it to tell a withheld document apart from an invoice the tax provider serves by design — both report pdfSource `tax_provider`, but only a withheld one can be repaired by POST /v2/invoices/{id}/generate-pdf. `tax_unreconciled`: the provider's tax figure was never recorded against this invoice. `issuer_identity_incomplete`: the registered legal name, tax ID or address could not be read. `tax_component_unpriceable`: a recorded tax component carried no presentable amount. `ledger_mismatch`: the recorded tax figures and the invoice's own totals disagree. `tax_provider_disagrees`: the provider re-read its filing and reported a different tax to the one this invoice was charged — terminal, because correcting an issued invoice is a credit note's job, so retrying the repair cannot clear it. New values may be added, so treat an unrecognised one as withheld rather than failing."
           },
           "periodEnd": {
             "type": "string",
