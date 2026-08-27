@@ -4,7 +4,10 @@
 
 import * as z from "zod/v3";
 import { remap as remap$ } from "../../lib/primitives.js";
+import { safeParse } from "../../lib/schemas.js";
 import { ClosedEnum } from "../../types/enums.js";
+import { Result as SafeParseResult } from "../../types/fp.js";
+import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import * as models from "../index.js";
 
 /**
@@ -36,7 +39,7 @@ export type UpdatePriceRequestBody = {
    * The pricing model to set. Only 'standard' is accepted. Legacy 'dynamic'/'volume'/'percentage' prices can still be edited (other fields) but cannot be switched to those models. Percentage/revenue-share is expressed via 'standard' with a unit-price multiplier.
    */
   model?: models.PriceModelInput | undefined;
-  properties?: models.PricePropertiesUnion | undefined;
+  properties?: models.PriceProperties | undefined;
   /**
    * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
    */
@@ -67,6 +70,12 @@ export type UpdatePriceRequest = {
   requestBody: UpdatePriceRequestBody;
 };
 
+export type UpdatePriceDetails = {
+  priceId?: string | undefined;
+  fields?: Array<string> | undefined;
+  subscriptionCount?: number | undefined;
+};
+
 /** @internal */
 export const UpdatePricePaymentTerm$outboundSchema: z.ZodNativeEnum<
   typeof UpdatePricePaymentTerm
@@ -78,7 +87,7 @@ export type UpdatePriceRequestBody$Outbound = {
   pricingUnitId?: string | null | undefined;
   invoiceDisplayName?: string | undefined;
   model?: string | undefined;
-  properties?: models.PricePropertiesUnion$Outbound | undefined;
+  properties?: models.PriceProperties$Outbound | undefined;
   paymentTerm?: string | undefined;
   billingCadence?: string | null | undefined;
   feature?: models.PriceFeatureInput$Outbound | null | undefined;
@@ -96,7 +105,7 @@ export const UpdatePriceRequestBody$outboundSchema: z.ZodType<
   pricingUnitId: z.nullable(z.string()).optional(),
   invoiceDisplayName: z.string().optional(),
   model: models.PriceModelInput$outboundSchema.optional(),
-  properties: models.PricePropertiesUnion$outboundSchema.optional(),
+  properties: models.PriceProperties$outboundSchema.optional(),
   paymentTerm: UpdatePricePaymentTerm$outboundSchema.optional(),
   billingCadence: z.nullable(z.string()).optional(),
   feature: z.nullable(models.PriceFeatureInput$outboundSchema).optional(),
@@ -137,5 +146,26 @@ export function updatePriceRequestToJSON(
 ): string {
   return JSON.stringify(
     UpdatePriceRequest$outboundSchema.parse(updatePriceRequest),
+  );
+}
+
+/** @internal */
+export const UpdatePriceDetails$inboundSchema: z.ZodType<
+  UpdatePriceDetails,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  priceId: z.string().optional(),
+  fields: z.array(z.string()).optional(),
+  subscriptionCount: z.number().int().optional(),
+});
+
+export function updatePriceDetailsFromJSON(
+  jsonString: string,
+): SafeParseResult<UpdatePriceDetails, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => UpdatePriceDetails$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'UpdatePriceDetails' from JSON`,
   );
 }

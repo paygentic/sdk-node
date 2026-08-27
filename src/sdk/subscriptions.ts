@@ -3,9 +3,12 @@
  */
 
 import { subscriptionsCreate } from "../funcs/subscriptionsCreate.js";
+import { subscriptionsCreateSubscriptionAdjustment } from "../funcs/subscriptionsCreateSubscriptionAdjustment.js";
+import { subscriptionsDeleteSubscriptionAdjustment } from "../funcs/subscriptionsDeleteSubscriptionAdjustment.js";
 import { subscriptionsGeneratePortalLink } from "../funcs/subscriptionsGeneratePortalLink.js";
 import { subscriptionsGet } from "../funcs/subscriptionsGet.js";
 import { subscriptionsList } from "../funcs/subscriptionsList.js";
+import { subscriptionsListSubscriptionAdjustments } from "../funcs/subscriptionsListSubscriptionAdjustments.js";
 import { subscriptionsReconcileSubscriptionFeatures } from "../funcs/subscriptionsReconcileSubscriptionFeatures.js";
 import { subscriptionsTerminate } from "../funcs/subscriptionsTerminate.js";
 import { subscriptionsUpdateSubscription } from "../funcs/subscriptionsUpdateSubscription.js";
@@ -119,6 +122,57 @@ export class Subscriptions extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.SubscriptionReconciliation> {
     return unwrapAsync(subscriptionsReconcileSubscriptionFeatures(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * List Adjustments
+   *
+   * @remarks
+   * Reads the adjustments on the subscription, oldest window first. A subscription with no adjustment returns an empty array. Paginated, because a long-running subscription accumulates one adjustment per rate change of every deal it has carried.
+   */
+  async listSubscriptionAdjustments(
+    request: operations.ListSubscriptionAdjustmentsRequest,
+    options?: RequestOptions,
+  ): Promise<models.SubscriptionAdjustmentsResponse> {
+    return unwrapAsync(subscriptionsListSubscriptionAdjustments(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Create Adjustment
+   *
+   * @remarks
+   * Attaches a percentage discount to the subscription for a dated window. Every invoice calculated while the window is open carries one discount line for each discounted charge, and tax is assessed on the reduced amount. An invoice that already exists is not changed, including one still in draft — the discount reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change a rate before any invoice has issued under the discount, delete the adjustment and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.
+   */
+  async createSubscriptionAdjustment(
+    request: operations.CreateSubscriptionAdjustmentRequest,
+    options?: RequestOptions,
+  ): Promise<models.SubscriptionAdjustment> {
+    return unwrapAsync(subscriptionsCreateSubscriptionAdjustment(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Delete Adjustment
+   *
+   * @remarks
+   * Deletes an adjustment that has not yet reached an issued invoice. No invoice changes: an invoice still in draft keeps its numbers, and loses the discount only when its period is calculated again. An adjustment that has already discounted an issued invoice cannot be deleted, because the invoice records why the customer was charged that amount. Its window cannot be shortened afterwards either, so set effectiveTo at creation time whenever the deal has a known end date.
+   */
+  async deleteSubscriptionAdjustment(
+    request: operations.DeleteSubscriptionAdjustmentRequest,
+    options?: RequestOptions,
+  ): Promise<void> {
+    return unwrapAsync(subscriptionsDeleteSubscriptionAdjustment(
       this,
       request,
       options,

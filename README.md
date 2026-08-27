@@ -422,6 +422,9 @@ run();
 * [generatePortalLink](docs/sdks/subscriptions/README.md#generateportallink) - Generate Portal Link
 * [terminate](docs/sdks/subscriptions/README.md#terminate) - Terminate
 * [reconcileSubscriptionFeatures](docs/sdks/subscriptions/README.md#reconcilesubscriptionfeatures) - Reconcile Features
+* [listSubscriptionAdjustments](docs/sdks/subscriptions/README.md#listsubscriptionadjustments) - List Adjustments
+* [createSubscriptionAdjustment](docs/sdks/subscriptions/README.md#createsubscriptionadjustment) - Create Adjustment
+* [deleteSubscriptionAdjustment](docs/sdks/subscriptions/README.md#deletesubscriptionadjustment) - Delete Adjustment
 
 ### [TestClocks](docs/sdks/testclocks/README.md)
 
@@ -577,9 +580,12 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`sourcesRulesUpdate`](docs/sdks/rules/README.md#update) - Update Rule
 - [`sourcesUpdate`](docs/sdks/sources/README.md#update) - Update
 - [`subscriptionsCreate`](docs/sdks/subscriptions/README.md#create) - Create
+- [`subscriptionsCreateSubscriptionAdjustment`](docs/sdks/subscriptions/README.md#createsubscriptionadjustment) - Create Adjustment
+- [`subscriptionsDeleteSubscriptionAdjustment`](docs/sdks/subscriptions/README.md#deletesubscriptionadjustment) - Delete Adjustment
 - [`subscriptionsGeneratePortalLink`](docs/sdks/subscriptions/README.md#generateportallink) - Generate Portal Link
 - [`subscriptionsGet`](docs/sdks/subscriptions/README.md#get) - Get
 - [`subscriptionsList`](docs/sdks/subscriptions/README.md#list) - List
+- [`subscriptionsListSubscriptionAdjustments`](docs/sdks/subscriptions/README.md#listsubscriptionadjustments) - List Adjustments
 - [`subscriptionsReconcileSubscriptionFeatures`](docs/sdks/subscriptions/README.md#reconcilesubscriptionfeatures) - Reconcile Features
 - [`subscriptionsTerminate`](docs/sdks/subscriptions/README.md#terminate) - Terminate
 - [`subscriptionsUpdateSubscription`](docs/sdks/subscriptions/README.md#updatesubscription) - Update
@@ -734,7 +740,7 @@ run();
 * [`PaygenticError`](./src/models/errors/paygenticerror.ts): The base class for HTTP error responses.
   * [`ErrorT`](./src/models/errors/errort.ts): *
 
-<details><summary>Less common errors (10)</summary>
+<details><summary>Less common errors (11)</summary>
 
 <br />
 
@@ -747,10 +753,11 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 89 of 136 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 136 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 136 methods.*
-* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 136 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 90 of 139 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 139 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 139 methods.*
+* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be restructured because a subscription still bills it directly. Status code `409`. Applicable to 1 of 139 methods.*
+* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 139 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

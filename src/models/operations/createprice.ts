@@ -47,7 +47,7 @@ export type CreatePriceRequest = {
    * ISO 8601 duration for recurring charges (e.g., 'P1M' for monthly, 'P1Y' for yearly) or 'P0D' for one-time charges. Required for fees, optional for billable metrics. Sample values: 'P0D' for one-time, 'P1M' for monthly recurring, 'P1Y' for yearly recurring
    */
   billingCadence?: string | null | undefined;
-  properties: models.PricePropertiesUnion;
+  properties: models.PriceProperties;
   feature?: models.PriceFeatureInput | undefined;
   /**
    * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
@@ -73,7 +73,7 @@ export type CreatePriceRequest$Outbound = {
   invoiceDisplayName: string;
   paymentTerm: string;
   billingCadence?: string | null | undefined;
-  properties: models.PricePropertiesUnion$Outbound;
+  properties: models.PriceProperties$Outbound;
   feature?: models.PriceFeatureInput$Outbound | undefined;
   grantDiscountEnabled: boolean;
   quantity?: number | undefined;
@@ -92,7 +92,7 @@ export const CreatePriceRequest$outboundSchema: z.ZodType<
   invoiceDisplayName: z.string(),
   paymentTerm: CreatePricePaymentTerm$outboundSchema,
   billingCadence: z.nullable(z.string()).optional(),
-  properties: models.PricePropertiesUnion$outboundSchema,
+  properties: models.PriceProperties$outboundSchema,
   feature: models.PriceFeatureInput$outboundSchema.optional(),
   grantDiscountEnabled: z.boolean().default(false),
   quantity: z.number().int().optional(),

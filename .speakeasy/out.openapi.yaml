@@ -4560,13 +4560,25 @@
                       "billableMetricId": "bm_j9k0l1m2n3o4p5q6",
                       "createdAt": "2024-02-10T13:45:00Z",
                       "currency": "USD",
-                      "description": "Tiered pricing for storage capacity",
+                      "description": "Volume pricing for storage capacity",
                       "invoiceDisplayName": "Storage Usage (GB)",
                       "model": "volume",
                       "paymentTerm": "in_arrears",
                       "properties": {
-                        "maxPrice": "0.25",
-                        "minPrice": "0.05"
+                        "tiers": [
+                          {
+                            "unitPrice": "5",
+                            "upTo": "100"
+                          },
+                          {
+                            "unitPrice": "4",
+                            "upTo": "500"
+                          },
+                          {
+                            "unitPrice": "3",
+                            "upTo": null
+                          }
+                        ]
                       },
                       "unitAmount": "50000000000",
                       "updatedAt": "2024-02-25T09:30:00Z"
@@ -4632,13 +4644,25 @@
                   "billableMetricId": "bm_j9k0l1m2n3o4p5q6",
                   "createdAt": "2024-02-10T13:45:00Z",
                   "currency": "USD",
-                  "description": "Tiered pricing for storage capacity",
+                  "description": "Volume pricing for storage capacity",
                   "invoiceDisplayName": "Storage Usage (GB)",
                   "model": "volume",
                   "paymentTerm": "in_arrears",
                   "properties": {
-                    "maxPrice": "0.25",
-                    "minPrice": "0.05"
+                    "tiers": [
+                      {
+                        "unitPrice": "5",
+                        "upTo": "100"
+                      },
+                      {
+                        "unitPrice": "4",
+                        "upTo": "500"
+                      },
+                      {
+                        "unitPrice": "3",
+                        "upTo": null
+                      }
+                    ]
                   },
                   "unitAmount": "50000000000",
                   "updatedAt": "2024-02-25T09:30:00Z"
@@ -4781,6 +4805,53 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "Price cannot be restructured because a subscription still bills it directly",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "code": {
+                      "type": "string",
+                      "examples": [
+                        "PRICE_STRUCTURALLY_LOCKED_BY_SUBSCRIPTION",
+                        "TRANSIENT_CONTENTION"
+                      ],
+                      "description": "Machine-readable conflict code. Open set: a new code may appear, so branch on the ones you handle and treat anything else as an unhandled conflict."
+                    },
+                    "details": {
+                      "type": "object",
+                      "properties": {
+                        "priceId": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "subscriptionCount": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "code"
+                  ]
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -7273,6 +7344,224 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/subscriptions/{id}/adjustments": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "List Adjustments",
+        "description": "Reads the adjustments on the subscription, oldest window first. A subscription with no adjustment returns an empty array. Paginated, because a long-running subscription accumulates one adjustment per rate change of every deal it has carried.",
+        "operationId": "listSubscriptionAdjustments",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The subscription ID"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "default": "10"
+            },
+            "description": "Number of adjustments to return"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "string",
+              "default": "0"
+            },
+            "description": "Number of adjustments to skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription's adjustments.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionAdjustmentsResponse"
+                },
+                "example": {
+                  "data": [
+                    {
+                      "object": "subscriptionAdjustment",
+                      "id": "subadj_a1b2c3d4e5f6g7h8",
+                      "subscriptionId": "sub_z1a2b3c4d5e6f7g8",
+                      "type": "percentageDiscount",
+                      "percentageDiscount": "0.35",
+                      "effectiveFrom": "2026-01-01T00:00:00Z",
+                      "effectiveTo": null,
+                      "description": "FY26 Growth",
+                      "createdAt": "2025-12-20T09:30:00Z"
+                    }
+                  ],
+                  "pagination": {
+                    "limit": 10,
+                    "offset": 0,
+                    "total": 1
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Create Adjustment",
+        "description": "Attaches a percentage discount to the subscription for a dated window. Every invoice calculated while the window is open carries one discount line for each discounted charge, and tax is assessed on the reduced amount. An invoice that already exists is not changed, including one still in draft — the discount reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change a rate before any invoice has issued under the discount, delete the adjustment and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.",
+        "operationId": "createSubscriptionAdjustment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The subscription ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSubscriptionAdjustmentRequest"
+              },
+              "example": {
+                "type": "percentageDiscount",
+                "percentageDiscount": "0.35",
+                "effectiveFrom": "2026-01-01T00:00:00Z",
+                "effectiveTo": null,
+                "description": "FY26 Growth",
+                "idempotencyKey": "adj_fy26_growth_001"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "An adjustment already exists for this idempotency key, and is returned unchanged. Nothing was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionAdjustment"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "The adjustment was created and applies from its effectiveFrom date.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionAdjustment"
+                },
+                "example": {
+                  "object": "subscriptionAdjustment",
+                  "id": "subadj_a1b2c3d4e5f6g7h8",
+                  "subscriptionId": "sub_z1a2b3c4d5e6f7g8",
+                  "type": "percentageDiscount",
+                  "percentageDiscount": "0.35",
+                  "effectiveFrom": "2026-01-01T00:00:00Z",
+                  "effectiveTo": null,
+                  "description": "FY26 Growth",
+                  "createdAt": "2025-12-20T09:30:00Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/subscriptions/{id}/adjustments/{adjustmentId}": {
+      "delete": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Delete Adjustment",
+        "description": "Deletes an adjustment that has not yet reached an issued invoice. No invoice changes: an invoice still in draft keeps its numbers, and loses the discount only when its period is calculated again. An adjustment that has already discounted an issued invoice cannot be deleted, because the invoice records why the customer was charged that amount. Its window cannot be shortened afterwards either, so set effectiveTo at creation time whenever the deal has a known end date.",
+        "operationId": "deleteSubscriptionAdjustment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The subscription ID"
+          },
+          {
+            "in": "path",
+            "name": "adjustmentId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The adjustment ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The adjustment was deleted. No invoice changed."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -14946,6 +15235,7 @@
         "type": "object",
         "oneOf": [
           {
+            "title": "StandardPriceProperties",
             "type": "object",
             "description": "Standard pricing model",
             "properties": {
@@ -14959,6 +15249,7 @@
             ]
           },
           {
+            "title": "DynamicPriceProperties",
             "type": "object",
             "description": "Dynamic pricing model",
             "properties": {
@@ -14977,51 +15268,43 @@
             ]
           },
           {
+            "title": "VolumePriceProperties",
             "type": "object",
             "description": "Volume pricing model",
             "properties": {
-              "default": {
-                "type": "string",
-                "description": "Default value for volume pricing"
-              },
-              "parameters": {
-                "type": "object",
-                "additionalProperties": false,
-                "required": [
-                  "function",
-                  "gradient",
-                  "min",
-                  "max"
-                ],
-                "properties": {
-                  "function": {
-                    "type": "string",
-                    "enum": [
-                      "linear"
-                    ],
-                    "description": "Function used for volume pricing calculations"
-                  },
-                  "gradient": {
-                    "type": "string",
-                    "description": "Gradient for volume pricing calculations"
-                  },
-                  "max": {
-                    "type": "string",
-                    "description": "Maximum value for volume pricing"
-                  },
-                  "min": {
-                    "type": "string",
-                    "description": "Minimum value for volume pricing"
+              "tiers": {
+                "type": "array",
+                "minItems": 1,
+                "description": "Ordered ladder of bands. The band is selected by the period's total metered usage, and its rate applies to every billed unit. A band matches when the quantity is less than or equal to its `upTo`, and the first matching band wins; the previous band's `upTo` is the exclusive lower bound, and the first band's floor is 0.",
+                "items": {
+                  "title": "VolumeTier",
+                  "type": "object",
+                  "required": [
+                    "upTo",
+                    "unitPrice"
+                  ],
+                  "properties": {
+                    "upTo": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Inclusive upper bound of the band, as a decimal string. Null on the last band only, which carries the remainder. Sample values: '100' bounds the band at 100 units, null leaves the top open."
+                    },
+                    "unitPrice": {
+                      "type": "string",
+                      "description": "Per-unit cost inside this band, as a decimal string, capped at 6 decimal places. Sample values: '5' represents $5 per unit, '0.004' represents $0.004 per unit."
+                    }
                   }
                 }
               }
             },
             "required": [
-              "parameters",
-              "default"
+              "tiers"
             ]
           },
           {
+            "title": "PercentagePriceProperties",
             "type": "object",
             "description": "Percentage pricing model",
             "properties": {
@@ -16067,6 +16350,137 @@
           "features",
           "lineItems"
         ]
+      },
+      "SubscriptionAdjustment": {
+        "type": "object",
+        "required": [
+          "object",
+          "id",
+          "subscriptionId",
+          "type",
+          "percentageDiscount",
+          "effectiveFrom",
+          "effectiveTo",
+          "description",
+          "createdAt"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "subscriptionAdjustment"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "description": "The adjustment ID"
+          },
+          "subscriptionId": {
+            "$ref": "#/components/schemas/SubscriptionId"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "percentageDiscount"
+            ]
+          },
+          "percentageDiscount": {
+            "type": "string",
+            "description": "The discount rate as a decimal fraction between 0 and 1. \"0.35\" means 35 percent."
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The first instant the discount applies. Inclusive."
+          },
+          "effectiveTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "The instant the discount stops applying. Exclusive. Null means the discount never stops."
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The deal's own name, shown on each discount line of the invoice."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SubscriptionAdjustmentsResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionAdjustment"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
+          }
+        }
+      },
+      "CreateSubscriptionAdjustmentRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "percentageDiscount",
+          "effectiveFrom"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "percentageDiscount"
+            ],
+            "description": "The kind of adjustment. `percentageDiscount` reduces every discountable charge by a rate."
+          },
+          "percentageDiscount": {
+            "type": "string",
+            "description": "The discount rate as a decimal fraction between 0 and 1, sent as a string. \"0.35\" means 35 percent. \"1\" means 100 percent, not 1 percent. At most 6 decimal places. A value of 0 or above 1 is rejected."
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The first instant the discount applies. Inclusive."
+          },
+          "effectiveTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "The instant the discount stops applying. Exclusive, so a window ending on the same date another begins neither overlaps nor leaves a gap. Null means the discount never stops, and it cannot be ended later — set an instant whenever the deal has a known end date. Must be after effectiveFrom."
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255,
+            "description": "The deal's own name, shown on each discount line of the invoice."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "A key of your choosing that makes a retry safe. Sending the same key against the same subscription returns the adjustment already created and creates no second one. Without a key a retried request creates a second adjustment, and two percentage discounts compound — two of 0.35 bill 57.75 percent off, not 35 percent.",
+            "example": "adj_fy26_growth_001"
+          }
+        }
       },
       "UserId": {
         "type": "string",

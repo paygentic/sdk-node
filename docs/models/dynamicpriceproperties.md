@@ -1,13 +1,13 @@
-# PriceProperties2
+# DynamicPriceProperties
 
 Dynamic pricing model
 
 ## Example Usage
 
 ```typescript
-import { PriceProperties2 } from "@paygentic/sdk/models";
+import { DynamicPriceProperties } from "@paygentic/sdk/models";
 
-let value: PriceProperties2 = {
+let value: DynamicPriceProperties = {
   maxPrice: "<value>",
   minPrice: "<value>",
 };

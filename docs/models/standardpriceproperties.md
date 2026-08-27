@@ -1,13 +1,13 @@
-# PriceProperties1
+# StandardPriceProperties
 
 Standard pricing model
 
 ## Example Usage
 
 ```typescript
-import { PriceProperties1 } from "@paygentic/sdk/models";
+import { StandardPriceProperties } from "@paygentic/sdk/models";
 
-let value: PriceProperties1 = {
+let value: StandardPriceProperties = {
   unitPrice: "<value>",
 };
 ```

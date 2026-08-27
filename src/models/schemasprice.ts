@@ -10,9 +10,9 @@ import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import { PriceFeature, PriceFeature$inboundSchema } from "./pricefeature.js";
 import { PriceModel, PriceModel$inboundSchema } from "./pricemodel.js";
 import {
-  PricePropertiesUnion,
-  PricePropertiesUnion$inboundSchema,
-} from "./pricepropertiesunion.js";
+  PriceProperties,
+  PriceProperties$inboundSchema,
+} from "./priceproperties.js";
 
 export const SchemasPriceObject = {
   Price: "price",
@@ -60,7 +60,7 @@ export type SchemasPrice = {
    */
   model?: PriceModel | undefined;
   paymentTerm: SchemasPricePaymentTerm;
-  properties: PricePropertiesUnion;
+  properties: PriceProperties;
   updatedAt: Date;
   /**
    * Features associated with this price
@@ -103,7 +103,7 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   invoiceDisplayName: z.string(),
   model: PriceModel$inboundSchema.optional(),
   paymentTerm: SchemasPricePaymentTerm$inboundSchema,
-  properties: PricePropertiesUnion$inboundSchema,
+  properties: PriceProperties$inboundSchema,
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   features: z.array(PriceFeature$inboundSchema).optional(),
   grantDiscountEnabled: z.boolean().default(false),

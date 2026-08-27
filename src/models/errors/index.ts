@@ -12,4 +12,5 @@ export * from "./paygenticdefaulterror.js";
 export * from "./paygenticerror.js";
 export * from "./responsevalidationerror.js";
 export * from "./sdkvalidationerror.js";
+export * from "./updateprice.js";
 export * from "./validationerror.js";

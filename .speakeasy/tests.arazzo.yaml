@@ -702,12 +702,8 @@ workflows:
             invoiceDisplayName: <value>
             paymentTerm: in_arrears
             properties:
-              default: <value>
-              parameters:
-                function: linear
-                gradient: <value>
-                max: <value>
-                min: <value>
+              maxPrice: <value>
+              minPrice: <value>
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
@@ -3837,4 +3833,51 @@ workflows:
               "x-file: example.file"
             type: simple
     x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSubscriptionAdjustments
+    steps:
+      - stepId: test
+        operationId: listSubscriptionAdjustments
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: "10"
+          - name: offset
+            in: query
+            value: "0"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[],"pagination":{"limit":447243,"offset":649593,"total":227366}}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: createSubscriptionAdjustment
+    steps:
+      - stepId: test
+        operationId: createSubscriptionAdjustment
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            effectiveFrom: "2024-10-22T16:42:25.269Z"
+            idempotencyKey: adj_fy26_growth_001
+            percentageDiscount: <value>
+            type: percentageDiscount
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":"<value>","effectiveFrom":"2024-03-20T15:18:14.515Z","effectiveTo":null,"description":"sham now fiercely aw oh what account","createdAt":"2025-10-07T13:07:46.511Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true

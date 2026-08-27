@@ -27,18 +27,20 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Update
+ * Create Adjustment
+ *
+ * @remarks
+ * Attaches a percentage discount to the subscription for a dated window. Every invoice calculated while the window is open carries one discount line for each discounted charge, and tax is assessed on the reduced amount. An invoice that already exists is not changed, including one still in draft — the discount reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change a rate before any invoice has issued under the discount, delete the adjustment and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.
  */
-export function pricesUpdate(
+export function subscriptionsCreateSubscriptionAdjustment(
   client: PaygenticCore,
-  request: operations.UpdatePriceRequest,
+  request: operations.CreateSubscriptionAdjustmentRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.SchemasPrice,
+    models.SubscriptionAdjustment,
     | errors.BadRequest
     | errors.ErrorT
-    | errors.UpdatePriceConflictError
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -58,15 +60,14 @@ export function pricesUpdate(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.UpdatePriceRequest,
+  request: operations.CreateSubscriptionAdjustmentRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.SchemasPrice,
+      models.SubscriptionAdjustment,
       | errors.BadRequest
       | errors.ErrorT
-      | errors.UpdatePriceConflictError
       | PaygenticError
       | ResponseValidationError
       | ConnectionError
@@ -81,14 +82,19 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.UpdatePriceRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.CreateSubscriptionAdjustmentRequest$outboundSchema.parse(
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload.RequestBody, { explode: true });
+  const body = encodeJSON("body", payload.CreateSubscriptionAdjustmentRequest, {
+    explode: true,
+  });
 
   const pathParams = {
     id: encodeSimple("id", payload.id, {
@@ -96,7 +102,7 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-  const path = pathToFunc("/v0/prices/{id}")(pathParams);
+  const path = pathToFunc("/v0/subscriptions/{id}/adjustments")(pathParams);
 
   const headers = new Headers(compactMap({
     "Content-Type": "application/json",
@@ -110,7 +116,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "updatePrice",
+    operationID: "createSubscriptionAdjustment",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -124,7 +130,7 @@ async function $do(
 
   const requestRes = client._createRequest(context, {
     security: requestSecurity,
-    method: "PATCH",
+    method: "POST",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
@@ -139,7 +145,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "404", "409", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "404", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -153,10 +159,9 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.SchemasPrice,
+    models.SubscriptionAdjustment,
     | errors.BadRequest
     | errors.ErrorT
-    | errors.UpdatePriceConflictError
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -166,10 +171,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.SchemasPrice$inboundSchema),
+    M.json([200, 201], models.SubscriptionAdjustment$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
-    M.jsonErr(409, errors.UpdatePriceConflictError$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

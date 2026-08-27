@@ -31,13 +31,8 @@ async function run() {
     invoiceDisplayName: "<value>",
     paymentTerm: "in_arrears",
     properties: {
-      default: "<value>",
-      parameters: {
-        function: "linear",
-        gradient: "<value>",
-        max: "<value>",
-        min: "<value>",
-      },
+      maxPrice: "<value>",
+      minPrice: "<value>",
     },
   });
 
@@ -66,13 +61,8 @@ async function run() {
     invoiceDisplayName: "<value>",
     paymentTerm: "in_arrears",
     properties: {
-      default: "<value>",
-      parameters: {
-        function: "linear",
-        gradient: "<value>",
-        max: "<value>",
-        min: "<value>",
-      },
+      maxPrice: "<value>",
+      minPrice: "<value>",
     },
   });
   if (res.ok) {
@@ -330,13 +320,14 @@ run();
 
 ### Errors
 
-| Error Type                   | Status Code                  | Content Type                 |
-| ---------------------------- | ---------------------------- | ---------------------------- |
-| errors.ErrorT                | 400                          | application/json             |
-| errors.ValidationError       | 400                          | application/json             |
-| errors.ErrorT                | 401, 403, 404                | application/json             |
-| errors.ErrorT                | 500                          | application/json             |
-| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+| Error Type                      | Status Code                     | Content Type                    |
+| ------------------------------- | ------------------------------- | ------------------------------- |
+| errors.ErrorT                   | 400                             | application/json                |
+| errors.ValidationError          | 400                             | application/json                |
+| errors.ErrorT                   | 401, 403, 404                   | application/json                |
+| errors.UpdatePriceConflictError | 409                             | application/json                |
+| errors.ErrorT                   | 500                             | application/json                |
+| errors.PaygenticDefaultError    | 4XX, 5XX                        | \*/\*                           |
 
 ## delete
 

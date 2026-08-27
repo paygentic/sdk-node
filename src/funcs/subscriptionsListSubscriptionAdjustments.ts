@@ -3,7 +3,7 @@
  */
 
 import { PaygenticCore } from "../core.js";
-import { encodeJSON, encodeSimple } from "../lib/encodings.js";
+import { encodeFormQuery, encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -27,18 +27,19 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Update
+ * List Adjustments
+ *
+ * @remarks
+ * Reads the adjustments on the subscription, oldest window first. A subscription with no adjustment returns an empty array. Paginated, because a long-running subscription accumulates one adjustment per rate change of every deal it has carried.
  */
-export function pricesUpdate(
+export function subscriptionsListSubscriptionAdjustments(
   client: PaygenticCore,
-  request: operations.UpdatePriceRequest,
+  request: operations.ListSubscriptionAdjustmentsRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.SchemasPrice,
-    | errors.BadRequest
+    models.SubscriptionAdjustmentsResponse,
     | errors.ErrorT
-    | errors.UpdatePriceConflictError
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -58,15 +59,13 @@ export function pricesUpdate(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.UpdatePriceRequest,
+  request: operations.ListSubscriptionAdjustmentsRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.SchemasPrice,
-      | errors.BadRequest
+      models.SubscriptionAdjustmentsResponse,
       | errors.ErrorT
-      | errors.UpdatePriceConflictError
       | PaygenticError
       | ResponseValidationError
       | ConnectionError
@@ -81,14 +80,15 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.UpdatePriceRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.ListSubscriptionAdjustmentsRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload.RequestBody, { explode: true });
+  const body = null;
 
   const pathParams = {
     id: encodeSimple("id", payload.id, {
@@ -96,10 +96,14 @@ async function $do(
       charEncoding: "percent",
     }),
   };
-  const path = pathToFunc("/v0/prices/{id}")(pathParams);
+  const path = pathToFunc("/v0/subscriptions/{id}/adjustments")(pathParams);
+
+  const query = encodeFormQuery({
+    "limit": payload.limit,
+    "offset": payload.offset,
+  });
 
   const headers = new Headers(compactMap({
-    "Content-Type": "application/json",
     Accept: "application/json",
   }));
 
@@ -110,7 +114,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "updatePrice",
+    operationID: "listSubscriptionAdjustments",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -124,10 +128,11 @@ async function $do(
 
   const requestRes = client._createRequest(context, {
     security: requestSecurity,
-    method: "PATCH",
+    method: "GET",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -139,7 +144,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "404", "409", "4XX", "500", "5XX"],
+    errorCodes: ["401", "403", "404", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -153,10 +158,8 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.SchemasPrice,
-    | errors.BadRequest
+    models.SubscriptionAdjustmentsResponse,
     | errors.ErrorT
-    | errors.UpdatePriceConflictError
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -166,10 +169,8 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.SchemasPrice$inboundSchema),
-    M.jsonErr(400, errors.BadRequest$inboundSchema),
+    M.json(200, models.SubscriptionAdjustmentsResponse$inboundSchema),
     M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
-    M.jsonErr(409, errors.UpdatePriceConflictError$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

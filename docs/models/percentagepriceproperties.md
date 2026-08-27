@@ -1,13 +1,13 @@
-# PriceProperties4
+# PercentagePriceProperties
 
 Percentage pricing model
 
 ## Example Usage
 
 ```typescript
-import { PriceProperties4 } from "@paygentic/sdk/models";
+import { PercentagePriceProperties } from "@paygentic/sdk/models";
 
-let value: PriceProperties4 = {
+let value: PercentagePriceProperties = {
   maxCharge: "<value>",
   minCharge: "<value>",
   percentage: "<value>",
