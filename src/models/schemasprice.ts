@@ -56,7 +56,7 @@ export type SchemasPrice = {
   createdAt: Date;
   invoiceDisplayName: string;
   /**
-   * Pricing model of a price as returned by the API. Includes legacy models ('dynamic', 'volume', 'percentage') retained for existing prices; only 'standard' can be created (see PriceModelInput).
+   * Pricing model of a price as returned by the API. Includes the legacy models ('dynamic', 'percentage') retained for existing prices; 'standard' and 'volume' can be created (see PriceModelInput).
    */
   model?: PriceModel | undefined;
   paymentTerm: SchemasPricePaymentTerm;
@@ -70,6 +70,10 @@ export type SchemasPrice = {
    * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
    */
   grantDiscountEnabled: boolean;
+  /**
+   * A fixed amount owed whole rather than a per-period rate. An obligation is not prorated over a partial first period: when a subscription starts before its billing anchor, no truncated stub is billed and the first charge is the full amount at the next anchor. An obligation also refuses an interval boundary that falls strictly inside one of its own billing periods, since part of an amount owed whole is not a thing to bill. Defaults to false, which is a rate and is today's behaviour for every price. Not supported on a metered price, whose amount resolves from usage at close.
+   */
+  isObligation: boolean;
   /**
    * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
    */
@@ -107,6 +111,7 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   features: z.array(PriceFeature$inboundSchema).optional(),
   grantDiscountEnabled: z.boolean().default(false),
+  isObligation: z.boolean().default(false),
   quantity: z.number().int(),
 });
 

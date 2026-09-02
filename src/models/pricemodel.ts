@@ -7,7 +7,7 @@ import * as openEnums from "../types/enums.js";
 import { OpenEnum } from "../types/enums.js";
 
 /**
- * Pricing model of a price as returned by the API. Includes legacy models ('dynamic', 'volume', 'percentage') retained for existing prices; only 'standard' can be created (see PriceModelInput).
+ * Pricing model of a price as returned by the API. Includes the legacy models ('dynamic', 'percentage') retained for existing prices; 'standard' and 'volume' can be created (see PriceModelInput).
  */
 export const PriceModel = {
   Standard: "standard",
@@ -16,7 +16,7 @@ export const PriceModel = {
   Percentage: "percentage",
 } as const;
 /**
- * Pricing model of a price as returned by the API. Includes legacy models ('dynamic', 'volume', 'percentage') retained for existing prices; only 'standard' can be created (see PriceModelInput).
+ * Pricing model of a price as returned by the API. Includes the legacy models ('dynamic', 'percentage') retained for existing prices; 'standard' and 'volume' can be created (see PriceModelInput).
  */
 export type PriceModel = OpenEnum<typeof PriceModel>;
 

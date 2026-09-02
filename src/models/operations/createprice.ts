@@ -32,7 +32,7 @@ export type CreatePriceRequest = {
    */
   pricingUnitId?: string | undefined;
   /**
-   * Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard'). Only 'standard' is accepted; for percentage/revenue-share use 'standard' with a unit-price multiplier. Legacy prices using 'dynamic'/'volume'/'percentage' stay readable and billable but cannot be created.
+   * Pricing calculation model. Required for billable metrics, optional for fees (defaults to 'standard'). 'standard' and 'volume' are accepted; fees only support 'standard'. For percentage/revenue-share use 'standard' with a unit-price multiplier. Legacy prices using 'dynamic'/'percentage' stay readable and billable but cannot be created.
    */
   model?: models.PriceModelInput | undefined;
   /**
@@ -53,6 +53,10 @@ export type CreatePriceRequest = {
    * When true, grants applied to a subscription will discount usage charged by this price. Only supported for standard metered prices.
    */
   grantDiscountEnabled?: boolean | undefined;
+  /**
+   * A fixed amount owed whole rather than a per-period rate. An obligation is not prorated over a partial first period: when a subscription starts before its billing anchor, no truncated stub is billed and the first charge is the full amount at the next anchor. An obligation also refuses an interval boundary that falls strictly inside one of its own billing periods, since part of an amount owed whole is not a thing to bill. Defaults to false, which is a rate and is today's behaviour for every price. Not supported on a metered price, whose amount resolves from usage at close.
+   */
+  isObligation?: boolean | undefined;
   /**
    * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
    */
@@ -76,6 +80,7 @@ export type CreatePriceRequest$Outbound = {
   properties: models.PriceProperties$Outbound;
   feature?: models.PriceFeatureInput$Outbound | undefined;
   grantDiscountEnabled: boolean;
+  isObligation: boolean;
   quantity?: number | undefined;
 };
 
@@ -95,6 +100,7 @@ export const CreatePriceRequest$outboundSchema: z.ZodType<
   properties: models.PriceProperties$outboundSchema,
   feature: models.PriceFeatureInput$outboundSchema.optional(),
   grantDiscountEnabled: z.boolean().default(false),
+  isObligation: z.boolean().default(false),
   quantity: z.number().int().optional(),
 });
 
