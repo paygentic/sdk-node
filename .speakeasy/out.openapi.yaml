@@ -16648,6 +16648,26 @@
             "nullable": true,
             "description": "The price this line was generated from, or `null` when the line has no originating charge. With `itemId` it says whether a missing tag is fixable: `priceId` set and `itemId` null means the charge was simply untagged, which tagging it and restamping resolves; both null means the line records a grant-credit purchase, which is deferred revenue and is never tagged. Any measure of outstanding mapping work must exclude the latter or it can never reach zero."
           },
+          "periodStart": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Start of the billed window this line covers, inclusive. Distinct from the invoice's own period, which is the union of its lines' windows (earliest start to latest end) and so covers time no single line bills on a mixed-timing invoice."
+          },
+          "periodEnd": {
+            "type": "string",
+            "format": "date-time",
+            "description": "End of the billed window this line covers, exclusive — the instant at `periodEnd` belongs to the next window. Equal to `periodStart` on a one-off charge, which bills at an instant and has no period grid."
+          },
+          "paymentTerm": {
+            "type": "string",
+            "enum": [
+              "in_advance",
+              "in_arrears",
+              null
+            ],
+            "nullable": true,
+            "description": "When this line falls due relative to the window it covers: `in_advance` at the window's start, `in_arrears` at its end. A metered line is stamped `in_arrears`, because usage is only known once the window closes — but metered rows written before that rule carry `null` and were never backfilled, so do not read a metered line's term as guaranteed. `null` also means the line is not billed on a term of its own: manual, grant-discount and adjustment lines carry no term, and an adjustment instead falls due with the charge it reduces. Treat `null` as an expected value on any line type, not an error."
+          },
           "invoiceDisplayName": {
             "type": "string",
             "description": "Display name for this line item on invoices"
@@ -17238,7 +17258,7 @@
               null
             ],
             "nullable": true,
-            "description": "Payment term for fee items. Null for metered/manual lines. `null` is listed in the enum as well as via `nullable` because OpenAPI 3.0 validators check the enum independently — `nullable: true` alone does not admit it, and createLineItem (which always returns null here) was emitting a schema-violating body."
+            "description": "When the line falls due relative to the window it covers. A fee line carries its price's term; a metered line is stamped `in_arrears`, though metered rows predating that rule carry `null`. Manual, grant-discount and adjustment lines are billed on no term of their own and are `null`. `null` is listed in the enum as well as via `nullable` because OpenAPI 3.0 validators check the enum independently — `nullable: true` alone does not admit it, and createLineItem (which always returns null here) was emitting a schema-violating body."
           },
           "subtotal": {
             "type": "string",

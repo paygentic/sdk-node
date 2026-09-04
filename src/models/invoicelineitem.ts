@@ -22,6 +22,20 @@ export const EventType = {
 export type EventType = ClosedEnum<typeof EventType>;
 
 /**
+ * When this line falls due relative to the window it covers: `in_advance` at the window's start, `in_arrears` at its end. A metered line is stamped `in_arrears`, because usage is only known once the window closes — but metered rows written before that rule carry `null` and were never backfilled, so do not read a metered line's term as guaranteed. `null` also means the line is not billed on a term of its own: manual, grant-discount and adjustment lines carry no term, and an adjustment instead falls due with the charge it reduces. Treat `null` as an expected value on any line type, not an error.
+ */
+export const InvoiceLineItemPaymentTerm = {
+  InAdvance: "in_advance",
+  InArrears: "in_arrears",
+} as const;
+/**
+ * When this line falls due relative to the window it covers: `in_advance` at the window's start, `in_arrears` at its end. A metered line is stamped `in_arrears`, because usage is only known once the window closes — but metered rows written before that rule carry `null` and were never backfilled, so do not read a metered line's term as guaranteed. `null` also means the line is not billed on a term of its own: manual, grant-discount and adjustment lines carry no term, and an adjustment instead falls due with the charge it reduces. Treat `null` as an expected value on any line type, not an error.
+ */
+export type InvoiceLineItemPaymentTerm = ClosedEnum<
+  typeof InvoiceLineItemPaymentTerm
+>;
+
+/**
  * Type of line item: 'charge' for regular billing, 'refund' for refunded items (amounts are negated)
  */
 export const InvoiceLineItemLineItemType = {
@@ -60,6 +74,18 @@ export type InvoiceLineItem = {
    * The price this line was generated from, or `null` when the line has no originating charge. With `itemId` it says whether a missing tag is fixable: `priceId` set and `itemId` null means the charge was simply untagged, which tagging it and restamping resolves; both null means the line records a grant-credit purchase, which is deferred revenue and is never tagged. Any measure of outstanding mapping work must exclude the latter or it can never reach zero.
    */
   priceId?: string | null | undefined;
+  /**
+   * Start of the billed window this line covers, inclusive. Distinct from the invoice's own period, which is the union of its lines' windows (earliest start to latest end) and so covers time no single line bills on a mixed-timing invoice.
+   */
+  periodStart?: Date | undefined;
+  /**
+   * End of the billed window this line covers, exclusive — the instant at `periodEnd` belongs to the next window. Equal to `periodStart` on a one-off charge, which bills at an instant and has no period grid.
+   */
+  periodEnd?: Date | undefined;
+  /**
+   * When this line falls due relative to the window it covers: `in_advance` at the window's start, `in_arrears` at its end. A metered line is stamped `in_arrears`, because usage is only known once the window closes — but metered rows written before that rule carry `null` and were never backfilled, so do not read a metered line's term as guaranteed. `null` also means the line is not billed on a term of its own: manual, grant-discount and adjustment lines carry no term, and an adjustment instead falls due with the charge it reduces. Treat `null` as an expected value on any line type, not an error.
+   */
+  paymentTerm?: InvoiceLineItemPaymentTerm | null | undefined;
   /**
    * Display name for this line item on invoices
    */
@@ -115,6 +141,11 @@ export const EventType$inboundSchema: z.ZodNativeEnum<typeof EventType> = z
   .nativeEnum(EventType);
 
 /** @internal */
+export const InvoiceLineItemPaymentTerm$inboundSchema: z.ZodNativeEnum<
+  typeof InvoiceLineItemPaymentTerm
+> = z.nativeEnum(InvoiceLineItemPaymentTerm);
+
+/** @internal */
 export const InvoiceLineItemLineItemType$inboundSchema: z.ZodNativeEnum<
   typeof InvoiceLineItemLineItemType
 > = z.nativeEnum(InvoiceLineItemLineItemType);
@@ -131,6 +162,11 @@ export const InvoiceLineItem$inboundSchema: z.ZodType<
   billableMetricId: z.string(),
   itemId: z.nullable(z.string()).optional(),
   priceId: z.nullable(z.string()).optional(),
+  periodStart: z.string().datetime({ offset: true }).transform(v => new Date(v))
+    .optional(),
+  periodEnd: z.string().datetime({ offset: true }).transform(v => new Date(v))
+    .optional(),
+  paymentTerm: z.nullable(InvoiceLineItemPaymentTerm$inboundSchema).optional(),
   invoiceDisplayName: z.string(),
   lineItemType: InvoiceLineItemLineItemType$inboundSchema,
   meterEventId: z.string(),
