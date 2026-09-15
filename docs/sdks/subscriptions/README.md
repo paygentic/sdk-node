@@ -558,7 +558,7 @@ run();
 | ---------------------------- | ---------------------------- | ---------------------------- |
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
-| errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 401, 403, 404, 429           | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
@@ -639,11 +639,11 @@ run();
 
 ## createSubscriptionAdjustment
 
-Attaches a percentage discount to the subscription for a dated window. Every invoice calculated while the window is open carries one discount line for each discounted charge, and tax is assessed on the reduced amount. An invoice that already exists is not changed, including one still in draft — the discount reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change a rate before any invoice has issued under the discount, delete the adjustment and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.
+Attaches an adjustment to the subscription for a dated window. A percentageDiscount reduces every discountable charge by a rate and carries one discount line per charge on the invoice. A usageDiscount takes a number of usage units off one metered price's billable quantity before that line is priced, so the line re-slots on a volume ladder and shows the corrected quantity; it emits no line of its own. Tax is assessed on the reduced amount either way. An invoice that already exists is not changed, including one still in draft — the adjustment reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change an adjustment before any invoice has issued under it, delete it and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.
 
-### Example Usage
+### Example Usage: percentageDiscount
 
-<!-- UsageSnippet language="typescript" operationID="createSubscriptionAdjustment" method="post" path="/v0/subscriptions/{id}/adjustments" -->
+<!-- UsageSnippet language="typescript" operationID="createSubscriptionAdjustment" method="post" path="/v0/subscriptions/{id}/adjustments" example="percentageDiscount" -->
 ```typescript
 import { Paygentic } from "@paygentic/sdk";
 
@@ -694,6 +694,77 @@ async function run() {
       effectiveTo: null,
       description: "FY26 Growth",
       idempotencyKey: "adj_fy26_growth_001",
+    },
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("subscriptionsCreateSubscriptionAdjustment failed:", res.error);
+  }
+}
+
+run();
+```
+### Example Usage: usageDiscount
+
+<!-- UsageSnippet language="typescript" operationID="createSubscriptionAdjustment" method="post" path="/v0/subscriptions/{id}/adjustments" example="usageDiscount" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.subscriptions.createSubscriptionAdjustment({
+    id: "<id>",
+    createSubscriptionAdjustmentRequest: {
+      type: "usageDiscount",
+      usageDiscount: "300",
+      targetPriceIds: [
+        "price_a1b2c3d4e5f6g7h8",
+      ],
+      effectiveFrom: new Date("2026-03-01T00:00:00Z"),
+      effectiveTo: new Date("2026-04-01T00:00:00Z"),
+      description: "March outage — bad events",
+      idempotencyKey: "adj_march_outage_001",
+    },
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { subscriptionsCreateSubscriptionAdjustment } from "@paygentic/sdk/funcs/subscriptionsCreateSubscriptionAdjustment.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await subscriptionsCreateSubscriptionAdjustment(paygentic, {
+    id: "<id>",
+    createSubscriptionAdjustmentRequest: {
+      type: "usageDiscount",
+      usageDiscount: "300",
+      targetPriceIds: [
+        "price_a1b2c3d4e5f6g7h8",
+      ],
+      effectiveFrom: new Date("2026-03-01T00:00:00Z"),
+      effectiveTo: new Date("2026-04-01T00:00:00Z"),
+      description: "March outage — bad events",
+      idempotencyKey: "adj_march_outage_001",
     },
   });
   if (res.ok) {

@@ -8,6 +8,7 @@ import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import { PriceFeature, PriceFeature$inboundSchema } from "./pricefeature.js";
+import { PriceTax, PriceTax$inboundSchema } from "./pricetax.js";
 
 export const PlanVersionPriceSlotObject = {
   Price: "price",
@@ -32,6 +33,20 @@ export const PlanVersionPriceSlotPaymentTerm = {
 } as const;
 export type PlanVersionPriceSlotPaymentTerm = ClosedEnum<
   typeof PlanVersionPriceSlotPaymentTerm
+>;
+
+/**
+ * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+ */
+export const PlanVersionPriceSlotRateType = {
+  Amount: "amount",
+  Proportion: "proportion",
+} as const;
+/**
+ * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+ */
+export type PlanVersionPriceSlotRateType = ClosedEnum<
+  typeof PlanVersionPriceSlotRateType
 >;
 
 /**
@@ -78,6 +93,14 @@ export type PlanVersionPriceSlot = {
    */
   isObligation: boolean;
   /**
+   * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+   */
+  rateType: PlanVersionPriceSlotRateType;
+  /**
+   * A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.
+   */
+  tax: PriceTax;
+  /**
    * Quantity used when generating invoice line items for this price. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
    */
   quantity: number;
@@ -103,6 +126,11 @@ export const PlanVersionPriceSlotPaymentTerm$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(PlanVersionPriceSlotPaymentTerm);
 
 /** @internal */
+export const PlanVersionPriceSlotRateType$inboundSchema: z.ZodNativeEnum<
+  typeof PlanVersionPriceSlotRateType
+> = z.nativeEnum(PlanVersionPriceSlotRateType);
+
+/** @internal */
 export const PlanVersionPriceSlot$inboundSchema: z.ZodType<
   PlanVersionPriceSlot,
   z.ZodTypeDef,
@@ -126,6 +154,8 @@ export const PlanVersionPriceSlot$inboundSchema: z.ZodType<
   features: z.array(PriceFeature$inboundSchema).optional(),
   grantDiscountEnabled: z.boolean().default(false),
   isObligation: z.boolean().default(false),
+  rateType: PlanVersionPriceSlotRateType$inboundSchema.default("amount"),
+  tax: PriceTax$inboundSchema,
   quantity: z.number().int().default(1),
   priceDeleted: z.boolean(),
 });

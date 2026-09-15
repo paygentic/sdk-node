@@ -13,6 +13,8 @@ import {
   PriceProperties,
   PriceProperties$inboundSchema,
 } from "./priceproperties.js";
+import { PriceTax, PriceTax$inboundSchema } from "./pricetax.js";
+import { RateType, RateType$inboundSchema } from "./ratetype.js";
 
 export const SchemasPriceObject = {
   Price: "price",
@@ -56,6 +58,10 @@ export type SchemasPrice = {
   createdAt: Date;
   invoiceDisplayName: string;
   /**
+   * Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'
+   */
+  invoiceDisplayGroup?: string | null | undefined;
+  /**
    * Pricing model of a price as returned by the API. Includes the legacy models ('dynamic', 'percentage') retained for existing prices; 'standard' and 'volume' can be created (see PriceModelInput).
    */
   model?: PriceModel | undefined;
@@ -74,6 +80,14 @@ export type SchemasPrice = {
    * A fixed amount owed whole rather than a per-period rate. An obligation is not prorated over a partial first period: when a subscription starts before its billing anchor, no truncated stub is billed and the first charge is the full amount at the next anchor. An obligation also refuses an interval boundary that falls strictly inside one of its own billing periods, since part of an amount owed whole is not a thing to bill. Defaults to false, which is a rate and is today's behaviour for every price. Not supported on a metered price, whose amount resolves from usage at close.
    */
   isObligation: boolean;
+  /**
+   * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+   */
+  rateType?: RateType | undefined;
+  /**
+   * A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.
+   */
+  tax: PriceTax;
   /**
    * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
    */
@@ -105,6 +119,7 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   billingCadence: z.nullable(z.string()).optional(),
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   invoiceDisplayName: z.string(),
+  invoiceDisplayGroup: z.nullable(z.string()).optional(),
   model: PriceModel$inboundSchema.optional(),
   paymentTerm: SchemasPricePaymentTerm$inboundSchema,
   properties: PriceProperties$inboundSchema,
@@ -112,6 +127,8 @@ export const SchemasPrice$inboundSchema: z.ZodType<
   features: z.array(PriceFeature$inboundSchema).optional(),
   grantDiscountEnabled: z.boolean().default(false),
   isObligation: z.boolean().default(false),
+  rateType: RateType$inboundSchema.optional(),
+  tax: PriceTax$inboundSchema,
   quantity: z.number().int(),
 });
 

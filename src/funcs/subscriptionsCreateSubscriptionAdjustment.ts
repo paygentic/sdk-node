@@ -30,7 +30,7 @@ import { Result } from "../types/fp.js";
  * Create Adjustment
  *
  * @remarks
- * Attaches a percentage discount to the subscription for a dated window. Every invoice calculated while the window is open carries one discount line for each discounted charge, and tax is assessed on the reduced amount. An invoice that already exists is not changed, including one still in draft — the discount reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change a rate before any invoice has issued under the discount, delete the adjustment and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.
+ * Attaches an adjustment to the subscription for a dated window. A percentageDiscount reduces every discountable charge by a rate and carries one discount line per charge on the invoice. A usageDiscount takes a number of usage units off one metered price's billable quantity before that line is priced, so the line re-slots on a volume ladder and shows the corrected quantity; it emits no line of its own. Tax is assessed on the reduced amount either way. An invoice that already exists is not changed, including one still in draft — the adjustment reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change an adjustment before any invoice has issued under it, delete it and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.
  */
 export function subscriptionsCreateSubscriptionAdjustment(
   client: PaygenticCore,

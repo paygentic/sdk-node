@@ -10,15 +10,14 @@ let value: CreateSubscriptionAdjustmentRequest = {
   createSubscriptionAdjustmentRequest: {
     type: "percentageDiscount",
     percentageDiscount: "<value>",
-    effectiveFrom: new Date("2025-12-21T02:17:09.871Z"),
-    idempotencyKey: "adj_fy26_growth_001",
+    effectiveFrom: new Date("2025-01-05T00:51:25.114Z"),
   },
 };
 ```
 
 ## Fields
 
-| Field                                                                                             | Type                                                                                              | Required                                                                                          | Description                                                                                       |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `id`                                                                                              | *string*                                                                                          | :heavy_check_mark:                                                                                | The subscription ID                                                                               |
-| `createSubscriptionAdjustmentRequest`                                                             | [models.CreateSubscriptionAdjustmentRequest](../../models/createsubscriptionadjustmentrequest.md) | :heavy_check_mark:                                                                                | N/A                                                                                               |
+| Field                                        | Type                                         | Required                                     | Description                                  |
+| -------------------------------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
+| `id`                                         | *string*                                     | :heavy_check_mark:                           | The subscription ID                          |
+| `createSubscriptionAdjustmentRequest`        | *models.CreateSubscriptionAdjustmentRequest* | :heavy_check_mark:                           | N/A                                          |

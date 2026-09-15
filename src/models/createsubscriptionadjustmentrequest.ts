@@ -3,76 +3,38 @@
  */
 
 import * as z from "zod/v3";
-import { ClosedEnum } from "../types/enums.js";
+import {
+  CreatePercentageDiscountAdjustment,
+  CreatePercentageDiscountAdjustment$Outbound,
+  CreatePercentageDiscountAdjustment$outboundSchema,
+} from "./createpercentagediscountadjustment.js";
+import {
+  CreateUsageDiscountAdjustment,
+  CreateUsageDiscountAdjustment$Outbound,
+  CreateUsageDiscountAdjustment$outboundSchema,
+} from "./createusagediscountadjustment.js";
 
 /**
- * The kind of adjustment. `percentageDiscount` reduces every discountable charge by a rate.
+ * One adjustment to attach to the subscription. The type decides which number the body carries: a rate for percentageDiscount, a unit count and one target price for usageDiscount.
  */
-export const CreateSubscriptionAdjustmentRequestType = {
-  PercentageDiscount: "percentageDiscount",
-} as const;
-/**
- * The kind of adjustment. `percentageDiscount` reduces every discountable charge by a rate.
- */
-export type CreateSubscriptionAdjustmentRequestType = ClosedEnum<
-  typeof CreateSubscriptionAdjustmentRequestType
->;
-
-export type CreateSubscriptionAdjustmentRequest = {
-  /**
-   * The kind of adjustment. `percentageDiscount` reduces every discountable charge by a rate.
-   */
-  type: CreateSubscriptionAdjustmentRequestType;
-  /**
-   * The discount rate as a decimal fraction between 0 and 1, sent as a string. "0.35" means 35 percent. "1" means 100 percent, not 1 percent. At most 6 decimal places. A value of 0 or above 1 is rejected.
-   */
-  percentageDiscount: string;
-  /**
-   * The first instant the discount applies. Inclusive.
-   */
-  effectiveFrom: Date;
-  /**
-   * The instant the discount stops applying. Exclusive, so a window ending on the same date another begins neither overlaps nor leaves a gap. Null means the discount never stops, and it cannot be ended later — set an instant whenever the deal has a known end date. Must be after effectiveFrom.
-   */
-  effectiveTo?: Date | null | undefined;
-  /**
-   * The deal's own name, shown on each discount line of the invoice.
-   */
-  description?: string | null | undefined;
-  /**
-   * A key of your choosing that makes a retry safe. Sending the same key against the same subscription returns the adjustment already created and creates no second one. Without a key a retried request creates a second adjustment, and two percentage discounts compound — two of 0.35 bill 57.75 percent off, not 35 percent.
-   */
-  idempotencyKey?: string | undefined;
-};
+export type CreateSubscriptionAdjustmentRequest =
+  | CreatePercentageDiscountAdjustment
+  | CreateUsageDiscountAdjustment;
 
 /** @internal */
-export const CreateSubscriptionAdjustmentRequestType$outboundSchema:
-  z.ZodNativeEnum<typeof CreateSubscriptionAdjustmentRequestType> = z
-    .nativeEnum(CreateSubscriptionAdjustmentRequestType);
-
-/** @internal */
-export type CreateSubscriptionAdjustmentRequest$Outbound = {
-  type: string;
-  percentageDiscount: string;
-  effectiveFrom: string;
-  effectiveTo?: string | null | undefined;
-  description?: string | null | undefined;
-  idempotencyKey?: string | undefined;
-};
+export type CreateSubscriptionAdjustmentRequest$Outbound =
+  | CreatePercentageDiscountAdjustment$Outbound
+  | CreateUsageDiscountAdjustment$Outbound;
 
 /** @internal */
 export const CreateSubscriptionAdjustmentRequest$outboundSchema: z.ZodType<
   CreateSubscriptionAdjustmentRequest$Outbound,
   z.ZodTypeDef,
   CreateSubscriptionAdjustmentRequest
-> = z.object({
-  type: CreateSubscriptionAdjustmentRequestType$outboundSchema,
-  percentageDiscount: z.string(),
-  effectiveFrom: z.date().transform(v => v.toISOString()),
-  effectiveTo: z.nullable(z.date().transform(v => v.toISOString())).optional(),
-  description: z.nullable(z.string()).optional(),
-  idempotencyKey: z.string().optional(),
-});
+> = z.union([
+  CreatePercentageDiscountAdjustment$outboundSchema,
+  CreateUsageDiscountAdjustment$outboundSchema,
+]);
 
 export function createSubscriptionAdjustmentRequestToJSON(
   createSubscriptionAdjustmentRequest: CreateSubscriptionAdjustmentRequest,

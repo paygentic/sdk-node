@@ -852,9 +852,9 @@
         "summary": "List by Merchant",
         "operationId": "listCustomers",
         "x-rate-limit": {
-          "max": 10,
-          "platformMax": 60,
-          "timeWindow": "1 second",
+          "max": 60,
+          "platformMax": 360,
+          "timeWindow": "6 seconds",
           "errorMessage": "Too many customer list requests. Please wait before trying again."
         },
         "parameters": [
@@ -1000,6 +1000,16 @@
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
+          },
+          "429": {
+            "description": "Too many requests. The allowance of the merchant for this operation is spent. Wait for the number of seconds in the retry-after header. Then send the request again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -4380,6 +4390,11 @@
                     "type": "string",
                     "description": "Line item label shown on customer invoices. Sample values: 'Claude Token Consumption', 'Storage Usage (GB)', 'Inference API Calls', 'Image Generation Count', 'Training Compute Hours', 'Data Transfer (TB)'"
                   },
+                  "invoiceDisplayGroup": {
+                    "type": "string",
+                    "description": "Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'",
+                    "nullable": true
+                  },
                   "paymentTerm": {
                     "type": "string",
                     "enum": [
@@ -4409,6 +4424,13 @@
                     "type": "boolean",
                     "default": false,
                     "description": "A fixed amount owed whole rather than a per-period rate. An obligation is not prorated over a partial first period: when a subscription starts before its billing anchor, no truncated stub is billed and the first charge is the full amount at the next anchor. An obligation also refuses an interval boundary that falls strictly inside one of its own billing periods, since part of an amount owed whole is not a thing to bill. Defaults to false, which is a rate and is today's behaviour for every price. Not supported on a metered price, whose amount resolves from usage at close."
+                  },
+                  "rateType": {
+                    "$ref": "#/components/schemas/RateType",
+                    "default": "amount"
+                  },
+                  "tax": {
+                    "$ref": "#/components/schemas/PriceTax"
                   },
                   "quantity": {
                     "$ref": "#/components/schemas/PriceQuantity",
@@ -4725,6 +4747,11 @@
                     "type": "string",
                     "description": "Updated invoice line item label. Sample values: 'LLM Token Usage', 'Storage Charges', 'API Call Fees'"
                   },
+                  "invoiceDisplayGroup": {
+                    "type": "string",
+                    "description": "Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'",
+                    "nullable": true
+                  },
                   "model": {
                     "allOf": [
                       {
@@ -4767,6 +4794,12 @@
                   "isObligation": {
                     "type": "boolean",
                     "description": "A fixed amount owed whole rather than a per-period rate. An obligation is not prorated over a partial first period: when a subscription starts before its billing anchor, no truncated stub is billed and the first charge is the full amount at the next anchor. An obligation also refuses an interval boundary that falls strictly inside one of its own billing periods, since part of an amount owed whole is not a thing to bill. Defaults to false, which is a rate and is today's behaviour for every price. Not supported on a metered price, whose amount resolves from usage at close."
+                  },
+                  "rateType": {
+                    "$ref": "#/components/schemas/RateType"
+                  },
+                  "tax": {
+                    "$ref": "#/components/schemas/PriceTax"
                   },
                   "quantity": {
                     "$ref": "#/components/schemas/PriceQuantity"
@@ -7354,6 +7387,16 @@
           "404": {
             "$ref": "#/components/responses/NotFound"
           },
+          "429": {
+            "description": "Too many requests. The reconciliation allowance for this subscription is spent. Wait for the number of seconds in the retry-after header. Then send the request again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
@@ -7413,16 +7456,33 @@
                       "subscriptionId": "sub_z1a2b3c4d5e6f7g8",
                       "type": "percentageDiscount",
                       "percentageDiscount": "0.35",
+                      "usageDiscount": null,
+                      "targetPriceIds": [],
                       "effectiveFrom": "2026-01-01T00:00:00Z",
                       "effectiveTo": null,
                       "description": "FY26 Growth",
                       "createdAt": "2025-12-20T09:30:00Z"
+                    },
+                    {
+                      "object": "subscriptionAdjustment",
+                      "id": "subadj_h8g7f6e5d4c3b2a1",
+                      "subscriptionId": "sub_z1a2b3c4d5e6f7g8",
+                      "type": "usageDiscount",
+                      "percentageDiscount": null,
+                      "usageDiscount": "300",
+                      "targetPriceIds": [
+                        "price_k1l2m3n4o5p6q7r8"
+                      ],
+                      "effectiveFrom": "2026-03-01T00:00:00Z",
+                      "effectiveTo": "2026-04-01T00:00:00Z",
+                      "description": "March outage",
+                      "createdAt": "2026-04-02T11:05:00Z"
                     }
                   ],
                   "pagination": {
                     "limit": 10,
                     "offset": 0,
-                    "total": 1
+                    "total": 2
                   }
                 }
               }
@@ -7447,7 +7507,7 @@
           "Subscriptions"
         ],
         "summary": "Create Adjustment",
-        "description": "Attaches a percentage discount to the subscription for a dated window. Every invoice calculated while the window is open carries one discount line for each discounted charge, and tax is assessed on the reduced amount. An invoice that already exists is not changed, including one still in draft — the discount reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change a rate before any invoice has issued under the discount, delete the adjustment and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.",
+        "description": "Attaches an adjustment to the subscription for a dated window. A percentageDiscount reduces every discountable charge by a rate and carries one discount line per charge on the invoice. A usageDiscount takes a number of usage units off one metered price's billable quantity before that line is priced, so the line re-slots on a volume ladder and shows the corrected quantity; it emits no line of its own. Tax is assessed on the reduced amount either way. An invoice that already exists is not changed, including one still in draft — the adjustment reaches the periods that close after it is created. There is no update operation, and a window cannot be changed after it is created. To change an adjustment before any invoice has issued under it, delete it and create a replacement. Once an invoice has issued the adjustment is permanent, so set effectiveTo at creation time whenever the deal has a known end date.",
         "operationId": "createSubscriptionAdjustment",
         "parameters": [
           {
@@ -7467,13 +7527,32 @@
               "schema": {
                 "$ref": "#/components/schemas/CreateSubscriptionAdjustmentRequest"
               },
-              "example": {
-                "type": "percentageDiscount",
-                "percentageDiscount": "0.35",
-                "effectiveFrom": "2026-01-01T00:00:00Z",
-                "effectiveTo": null,
-                "description": "FY26 Growth",
-                "idempotencyKey": "adj_fy26_growth_001"
+              "examples": {
+                "percentageDiscount": {
+                  "summary": "A 35% deal discount, open-ended",
+                  "value": {
+                    "type": "percentageDiscount",
+                    "percentageDiscount": "0.35",
+                    "effectiveFrom": "2026-01-01T00:00:00Z",
+                    "effectiveTo": null,
+                    "description": "FY26 Growth",
+                    "idempotencyKey": "adj_fy26_growth_001"
+                  }
+                },
+                "usageDiscount": {
+                  "summary": "300 erroneous units taken off one metered price for a single period",
+                  "value": {
+                    "type": "usageDiscount",
+                    "usageDiscount": "300",
+                    "targetPriceIds": [
+                      "price_a1b2c3d4e5f6g7h8"
+                    ],
+                    "effectiveFrom": "2026-03-01T00:00:00Z",
+                    "effectiveTo": "2026-04-01T00:00:00Z",
+                    "description": "March outage — bad events",
+                    "idempotencyKey": "adj_march_outage_001"
+                  }
+                }
               }
             }
           }
@@ -7505,7 +7584,9 @@
                   "effectiveFrom": "2026-01-01T00:00:00Z",
                   "effectiveTo": null,
                   "description": "FY26 Growth",
-                  "createdAt": "2025-12-20T09:30:00Z"
+                  "createdAt": "2025-12-20T09:30:00Z",
+                  "usageDiscount": null,
+                  "targetPriceIds": []
                 }
               }
             }
@@ -14756,6 +14837,32 @@
           }
         }
       },
+      "PriceTax": {
+        "type": "object",
+        "description": "A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.",
+        "required": [
+          "supplyScope"
+        ],
+        "properties": {
+          "supplyScope": {
+            "type": "string",
+            "enum": [
+              "IN_SCOPE",
+              "OUTSIDE_SCOPE"
+            ],
+            "description": "Whether this price's money is consideration for a supply — the one tax fact only you can state, because it is settled when you agree the deal rather than derived from what was sold. `IN_SCOPE` (the default) is consideration: it enters the taxable amount, positive as a charge or negative as a reduction in the price of the supply it applies to. `OUTSIDE_SCOPE` money is not consideration for anything, so it does not change the taxable amount, carries no tax, does not appear on the tax document, and nets into the amount payable after tax. This means \"not consideration for a supply\" — it does NOT mean \"a supply outside this jurisdiction\": exports and place-of-supply answers are worked out from the addresses on the sale by the tax provider, and are never declared on a price. How a supply is then classified — standard, zero-rated, exempt — is the tax provider's determination and is not set here either. Omit the whole `tax` object to leave a price in scope; there is deliberately no schema default on this property, so that a misspelt key is refused rather than silently defaulted."
+          },
+          "outsideScopeLabel": {
+            "type": "string",
+            "enum": [
+              "CASHBACK",
+              null
+            ],
+            "nullable": true,
+            "description": "What an `OUTSIDE_SCOPE` amount is called in the invoice totals, so the wording follows the declaration rather than being retyped per price. Required when `supplyScope` is `OUTSIDE_SCOPE`, and rejected otherwise. `CASHBACK` is the only value today, and a price declaring it must use the `standard` model and must not carry a positive `unitPrice` — a cashback is money paid back, not charged."
+          }
+        }
+      },
       "Price": {
         "type": "object",
         "required": [
@@ -14768,7 +14875,8 @@
           "properties",
           "createdAt",
           "updatedAt",
-          "quantity"
+          "quantity",
+          "tax"
         ],
         "properties": {
           "id": {
@@ -14854,6 +14962,18 @@
             "type": "boolean",
             "default": false,
             "description": "A fixed amount owed whole rather than a per-period rate. An obligation is not prorated over a partial first period: when a subscription starts before its billing anchor, no truncated stub is billed and the first charge is the full amount at the next anchor. An obligation also refuses an interval boundary that falls strictly inside one of its own billing periods, since part of an amount owed whole is not a thing to bill. Defaults to false, which is a rate and is today's behaviour for every price. Not supported on a metered price, whose amount resolves from usage at close."
+          },
+          "rateType": {
+            "type": "string",
+            "enum": [
+              "amount",
+              "proportion"
+            ],
+            "default": "amount",
+            "description": "What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency."
+          },
+          "tax": {
+            "$ref": "#/components/schemas/PriceTax"
           },
           "quantity": {
             "type": "integer",
@@ -15344,6 +15464,14 @@
           }
         ]
       },
+      "RateType": {
+        "type": "string",
+        "enum": [
+          "amount",
+          "proportion"
+        ],
+        "description": "What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency."
+      },
       "PriceQuantity": {
         "type": "integer",
         "minimum": 0,
@@ -15360,7 +15488,8 @@
           "properties",
           "createdAt",
           "updatedAt",
-          "quantity"
+          "quantity",
+          "tax"
         ],
         "properties": {
           "id": {
@@ -15401,6 +15530,11 @@
           "invoiceDisplayName": {
             "type": "string"
           },
+          "invoiceDisplayGroup": {
+            "type": "string",
+            "description": "Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'",
+            "nullable": true
+          },
           "model": {
             "$ref": "#/components/schemas/PriceModel"
           },
@@ -15434,6 +15568,13 @@
             "type": "boolean",
             "default": false,
             "description": "A fixed amount owed whole rather than a per-period rate. An obligation is not prorated over a partial first period: when a subscription starts before its billing anchor, no truncated stub is billed and the first charge is the full amount at the next anchor. An obligation also refuses an interval boundary that falls strictly inside one of its own billing periods, since part of an amount owed whole is not a thing to bill. Defaults to false, which is a rate and is today's behaviour for every price. Not supported on a metered price, whose amount resolves from usage at close."
+          },
+          "rateType": {
+            "$ref": "#/components/schemas/RateType",
+            "default": "amount"
+          },
+          "tax": {
+            "$ref": "#/components/schemas/PriceTax"
           },
           "quantity": {
             "$ref": "#/components/schemas/PriceQuantity"
@@ -16379,6 +16520,8 @@
           "subscriptionId",
           "type",
           "percentageDiscount",
+          "usageDiscount",
+          "targetPriceIds",
           "effectiveFrom",
           "effectiveTo",
           "description",
@@ -16401,17 +16544,35 @@
           "type": {
             "type": "string",
             "enum": [
-              "percentageDiscount"
+              "percentageDiscount",
+              "usageDiscount"
             ]
           },
           "percentageDiscount": {
-            "type": "string",
-            "description": "The discount rate as a decimal fraction between 0 and 1. \"0.35\" means 35 percent."
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The discount rate as a decimal fraction between 0 and 1. \"0.35\" means 35 percent. Null on a usageDiscount, which carries a unit count instead."
+          },
+          "usageDiscount": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The number of usage units taken off the targeted line's billable quantity. Null on a percentageDiscount, which carries a rate instead."
+          },
+          "targetPriceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The prices this adjustment reduces. Exactly one metered price on a usageDiscount; empty on a percentageDiscount, which reduces every discountable charge."
           },
           "effectiveFrom": {
             "type": "string",
             "format": "date-time",
-            "description": "The first instant the discount applies. Inclusive."
+            "description": "Opens the window. Read per type: INCLUSIVE on a percentageDiscount, whose window is prorated by day overlap; EXCLUSIVE on a usageDiscount, which corrects a line whose period END falls strictly after this instant."
           },
           "effectiveTo": {
             "type": [
@@ -16419,14 +16580,14 @@
               "null"
             ],
             "format": "date-time",
-            "description": "The instant the discount stops applying. Exclusive. Null means the discount never stops."
+            "description": "Closes the window, or null for never. Read per type: EXCLUSIVE on a percentageDiscount; INCLUSIVE on a usageDiscount, which corrects a line whose period END falls on or before this instant."
           },
           "description": {
             "type": [
               "string",
               "null"
             ],
-            "description": "The deal's own name, shown on each discount line of the invoice."
+            "description": "The deal's own name. Shown on each discount line a percentageDiscount emits; a usageDiscount emits no line, so its description is carried here only."
           },
           "createdAt": {
             "type": "string",
@@ -16452,7 +16613,7 @@
           }
         }
       },
-      "CreateSubscriptionAdjustmentRequest": {
+      "CreatePercentageDiscountAdjustment": {
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -16466,7 +16627,7 @@
             "enum": [
               "percentageDiscount"
             ],
-            "description": "The kind of adjustment. `percentageDiscount` reduces every discountable charge by a rate."
+            "description": "Reduces every discountable charge on the invoice by a rate."
           },
           "percentageDiscount": {
             "type": "string",
@@ -16499,6 +16660,85 @@
             "maxLength": 255,
             "description": "A key of your choosing that makes a retry safe. Sending the same key against the same subscription returns the adjustment already created and creates no second one. Without a key a retried request creates a second adjustment, and two percentage discounts compound — two of 0.35 bill 57.75 percent off, not 35 percent.",
             "example": "adj_fy26_growth_001"
+          }
+        }
+      },
+      "CreateUsageDiscountAdjustment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "usageDiscount",
+          "targetPriceIds",
+          "effectiveFrom"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "usageDiscount"
+            ],
+            "description": "Reduces one metered price's billable quantity by a number of usage units, before the line is priced."
+          },
+          "usageDiscount": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$",
+            "description": "The number of usage units to take off the billable quantity, sent as a plain decimal string. \"300\" waives 300 units. Greater than 0, at most 6 decimal places, fewer than 35 digits before the point. Plain notation only — no sign, exponent, hex or digit separators, so \"1_000\" and \"1e3\" are rejected rather than read as 1000. Applied in full or not at all — a unit count is never prorated across a partial window — and once per matching line, so an invoice bundling several periods is corrected on each of them. The line is floored at 0, so a discount larger than the billable quantity zeroes it rather than crediting."
+          },
+          "targetPriceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 1,
+            "description": "Exactly one metered price of this subscription, priced as standard or volume. Usage units are not comparable across metrics, so a usage discount names the one price it reduces. A dynamic or percentage price is refused: its quantity is a monetary amount rather than a unit count. A price billing at a negative rate (a usage-scaled rebate) is refused too, because removing its units would raise the invoice."
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Opens the window. Exclusive for this type: a metered line is corrected when its period END falls after this instant, so a window opening exactly when a period ends belongs to the next period, not that one. Set it to the start of the period you are correcting."
+          },
+          "effectiveTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Closes the window. INCLUSIVE for this type, unlike percentageDiscount: a metered line bills in arrears, so set this to the exact period end you are correcting and that period is covered. Null means the discount never stops — it then takes its full unit count off this price on EVERY later invoice, so set both bounds whenever you are correcting one period. Must be after effectiveFrom."
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255,
+            "description": "Your own name for this correction. A usageDiscount emits no invoice line, so this is printed nowhere on the invoice — it is returned on the adjustment for your own records."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "A key of your choosing that makes a retry safe. Sending the same key against the same subscription returns the adjustment already created and creates no second one. Without a key a retried request creates a second adjustment, and usage discounts against one price SUM — two of \"300\" waive 600 units, not 300. Nothing else detects a duplicate.",
+            "example": "adj_mar_outage_001"
+          }
+        }
+      },
+      "CreateSubscriptionAdjustmentRequest": {
+        "description": "One adjustment to attach to the subscription. The type decides which number the body carries: a rate for percentageDiscount, a unit count and one target price for usageDiscount.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/CreatePercentageDiscountAdjustment"
+          },
+          {
+            "$ref": "#/components/schemas/CreateUsageDiscountAdjustment"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "percentageDiscount": "#/components/schemas/CreatePercentageDiscountAdjustment",
+            "usageDiscount": "#/components/schemas/CreateUsageDiscountAdjustment"
           }
         }
       },
@@ -17249,6 +17489,13 @@
             "type": "string",
             "nullable": true,
             "description": "Raw metered usage. Null for fee/manual lines"
+          },
+          "usageDiscountIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The subscription adjustments of type `usageDiscount` that reduced this line's billable `quantity`. Empty for every other line. Where this is non-empty, `quantity` is below `meteredQuantity` because an operator waived units, rather than because a grant covered them."
           },
           "paymentTerm": {
             "type": "string",

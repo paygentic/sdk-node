@@ -40,6 +40,10 @@ export type CreatePriceRequest = {
    */
   invoiceDisplayName: string;
   /**
+   * Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'
+   */
+  invoiceDisplayGroup?: string | null | undefined;
+  /**
    * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
    */
   paymentTerm: CreatePricePaymentTerm;
@@ -58,6 +62,14 @@ export type CreatePriceRequest = {
    */
   isObligation?: boolean | undefined;
   /**
+   * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+   */
+  rateType?: models.RateType | undefined;
+  /**
+   * A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.
+   */
+  tax?: models.PriceTax | undefined;
+  /**
    * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
    */
   quantity?: number | undefined;
@@ -75,12 +87,15 @@ export type CreatePriceRequest$Outbound = {
   pricingUnitId?: string | undefined;
   model?: string | undefined;
   invoiceDisplayName: string;
+  invoiceDisplayGroup?: string | null | undefined;
   paymentTerm: string;
   billingCadence?: string | null | undefined;
   properties: models.PriceProperties$Outbound;
   feature?: models.PriceFeatureInput$Outbound | undefined;
   grantDiscountEnabled: boolean;
   isObligation: boolean;
+  rateType?: string | undefined;
+  tax?: models.PriceTax$Outbound | undefined;
   quantity?: number | undefined;
 };
 
@@ -95,12 +110,15 @@ export const CreatePriceRequest$outboundSchema: z.ZodType<
   pricingUnitId: z.string().optional(),
   model: models.PriceModelInput$outboundSchema.optional(),
   invoiceDisplayName: z.string(),
+  invoiceDisplayGroup: z.nullable(z.string()).optional(),
   paymentTerm: CreatePricePaymentTerm$outboundSchema,
   billingCadence: z.nullable(z.string()).optional(),
   properties: models.PriceProperties$outboundSchema,
   feature: models.PriceFeatureInput$outboundSchema.optional(),
   grantDiscountEnabled: z.boolean().default(false),
   isObligation: z.boolean().default(false),
+  rateType: models.RateType$outboundSchema.optional(),
+  tax: models.PriceTax$outboundSchema.optional(),
   quantity: z.number().int().optional(),
 });
 

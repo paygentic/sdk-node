@@ -11,13 +11,17 @@ let value: SubscriptionAdjustmentsResponse = {
       object: "subscriptionAdjustment",
       id: "<id>",
       subscriptionId: "<id>",
-      type: "percentageDiscount",
+      type: "usageDiscount",
       percentageDiscount: "<value>",
-      effectiveFrom: new Date("2026-05-22T17:26:28.653Z"),
-      effectiveTo: new Date("2026-12-01T10:13:41.565Z"),
-      description:
-        "ew language unexpectedly fatally carelessly even sanity insidious",
-      createdAt: new Date("2025-08-27T09:09:53.038Z"),
+      usageDiscount: "<value>",
+      targetPriceIds: [
+        "<value 1>",
+        "<value 2>",
+      ],
+      effectiveFrom: new Date("2026-02-12T06:29:40.059Z"),
+      effectiveTo: new Date("2024-11-11T04:29:18.664Z"),
+      description: "incidentally officially why",
+      createdAt: new Date("2024-04-12T05:47:40.543Z"),
     },
   ],
   pagination: {

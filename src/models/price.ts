@@ -8,6 +8,7 @@ import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import { PriceFeature, PriceFeature$inboundSchema } from "./pricefeature.js";
+import { PriceTax, PriceTax$inboundSchema } from "./pricetax.js";
 
 export const PriceObject = {
   Price: "price",
@@ -27,6 +28,18 @@ export const PricePaymentTerm = {
   InAdvance: "in_advance",
 } as const;
 export type PricePaymentTerm = ClosedEnum<typeof PricePaymentTerm>;
+
+/**
+ * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+ */
+export const PriceRateType = {
+  Amount: "amount",
+  Proportion: "proportion",
+} as const;
+/**
+ * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+ */
+export type PriceRateType = ClosedEnum<typeof PriceRateType>;
 
 export type Price = {
   /**
@@ -69,6 +82,14 @@ export type Price = {
    */
   isObligation: boolean;
   /**
+   * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
+   */
+  rateType: PriceRateType;
+  /**
+   * A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.
+   */
+  tax: PriceTax;
+  /**
    * Quantity used when generating invoice line items for this price. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
    */
   quantity: number;
@@ -86,6 +107,11 @@ export const PriceModel1$inboundSchema: z.ZodNativeEnum<typeof PriceModel1> = z
 export const PricePaymentTerm$inboundSchema: z.ZodNativeEnum<
   typeof PricePaymentTerm
 > = z.nativeEnum(PricePaymentTerm);
+
+/** @internal */
+export const PriceRateType$inboundSchema: z.ZodNativeEnum<
+  typeof PriceRateType
+> = z.nativeEnum(PriceRateType);
 
 /** @internal */
 export const Price$inboundSchema: z.ZodType<Price, z.ZodTypeDef, unknown> = z
@@ -112,6 +138,8 @@ export const Price$inboundSchema: z.ZodType<Price, z.ZodTypeDef, unknown> = z
     features: z.array(PriceFeature$inboundSchema).optional(),
     grantDiscountEnabled: z.boolean().default(false),
     isObligation: z.boolean().default(false),
+    rateType: PriceRateType$inboundSchema.default("amount"),
+    tax: PriceTax$inboundSchema,
     quantity: z.number().int().default(1),
   });
 

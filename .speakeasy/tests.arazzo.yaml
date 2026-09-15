@@ -710,7 +710,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z","grantDiscountEnabled":false,"isObligation":false,"quantity":252475}
+              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2026-10-05T13:07:49.806Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2024-01-14T15:09:30.569Z","grantDiscountEnabled":false,"isObligation":false,"tax":{"supplyScope":"IN_SCOPE"},"quantity":252475}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -747,7 +747,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"in_arrears","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false,"isObligation":false,"quantity":296918}
+              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2024-11-21T10:08:56.515Z","invoiceDisplayName":"<value>","paymentTerm":"in_arrears","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2025-07-08T01:37:23.087Z","grantDiscountEnabled":false,"isObligation":false,"tax":{"supplyScope":"IN_SCOPE"},"quantity":296918}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -767,7 +767,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z","grantDiscountEnabled":false,"isObligation":false,"quantity":616565}
+              {"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-11-06T18:08:04.065Z","invoiceDisplayName":"<value>","paymentTerm":"in_advance","properties":{"maxCharge":"<value>","minCharge":"<value>","percentage":"<value>"},"updatedAt":"2026-06-07T02:13:50.582Z","grantDiscountEnabled":false,"isObligation":false,"tax":{"supplyScope":"OUTSIDE_SCOPE"},"quantity":616565}
             type: simple
     x-speakeasy-test-group: Prices
     x-speakeasy-test-rebuild: true
@@ -3791,7 +3791,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan_version","versionNumber":969073,"status":"archived","isDefault":true,"subscriptionCount":265555,"updatedAt":"2026-12-13T23:04:42.440Z","prices":[{"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-02-20T18:42:50.017Z","invoiceDisplayName":"<value>","model":"dynamic","paymentTerm":"in_advance","properties":{"key":"<value>"},"updatedAt":"2024-10-10T06:17:20.359Z","grantDiscountEnabled":false,"isObligation":false,"quantity":1,"priceDeleted":true}]}
+              {"id":"<id>","object":"plan_version","versionNumber":969073,"status":"archived","isDefault":true,"subscriptionCount":265555,"updatedAt":"2026-12-13T23:04:42.440Z","prices":[{"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-02-20T18:42:50.017Z","invoiceDisplayName":"<value>","model":"dynamic","paymentTerm":"in_advance","properties":{"key":"<value>"},"updatedAt":"2024-10-10T06:17:20.359Z","grantDiscountEnabled":false,"isObligation":false,"rateType":"amount","tax":{"supplyScope":"OUTSIDE_SCOPE"},"quantity":1,"priceDeleted":true}]}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -3878,7 +3878,61 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":"<value>","effectiveFrom":"2024-03-20T15:18:14.515Z","effectiveTo":null,"description":"sham now fiercely aw oh what account","createdAt":"2025-10-07T13:07:46.511Z"}
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: createSubscriptionAdjustment-percentageDiscount
+    steps:
+      - stepId: test
+        operationId: createSubscriptionAdjustment
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            description: FY26 Growth
+            effectiveFrom: "2026-01-01T00:00:00Z"
+            effectiveTo: null
+            idempotencyKey: adj_fy26_growth_001
+            percentageDiscount: "0.35"
+            type: percentageDiscount
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: createSubscriptionAdjustment-usageDiscount
+    steps:
+      - stepId: test
+        operationId: createSubscriptionAdjustment
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            description: March outage — bad events
+            effectiveFrom: "2026-03-01T00:00:00Z"
+            effectiveTo: "2026-04-01T00:00:00Z"
+            idempotencyKey: adj_march_outage_001
+            targetPriceIds:
+              - price_a1b2c3d4e5f6g7h8
+            type: usageDiscount
+            usageDiscount: "300"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
