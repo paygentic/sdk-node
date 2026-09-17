@@ -97,6 +97,14 @@ export type PlanVersionPriceSlot = {
    */
   rateType: PlanVersionPriceSlotRateType;
   /**
+   * Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'
+   */
+  invoiceDisplayGroup?: string | null | undefined;
+  /**
+   * Unique identifier for a pricing unit
+   */
+  pricingUnitId?: string | undefined;
+  /**
    * A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.
    */
   tax: PriceTax;
@@ -155,6 +163,8 @@ export const PlanVersionPriceSlot$inboundSchema: z.ZodType<
   grantDiscountEnabled: z.boolean().default(false),
   isObligation: z.boolean().default(false),
   rateType: PlanVersionPriceSlotRateType$inboundSchema.default("amount"),
+  invoiceDisplayGroup: z.nullable(z.string()).optional(),
+  pricingUnitId: z.string().optional(),
   tax: PriceTax$inboundSchema,
   quantity: z.number().int().default(1),
   priceDeleted: z.boolean(),

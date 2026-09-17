@@ -14837,6 +14837,11 @@
           }
         }
       },
+      "PricingUnitId": {
+        "type": "string",
+        "pattern": "^pu_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for a pricing unit"
+      },
       "PriceTax": {
         "type": "object",
         "description": "A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.",
@@ -14972,6 +14977,15 @@
             "default": "amount",
             "description": "What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency."
           },
+          "invoiceDisplayGroup": {
+            "type": "string",
+            "description": "Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'",
+            "nullable": true
+          },
+          "pricingUnitId": {
+            "$ref": "#/components/schemas/PricingUnitId",
+            "description": "The pricing unit this price is denominated in (credits). Present when the price draws down a credit pool instead of charging real currency."
+          },
           "tax": {
             "$ref": "#/components/schemas/PriceTax"
           },
@@ -14987,11 +15001,6 @@
       "WalletNamespaceId": {
         "type": "string",
         "description": "Unique identifier for a wallet namespace"
-      },
-      "PricingUnitId": {
-        "type": "string",
-        "pattern": "^pu_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for a pricing unit"
       },
       "PlanCreditAllocation": {
         "type": "object",
@@ -15404,15 +15413,17 @@
           {
             "title": "VolumePriceProperties",
             "type": "object",
+            "additionalProperties": false,
             "description": "Volume pricing model",
             "properties": {
               "tiers": {
                 "type": "array",
                 "minItems": 1,
-                "description": "Ordered ladder of bands. The band is selected by the period's total metered usage, and its rate applies to every billed unit. A band matches when the quantity is less than or equal to its `upTo`, and the first matching band wins; the previous band's `upTo` is the exclusive lower bound, and the first band's floor is 0.",
+                "description": "Ordered ladder of bands. The band is selected by the period's total metered usage, and its rate applies to every billed unit. A band matches when the quantity is less than or equal to its `upTo`, and the first matching band wins; the previous band's `upTo` is the exclusive lower bound, and the first band's floor is 0. Exactly one band carries `upTo: null` and it must be the last. Bounds must strictly ascend. The API refuses a ladder whose bounds are out of order rather than sorting it. Because one rate applies to every unit, a total can fall as usage rises: on a ladder of '100' at '5' then null at '3', 100 units bill 500 and 101 units bill 303.",
                 "items": {
                   "title": "VolumeTier",
                   "type": "object",
+                  "additionalProperties": false,
                   "required": [
                     "upTo",
                     "unitPrice"
@@ -15423,11 +15434,11 @@
                         "string",
                         "null"
                       ],
-                      "description": "Inclusive upper bound of the band, as a decimal string. Null on the last band only, which carries the remainder. Sample values: '100' bounds the band at 100 units, null leaves the top open."
+                      "description": "Inclusive upper bound of the band, as a decimal string greater than 0, capped at 6 decimal places, and less than 1e65 in magnitude. Bounds must strictly ascend across the ladder. Null on the last band only, which carries the remainder. Sample values: '100' bounds the band at 100 units, null leaves the top open."
                     },
                     "unitPrice": {
                       "type": "string",
-                      "description": "Per-unit cost inside this band, as a decimal string, capped at 6 decimal places. Sample values: '5' represents $5 per unit, '0.004' represents $0.004 per unit."
+                      "description": "Per-unit cost inside this band, as a decimal string, capped at 6 decimal places and less than 1e65 in magnitude. Must be zero or greater. Unlike StandardPriceProperties.unitPrice, a band rate cannot be negative. To bill a usage-scaled rebate, use model 'standard' with a negative unitPrice. Sample values: '5' represents $5 per unit, '0.004' represents $0.004 per unit."
                     }
                   }
                 }
@@ -16683,7 +16694,7 @@
           "usageDiscount": {
             "type": "string",
             "pattern": "^[0-9]+(\\.[0-9]+)?$",
-            "description": "The number of usage units to take off the billable quantity, sent as a plain decimal string. \"300\" waives 300 units. Greater than 0, at most 6 decimal places, fewer than 35 digits before the point. Plain notation only — no sign, exponent, hex or digit separators, so \"1_000\" and \"1e3\" are rejected rather than read as 1000. Applied in full or not at all — a unit count is never prorated across a partial window — and once per matching line, so an invoice bundling several periods is corrected on each of them. The line is floored at 0, so a discount larger than the billable quantity zeroes it rather than crediting."
+            "description": "The number of usage units to take off the billable quantity, sent as a plain decimal string. \"300\" waives 300 units. Greater than 0, at most 6 decimal places, fewer than 35 digits before the point. Plain notation only — no sign, exponent, hex or digit separators, so \"1_000\" and \"1e3\" are rejected rather than read as 1000. Applied in full or not at all — a unit count is never prorated across a partial window — and once per matching line, so an invoice bundling several periods is corrected on each of them. The line is floored at 0, so a discount larger than the billable quantity zeroes it rather than crediting. On a volume ladder the corrected quantity also re-selects the band, so a waiver that crosses a boundary can bill more than the uncorrected line did: waiving 300 of 1000 units on a ladder of 2.00 up to 999 and 1.00 beyond bills 700 at 2.00 for 1400.00, where the 1000 units billed 1000.00. That is the ladder's price for the corrected usage — what a customer who genuinely used 700 units pays — so check the ladder before waiving units near a band boundary."
           },
           "targetPriceIds": {
             "type": "array",
