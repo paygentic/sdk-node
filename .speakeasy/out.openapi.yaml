@@ -7399,6 +7399,21 @@
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
+          },
+          "503": {
+            "description": "The subscription's billing timeline could not be resolved. No entitlement or grant was changed. Wait for the number of seconds in the retry-after header, then send the request again.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "error": "service_unavailable",
+                  "message": "Could not resolve the subscription's billing timeline; retry the reconciliation",
+                  "code": "SUBSCRIPTION_TIMELINE_RESOLUTION_FAILED"
+                }
+              }
+            }
           }
         }
       }
@@ -17549,7 +17564,7 @@
           "estimatedSubtotal": {
             "type": "string",
             "nullable": true,
-            "description": "Real-time estimated subtotal based on current metered usage. Only present for type=metered items during an active billing period. Null for fee/manual items or when estimation is unavailable."
+            "description": "Real-time estimated subtotal for a line whose amount is not final yet: current usage for a metered item, the rate the subscription is on for a fee. Null for manual items, and for any line whose amount is already final or cannot be estimated."
           }
         }
       },
@@ -18607,6 +18622,29 @@
             "items": {
               "$ref": "#/components/schemas/CurrencyBreakdownEntry"
             }
+          },
+          "revenueRange": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.",
+            "required": [
+              "from",
+              "to"
+            ],
+            "properties": {
+              "from": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Earliest invoice issue instant."
+              },
+              "to": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Latest invoice issue instant."
+              }
+            }
           }
         }
       },
@@ -18716,6 +18754,29 @@
             "maxItems": 100,
             "items": {
               "type": "string"
+            }
+          },
+          "revenueRange": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.",
+            "required": [
+              "from",
+              "to"
+            ],
+            "properties": {
+              "from": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Earliest invoice issue instant."
+              },
+              "to": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Latest invoice issue instant."
+              }
             }
           }
         }

@@ -153,7 +153,7 @@ export type LineItem = {
    */
   estimatedMeteredQuantity?: string | null | undefined;
   /**
-   * Real-time estimated subtotal based on current metered usage. Only present for type=metered items during an active billing period. Null for fee/manual items or when estimation is unavailable.
+   * Real-time estimated subtotal for a line whose amount is not final yet: current usage for a metered item, the rate the subscription is on for a fee. Null for manual items, and for any line whose amount is already final or cannot be estimated.
    */
   estimatedSubtotal?: string | null | undefined;
 };

@@ -11,6 +11,20 @@ import {
   ProfitabilityRow$inboundSchema,
 } from "./profitabilityrow.js";
 
+/**
+ * Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.
+ */
+export type ProfitabilitySummaryResponseRevenueRange = {
+  /**
+   * Earliest invoice issue instant.
+   */
+  from: Date;
+  /**
+   * Latest invoice issue instant.
+   */
+  to: Date;
+};
+
 export type ProfitabilitySummaryResponse = {
   /**
    * Object type identifier
@@ -28,7 +42,37 @@ export type ProfitabilitySummaryResponse = {
    * Non-fatal warnings collected during cost discovery (e.g. an individual cost query failed). Empty array on a clean run.
    */
   warnings?: Array<string> | undefined;
+  /**
+   * Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.
+   */
+  revenueRange?: ProfitabilitySummaryResponseRevenueRange | null | undefined;
 };
+
+/** @internal */
+export const ProfitabilitySummaryResponseRevenueRange$inboundSchema: z.ZodType<
+  ProfitabilitySummaryResponseRevenueRange,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  from: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  to: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+});
+
+export function profitabilitySummaryResponseRevenueRangeFromJSON(
+  jsonString: string,
+): SafeParseResult<
+  ProfitabilitySummaryResponseRevenueRange,
+  SDKValidationError
+> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ProfitabilitySummaryResponseRevenueRange$inboundSchema.parse(
+        JSON.parse(x),
+      ),
+    `Failed to parse 'ProfitabilitySummaryResponseRevenueRange' from JSON`,
+  );
+}
 
 /** @internal */
 export const ProfitabilitySummaryResponse$inboundSchema: z.ZodType<
@@ -40,6 +84,9 @@ export const ProfitabilitySummaryResponse$inboundSchema: z.ZodType<
   currency: z.string(),
   rows: z.array(ProfitabilityRow$inboundSchema),
   warnings: z.array(z.string()).optional(),
+  revenueRange: z.nullable(
+    z.lazy(() => ProfitabilitySummaryResponseRevenueRange$inboundSchema),
+  ).optional(),
 });
 
 export function profitabilitySummaryResponseFromJSON(

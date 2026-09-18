@@ -27,6 +27,20 @@ import {
   RevenueTrendBucket$inboundSchema,
 } from "./revenuetrendbucket.js";
 
+/**
+ * Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.
+ */
+export type RevenueSummaryResponseRevenueRange = {
+  /**
+   * Earliest invoice issue instant.
+   */
+  from: Date;
+  /**
+   * Latest invoice issue instant.
+   */
+  to: Date;
+};
+
 export type RevenueSummaryResponse = {
   /**
    * Object type identifier
@@ -66,7 +80,32 @@ export type RevenueSummaryResponse = {
    * Per-currency revenue aggregates (only present when groupBy=currency is specified). Primary currency appears first, then alphabetical by ISO code. When present, top-level netRevenue, invoices, payments, and trend fields are omitted.
    */
   currencyBreakdown?: Array<CurrencyBreakdownEntry> | undefined;
+  /**
+   * Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.
+   */
+  revenueRange?: RevenueSummaryResponseRevenueRange | null | undefined;
 };
+
+/** @internal */
+export const RevenueSummaryResponseRevenueRange$inboundSchema: z.ZodType<
+  RevenueSummaryResponseRevenueRange,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  from: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  to: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+});
+
+export function revenueSummaryResponseRevenueRangeFromJSON(
+  jsonString: string,
+): SafeParseResult<RevenueSummaryResponseRevenueRange, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      RevenueSummaryResponseRevenueRange$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'RevenueSummaryResponseRevenueRange' from JSON`,
+  );
+}
 
 /** @internal */
 export const RevenueSummaryResponse$inboundSchema: z.ZodType<
@@ -85,6 +124,9 @@ export const RevenueSummaryResponse$inboundSchema: z.ZodType<
   trend: z.array(RevenueTrendBucket$inboundSchema).optional(),
   groupBreakdown: z.array(GroupInvoiceSummary$inboundSchema).optional(),
   currencyBreakdown: z.array(CurrencyBreakdownEntry$inboundSchema).optional(),
+  revenueRange: z.nullable(
+    z.lazy(() => RevenueSummaryResponseRevenueRange$inboundSchema),
+  ).optional(),
 });
 
 export function revenueSummaryResponseFromJSON(
