@@ -34,6 +34,20 @@ export type Pagination = {
   offset: number;
 };
 
+/**
+ * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.
+ */
+export type CostReportResponseCostRange = {
+  /**
+   * Earliest cost event instant.
+   */
+  from: Date;
+  /**
+   * Latest cost event instant.
+   */
+  to: Date;
+};
+
 export type CostReportResponse = {
   object: CostReportResponseObject;
   /**
@@ -70,6 +84,10 @@ export type CostReportResponse = {
    */
   warnings?: Array<string> | undefined;
   pagination: Pagination;
+  /**
+   * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.
+   */
+  costRange?: CostReportResponseCostRange | null | undefined;
 };
 
 /** @internal */
@@ -116,6 +134,26 @@ export function paginationFromJSON(
 }
 
 /** @internal */
+export const CostReportResponseCostRange$inboundSchema: z.ZodType<
+  CostReportResponseCostRange,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  from: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  to: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+});
+
+export function costReportResponseCostRangeFromJSON(
+  jsonString: string,
+): SafeParseResult<CostReportResponseCostRange, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CostReportResponseCostRange$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CostReportResponseCostRange' from JSON`,
+  );
+}
+
+/** @internal */
 export const CostReportResponse$inboundSchema: z.ZodType<
   CostReportResponse,
   z.ZodTypeDef,
@@ -132,6 +170,8 @@ export const CostReportResponse$inboundSchema: z.ZodType<
   availableDimensions: z.array(z.string()),
   warnings: z.array(z.string()).optional(),
   pagination: z.lazy(() => Pagination$inboundSchema),
+  costRange: z.nullable(z.lazy(() => CostReportResponseCostRange$inboundSchema))
+    .optional(),
 });
 
 export function costReportResponseFromJSON(

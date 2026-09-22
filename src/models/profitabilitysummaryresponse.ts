@@ -25,6 +25,20 @@ export type ProfitabilitySummaryResponseRevenueRange = {
   to: Date;
 };
 
+/**
+ * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.
+ */
+export type ProfitabilitySummaryResponseCostRange = {
+  /**
+   * Earliest cost event instant.
+   */
+  from: Date;
+  /**
+   * Latest cost event instant.
+   */
+  to: Date;
+};
+
 export type ProfitabilitySummaryResponse = {
   /**
    * Object type identifier
@@ -46,6 +60,10 @@ export type ProfitabilitySummaryResponse = {
    * Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.
    */
   revenueRange?: ProfitabilitySummaryResponseRevenueRange | null | undefined;
+  /**
+   * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.
+   */
+  costRange?: ProfitabilitySummaryResponseCostRange | null | undefined;
 };
 
 /** @internal */
@@ -75,6 +93,27 @@ export function profitabilitySummaryResponseRevenueRangeFromJSON(
 }
 
 /** @internal */
+export const ProfitabilitySummaryResponseCostRange$inboundSchema: z.ZodType<
+  ProfitabilitySummaryResponseCostRange,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  from: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  to: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+});
+
+export function profitabilitySummaryResponseCostRangeFromJSON(
+  jsonString: string,
+): SafeParseResult<ProfitabilitySummaryResponseCostRange, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      ProfitabilitySummaryResponseCostRange$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'ProfitabilitySummaryResponseCostRange' from JSON`,
+  );
+}
+
+/** @internal */
 export const ProfitabilitySummaryResponse$inboundSchema: z.ZodType<
   ProfitabilitySummaryResponse,
   z.ZodTypeDef,
@@ -86,6 +125,9 @@ export const ProfitabilitySummaryResponse$inboundSchema: z.ZodType<
   warnings: z.array(z.string()).optional(),
   revenueRange: z.nullable(
     z.lazy(() => ProfitabilitySummaryResponseRevenueRange$inboundSchema),
+  ).optional(),
+  costRange: z.nullable(
+    z.lazy(() => ProfitabilitySummaryResponseCostRange$inboundSchema),
   ).optional(),
 });
 
