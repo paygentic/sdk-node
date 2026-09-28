@@ -21,7 +21,7 @@ export type ProfitabilityRow = {
    */
   customerName: string;
   /**
-   * Net revenue (paid + outstanding) in unit currency, with two decimals.
+   * Revenue excluding tax (paid + outstanding invoices issued in the period), in unit currency, with two decimals.
    */
   netRevenue: string;
   /**

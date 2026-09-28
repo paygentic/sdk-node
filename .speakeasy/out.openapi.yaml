@@ -149,7 +149,8 @@
                   "description",
                   "unit",
                   "merchantId",
-                  "aggregation"
+                  "aggregation",
+                  "eventType"
                 ],
                 "properties": {
                   "aggregation": {
@@ -194,12 +195,13 @@
                   },
                   "eventType": {
                     "type": "string",
+                    "minLength": 1,
                     "description": "CloudEvents type for meter routing. Links this billable metric to the metering service."
                   },
                   "valueProperty": {
                     "type": "string",
                     "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$",
-                    "description": "JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Required for SUM/AVG/MIN/MAX/LATEST aggregations."
+                    "description": "JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Required for SUM/AVG/MIN/MAX/LATEST aggregations. Optional for UNIQUE_COUNT, which counts distinct values of this property when set and distinct events when not. Not stored for COUNT."
                   },
                   "groupBy": {
                     "type": "object",
@@ -507,14 +509,14 @@
                   },
                   "eventType": {
                     "type": "string",
-                    "nullable": true,
-                    "description": "CloudEvents type for meter routing."
+                    "minLength": 1,
+                    "description": "CloudEvents type for meter routing. Cannot be cleared: every billable metric needs one."
                   },
                   "valueProperty": {
                     "type": "string",
                     "nullable": true,
                     "pattern": "^\\$\\.[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)*$",
-                    "description": "JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`)."
+                    "description": "JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Cannot be cleared on a SUM/AVG/MIN/MAX/LATEST metric. Not stored for COUNT."
                   },
                   "groupBy": {
                     "type": "object",
@@ -7630,7 +7632,7 @@
           "Subscriptions"
         ],
         "summary": "Delete Adjustment",
-        "description": "Deletes an adjustment that has not yet reached an issued invoice. No invoice changes: an invoice still in draft keeps its numbers, and loses the discount only when its period is calculated again. An adjustment that has already discounted an issued invoice cannot be deleted, because the invoice records why the customer was charged that amount. Its window cannot be shortened afterwards either, so set effectiveTo at creation time whenever the deal has a known end date.",
+        "description": "Stops an adjustment from applying to any period it has not already been billed on. An adjustment that has never reached an issued invoice is removed, and the response is 204. An adjustment that has already been billed on an issued invoice is RETRACTED instead: its effectiveTo moves to the end of the last period it was billed on, the adjustment still exists, and the response is 200 carrying it. Read a 200 as \"shortened\", not as \"removed\". No invoice changes either way: an issued invoice keeps its numbers, and a draft loses the adjustment only when its period is calculated again. Deleting the same adjustment again returns the same 200 and the same window.",
         "operationId": "deleteSubscriptionAdjustment",
         "parameters": [
           {
@@ -7653,8 +7655,18 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "The adjustment was retracted to the end of the last period it was billed on. It still exists, with a shortened window.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionAdjustment"
+                }
+              }
+            }
+          },
           "204": {
-            "description": "The adjustment was deleted. No invoice changed."
+            "description": "The adjustment was removed. It had never been billed on an issued invoice."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
@@ -10360,7 +10372,7 @@
                   "currentTime": {
                     "type": "string",
                     "format": "date-time",
-                    "description": "Initial time for the test clock (defaults to current time). Cannot be more than 1 hour in the past to prevent accidental backdating. The 1-hour buffer accounts for clock drift and network delays."
+                    "description": "Initial time for the test clock (defaults to current time). May be in the past, which lets a subscription on the clock start on a past date and bill its periods as the clock advances."
                   },
                   "description": {
                     "type": "string",
@@ -16547,6 +16559,8 @@
           "type",
           "percentageDiscount",
           "usageDiscount",
+          "minimumQuantity",
+          "maximumQuantity",
           "targetPriceIds",
           "effectiveFrom",
           "effectiveTo",
@@ -16571,7 +16585,9 @@
             "type": "string",
             "enum": [
               "percentageDiscount",
-              "usageDiscount"
+              "usageDiscount",
+              "minimumQuantity",
+              "maximumQuantity"
             ]
           },
           "percentageDiscount": {
@@ -16579,26 +16595,40 @@
               "string",
               "null"
             ],
-            "description": "The discount rate as a decimal fraction between 0 and 1. \"0.35\" means 35 percent. Null on a usageDiscount, which carries a unit count instead."
+            "description": "The discount rate as a decimal fraction between 0 and 1. \"0.35\" means 35 percent. Null on every other type."
           },
           "usageDiscount": {
             "type": [
               "string",
               "null"
             ],
-            "description": "The number of usage units taken off the targeted line's billable quantity. Null on a percentageDiscount, which carries a rate instead."
+            "description": "The number of usage units taken off the targeted line's billable quantity. Null on every other type."
+          },
+          "minimumQuantity": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The contracted minimum quantity billed for one period of the targeted price. Null on every other type."
+          },
+          "maximumQuantity": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The contracted maximum quantity billed for one period of the targeted price. Null on every other type."
           },
           "targetPriceIds": {
             "type": "array",
             "items": {
               "type": "string"
             },
-            "description": "The prices this adjustment reduces. Exactly one metered price on a usageDiscount; empty on a percentageDiscount, which reduces every discountable charge."
+            "description": "The prices this adjustment applies to. Exactly one price on a usageDiscount; empty on a percentageDiscount, which reduces every discountable charge. A minimumQuantity or maximumQuantity is created against exactly one price, and later lists more than one only where that charge moved to a new price — a floating subscription moving to a new plan version, or a price edit freezing the subscription's version. Every id listed is the same charge, and the bound applies to whichever one a period bills under."
           },
           "effectiveFrom": {
             "type": "string",
             "format": "date-time",
-            "description": "Opens the window. Read per type: INCLUSIVE on a percentageDiscount, whose window is prorated by day overlap; EXCLUSIVE on a usageDiscount, which corrects a line whose period END falls strictly after this instant."
+            "description": "Opens the window. Read per type: INCLUSIVE on a percentageDiscount, whose window is prorated by day overlap; EXCLUSIVE on a usageDiscount and on both quantity bounds, which apply to a line whose period END falls strictly after this instant."
           },
           "effectiveTo": {
             "type": [
@@ -16606,14 +16636,14 @@
               "null"
             ],
             "format": "date-time",
-            "description": "Closes the window, or null for never. Read per type: EXCLUSIVE on a percentageDiscount; INCLUSIVE on a usageDiscount, which corrects a line whose period END falls on or before this instant."
+            "description": "Closes the window, or null for never. Read per type: EXCLUSIVE on a percentageDiscount; INCLUSIVE on a usageDiscount and on both quantity bounds, which apply to a line whose period END falls on or before this instant. A delete shortens this to the end of the last period the adjustment has already been billed on."
           },
           "description": {
             "type": [
               "string",
               "null"
             ],
-            "description": "The deal's own name. Shown on each discount line a percentageDiscount emits; a usageDiscount emits no line, so its description is carried here only."
+            "description": "The deal's own name. Shown on each discount line a percentageDiscount emits; every other type emits no line, so its description is carried here only."
           },
           "createdAt": {
             "type": "string",
@@ -16750,21 +16780,151 @@
           }
         }
       },
+      "CreateMinimumQuantityAdjustment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "minimumQuantity",
+          "targetPriceIds",
+          "effectiveFrom"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "minimumQuantity"
+            ],
+            "description": "Bills at least the contracted quantity on one price, whatever the customer actually used."
+          },
+          "minimumQuantity": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$",
+            "description": "The contracted minimum quantity for one billing period of the target price, sent as a plain decimal string. Not negative, at most 6 decimal places, fewer than 35 digits before the point. Plain notation only — no sign, exponent, hex or digit separators, so \"1_000\" and \"1e3\" are rejected rather than read as 1000. \"4\" bills 4 seats in a period the customer used 2 in; a value of 0 binds nothing. Measured over the whole billing period, not per line: where a period is split into several lines, each line's quantity counts for its share of the period, and every line is scaled by the same factor to bring the period to the minimum. Several bounds of the same direction on one price do not add up — the greatest minimum and the least maximum are the ones that apply."
+          },
+          "targetPriceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 1,
+            "description": "Exactly one price of this subscription. A metered price is accepted, and so is a price whose supply is outside the scope of VAT: a bound constrains a measurement rather than an amount of consideration. A price that bills once rather than per period is refused, because there is no repeating period for the bound to be measured over."
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Opens the window. Exclusive for this type: a line is bounded when its period END falls after this instant, so a window opening exactly when a period ends belongs to the next period, not that one. The bound is never prorated — a window opening mid-period applies to that whole period."
+          },
+          "effectiveTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Closes the window. INCLUSIVE for this type, like usageDiscount and unlike percentageDiscount: set this to the exact period end you are bounding and that period is covered. Null means the bound never stops. Must be after effectiveFrom."
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255,
+            "description": "Your own name for this term. A quantity bound emits no invoice line, so this is printed nowhere on the invoice — it is returned on the adjustment for your own records."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "A key of your choosing that makes a retry safe. Sending the same key against the same subscription returns the adjustment already created and creates no second one. Without a key a retried request creates a second bound; two identical bounds change nothing, because bounds of one direction do not add up.",
+            "example": "adj_fortress_seats_001"
+          }
+        }
+      },
+      "CreateMaximumQuantityAdjustment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "maximumQuantity",
+          "targetPriceIds",
+          "effectiveFrom"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "maximumQuantity"
+            ],
+            "description": "Bills at most the contracted quantity on one price, whatever the customer actually used."
+          },
+          "maximumQuantity": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$",
+            "description": "The contracted maximum quantity for one billing period of the target price, sent as a plain decimal string. Not negative, at most 6 decimal places, fewer than 35 digits before the point. Plain notation only — no sign, exponent, hex or digit separators, so \"1_000\" and \"1e3\" are rejected rather than read as 1000. \"4\" bills 4 seats in a period the customer used 9 in; a value of 0 bills nothing at all. Measured over the whole billing period, not per line: where a period is split into several lines, each line's quantity counts for its share of the period, and every line is scaled by the same factor to bring the period to the maximum. Several bounds of the same direction on one price do not add up — the greatest minimum and the least maximum are the ones that apply."
+          },
+          "targetPriceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "maxItems": 1,
+            "description": "Exactly one price of this subscription. A metered price is accepted, and so is a price whose supply is outside the scope of VAT: a bound constrains a measurement rather than an amount of consideration. A price that bills once rather than per period is refused, because there is no repeating period for the bound to be measured over."
+          },
+          "effectiveFrom": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Opens the window. Exclusive for this type: a line is bounded when its period END falls after this instant, so a window opening exactly when a period ends belongs to the next period, not that one. The bound is never prorated — a window opening mid-period applies to that whole period."
+          },
+          "effectiveTo": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Closes the window. INCLUSIVE for this type, like usageDiscount and unlike percentageDiscount: set this to the exact period end you are bounding and that period is covered. Null means the bound never stops. Must be after effectiveFrom."
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255,
+            "description": "Your own name for this term. A quantity bound emits no invoice line, so this is printed nowhere on the invoice — it is returned on the adjustment for your own records."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "A key of your choosing that makes a retry safe. Sending the same key against the same subscription returns the adjustment already created and creates no second one. Without a key a retried request creates a second bound; two identical bounds change nothing, because bounds of one direction do not add up.",
+            "example": "adj_fortress_seats_001"
+          }
+        }
+      },
       "CreateSubscriptionAdjustmentRequest": {
-        "description": "One adjustment to attach to the subscription. The type decides which number the body carries: a rate for percentageDiscount, a unit count and one target price for usageDiscount.",
+        "description": "One adjustment to attach to the subscription. The type decides which number the body carries: a rate for percentageDiscount, a unit count and one target price for usageDiscount, and a contracted quantity and one target price for minimumQuantity and maximumQuantity.",
         "oneOf": [
           {
             "$ref": "#/components/schemas/CreatePercentageDiscountAdjustment"
           },
           {
             "$ref": "#/components/schemas/CreateUsageDiscountAdjustment"
+          },
+          {
+            "$ref": "#/components/schemas/CreateMinimumQuantityAdjustment"
+          },
+          {
+            "$ref": "#/components/schemas/CreateMaximumQuantityAdjustment"
           }
         ],
         "discriminator": {
           "propertyName": "type",
           "mapping": {
             "percentageDiscount": "#/components/schemas/CreatePercentageDiscountAdjustment",
-            "usageDiscount": "#/components/schemas/CreateUsageDiscountAdjustment"
+            "usageDiscount": "#/components/schemas/CreateUsageDiscountAdjustment",
+            "minimumQuantity": "#/components/schemas/CreateMinimumQuantityAdjustment",
+            "maximumQuantity": "#/components/schemas/CreateMaximumQuantityAdjustment"
           }
         }
       },
@@ -18399,7 +18559,7 @@
           },
           "amount": {
             "type": "string",
-            "description": "Total amount of invoices in this category in dollars"
+            "description": "Total amount of invoices in this category in dollars, including tax"
           }
         }
       },
@@ -18481,7 +18641,7 @@
           },
           "issuedInvoices": {
             "type": "string",
-            "description": "Total issued invoice amount in dollars for this group in this bucket"
+            "description": "Total issued invoice amount in dollars for this group in this bucket, excluding tax"
           }
         }
       },
@@ -18502,7 +18662,7 @@
           },
           "issuedInvoices": {
             "type": "string",
-            "description": "Total amount of all invoices issued in this bucket (all statuses, by issuedAt)"
+            "description": "Total amount of all invoices issued in this bucket (all statuses, by issuedAt), excluding tax"
           },
           "writtenOffInvoices": {
             "type": "string",
@@ -18570,7 +18730,7 @@
           },
           "netRevenue": {
             "type": "string",
-            "description": "Net collected revenue in dollars for this currency (issued invoices + completed payments)"
+            "description": "Revenue in dollars for this currency, excluding tax: invoices issued in the period plus completed payments"
           },
           "invoices": {
             "$ref": "#/components/schemas/InvoiceSummary"
@@ -18600,11 +18760,11 @@
           },
           "netRevenue": {
             "type": "string",
-            "description": "Net collected revenue in dollars (paid invoices + completed payments), already net of non-voided refunds. Omitted when groupBy=currency is active."
+            "description": "Revenue in dollars, excluding tax: invoices issued in the period plus completed payments, less non-voided refunds issued in the period. Invoices and refunds are counted excluding tax. Omitted when groupBy=currency is active."
           },
           "totalRefunds": {
             "type": "string",
-            "description": "Gross total of non-voided refunds (credit notes) issued in the period, in dollars. Already subtracted from netRevenue and invoice totals. Omitted when groupBy=currency is active."
+            "description": "Total of non-voided refunds (credit notes) issued in the period, in dollars, including tax. netRevenue subtracts these refunds excluding tax. Omitted when groupBy=currency is active."
           },
           "refundCount": {
             "type": "number",
@@ -18717,7 +18877,7 @@
           },
           "netRevenue": {
             "type": "string",
-            "description": "Net revenue (paid + outstanding) in unit currency, with two decimals."
+            "description": "Revenue excluding tax (paid + outstanding invoices issued in the period), in unit currency, with two decimals."
           },
           "totalCost": {
             "type": "string",

@@ -13,7 +13,7 @@ let value: InvoiceCategorySummary = {
 
 ## Fields
 
-| Field                                                | Type                                                 | Required                                             | Description                                          |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `count`                                              | *number*                                             | :heavy_check_mark:                                   | Number of invoices in this category                  |
-| `amount`                                             | *string*                                             | :heavy_check_mark:                                   | Total amount of invoices in this category in dollars |
+| Field                                                               | Type                                                                | Required                                                            | Description                                                         |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `count`                                                             | *number*                                                            | :heavy_check_mark:                                                  | Number of invoices in this category                                 |
+| `amount`                                                            | *string*                                                            | :heavy_check_mark:                                                  | Total amount of invoices in this category in dollars, including tax |

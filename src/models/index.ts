@@ -18,6 +18,8 @@ export * from "./createapprovalrequest.js";
 export * from "./createbillingschedulerequest.js";
 export * from "./creategrantrequest.js";
 export * from "./createmanuallineitemrequest.js";
+export * from "./createmaximumquantityadjustment.js";
+export * from "./createminimumquantityadjustment.js";
 export * from "./createorderapprovalrequest.js";
 export * from "./createorderlineitemrequest.js";
 export * from "./createorderrequest.js";

@@ -5,11 +5,11 @@
 ```typescript
 import { SubscriptionAdjustmentType } from "@paygentic/sdk/models";
 
-let value: SubscriptionAdjustmentType = "usageDiscount";
+let value: SubscriptionAdjustmentType = "maximumQuantity";
 ```
 
 ## Values
 
 ```typescript
-"percentageDiscount" | "usageDiscount"
+"percentageDiscount" | "usageDiscount" | "minimumQuantity" | "maximumQuantity"
 ```

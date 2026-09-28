@@ -13,7 +13,7 @@ export type InvoiceCategorySummary = {
    */
   count: number;
   /**
-   * Total amount of invoices in this category in dollars
+   * Total amount of invoices in this category in dollars, including tax
    */
   amount: string;
 };

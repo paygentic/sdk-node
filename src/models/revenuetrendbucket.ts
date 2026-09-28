@@ -17,7 +17,7 @@ export type RevenueTrendBucket = {
    */
   timestamp: Date;
   /**
-   * Total amount of all invoices issued in this bucket (all statuses, by issuedAt)
+   * Total amount of all invoices issued in this bucket (all statuses, by issuedAt), excluding tax
    */
   issuedInvoices: string;
   /**

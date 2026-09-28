@@ -8,9 +8,12 @@ import { CreateSubscriptionAdjustmentRequest } from "@paygentic/sdk/models/opera
 let value: CreateSubscriptionAdjustmentRequest = {
   id: "<id>",
   createSubscriptionAdjustmentRequest: {
-    type: "percentageDiscount",
-    percentageDiscount: "<value>",
-    effectiveFrom: new Date("2025-01-05T00:51:25.114Z"),
+    type: "usageDiscount",
+    usageDiscount: "<value>",
+    targetPriceIds: [
+      "<value 1>",
+    ],
+    effectiveFrom: new Date("2025-10-02T14:34:34.884Z"),
   },
 };
 ```

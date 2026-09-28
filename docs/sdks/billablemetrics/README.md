@@ -33,6 +33,7 @@ async function run() {
     name: "Token Counter",
     productId: "prod_abc123",
     unit: "tokens",
+    eventType: "<value>",
   });
 
   console.log(result);
@@ -63,6 +64,7 @@ async function run() {
     name: "Token Counter",
     productId: "prod_abc123",
     unit: "tokens",
+    eventType: "<value>",
   });
   if (res.ok) {
     const { value: result } = res;

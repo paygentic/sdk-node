@@ -18,6 +18,8 @@ export type SubscriptionAdjustmentObject = ClosedEnum<
 export const SubscriptionAdjustmentType = {
   PercentageDiscount: "percentageDiscount",
   UsageDiscount: "usageDiscount",
+  MinimumQuantity: "minimumQuantity",
+  MaximumQuantity: "maximumQuantity",
 } as const;
 export type SubscriptionAdjustmentType = ClosedEnum<
   typeof SubscriptionAdjustmentType
@@ -35,27 +37,35 @@ export type SubscriptionAdjustment = {
   subscriptionId: string;
   type: SubscriptionAdjustmentType;
   /**
-   * The discount rate as a decimal fraction between 0 and 1. "0.35" means 35 percent. Null on a usageDiscount, which carries a unit count instead.
+   * The discount rate as a decimal fraction between 0 and 1. "0.35" means 35 percent. Null on every other type.
    */
   percentageDiscount: string | null;
   /**
-   * The number of usage units taken off the targeted line's billable quantity. Null on a percentageDiscount, which carries a rate instead.
+   * The number of usage units taken off the targeted line's billable quantity. Null on every other type.
    */
   usageDiscount: string | null;
   /**
-   * The prices this adjustment reduces. Exactly one metered price on a usageDiscount; empty on a percentageDiscount, which reduces every discountable charge.
+   * The contracted minimum quantity billed for one period of the targeted price. Null on every other type.
+   */
+  minimumQuantity: string | null;
+  /**
+   * The contracted maximum quantity billed for one period of the targeted price. Null on every other type.
+   */
+  maximumQuantity: string | null;
+  /**
+   * The prices this adjustment applies to. Exactly one price on a usageDiscount; empty on a percentageDiscount, which reduces every discountable charge. A minimumQuantity or maximumQuantity is created against exactly one price, and later lists more than one only where that charge moved to a new price — a floating subscription moving to a new plan version, or a price edit freezing the subscription's version. Every id listed is the same charge, and the bound applies to whichever one a period bills under.
    */
   targetPriceIds: Array<string>;
   /**
-   * Opens the window. Read per type: INCLUSIVE on a percentageDiscount, whose window is prorated by day overlap; EXCLUSIVE on a usageDiscount, which corrects a line whose period END falls strictly after this instant.
+   * Opens the window. Read per type: INCLUSIVE on a percentageDiscount, whose window is prorated by day overlap; EXCLUSIVE on a usageDiscount and on both quantity bounds, which apply to a line whose period END falls strictly after this instant.
    */
   effectiveFrom: Date;
   /**
-   * Closes the window, or null for never. Read per type: EXCLUSIVE on a percentageDiscount; INCLUSIVE on a usageDiscount, which corrects a line whose period END falls on or before this instant.
+   * Closes the window, or null for never. Read per type: EXCLUSIVE on a percentageDiscount; INCLUSIVE on a usageDiscount and on both quantity bounds, which apply to a line whose period END falls on or before this instant. A delete shortens this to the end of the last period the adjustment has already been billed on.
    */
   effectiveTo: Date | null;
   /**
-   * The deal's own name. Shown on each discount line a percentageDiscount emits; a usageDiscount emits no line, so its description is carried here only.
+   * The deal's own name. Shown on each discount line a percentageDiscount emits; every other type emits no line, so its description is carried here only.
    */
   description: string | null;
   createdAt: Date;
@@ -83,6 +93,8 @@ export const SubscriptionAdjustment$inboundSchema: z.ZodType<
   type: SubscriptionAdjustmentType$inboundSchema,
   percentageDiscount: z.nullable(z.string()),
   usageDiscount: z.nullable(z.string()),
+  minimumQuantity: z.nullable(z.string()),
+  maximumQuantity: z.nullable(z.string()),
   targetPriceIds: z.array(z.string()),
   effectiveFrom: z.string().datetime({ offset: true }).transform(v =>
     new Date(v)

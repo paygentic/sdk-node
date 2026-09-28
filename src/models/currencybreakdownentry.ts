@@ -25,7 +25,7 @@ export type CurrencyBreakdownEntry = {
    */
   currency: string;
   /**
-   * Net collected revenue in dollars for this currency (issued invoices + completed payments)
+   * Revenue in dollars for this currency, excluding tax: invoices issued in the period plus completed payments
    */
   netRevenue: string;
   invoices: InvoiceSummary;

@@ -23,11 +23,11 @@ export type UpdateBillableMetricRequestBody = {
    */
   itemId?: string | null | undefined;
   /**
-   * CloudEvents type for meter routing.
+   * CloudEvents type for meter routing. Cannot be cleared: every billable metric needs one.
    */
-  eventType?: string | null | undefined;
+  eventType?: string | undefined;
   /**
-   * JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`).
+   * JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Cannot be cleared on a SUM/AVG/MIN/MAX/LATEST metric. Not stored for COUNT.
    */
   valueProperty?: string | null | undefined;
   /**
@@ -51,7 +51,7 @@ export type UpdateBillableMetricRequestBody$Outbound = {
   name?: string | undefined;
   unit?: string | undefined;
   itemId?: string | null | undefined;
-  eventType?: string | null | undefined;
+  eventType?: string | undefined;
   valueProperty?: string | null | undefined;
   groupBy?: { [k: string]: string } | null | undefined;
   eventFrom?: string | null | undefined;
@@ -67,7 +67,7 @@ export const UpdateBillableMetricRequestBody$outboundSchema: z.ZodType<
   name: z.string().optional(),
   unit: z.string().optional(),
   itemId: z.nullable(z.string()).optional(),
-  eventType: z.nullable(z.string()).optional(),
+  eventType: z.string().optional(),
   valueProperty: z.nullable(z.string()).optional(),
   groupBy: z.nullable(z.record(z.string())).optional(),
   eventFrom: z.nullable(z.date().transform(v => v.toISOString())).optional(),

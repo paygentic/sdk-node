@@ -56,9 +56,9 @@ export type CreateBillableMetricRequest = {
   /**
    * CloudEvents type for meter routing. Links this billable metric to the metering service.
    */
-  eventType?: string | undefined;
+  eventType: string;
   /**
-   * JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Required for SUM/AVG/MIN/MAX/LATEST aggregations.
+   * JSONPath to extract a numeric value from event data. Must start with `$.` (example: `$.amount` or `$.payload.bytes`). Required for SUM/AVG/MIN/MAX/LATEST aggregations. Optional for UNIQUE_COUNT, which counts distinct values of this property when set and distinct events when not. Not stored for COUNT.
    */
   valueProperty?: string | undefined;
   /**
@@ -85,7 +85,7 @@ export type CreateBillableMetricRequest$Outbound = {
   productId?: string | undefined;
   itemId?: string | undefined;
   unit: string;
-  eventType?: string | undefined;
+  eventType: string;
   valueProperty?: string | undefined;
   groupBy?: { [k: string]: string } | undefined;
   eventFrom?: string | undefined;
@@ -104,7 +104,7 @@ export const CreateBillableMetricRequest$outboundSchema: z.ZodType<
   productId: z.string().optional(),
   itemId: z.string().optional(),
   unit: z.string(),
-  eventType: z.string().optional(),
+  eventType: z.string(),
   valueProperty: z.string().optional(),
   groupBy: z.record(z.string()).optional(),
   eventFrom: z.date().transform(v => v.toISOString()).optional(),

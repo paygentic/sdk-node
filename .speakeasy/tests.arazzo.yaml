@@ -52,6 +52,7 @@ workflows:
           payload:
             aggregation: SUM
             description: Tracks total tokens consumed per API call
+            eventType: <value>
             merchantId: <id>
             name: Token Counter
             unit: tokens
@@ -3878,7 +3879,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"minimumQuantity":"<value>","maximumQuantity":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -3904,7 +3905,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"minimumQuantity":"<value>","maximumQuantity":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -3932,7 +3933,27 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"percentageDiscount","percentageDiscount":null,"usageDiscount":null,"minimumQuantity":"<value>","maximumQuantity":null,"targetPriceIds":["<value 1>"],"effectiveFrom":"2025-09-15T08:46:30.990Z","effectiveTo":"2025-10-28T11:48:02.536Z","description":"who communicate however","createdAt":"2026-05-07T19:39:39.991Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: deleteSubscriptionAdjustment
+    steps:
+      - stepId: test
+        operationId: deleteSubscriptionAdjustment
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: adjustmentId
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"maximumQuantity","percentageDiscount":"<value>","usageDiscount":"<value>","minimumQuantity":"<value>","maximumQuantity":"<value>","targetPriceIds":["<value 1>","<value 2>"],"effectiveFrom":"2026-08-16T16:31:19.794Z","effectiveTo":"2024-03-01T05:31:19.703Z","description":"phew hammock vain especially trolley dress","createdAt":"2025-01-30T16:16:28.658Z"}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true

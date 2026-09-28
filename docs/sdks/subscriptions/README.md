@@ -803,7 +803,7 @@ run();
 
 ## deleteSubscriptionAdjustment
 
-Deletes an adjustment that has not yet reached an issued invoice. No invoice changes: an invoice still in draft keeps its numbers, and loses the discount only when its period is calculated again. An adjustment that has already discounted an issued invoice cannot be deleted, because the invoice records why the customer was charged that amount. Its window cannot be shortened afterwards either, so set effectiveTo at creation time whenever the deal has a known end date.
+Stops an adjustment from applying to any period it has not already been billed on. An adjustment that has never reached an issued invoice is removed, and the response is 204. An adjustment that has already been billed on an issued invoice is RETRACTED instead: its effectiveTo moves to the end of the last period it was billed on, the adjustment still exists, and the response is 200 carrying it. Read a 200 as "shortened", not as "removed". No invoice changes either way: an issued invoice keeps its numbers, and a draft loses the adjustment only when its period is calculated again. Deleting the same adjustment again returns the same 200 and the same window.
 
 ### Example Usage
 
@@ -816,12 +816,12 @@ const paygentic = new Paygentic({
 });
 
 async function run() {
-  await paygentic.subscriptions.deleteSubscriptionAdjustment({
+  const result = await paygentic.subscriptions.deleteSubscriptionAdjustment({
     id: "<id>",
     adjustmentId: "<id>",
   });
 
-
+  console.log(result);
 }
 
 run();
@@ -848,7 +848,7 @@ async function run() {
   });
   if (res.ok) {
     const { value: result } = res;
-    
+    console.log(result);
   } else {
     console.log("subscriptionsDeleteSubscriptionAdjustment failed:", res.error);
   }
@@ -868,7 +868,7 @@ run();
 
 ### Response
 
-**Promise\<void\>**
+**Promise\<[models.SubscriptionAdjustment](../../models/subscriptionadjustment.md)\>**
 
 ### Errors
 

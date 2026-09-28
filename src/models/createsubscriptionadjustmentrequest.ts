@@ -4,6 +4,16 @@
 
 import * as z from "zod/v3";
 import {
+  CreateMaximumQuantityAdjustment,
+  CreateMaximumQuantityAdjustment$Outbound,
+  CreateMaximumQuantityAdjustment$outboundSchema,
+} from "./createmaximumquantityadjustment.js";
+import {
+  CreateMinimumQuantityAdjustment,
+  CreateMinimumQuantityAdjustment$Outbound,
+  CreateMinimumQuantityAdjustment$outboundSchema,
+} from "./createminimumquantityadjustment.js";
+import {
   CreatePercentageDiscountAdjustment,
   CreatePercentageDiscountAdjustment$Outbound,
   CreatePercentageDiscountAdjustment$outboundSchema,
@@ -15,16 +25,20 @@ import {
 } from "./createusagediscountadjustment.js";
 
 /**
- * One adjustment to attach to the subscription. The type decides which number the body carries: a rate for percentageDiscount, a unit count and one target price for usageDiscount.
+ * One adjustment to attach to the subscription. The type decides which number the body carries: a rate for percentageDiscount, a unit count and one target price for usageDiscount, and a contracted quantity and one target price for minimumQuantity and maximumQuantity.
  */
 export type CreateSubscriptionAdjustmentRequest =
   | CreatePercentageDiscountAdjustment
-  | CreateUsageDiscountAdjustment;
+  | CreateUsageDiscountAdjustment
+  | CreateMinimumQuantityAdjustment
+  | CreateMaximumQuantityAdjustment;
 
 /** @internal */
 export type CreateSubscriptionAdjustmentRequest$Outbound =
   | CreatePercentageDiscountAdjustment$Outbound
-  | CreateUsageDiscountAdjustment$Outbound;
+  | CreateUsageDiscountAdjustment$Outbound
+  | CreateMinimumQuantityAdjustment$Outbound
+  | CreateMaximumQuantityAdjustment$Outbound;
 
 /** @internal */
 export const CreateSubscriptionAdjustmentRequest$outboundSchema: z.ZodType<
@@ -34,6 +48,8 @@ export const CreateSubscriptionAdjustmentRequest$outboundSchema: z.ZodType<
 > = z.union([
   CreatePercentageDiscountAdjustment$outboundSchema,
   CreateUsageDiscountAdjustment$outboundSchema,
+  CreateMinimumQuantityAdjustment$outboundSchema,
+  CreateMaximumQuantityAdjustment$outboundSchema,
 ]);
 
 export function createSubscriptionAdjustmentRequestToJSON(

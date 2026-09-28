@@ -17,7 +17,7 @@ export type GroupTrendEntry = {
    */
   groupLabel: string;
   /**
-   * Total issued invoice amount in dollars for this group in this bucket
+   * Total issued invoice amount in dollars for this group in this bucket, excluding tax
    */
   issuedInvoices: string;
 };

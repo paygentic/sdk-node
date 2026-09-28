@@ -47,11 +47,11 @@ export type RevenueSummaryResponse = {
    */
   object: "revenue_summary";
   /**
-   * Net collected revenue in dollars (paid invoices + completed payments), already net of non-voided refunds. Omitted when groupBy=currency is active.
+   * Revenue in dollars, excluding tax: invoices issued in the period plus completed payments, less non-voided refunds issued in the period. Invoices and refunds are counted excluding tax. Omitted when groupBy=currency is active.
    */
   netRevenue?: string | undefined;
   /**
-   * Gross total of non-voided refunds (credit notes) issued in the period, in dollars. Already subtracted from netRevenue and invoice totals. Omitted when groupBy=currency is active.
+   * Total of non-voided refunds (credit notes) issued in the period, in dollars, including tax. netRevenue subtracts these refunds excluding tax. Omitted when groupBy=currency is active.
    */
   totalRefunds?: string | undefined;
   /**
