@@ -37,7 +37,7 @@ export function ordersCreateOrderApproval(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.Approval,
+    models.OrderApproval,
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -62,7 +62,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.Approval,
+      models.OrderApproval,
       | PaygenticError
       | ResponseValidationError
       | ConnectionError
@@ -148,7 +148,7 @@ async function $do(
   const response = doResult.value;
 
   const [result] = await M.match<
-    models.Approval,
+    models.OrderApproval,
     | PaygenticError
     | ResponseValidationError
     | ConnectionError
@@ -158,7 +158,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(201, models.Approval$inboundSchema),
+    M.json(201, models.OrderApproval$inboundSchema),
     M.fail([404, 409, "4XX"]),
     M.fail("5XX"),
   )(response, req);

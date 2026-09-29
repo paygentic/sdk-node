@@ -32,7 +32,7 @@ export type ListBillingSchedulesObject = ClosedEnum<
  */
 export type ListBillingSchedulesResponse = {
   object: ListBillingSchedulesObject;
-  data: Array<models.SchemasBillingSchedule>;
+  data: Array<models.BillingSchedule>;
   /**
    * Offset-based pagination response.
    */
@@ -77,7 +77,7 @@ export const ListBillingSchedulesResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   object: ListBillingSchedulesObject$inboundSchema,
-  data: z.array(models.SchemasBillingSchedule$inboundSchema),
+  data: z.array(models.BillingSchedule$inboundSchema),
   pagination: models.OffsetPagination$inboundSchema,
 });
 

@@ -7,7 +7,11 @@ import { MintPlanVersionRequest } from "@paygentic/sdk/models/operations";
 
 let value: MintPlanVersionRequest = {
   id: "<id>",
-  mintPlanVersionRequest: {},
+  mintPlanVersionRequest: {
+    prices: [
+      "<value>",
+    ],
+  },
 };
 ```
 

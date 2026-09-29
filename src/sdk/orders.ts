@@ -138,7 +138,7 @@ export class Orders extends ClientSDK {
   async createOrderApproval(
     request: operations.CreateOrderApprovalRequest,
     options?: RequestOptions,
-  ): Promise<models.Approval> {
+  ): Promise<models.OrderApproval> {
     return unwrapAsync(ordersCreateOrderApproval(
       this,
       request,

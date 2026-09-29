@@ -6,11 +6,11 @@ import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
-import {
-  BillingSchedule,
-  BillingSchedule$inboundSchema,
-} from "./billingschedule.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  OrderBillingSchedule,
+  OrderBillingSchedule$inboundSchema,
+} from "./orderbillingschedule.js";
 import { OrderLineItem, OrderLineItem$inboundSchema } from "./orderlineitem.js";
 
 export const OrderObject = {
@@ -55,7 +55,7 @@ export type Order = {
   defaultPaymentTermDays: number;
   metadata: { [k: string]: any };
   lineItems: Array<OrderLineItem>;
-  billingSchedules: Array<BillingSchedule>;
+  billingSchedules: Array<OrderBillingSchedule>;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -102,7 +102,7 @@ export const Order$inboundSchema: z.ZodType<Order, z.ZodTypeDef, unknown> = z
     defaultPaymentTermDays: z.number().int(),
     metadata: z.record(z.any()),
     lineItems: z.array(OrderLineItem$inboundSchema),
-    billingSchedules: z.array(BillingSchedule$inboundSchema),
+    billingSchedules: z.array(OrderBillingSchedule$inboundSchema),
     createdAt: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),

@@ -87,7 +87,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasPrice](../../models/schemasprice.md)\>**
+**Promise\<[models.Price](../../models/price.md)\>**
 
 ### Errors
 
@@ -237,7 +237,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasPrice](../../models/schemasprice.md)\>**
+**Promise\<[models.Price](../../models/price.md)\>**
 
 ### Errors
 
@@ -316,7 +316,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasPrice](../../models/schemasprice.md)\>**
+**Promise\<[models.Price](../../models/price.md)\>**
 
 ### Errors
 

@@ -50,7 +50,7 @@ export type PlanVersionPriceSlotRateType = ClosedEnum<
 >;
 
 /**
- * One price slot on a plan version. Every `Price` field is present, plus `priceDeleted` layered on top.
+ * One price slot on a plan version. Every `Price` field is present, plus `key` and `priceDeleted` layered on top.
  */
 export type PlanVersionPriceSlot = {
   /**
@@ -113,6 +113,10 @@ export type PlanVersionPriceSlot = {
    */
   quantity: number;
   /**
+   * The name of this line. Send it as the `key` of a subscription price-interval operation to address this line. A line created before keys could be supplied carries a generated key, which does not match the format that this API accepts for new keys.
+   */
+  key: string;
+  /**
    * True when the underlying price this slot references has been soft-deleted.
    */
   priceDeleted: boolean;
@@ -167,6 +171,7 @@ export const PlanVersionPriceSlot$inboundSchema: z.ZodType<
   pricingUnitId: z.string().optional(),
   tax: PriceTax$inboundSchema,
   quantity: z.number().int().default(1),
+  key: z.string(),
   priceDeleted: z.boolean(),
 });
 

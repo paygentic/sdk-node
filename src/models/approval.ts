@@ -13,6 +13,19 @@ export const ApprovalObject = {
 } as const;
 export type ApprovalObject = ClosedEnum<typeof ApprovalObject>;
 
+export const ApprovalResourceType = {
+  Order: "order",
+  Invoice: "invoice",
+} as const;
+export type ApprovalResourceType = ClosedEnum<typeof ApprovalResourceType>;
+
+export const ApprovalKind = {
+  DataReview: "data_review",
+  FinancialReview: "financial_review",
+  Push: "push",
+} as const;
+export type ApprovalKind = ClosedEnum<typeof ApprovalKind>;
+
 export const ApprovalDecision = {
   Pending: "pending",
   Approved: "approved",
@@ -25,9 +38,9 @@ export type Approval = {
   id: string;
   object: ApprovalObject;
   merchantId: string;
-  resourceType: string;
+  resourceType: ApprovalResourceType;
   resourceId: string;
-  kind: string;
+  kind: ApprovalKind;
   decision: ApprovalDecision;
   requester: string;
   reviewer?: string | null | undefined;
@@ -43,6 +56,15 @@ export const ApprovalObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(ApprovalObject);
 
 /** @internal */
+export const ApprovalResourceType$inboundSchema: z.ZodNativeEnum<
+  typeof ApprovalResourceType
+> = z.nativeEnum(ApprovalResourceType);
+
+/** @internal */
+export const ApprovalKind$inboundSchema: z.ZodNativeEnum<typeof ApprovalKind> =
+  z.nativeEnum(ApprovalKind);
+
+/** @internal */
 export const ApprovalDecision$inboundSchema: z.ZodNativeEnum<
   typeof ApprovalDecision
 > = z.nativeEnum(ApprovalDecision);
@@ -56,9 +78,9 @@ export const Approval$inboundSchema: z.ZodType<
   id: z.string(),
   object: ApprovalObject$inboundSchema,
   merchantId: z.string(),
-  resourceType: z.string(),
+  resourceType: ApprovalResourceType$inboundSchema,
   resourceId: z.string(),
-  kind: z.string(),
+  kind: ApprovalKind$inboundSchema,
   decision: ApprovalDecision$inboundSchema,
   requester: z.string(),
   reviewer: z.nullable(z.string()).optional(),

@@ -35,7 +35,7 @@ export function pricesCreate(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.SchemasPrice,
+    models.Price,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -62,7 +62,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.SchemasPrice,
+      models.Price,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -145,7 +145,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.SchemasPrice,
+    models.Price,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -157,7 +157,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(201, models.SchemasPrice$inboundSchema),
+    M.json(201, models.Price$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),

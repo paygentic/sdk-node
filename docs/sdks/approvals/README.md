@@ -82,7 +82,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasApproval](../../models/schemasapproval.md)\>**
+**Promise\<[models.Approval](../../models/approval.md)\>**
 
 ### Errors
 
@@ -232,7 +232,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasApproval](../../models/schemasapproval.md)\>**
+**Promise\<[models.Approval](../../models/approval.md)\>**
 
 ### Errors
 
@@ -313,7 +313,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasApproval](../../models/schemasapproval.md)\>**
+**Promise\<[models.Approval](../../models/approval.md)\>**
 
 ### Errors
 

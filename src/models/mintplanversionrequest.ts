@@ -3,61 +3,30 @@
  */
 
 import * as z from "zod/v3";
-
-export type ReplacePrice = {
-  /**
-   * Unique identifier for a price
-   */
-  replacesPriceId: string;
-  /**
-   * Unique identifier for a price
-   */
-  withPriceId: string;
-};
+import {
+  MintPlanLineRef,
+  MintPlanLineRef$Outbound,
+  MintPlanLineRef$outboundSchema,
+} from "./mintplanlineref.js";
 
 /**
- * A reference-by-id price diff applied to the prices of the plan's current version. Every id references an existing price created via POST /prices; inline price definitions are not accepted. A mint must carry at least one price change, so an empty body is rejected. A version must carry at least one price, so a diff that would leave none is rejected.
+ * The price set the new version is to hold. Every price ID references an existing price created via POST /prices; inline price definitions are not accepted. The change against the plan's current version follows from the keys: a key on both sides with a different price ID replaces that line and keeps its identity, a key only in this request adds a line, and a key the current version holds and this request omits removes that line. An entry with no key adds a line under a generated key; it is never matched to an existing line by price ID. A version must carry at least one price, so an empty set is rejected.
  */
 export type MintPlanVersionRequest = {
   /**
-   * Prices to add to the version. Each must not already be on the plan's current version.
+   * The full price set the new version holds. To move off the previous addPrices, removePrices and replacePrices fields: a replacePrices entry becomes the same key with the new price ID, a removePrices entry becomes an omitted key, and an addPrices entry becomes a new entry.
    */
-  addPrices?: Array<string> | undefined;
+  prices: Array<MintPlanLineRef>;
   /**
-   * Prices to remove. Each must be on the plan's current version.
+   * The ID of the plan version you read the current price set from. Supply it to be told when the plan has moved on: the request is rejected with 409 if the plan's current version is no longer this one, so a set built from a stale read cannot drop a line another caller has just added. Omit it to write the set unconditionally.
    */
-  removePrices?: Array<string> | undefined;
-  /**
-   * Prices to swap in place, preserving the slot's lineage so the price keeps its identity where the plan is configured for stable price ids. replacesPriceId must be on the plan's current version; withPriceId is the new price.
-   */
-  replacePrices?: Array<ReplacePrice> | undefined;
+  basedOnVersionId?: string | undefined;
 };
-
-/** @internal */
-export type ReplacePrice$Outbound = {
-  replacesPriceId: string;
-  withPriceId: string;
-};
-
-/** @internal */
-export const ReplacePrice$outboundSchema: z.ZodType<
-  ReplacePrice$Outbound,
-  z.ZodTypeDef,
-  ReplacePrice
-> = z.object({
-  replacesPriceId: z.string(),
-  withPriceId: z.string(),
-});
-
-export function replacePriceToJSON(replacePrice: ReplacePrice): string {
-  return JSON.stringify(ReplacePrice$outboundSchema.parse(replacePrice));
-}
 
 /** @internal */
 export type MintPlanVersionRequest$Outbound = {
-  addPrices?: Array<string> | undefined;
-  removePrices?: Array<string> | undefined;
-  replacePrices?: Array<ReplacePrice$Outbound> | undefined;
+  prices: Array<MintPlanLineRef$Outbound>;
+  basedOnVersionId?: string | undefined;
 };
 
 /** @internal */
@@ -66,9 +35,8 @@ export const MintPlanVersionRequest$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   MintPlanVersionRequest
 > = z.object({
-  addPrices: z.array(z.string()).optional(),
-  removePrices: z.array(z.string()).optional(),
-  replacePrices: z.array(z.lazy(() => ReplacePrice$outboundSchema)).optional(),
+  prices: z.array(MintPlanLineRef$outboundSchema),
+  basedOnVersionId: z.string().optional(),
 });
 
 export function mintPlanVersionRequestToJSON(

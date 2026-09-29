@@ -99,9 +99,9 @@ export type CreatePlanRequest = {
    */
   name: string;
   /**
-   * Array of price IDs to associate with this plan
+   * The prices this plan starts with. An entry is either a price ID on its own, or an object that names a price ID and the key by which you address that line. A price ID on its own receives a generated key.
    */
-  prices?: Array<string> | undefined;
+  prices?: Array<models.PlanLineRef> | undefined;
   /**
    * Unique identifier for a product
    */
@@ -167,7 +167,7 @@ export type CreatePlanRequest$Outbound = {
   invoiceDisplayName?: string | undefined;
   merchantId: string;
   name: string;
-  prices?: Array<string> | undefined;
+  prices?: Array<models.PlanLineRef$Outbound> | undefined;
   productId: string;
   taxBehavior: string;
   renewalReminderEnabled: boolean;
@@ -193,7 +193,7 @@ export const CreatePlanRequest$outboundSchema: z.ZodType<
   invoiceDisplayName: z.string().optional(),
   merchantId: z.string(),
   name: z.string(),
-  prices: z.array(z.string()).optional(),
+  prices: z.array(models.PlanLineRef$outboundSchema).optional(),
   productId: z.string(),
   taxBehavior: CreatePlanTaxBehavior$outboundSchema.default("exclusive"),
   renewalReminderEnabled: z.boolean().default(true),

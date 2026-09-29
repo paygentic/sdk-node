@@ -35,7 +35,7 @@ export function approvalsGetApproval(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.SchemasApproval,
+    models.Approval,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -61,7 +61,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.SchemasApproval,
+      models.Approval,
       | errors.ErrorT
       | PaygenticError
       | ResponseValidationError
@@ -148,7 +148,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.SchemasApproval,
+    models.Approval,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -159,7 +159,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.SchemasApproval$inboundSchema),
+    M.json(200, models.Approval$inboundSchema),
     M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),

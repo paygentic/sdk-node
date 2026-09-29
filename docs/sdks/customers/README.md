@@ -556,7 +556,7 @@ run();
 
 ### Response
 
-**Promise\<[models.PaymentSession](../../models/paymentsession.md)\>**
+**Promise\<[models.CustomerPaymentSession](../../models/customerpaymentsession.md)\>**
 
 ### Errors
 

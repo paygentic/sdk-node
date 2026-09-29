@@ -114,7 +114,7 @@ export class Customers extends ClientSDK {
   async createCustomerPaymentMethod(
     request: operations.CreateCustomerPaymentMethodRequest,
     options?: RequestOptions,
-  ): Promise<models.PaymentSession> {
+  ): Promise<models.CustomerPaymentSession> {
     return unwrapAsync(customersCreateCustomerPaymentMethod(
       this,
       request,

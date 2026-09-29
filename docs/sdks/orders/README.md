@@ -717,7 +717,7 @@ run();
 
 ### Response
 
-**Promise\<[models.Approval](../../models/approval.md)\>**
+**Promise\<[models.OrderApproval](../../models/orderapproval.md)\>**
 
 ### Errors
 

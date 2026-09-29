@@ -12,7 +12,7 @@ import {
   PlanCreditAllocation,
   PlanCreditAllocation$inboundSchema,
 } from "./plancreditallocation.js";
-import { Price, Price$inboundSchema } from "./price.js";
+import { PlanPrice, PlanPrice$inboundSchema } from "./planprice.js";
 
 export const PlanObject = {
   Plan: "plan",
@@ -84,7 +84,7 @@ export type Plan = {
   merchantId: string;
   name: string;
   paymentTerm?: PlanPaymentTerm | undefined;
-  prices?: Array<Price> | undefined;
+  prices?: Array<PlanPrice> | undefined;
   /**
    * Unique identifier for a product
    */
@@ -186,7 +186,7 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
     merchantId: z.string(),
     name: z.string(),
     paymentTerm: z.lazy(() => PlanPaymentTerm$inboundSchema).optional(),
-    prices: z.array(Price$inboundSchema).optional(),
+    prices: z.array(PlanPrice$inboundSchema).optional(),
     productId: z.string(),
     taxBehavior: TaxBehavior$inboundSchema.optional(),
     updatedAt: z.string().datetime({ offset: true }).transform(v =>

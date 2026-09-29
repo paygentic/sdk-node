@@ -9,16 +9,13 @@ import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 export const PaymentSessionObject = {
-  PaymentSession: "paymentSession",
+  PaymentSession: "payment_session",
 } as const;
 export type PaymentSessionObject = ClosedEnum<typeof PaymentSessionObject>;
 
-export const Mode = {
-  Payment: "payment",
-  Setup: "setup",
-} as const;
-export type Mode = ClosedEnum<typeof Mode>;
-
+/**
+ * Lifecycle status of the session.
+ */
 export const PaymentSessionStatus = {
   Pending: "pending",
   Processing: "processing",
@@ -27,37 +24,61 @@ export const PaymentSessionStatus = {
   Expired: "expired",
   Cancelled: "cancelled",
 } as const;
+/**
+ * Lifecycle status of the session.
+ */
 export type PaymentSessionStatus = ClosedEnum<typeof PaymentSessionStatus>;
 
 export type PaymentSession = {
   object: PaymentSessionObject;
   /**
-   * Payment session identifier (e.g. `ps_...`).
+   * Payment session ID (ps_*).
    */
   id: string;
-  mode: Mode;
+  /**
+   * Type of entity the session pays for (invoice, subscription, payment, topup).
+   */
+  entityType: string;
+  /**
+   * ID of the entity the session pays for.
+   */
+  entityId: string;
+  /**
+   * Display label for the entity — invoice number, payment-link reference, or subscription name. Null when no label is available.
+   */
+  entityLabel?: string | null | undefined;
+  /**
+   * Amount in decimal dollars.
+   */
+  amount: string;
+  /**
+   * ISO 4217 currency code.
+   */
+  currency: string;
+  /**
+   * Lifecycle status of the session.
+   */
   status: PaymentSessionStatus;
   /**
-   * Hosted page URL. Redirect the customer here, or load it inside an iframe — when iframed, the page reports outcomes via `postMessage` (`payment_success` / `payment_error`) to the parent window.
+   * Stripe Connect account ID (acct_*) when the session is routed to a connected account.
    */
-  url: string;
-  successRedirectUrl?: string | null | undefined;
-  failureRedirectUrl?: string | null | undefined;
-  metadata?: { [k: string]: any } | undefined;
-  expiresAt: Date;
+  merchantPaymentAccountId?: string | null | undefined;
+  /**
+   * Provider payment intent reference — Stripe PaymentIntent ID (pi_*) or Airwallex intent ID (int_*). Null until the intent is created on first checkout load.
+   */
+  providerPaymentRef?: string | null | undefined;
+  /**
+   * Timestamp the session reached terminal completion. Null until the session completes.
+   */
   completedAt?: Date | null | undefined;
   createdAt: Date;
+  updatedAt: Date;
 };
 
 /** @internal */
 export const PaymentSessionObject$inboundSchema: z.ZodNativeEnum<
   typeof PaymentSessionObject
 > = z.nativeEnum(PaymentSessionObject);
-
-/** @internal */
-export const Mode$inboundSchema: z.ZodNativeEnum<typeof Mode> = z.nativeEnum(
-  Mode,
-);
 
 /** @internal */
 export const PaymentSessionStatus$inboundSchema: z.ZodNativeEnum<
@@ -72,17 +93,19 @@ export const PaymentSession$inboundSchema: z.ZodType<
 > = z.object({
   object: PaymentSessionObject$inboundSchema,
   id: z.string(),
-  mode: Mode$inboundSchema,
+  entityType: z.string(),
+  entityId: z.string(),
+  entityLabel: z.nullable(z.string()).optional(),
+  amount: z.string(),
+  currency: z.string(),
   status: PaymentSessionStatus$inboundSchema,
-  url: z.string(),
-  successRedirectUrl: z.nullable(z.string()).optional(),
-  failureRedirectUrl: z.nullable(z.string()).optional(),
-  metadata: z.record(z.any()).optional(),
-  expiresAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  merchantPaymentAccountId: z.nullable(z.string()).optional(),
+  providerPaymentRef: z.nullable(z.string()).optional(),
   completedAt: z.nullable(
     z.string().datetime({ offset: true }).transform(v => new Date(v)),
   ).optional(),
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
 });
 
 export function paymentSessionFromJSON(

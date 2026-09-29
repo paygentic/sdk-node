@@ -6,15 +6,12 @@ import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
+import { Approval, Approval$inboundSchema } from "./approval.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import {
   OffsetPagination,
   OffsetPagination$inboundSchema,
 } from "./offsetpagination.js";
-import {
-  SchemasApproval,
-  SchemasApproval$inboundSchema,
-} from "./schemasapproval.js";
 
 export const ApprovalListObject = {
   List: "list",
@@ -23,7 +20,7 @@ export type ApprovalListObject = ClosedEnum<typeof ApprovalListObject>;
 
 export type ApprovalList = {
   object: ApprovalListObject;
-  data: Array<SchemasApproval>;
+  data: Array<Approval>;
   /**
    * Offset-based pagination response.
    */
@@ -42,7 +39,7 @@ export const ApprovalList$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   object: ApprovalListObject$inboundSchema,
-  data: z.array(SchemasApproval$inboundSchema),
+  data: z.array(Approval$inboundSchema),
   pagination: OffsetPagination$inboundSchema,
 });
 

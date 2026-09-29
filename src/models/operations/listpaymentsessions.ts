@@ -84,7 +84,7 @@ export type ListPaymentSessionsObject = ClosedEnum<
  */
 export type ListPaymentSessionsResponse = {
   object: ListPaymentSessionsObject;
-  data: Array<models.SchemasPaymentSession>;
+  data: Array<models.PaymentSession>;
   /**
    * Offset-based pagination response.
    */
@@ -146,7 +146,7 @@ export const ListPaymentSessionsResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   object: ListPaymentSessionsObject$inboundSchema,
-  data: z.array(models.SchemasPaymentSession$inboundSchema),
+  data: z.array(models.PaymentSession$inboundSchema),
   pagination: models.OffsetPagination$inboundSchema,
 });
 

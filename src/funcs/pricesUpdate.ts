@@ -35,7 +35,7 @@ export function pricesUpdate(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.SchemasPrice,
+    models.Price,
     | errors.BadRequest
     | errors.ErrorT
     | errors.UpdatePriceConflictError
@@ -63,7 +63,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.SchemasPrice,
+      models.Price,
       | errors.BadRequest
       | errors.ErrorT
       | errors.UpdatePriceConflictError
@@ -153,7 +153,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.SchemasPrice,
+    models.Price,
     | errors.BadRequest
     | errors.ErrorT
     | errors.UpdatePriceConflictError
@@ -166,7 +166,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.SchemasPrice$inboundSchema),
+    M.json(200, models.Price$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
     M.jsonErr(409, errors.UpdatePriceConflictError$inboundSchema),

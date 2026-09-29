@@ -3766,7 +3766,9 @@ workflows:
             value: <id>
         requestBody:
           contentType: application/json
-          payload: {}
+          payload:
+            prices:
+              - priceId: <id>
         successCriteria:
           - condition: $statusCode == 201
           - condition: $response.header.Content-Type == application/json
@@ -3792,7 +3794,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan_version","versionNumber":969073,"status":"archived","isDefault":true,"subscriptionCount":265555,"updatedAt":"2026-12-13T23:04:42.440Z","prices":[{"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-02-20T18:42:50.017Z","invoiceDisplayName":"<value>","model":"dynamic","paymentTerm":"in_advance","properties":{"key":"<value>"},"updatedAt":"2024-10-10T06:17:20.359Z","grantDiscountEnabled":false,"isObligation":false,"rateType":"amount","tax":{"supplyScope":"OUTSIDE_SCOPE"},"quantity":1,"priceDeleted":true}]}
+              {"id":"<id>","object":"plan_version","versionNumber":969073,"status":"archived","isDefault":true,"subscriptionCount":265555,"updatedAt":"2026-12-13T23:04:42.440Z","prices":[{"id":"<id>","object":"price","merchantId":"<id>","createdAt":"2025-02-20T18:42:50.017Z","invoiceDisplayName":"<value>","model":"dynamic","paymentTerm":"in_advance","properties":{"key":"<value>"},"updatedAt":"2024-10-10T06:17:20.359Z","grantDiscountEnabled":false,"isObligation":false,"rateType":"amount","tax":{"supplyScope":"OUTSIDE_SCOPE"},"quantity":1,"key":"<key>","priceDeleted":true}]}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true

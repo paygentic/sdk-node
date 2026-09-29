@@ -19,7 +19,7 @@ export class Prices extends ClientSDK {
   async create(
     request: operations.CreatePriceRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasPrice> {
+  ): Promise<models.Price> {
     return unwrapAsync(pricesCreate(
       this,
       request,
@@ -47,7 +47,7 @@ export class Prices extends ClientSDK {
   async get(
     request: operations.GetPriceRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasPrice> {
+  ): Promise<models.Price> {
     return unwrapAsync(pricesGet(
       this,
       request,
@@ -61,7 +61,7 @@ export class Prices extends ClientSDK {
   async update(
     request: operations.UpdatePriceRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasPrice> {
+  ): Promise<models.Price> {
     return unwrapAsync(pricesUpdate(
       this,
       request,

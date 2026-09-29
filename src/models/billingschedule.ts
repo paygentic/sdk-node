@@ -50,9 +50,6 @@ export type BillingSchedulePeriodPreset = ClosedEnum<
   typeof BillingSchedulePeriodPreset
 >;
 
-/**
- * Summary of a billing schedule owned by this order. The full schedule (with intervals + staged invoices) is served under /billingSchedules. Owner-polymorphic: a schedule belongs to exactly one Order or one Subscription (XOR); cadence lives on ScheduleIntervals, not the header.
- */
 export type BillingSchedule = {
   id: string;
   object: BillingScheduleObject;
@@ -61,15 +58,20 @@ export type BillingSchedule = {
   merchantId: string;
   status: BillingScheduleStatus;
   startDate: Date;
-  endDate: Date;
+  /**
+   * The schedule's end date. Always present.
+   */
+  endDate: Date | null;
   billingAnchor: Date;
   alignmentPolicy: BillingScheduleAlignmentPolicy;
   prorationPolicy: BillingScheduleProrationPolicy;
   paymentTermDays?: number | null | undefined;
   periodPreset: BillingSchedulePeriodPreset;
+  customPeriodWindows: Array<any>;
   metadata: { [k: string]: any };
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date | null | undefined;
 };
 
 /** @internal */
@@ -110,7 +112,9 @@ export const BillingSchedule$inboundSchema: z.ZodType<
   merchantId: z.string(),
   status: BillingScheduleStatus$inboundSchema,
   startDate: z.string().datetime({ offset: true }).transform(v => new Date(v)),
-  endDate: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  endDate: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ),
   billingAnchor: z.string().datetime({ offset: true }).transform(v =>
     new Date(v)
   ),
@@ -118,9 +122,13 @@ export const BillingSchedule$inboundSchema: z.ZodType<
   prorationPolicy: BillingScheduleProrationPolicy$inboundSchema,
   paymentTermDays: z.nullable(z.number().int()).optional(),
   periodPreset: BillingSchedulePeriodPreset$inboundSchema,
+  customPeriodWindows: z.array(z.any()),
   metadata: z.record(z.any()),
   createdAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  deletedAt: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ).optional(),
 });
 
 export function billingScheduleFromJSON(

@@ -5,6 +5,9 @@
 import * as z from "zod/v3";
 
 export type CreateItemRequest = {
+  /**
+   * Unique identifier for an organization
+   */
   merchantId: string;
   /**
    * Canonical sellable name for the Item

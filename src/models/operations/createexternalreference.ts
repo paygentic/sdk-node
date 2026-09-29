@@ -6,6 +6,9 @@ import * as z from "zod/v3";
 import * as models from "../index.js";
 
 export type CreateExternalReferenceRequest = {
+  /**
+   * Unique identifier for an organization
+   */
   merchantId: string;
   /**
    * The type of Paygentic entity this external reference points at

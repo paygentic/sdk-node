@@ -9,13 +9,13 @@ let value: Approval = {
   id: "<id>",
   object: "approval",
   merchantId: "<id>",
-  resourceType: "<value>",
+  resourceType: "invoice",
   resourceId: "<id>",
-  kind: "<value>",
-  decision: "cancelled",
+  kind: "data_review",
+  decision: "rejected",
   requester: "<value>",
   dataSnapshotHash: "<value>",
-  createdAt: new Date("2024-06-05T20:42:57.810Z"),
+  createdAt: new Date("2026-07-19T00:36:40.907Z"),
 };
 ```
 
@@ -26,9 +26,9 @@ let value: Approval = {
 | `id`                                                                                          | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `object`                                                                                      | [models.ApprovalObject](../models/approvalobject.md)                                          | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `merchantId`                                                                                  | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `resourceType`                                                                                | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `resourceType`                                                                                | [models.ApprovalResourceType](../models/approvalresourcetype.md)                              | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `resourceId`                                                                                  | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `kind`                                                                                        | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `kind`                                                                                        | [models.ApprovalKind](../models/approvalkind.md)                                              | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `decision`                                                                                    | [models.ApprovalDecision](../models/approvaldecision.md)                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `requester`                                                                                   | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `reviewer`                                                                                    | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |

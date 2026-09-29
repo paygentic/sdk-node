@@ -1,5 +1,7 @@
 # PaymentSessionStatus
 
+Lifecycle status of the session.
+
 ## Example Usage
 
 ```typescript

@@ -8,38 +8,24 @@ import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import { PriceFeature, PriceFeature$inboundSchema } from "./pricefeature.js";
+import { PriceModel, PriceModel$inboundSchema } from "./pricemodel.js";
+import {
+  PriceProperties,
+  PriceProperties$inboundSchema,
+} from "./priceproperties.js";
 import { PriceTax, PriceTax$inboundSchema } from "./pricetax.js";
+import { RateType, RateType$inboundSchema } from "./ratetype.js";
 
 export const PriceObject = {
   Price: "price",
 } as const;
 export type PriceObject = ClosedEnum<typeof PriceObject>;
 
-export const PriceModel1 = {
-  Standard: "standard",
-  Dynamic: "dynamic",
-  Volume: "volume",
-  Percentage: "percentage",
-} as const;
-export type PriceModel1 = ClosedEnum<typeof PriceModel1>;
-
 export const PricePaymentTerm = {
   InArrears: "in_arrears",
   InAdvance: "in_advance",
 } as const;
 export type PricePaymentTerm = ClosedEnum<typeof PricePaymentTerm>;
-
-/**
- * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
- */
-export const PriceRateType = {
-  Amount: "amount",
-  Proportion: "proportion",
-} as const;
-/**
- * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
- */
-export type PriceRateType = ClosedEnum<typeof PriceRateType>;
 
 export type Price = {
   /**
@@ -48,26 +34,37 @@ export type Price = {
   id: string;
   object: PriceObject;
   /**
-   * Unique identifier for an organization
+   * Unique identifier for a billable metric
    */
-  merchantId: string;
   billableMetricId?: string | undefined;
   /**
-   * The unique identifier for the fee referred to by this price
+   * The unique identifier for the fee referred to by this price. Present when price is linked to a fee.
    */
   feeId?: string | undefined;
   /**
-   * ISO 8601 duration for billing frequency (e.g., P1M for monthly)
+   * Unique identifier for a pricing unit
+   */
+  pricingUnitId?: string | undefined;
+  /**
+   * Unique identifier for an organization
+   */
+  merchantId: string;
+  /**
+   * ISO 8601 duration. 'P0D' for one-time, 'P1M' for monthly, 'P1Y' for yearly. Required for fees, optional for billable metrics. Defaults to plan's billingCadence if not specified.
    */
   billingCadence?: string | null | undefined;
   createdAt: Date;
-  currency?: string | undefined;
-  description?: string | undefined;
   invoiceDisplayName: string;
-  model: PriceModel1;
+  /**
+   * Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'
+   */
+  invoiceDisplayGroup?: string | null | undefined;
+  /**
+   * Pricing model of a price as returned by the API. Includes the legacy models ('dynamic', 'percentage') retained for existing prices; 'standard' and 'volume' can be created (see PriceModelInput).
+   */
+  model?: PriceModel | undefined;
   paymentTerm: PricePaymentTerm;
-  properties: { [k: string]: any };
-  unitAmount?: string | undefined;
+  properties: PriceProperties;
   updatedAt: Date;
   /**
    * Features associated with this price
@@ -84,21 +81,13 @@ export type Price = {
   /**
    * What properties.unitPrice is denominated in. 'amount' (the default) is an amount of the invoice currency for each unit metered, so the quantity is the multiplier. 'proportion' is the reverse: a dimensionless share of a currency-denominated quantity, so '0.02' is 2% and the invoice prints '2.00%'. Presentation only. Requires a standard metered price in real currency.
    */
-  rateType: PriceRateType;
-  /**
-   * Presentation only. Prices sharing this value, within one billing period, print as a single row on the rendered invoice PDF and are described by this string. Every member still bills its own line item on the ledger, this API and the compliance document. The combined row's rate is derived from the members' own rates. Requires the 'standard' pricing model. Sample values: 'Cross Border Fees', 'FX Fees'
-   */
-  invoiceDisplayGroup?: string | null | undefined;
-  /**
-   * Unique identifier for a pricing unit
-   */
-  pricingUnitId?: string | undefined;
+  rateType?: RateType | undefined;
   /**
    * A price's tax declaration. Optional on write — a price that declares nothing is `IN_SCOPE`, and is billed and taxed exactly as it was before this object existed. Always present on read. Replaced as a whole on update: send the object to change it, omit it to leave it alone.
    */
   tax: PriceTax;
   /**
-   * Quantity used when generating invoice line items for this price. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
+   * Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1.
    */
   quantity: number;
 };
@@ -108,49 +97,37 @@ export const PriceObject$inboundSchema: z.ZodNativeEnum<typeof PriceObject> = z
   .nativeEnum(PriceObject);
 
 /** @internal */
-export const PriceModel1$inboundSchema: z.ZodNativeEnum<typeof PriceModel1> = z
-  .nativeEnum(PriceModel1);
-
-/** @internal */
 export const PricePaymentTerm$inboundSchema: z.ZodNativeEnum<
   typeof PricePaymentTerm
 > = z.nativeEnum(PricePaymentTerm);
-
-/** @internal */
-export const PriceRateType$inboundSchema: z.ZodNativeEnum<
-  typeof PriceRateType
-> = z.nativeEnum(PriceRateType);
 
 /** @internal */
 export const Price$inboundSchema: z.ZodType<Price, z.ZodTypeDef, unknown> = z
   .object({
     id: z.string(),
     object: PriceObject$inboundSchema.default("price"),
-    merchantId: z.string(),
     billableMetricId: z.string().optional(),
     feeId: z.string().optional(),
+    pricingUnitId: z.string().optional(),
+    merchantId: z.string(),
     billingCadence: z.nullable(z.string()).optional(),
     createdAt: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),
-    currency: z.string().optional(),
-    description: z.string().optional(),
     invoiceDisplayName: z.string(),
-    model: PriceModel1$inboundSchema,
+    invoiceDisplayGroup: z.nullable(z.string()).optional(),
+    model: PriceModel$inboundSchema.optional(),
     paymentTerm: PricePaymentTerm$inboundSchema,
-    properties: z.record(z.any()),
-    unitAmount: z.string().optional(),
+    properties: PriceProperties$inboundSchema,
     updatedAt: z.string().datetime({ offset: true }).transform(v =>
       new Date(v)
     ),
     features: z.array(PriceFeature$inboundSchema).optional(),
     grantDiscountEnabled: z.boolean().default(false),
     isObligation: z.boolean().default(false),
-    rateType: PriceRateType$inboundSchema.default("amount"),
-    invoiceDisplayGroup: z.nullable(z.string()).optional(),
-    pricingUnitId: z.string().optional(),
+    rateType: RateType$inboundSchema.optional(),
     tax: PriceTax$inboundSchema,
-    quantity: z.number().int().default(1),
+    quantity: z.number().int(),
   });
 
 export function priceFromJSON(

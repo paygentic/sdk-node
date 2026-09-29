@@ -1563,7 +1563,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentSession"
+                  "$ref": "#/components/schemas/CustomerPaymentSession"
                 }
               }
             }
@@ -3476,9 +3476,9 @@
                   "prices": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/schemas-PriceId"
+                      "$ref": "#/components/schemas/PlanLineRef"
                     },
-                    "description": "Array of price IDs to associate with this plan"
+                    "description": "The prices this plan starts with. An entry is either a price ID on its own, or an object that names a price ID and the key by which you address that line. A price ID on its own receives a generated key."
                   },
                   "productId": {
                     "$ref": "#/components/schemas/ProductId",
@@ -4004,7 +4004,7 @@
                   "prices": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/schemas-PriceId"
+                      "$ref": "#/components/schemas/PriceId"
                     },
                     "description": "Array of price IDs to associate with this plan"
                   },
@@ -4199,7 +4199,7 @@
           "Plans"
         ],
         "summary": "Mint a plan version",
-        "description": "Mint a new plan version from a price diff and make it the version the plan bills from, in one step. The diff references existing prices by id: create prices beforehand with POST /prices, then add, remove, or replace them here. To return to an earlier price set, make that version the default with a PATCH on the version.",
+        "description": "Mint a new plan version from the price set it is to hold, and make it the version the plan bills from, in one step. The request names the complete set, not a change to it: create prices beforehand with POST /prices, then list every price the new version holds. The change against the current version follows from the keys — a key on both sides with a different price ID replaces that line, a key only in the request adds a line, and a key the current version holds and the request omits removes that line. To return to an earlier price set, make that version the default with a PATCH on the version.",
         "operationId": "mintPlanVersion",
         "requestBody": {
           "required": true,
@@ -4449,7 +4449,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-Price"
+                  "$ref": "#/components/schemas/Price"
                 },
                 "example": {
                   "id": "price_l5m6n7o8p9q0r1s2",
@@ -4546,7 +4546,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/schemas-Price"
+                        "$ref": "#/components/schemas/Price"
                       }
                     },
                     "pagination": {
@@ -4665,7 +4665,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-Price"
+                  "$ref": "#/components/schemas/Price"
                 },
                 "example": {
                   "id": "price_b1c2d3e4f5g6h7i8",
@@ -4817,7 +4817,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-Price"
+                  "$ref": "#/components/schemas/Price"
                 },
                 "example": {
                   "id": "price_r7s8t9u0v1w2x3y4",
@@ -9129,7 +9129,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/schemas-PaymentSession"
+                        "$ref": "#/components/schemas/PaymentSession"
                       }
                     },
                     "pagination": {
@@ -10759,7 +10759,7 @@
                 ],
                 "properties": {
                   "merchantId": {
-                    "$ref": "#/components/schemas/schemas-OrganizationId"
+                    "$ref": "#/components/schemas/OrganizationId"
                   },
                   "entityType": {
                     "$ref": "#/components/schemas/EntityType"
@@ -10772,7 +10772,7 @@
                     "$ref": "#/components/schemas/Provider"
                   },
                   "externalId": {
-                    "$ref": "#/components/schemas/schemas-ExternalId"
+                    "$ref": "#/components/schemas/ExternalRecordId"
                   },
                   "externalLabel": {
                     "type": "string",
@@ -10843,7 +10843,7 @@
             "name": "merchantId",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/schemas-OrganizationId"
+              "$ref": "#/components/schemas/OrganizationId"
             },
             "description": "Restrict results to a specific merchant. All active filters AND together."
           },
@@ -10875,7 +10875,7 @@
             "name": "externalId",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/schemas-ExternalId"
+              "$ref": "#/components/schemas/ExternalRecordId"
             },
             "description": "Filter by the external system's record id. Pair with `provider` to look up all Paygentic entities that carry a given external reference. All active filters AND together."
           },
@@ -11092,7 +11092,7 @@
                 ],
                 "properties": {
                   "merchantId": {
-                    "$ref": "#/components/schemas/schemas-OrganizationId"
+                    "$ref": "#/components/schemas/OrganizationId"
                   },
                   "name": {
                     "type": "string",
@@ -11151,7 +11151,7 @@
             "name": "merchantId",
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/schemas-OrganizationId"
+              "$ref": "#/components/schemas/OrganizationId"
             },
             "description": "Filter items by merchant organization id"
           },
@@ -11828,7 +11828,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Approval"
+                  "$ref": "#/components/schemas/OrderApproval"
                 }
               }
             }
@@ -11896,7 +11896,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "$ref": "#/components/schemas/schemas-BillingSchedule"
+                        "$ref": "#/components/schemas/BillingSchedule"
                       }
                     },
                     "pagination": {
@@ -11946,7 +11946,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-BillingSchedule"
+                  "$ref": "#/components/schemas/BillingSchedule"
                 }
               }
             }
@@ -11995,7 +11995,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-BillingSchedule"
+                  "$ref": "#/components/schemas/BillingSchedule"
                 }
               }
             }
@@ -12046,7 +12046,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-BillingSchedule"
+                  "$ref": "#/components/schemas/BillingSchedule"
                 }
               }
             }
@@ -12752,7 +12752,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-Approval"
+                  "$ref": "#/components/schemas/Approval"
                 }
               }
             }
@@ -12908,7 +12908,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-Approval"
+                  "$ref": "#/components/schemas/Approval"
                 }
               }
             }
@@ -12959,7 +12959,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/schemas-Approval"
+                  "$ref": "#/components/schemas/Approval"
                 }
               }
             }
@@ -13073,25 +13073,10 @@
         "pattern": "^prod_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a product"
       },
-      "OrganizationId": {
-        "type": "string",
-        "pattern": "^org_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for an organization"
-      },
-      "CustomerId": {
-        "type": "string",
-        "pattern": "^cus_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for a customer"
-      },
       "SubscriptionId": {
         "type": "string",
         "pattern": "^sub_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a subscription"
-      },
-      "PlanId": {
-        "type": "string",
-        "pattern": "^plan_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for a plan"
       },
       "SourceId": {
         "type": "string",
@@ -13122,11 +13107,6 @@
         "type": "string",
         "pattern": "^cst_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a cost"
-      },
-      "PriceId": {
-        "type": "string",
-        "pattern": "^price_[a-zA-Z0-9]+$",
-        "description": "Unique identifier for a price"
       },
       "SalesforceAccount": {
         "type": "object",
@@ -13246,6 +13226,11 @@
             "description": "The refunds for this invoice"
           }
         }
+      },
+      "OrganizationId": {
+        "type": "string",
+        "pattern": "^org_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for an organization"
       },
       "BillableMetric": {
         "type": "object",
@@ -13549,6 +13534,11 @@
           }
         }
       },
+      "CustomerId": {
+        "type": "string",
+        "pattern": "^cus_[a-zA-Z0-9]+$",
+        "description": "Unique identifier for a customer"
+      },
       "Address": {
         "type": "object",
         "properties": {
@@ -13749,7 +13739,7 @@
           }
         }
       },
-      "PaymentSession": {
+      "CustomerPaymentSession": {
         "type": "object",
         "required": [
           "object",
@@ -14814,12 +14804,12 @@
           }
         }
       },
-      "schemas-PlanId": {
+      "PlanId": {
         "type": "string",
         "pattern": "^plan_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a plan"
       },
-      "schemas-PriceId": {
+      "PriceId": {
         "type": "string",
         "pattern": "^price_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a price"
@@ -14895,7 +14885,7 @@
           }
         }
       },
-      "Price": {
+      "PlanPrice": {
         "type": "object",
         "required": [
           "id",
@@ -14912,7 +14902,7 @@
         ],
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/schemas-PriceId"
+            "$ref": "#/components/schemas/PriceId"
           },
           "object": {
             "type": "string",
@@ -15072,7 +15062,7 @@
         ],
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/schemas-PlanId"
+            "$ref": "#/components/schemas/PlanId"
           },
           "object": {
             "type": "string",
@@ -15142,7 +15132,7 @@
           "prices": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Price"
+              "$ref": "#/components/schemas/PlanPrice"
             }
           },
           "productId": {
@@ -15200,6 +15190,39 @@
           }
         }
       },
+      "PlanLineKey": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$",
+        "description": "The name you give one line of a plan, for example `platform_fee`. It starts with a lowercase letter or a digit, contains only lowercase letters, digits, hyphens and underscores, and is at most 64 characters. A key names one line for the life of the plan: every version that keeps the line carries the same key, and a key that you drop from one version and supply again on a later version says that the line resumed. Keys are compared exactly, so `Platform_Fee` is not accepted."
+      },
+      "PlanLineInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "priceId"
+        ],
+        "description": "One line of a plan: the price it bills, and the key that names it.",
+        "properties": {
+          "priceId": {
+            "$ref": "#/components/schemas/PriceId"
+          },
+          "key": {
+            "$ref": "#/components/schemas/PlanLineKey",
+            "description": "Omit this to receive a generated key."
+          }
+        }
+      },
+      "PlanLineRef": {
+        "description": "Either a price ID on its own, or a price ID with the key that names its line.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PriceId"
+          },
+          {
+            "$ref": "#/components/schemas/PlanLineInput"
+          }
+        ]
+      },
       "PlanVersionSummary": {
         "type": "object",
         "required": [
@@ -15249,60 +15272,76 @@
           }
         }
       },
+      "MintPlanLineInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "priceId"
+        ],
+        "description": "One line of the new version: the price it bills, and the key that names it.",
+        "properties": {
+          "priceId": {
+            "$ref": "#/components/schemas/PriceId"
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "The key of the line. A key this plan already holds keeps that line, whatever its shape, because a line created before keys could be supplied carries a generated key. A key the plan does not hold names a new line and must match the format in `PlanLineKey`. Omit this to receive a generated key."
+          }
+        }
+      },
+      "MintPlanLineRef": {
+        "description": "Either a price ID on its own, or a price ID with the key that names its line.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PriceId"
+          },
+          {
+            "$ref": "#/components/schemas/MintPlanLineInput"
+          }
+        ]
+      },
       "MintPlanVersionRequest": {
         "type": "object",
         "additionalProperties": false,
-        "minProperties": 1,
-        "description": "A reference-by-id price diff applied to the prices of the plan's current version. Every id references an existing price created via POST /prices; inline price definitions are not accepted. A mint must carry at least one price change, so an empty body is rejected. A version must carry at least one price, so a diff that would leave none is rejected.",
+        "required": [
+          "prices"
+        ],
+        "description": "The price set the new version is to hold. Every price ID references an existing price created via POST /prices; inline price definitions are not accepted. The change against the plan's current version follows from the keys: a key on both sides with a different price ID replaces that line and keeps its identity, a key only in this request adds a line, and a key the current version holds and this request omits removes that line. An entry with no key adds a line under a generated key; it is never matched to an existing line by price ID. A version must carry at least one price, so an empty set is rejected.",
         "properties": {
-          "addPrices": {
+          "prices": {
             "type": "array",
+            "minItems": 1,
             "items": {
-              "$ref": "#/components/schemas/schemas-PriceId"
+              "$ref": "#/components/schemas/MintPlanLineRef"
             },
-            "description": "Prices to add to the version. Each must not already be on the plan's current version."
+            "description": "The full price set the new version holds. To move off the previous addPrices, removePrices and replacePrices fields: a replacePrices entry becomes the same key with the new price ID, a removePrices entry becomes an omitted key, and an addPrices entry becomes a new entry."
           },
-          "removePrices": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/schemas-PriceId"
-            },
-            "description": "Prices to remove. Each must be on the plan's current version."
-          },
-          "replacePrices": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "replacesPriceId",
-                "withPriceId"
-              ],
-              "properties": {
-                "replacesPriceId": {
-                  "$ref": "#/components/schemas/schemas-PriceId"
-                },
-                "withPriceId": {
-                  "$ref": "#/components/schemas/schemas-PriceId"
-                }
-              }
-            },
-            "description": "Prices to swap in place, preserving the slot's lineage so the price keeps its identity where the plan is configured for stable price ids. replacesPriceId must be on the plan's current version; withPriceId is the new price."
+          "basedOnVersionId": {
+            "type": "string",
+            "pattern": "^pver_[a-zA-Z0-9]+$",
+            "description": "The ID of the plan version you read the current price set from. Supply it to be told when the plan has moved on: the request is rejected with 409 if the plan's current version is no longer this one, so a set built from a stale read cannot drop a line another caller has just added. Omit it to write the set unconditionally."
           }
         }
       },
       "PlanVersionPriceSlot": {
-        "description": "One price slot on a plan version. Every `Price` field is present, plus `priceDeleted` layered on top.",
+        "description": "One price slot on a plan version. Every `Price` field is present, plus `key` and `priceDeleted` layered on top.",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Price"
+            "$ref": "#/components/schemas/PlanPrice"
           },
           {
             "type": "object",
             "required": [
+              "key",
               "priceDeleted"
             ],
             "properties": {
+              "key": {
+                "type": "string",
+                "description": "The name of this line. Send it as the `key` of a subscription price-interval operation to address this line. A line created before keys could be supplied carries a generated key, which does not match the format that this API accepts for new keys."
+              },
               "priceDeleted": {
                 "type": "boolean",
                 "description": "True when the underlying price this slot references has been soft-deleted."
@@ -15515,7 +15554,7 @@
         "minimum": 0,
         "description": "Quantity for invoice line items. Total per period = quantity × unitPrice. Only supported for fee prices; metered prices derive quantity from usage. Defaults to 1."
       },
-      "schemas-Price": {
+      "Price": {
         "type": "object",
         "required": [
           "id",
@@ -17999,7 +18038,7 @@
           }
         }
       },
-      "schemas-PaymentSession": {
+      "PaymentSession": {
         "type": "object",
         "required": [
           "object",
@@ -19041,11 +19080,7 @@
           "updatedAt"
         ]
       },
-      "schemas-OrganizationId": {
-        "type": "string",
-        "pattern": "^org_[a-zA-Z0-9]+$"
-      },
-      "schemas-ExternalId": {
+      "ExternalRecordId": {
         "type": "string",
         "pattern": "^[a-zA-Z0-9_-]+$",
         "maxLength": 255,
@@ -19077,7 +19112,7 @@
             "default": "item"
           },
           "merchantId": {
-            "$ref": "#/components/schemas/schemas-OrganizationId"
+            "$ref": "#/components/schemas/OrganizationId"
           },
           "name": {
             "type": "string"
@@ -19197,7 +19232,7 @@
           }
         }
       },
-      "BillingSchedule": {
+      "OrderBillingSchedule": {
         "type": "object",
         "description": "Summary of a billing schedule owned by this order. The full schedule (with intervals + staged invoices) is served under /billingSchedules. Owner-polymorphic: a schedule belongs to exactly one Order or one Subscription (XOR); cadence lives on ScheduleIntervals, not the header.",
         "required": [
@@ -19410,7 +19445,7 @@
           "billingSchedules": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/BillingSchedule"
+              "$ref": "#/components/schemas/OrderBillingSchedule"
             }
           },
           "createdAt": {
@@ -19668,7 +19703,7 @@
           }
         }
       },
-      "Approval": {
+      "OrderApproval": {
         "type": "object",
         "required": [
           "id",
@@ -19738,7 +19773,7 @@
           }
         }
       },
-      "schemas-BillingSchedule": {
+      "BillingSchedule": {
         "type": "object",
         "required": [
           "id",
@@ -20417,7 +20452,7 @@
           }
         }
       },
-      "schemas-Approval": {
+      "Approval": {
         "type": "object",
         "required": [
           "id",
@@ -20513,7 +20548,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/schemas-Approval"
+              "$ref": "#/components/schemas/Approval"
             }
           },
           "pagination": {

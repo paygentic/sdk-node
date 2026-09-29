@@ -18,7 +18,7 @@ export class Approvals extends ClientSDK {
   async createApproval(
     request: models.CreateApprovalRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasApproval> {
+  ): Promise<models.Approval> {
     return unwrapAsync(approvalsCreateApproval(
       this,
       request,
@@ -46,7 +46,7 @@ export class Approvals extends ClientSDK {
   async getApproval(
     request: operations.GetApprovalRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasApproval> {
+  ): Promise<models.Approval> {
     return unwrapAsync(approvalsGetApproval(
       this,
       request,
@@ -60,7 +60,7 @@ export class Approvals extends ClientSDK {
   async updateApproval(
     request: operations.UpdateApprovalRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasApproval> {
+  ): Promise<models.Approval> {
     return unwrapAsync(approvalsUpdateApproval(
       this,
       request,

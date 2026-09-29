@@ -38,7 +38,7 @@ export function customersCreateCustomerPaymentMethod(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.PaymentSession,
+    models.CustomerPaymentSession,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -65,7 +65,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      models.PaymentSession,
+      models.CustomerPaymentSession,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -155,7 +155,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.PaymentSession,
+    models.CustomerPaymentSession,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -167,7 +167,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(201, models.PaymentSession$inboundSchema),
+    M.json(201, models.CustomerPaymentSession$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([403, 404], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),

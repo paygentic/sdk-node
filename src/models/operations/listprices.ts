@@ -37,7 +37,7 @@ export type ListPricesPagination = {
  * List of prices
  */
 export type ListPricesResponse = {
-  data?: Array<models.SchemasPrice> | undefined;
+  data?: Array<models.Price> | undefined;
   pagination?: ListPricesPagination | undefined;
 };
 
@@ -96,7 +96,7 @@ export const ListPricesResponse$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  data: z.array(models.SchemasPrice$inboundSchema).optional(),
+  data: z.array(models.Price$inboundSchema).optional(),
   pagination: z.lazy(() => ListPricesPagination$inboundSchema).optional(),
 });
 

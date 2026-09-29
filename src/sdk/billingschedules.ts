@@ -37,7 +37,7 @@ export class BillingSchedules extends ClientSDK {
   async createBillingSchedule(
     request: models.CreateBillingScheduleRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasBillingSchedule> {
+  ): Promise<models.BillingSchedule> {
     return unwrapAsync(billingSchedulesCreateBillingSchedule(
       this,
       request,
@@ -51,7 +51,7 @@ export class BillingSchedules extends ClientSDK {
   async getBillingSchedule(
     request: operations.GetBillingScheduleRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasBillingSchedule> {
+  ): Promise<models.BillingSchedule> {
     return unwrapAsync(billingSchedulesGetBillingSchedule(
       this,
       request,
@@ -65,7 +65,7 @@ export class BillingSchedules extends ClientSDK {
   async updateBillingSchedule(
     request: operations.UpdateBillingScheduleRequest,
     options?: RequestOptions,
-  ): Promise<models.SchemasBillingSchedule> {
+  ): Promise<models.BillingSchedule> {
     return unwrapAsync(billingSchedulesUpdateBillingSchedule(
       this,
       request,

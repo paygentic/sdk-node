@@ -1,21 +1,21 @@
-# SchemasApproval
+# OrderApproval
 
 ## Example Usage
 
 ```typescript
-import { SchemasApproval } from "@paygentic/sdk/models";
+import { OrderApproval } from "@paygentic/sdk/models";
 
-let value: SchemasApproval = {
+let value: OrderApproval = {
   id: "<id>",
   object: "approval",
   merchantId: "<id>",
-  resourceType: "order",
+  resourceType: "<value>",
   resourceId: "<id>",
-  kind: "push",
-  decision: "pending",
+  kind: "<value>",
+  decision: "approved",
   requester: "<value>",
   dataSnapshotHash: "<value>",
-  createdAt: new Date("2025-01-19T04:20:38.690Z"),
+  createdAt: new Date("2024-11-22T09:17:20.010Z"),
 };
 ```
 
@@ -24,12 +24,12 @@ let value: SchemasApproval = {
 | Field                                                                                         | Type                                                                                          | Required                                                                                      | Description                                                                                   |
 | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | `id`                                                                                          | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `object`                                                                                      | [models.SchemasApprovalObject](../models/schemasapprovalobject.md)                            | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `object`                                                                                      | [models.OrderApprovalObject](../models/orderapprovalobject.md)                                | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `merchantId`                                                                                  | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `resourceType`                                                                                | [models.SchemasApprovalResourceType](../models/schemasapprovalresourcetype.md)                | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `resourceType`                                                                                | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `resourceId`                                                                                  | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `kind`                                                                                        | [models.SchemasApprovalKind](../models/schemasapprovalkind.md)                                | :heavy_check_mark:                                                                            | N/A                                                                                           |
-| `decision`                                                                                    | [models.SchemasApprovalDecision](../models/schemasapprovaldecision.md)                        | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `kind`                                                                                        | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
+| `decision`                                                                                    | [models.OrderApprovalDecision](../models/orderapprovaldecision.md)                            | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `requester`                                                                                   | *string*                                                                                      | :heavy_check_mark:                                                                            | N/A                                                                                           |
 | `reviewer`                                                                                    | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |
 | `note`                                                                                        | *string*                                                                                      | :heavy_minus_sign:                                                                            | N/A                                                                                           |

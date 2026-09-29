@@ -23,6 +23,9 @@ export type Item = {
    */
   id: string;
   object: ItemObject;
+  /**
+   * Unique identifier for an organization
+   */
   merchantId: string;
   name: string;
   metadata: { [k: string]: any };

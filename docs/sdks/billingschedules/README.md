@@ -158,7 +158,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasBillingSchedule](../../models/schemasbillingschedule.md)\>**
+**Promise\<[models.BillingSchedule](../../models/billingschedule.md)\>**
 
 ### Errors
 
@@ -235,7 +235,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasBillingSchedule](../../models/schemasbillingschedule.md)\>**
+**Promise\<[models.BillingSchedule](../../models/billingschedule.md)\>**
 
 ### Errors
 
@@ -312,7 +312,7 @@ run();
 
 ### Response
 
-**Promise\<[models.SchemasBillingSchedule](../../models/schemasbillingschedule.md)\>**
+**Promise\<[models.BillingSchedule](../../models/billingschedule.md)\>**
 
 ### Errors
 
