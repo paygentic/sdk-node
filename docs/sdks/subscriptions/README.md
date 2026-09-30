@@ -10,6 +10,8 @@ A `Subscription` is a customer's commitment to purchase a `Product` following th
 * [create](#create) - Create
 * [get](#get) - Get
 * [updateSubscription](#updatesubscription) - Update
+* [getSubscriptionIntervals](#getsubscriptionintervals) - Get Price Intervals
+* [editSubscriptionIntervals](#editsubscriptionintervals) - Edit Price Intervals
 * [generatePortalLink](#generateportallink) - Generate Portal Link
 * [terminate](#terminate) - Terminate
 * [reconcileSubscriptionFeatures](#reconcilesubscriptionfeatures) - Reconcile Features
@@ -324,6 +326,174 @@ run();
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
 | errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## getSubscriptionIntervals
+
+Returns all the price intervals of the subscription, ordered by start date. This includes intervals that ended and intervals that start in the future. If there are none, returns an empty array.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="getSubscriptionIntervals" method="get" path="/v0/subscriptions/{id}/intervals" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.subscriptions.getSubscriptionIntervals({
+    id: "<id>",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { subscriptionsGetSubscriptionIntervals } from "@paygentic/sdk/funcs/subscriptionsGetSubscriptionIntervals.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await subscriptionsGetSubscriptionIntervals(paygentic, {
+    id: "<id>",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("subscriptionsGetSubscriptionIntervals failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.GetSubscriptionIntervalsRequest](../../models/operations/getsubscriptionintervalsrequest.md)                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.SubscriptionIntervalsResponse](../../models/subscriptionintervalsresponse.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## editSubscriptionIntervals
+
+Adds, edits, or removes price intervals on the subscription. Use an add to override a plan price for a period. Use an edit to change unitPrice, baseQuantity, quantityTransitions, or endDate. Use a remove to delete an interval. To close a price, set endDate. To re-open it, set endDate to null. To send an interval from a GET response as an edit, remove kind from it. An edit with no changed field changes nothing. If you send an add again after a timeout, it fails with 409 because it overlaps the first add. Use GET to check the result. The request is rejected if it changes a billing period that already exists, leaves a gap or an overlap, or bills a one-off price more than once.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="editSubscriptionIntervals" method="post" path="/v0/subscriptions/{id}/intervals" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.subscriptions.editSubscriptionIntervals({
+    id: "<id>",
+    editSubscriptionIntervalsRequest: {
+      edit: [
+        {
+          id: "spi_p9q0r1s2t3u4v5w6",
+          unitPrice: "9.00",
+        },
+      ],
+    },
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { subscriptionsEditSubscriptionIntervals } from "@paygentic/sdk/funcs/subscriptionsEditSubscriptionIntervals.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await subscriptionsEditSubscriptionIntervals(paygentic, {
+    id: "<id>",
+    editSubscriptionIntervalsRequest: {
+      edit: [
+        {
+          id: "spi_p9q0r1s2t3u4v5w6",
+          unitPrice: "9.00",
+        },
+      ],
+    },
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("subscriptionsEditSubscriptionIntervals failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.EditSubscriptionIntervalsRequest](../../models/operations/editsubscriptionintervalsrequest.md)                                                                     | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.EditSubscriptionIntervalsResponse](../../models/editsubscriptionintervalsresponse.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 401, 403, 404, 409, 429      | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 

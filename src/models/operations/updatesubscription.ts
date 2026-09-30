@@ -5,6 +5,7 @@
 import * as z from "zod/v3";
 import { remap as remap$ } from "../../lib/primitives.js";
 import { ClosedEnum } from "../../types/enums.js";
+import * as models from "../index.js";
 
 export const UpdateSubscriptionStatus = {
   Active: "active",
@@ -55,6 +56,10 @@ export type UpdateSubscriptionRequestBody = {
    * Payment term in days ("Net X") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid alongside bankTransferOnly=true. Set 0 for "due on issue". Already-issued invoices keep their snapshotted dueAt.
    */
   paymentTermDays?: number | undefined;
+  /**
+   * How the subscription follows new versions of its plan. `floating` follows the plan's default version: when the default changes, the subscription bills from the new default from its next billing period. `pinned` keeps the plan version that the subscription holds. A subscription created without a value is `floating`. A change to this value does not change a billing period that has already started.
+   */
+  versionPolicy?: models.SubscriptionVersionPolicy | undefined;
 };
 
 export type UpdateSubscriptionRequest = {
@@ -80,6 +85,7 @@ export type UpdateSubscriptionRequestBody$Outbound = {
   renewalReminderEnabled?: boolean | null | undefined;
   renewalReminderDays?: number | null | undefined;
   paymentTermDays?: number | undefined;
+  versionPolicy?: string | undefined;
 };
 
 /** @internal */
@@ -99,6 +105,7 @@ export const UpdateSubscriptionRequestBody$outboundSchema: z.ZodType<
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),
   paymentTermDays: z.number().int().optional(),
+  versionPolicy: models.SubscriptionVersionPolicy$outboundSchema.optional(),
 });
 
 export function updateSubscriptionRequestBodyToJSON(

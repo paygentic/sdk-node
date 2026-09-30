@@ -11,6 +11,10 @@ import {
   SubscriptionMetadata,
   SubscriptionMetadata$inboundSchema,
 } from "./subscriptionmetadata.js";
+import {
+  SubscriptionVersionPolicy,
+  SubscriptionVersionPolicy$inboundSchema,
+} from "./subscriptionversionpolicy.js";
 
 export const SubscriptionObject = {
   Subscription: "subscription",
@@ -173,6 +177,10 @@ export type Subscription = {
    * The version number of the plan version referenced by planVersionId, as of subscription creation.
    */
   versionNumber?: number | undefined;
+  /**
+   * How the subscription follows new versions of its plan. `floating` follows the plan's default version: when the default changes, the subscription bills from the new default from its next billing period. `pinned` keeps the plan version that the subscription holds. A subscription created without a value is `floating`. A change to this value does not change a billing period that has already started.
+   */
+  versionPolicy: SubscriptionVersionPolicy;
   /**
    * Deprecated. Legacy-only, not populated for new subscriptions.
    *
@@ -439,6 +447,7 @@ export const Subscription$inboundSchema: z.ZodType<
   planId: z.string(),
   planVersionId: z.string().optional(),
   versionNumber: z.number().int().optional(),
+  versionPolicy: SubscriptionVersionPolicy$inboundSchema,
   prefundAmount: z.string().optional(),
   minimumAccountBalance: z.string().optional(),
   startedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),

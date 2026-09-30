@@ -5,8 +5,10 @@
 import { subscriptionsCreate } from "../funcs/subscriptionsCreate.js";
 import { subscriptionsCreateSubscriptionAdjustment } from "../funcs/subscriptionsCreateSubscriptionAdjustment.js";
 import { subscriptionsDeleteSubscriptionAdjustment } from "../funcs/subscriptionsDeleteSubscriptionAdjustment.js";
+import { subscriptionsEditSubscriptionIntervals } from "../funcs/subscriptionsEditSubscriptionIntervals.js";
 import { subscriptionsGeneratePortalLink } from "../funcs/subscriptionsGeneratePortalLink.js";
 import { subscriptionsGet } from "../funcs/subscriptionsGet.js";
+import { subscriptionsGetSubscriptionIntervals } from "../funcs/subscriptionsGetSubscriptionIntervals.js";
 import { subscriptionsList } from "../funcs/subscriptionsList.js";
 import { subscriptionsListSubscriptionAdjustments } from "../funcs/subscriptionsListSubscriptionAdjustments.js";
 import { subscriptionsReconcileSubscriptionFeatures } from "../funcs/subscriptionsReconcileSubscriptionFeatures.js";
@@ -71,6 +73,40 @@ export class Subscriptions extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.Subscription> {
     return unwrapAsync(subscriptionsUpdateSubscription(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Get Price Intervals
+   *
+   * @remarks
+   * Returns all the price intervals of the subscription, ordered by start date. This includes intervals that ended and intervals that start in the future. If there are none, returns an empty array.
+   */
+  async getSubscriptionIntervals(
+    request: operations.GetSubscriptionIntervalsRequest,
+    options?: RequestOptions,
+  ): Promise<models.SubscriptionIntervalsResponse> {
+    return unwrapAsync(subscriptionsGetSubscriptionIntervals(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Edit Price Intervals
+   *
+   * @remarks
+   * Adds, edits, or removes price intervals on the subscription. Use an add to override a plan price for a period. Use an edit to change unitPrice, baseQuantity, quantityTransitions, or endDate. Use a remove to delete an interval. To close a price, set endDate. To re-open it, set endDate to null. To send an interval from a GET response as an edit, remove kind from it. An edit with no changed field changes nothing. If you send an add again after a timeout, it fails with 409 because it overlaps the first add. Use GET to check the result. The request is rejected if it changes a billing period that already exists, leaves a gap or an overlap, or bills a one-off price more than once.
+   */
+  async editSubscriptionIntervals(
+    request: operations.EditSubscriptionIntervalsRequest,
+    options?: RequestOptions,
+  ): Promise<models.EditSubscriptionIntervalsResponse> {
+    return unwrapAsync(subscriptionsEditSubscriptionIntervals(
       this,
       request,
       options,

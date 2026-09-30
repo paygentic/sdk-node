@@ -3,7 +3,7 @@
  */
 
 import { PaygenticCore } from "../core.js";
-import { encodeFormQuery } from "../lib/encodings.js";
+import { encodeJSON, encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -27,18 +27,18 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get revenue summary
+ * Edit Price Intervals
  *
  * @remarks
- * Returns revenue summary with invoice and payment breakdowns (outstanding/paid/writtenOff), plus a time-series trend. Revenue is sourced from all issued invoices (v0 + v1) and completed payments.
+ * Adds, edits, or removes price intervals on the subscription. Use an add to override a plan price for a period. Use an edit to change unitPrice, baseQuantity, quantityTransitions, or endDate. Use a remove to delete an interval. To close a price, set endDate. To re-open it, set endDate to null. To send an interval from a GET response as an edit, remove kind from it. An edit with no changed field changes nothing. If you send an add again after a timeout, it fails with 409 because it overlaps the first add. Use GET to check the result. The request is rejected if it changes a billing period that already exists, leaves a gap or an overlap, or bills a one-off price more than once.
  */
-export function revenueGet(
+export function subscriptionsEditSubscriptionIntervals(
   client: PaygenticCore,
-  request: operations.GetRevenueRequest,
+  request: operations.EditSubscriptionIntervalsRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.RevenueSummaryResponse,
+    models.EditSubscriptionIntervalsResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -60,12 +60,12 @@ export function revenueGet(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.GetRevenueRequest,
+  request: operations.EditSubscriptionIntervalsRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.RevenueSummaryResponse,
+      models.EditSubscriptionIntervalsResponse,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -82,30 +82,28 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.GetRevenueRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.EditSubscriptionIntervalsRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
-  const body = null;
-
-  const path = pathToFunc("/v0/revenue")();
-
-  const query = encodeFormQuery({
-    "bucketWidth": payload.bucketWidth,
-    "currency": payload.currency,
-    "customerId": payload.customerId,
-    "endTime": payload.endTime,
-    "groupBy": payload.groupBy,
-    "merchantId": payload.merchantId,
-    "periodBasis": payload.periodBasis,
-    "startTime": payload.startTime,
-    "subscriptionIds": payload.subscriptionIds,
+  const body = encodeJSON("body", payload.EditSubscriptionIntervalsRequest, {
+    explode: true,
   });
 
+  const pathParams = {
+    id: encodeSimple("id", payload.id, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/v0/subscriptions/{id}/intervals")(pathParams);
+
   const headers = new Headers(compactMap({
+    "Content-Type": "application/json",
     Accept: "application/json",
   }));
 
@@ -116,7 +114,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "getRevenue",
+    operationID: "editSubscriptionIntervals",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -130,11 +128,10 @@ async function $do(
 
   const requestRes = client._createRequest(context, {
     security: requestSecurity,
-    method: "GET",
+    method: "POST",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
-    query: query,
     body: body,
     userAgent: client._options.userAgent,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
@@ -146,7 +143,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "404", "409", "429", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -160,7 +157,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.RevenueSummaryResponse,
+    models.EditSubscriptionIntervalsResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -172,9 +169,9 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.RevenueSummaryResponse$inboundSchema),
+    M.json(200, models.EditSubscriptionIntervalsResponse$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
-    M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
+    M.jsonErr([401, 403, 404, 409, 429], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

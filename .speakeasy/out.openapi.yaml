@@ -6598,6 +6598,7 @@
                     {
                       "id": "sub_z1a2b3c4d5e6f7g8",
                       "object": "subscription",
+                      "versionPolicy": "floating",
                       "autoCharge": false,
                       "taxExempt": false,
                       "createdAt": "2024-01-10T08:00:00Z",
@@ -6617,6 +6618,7 @@
                     {
                       "id": "sub_j1k2l3m4n5o6p7q8",
                       "object": "subscription",
+                      "versionPolicy": "floating",
                       "autoCharge": true,
                       "taxExempt": true,
                       "createdAt": "2024-02-01T14:45:30Z",
@@ -6801,6 +6803,9 @@
                     "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.",
                     "minimum": 1
                   },
+                  "versionPolicy": {
+                    "$ref": "#/components/schemas/SubscriptionVersionPolicy"
+                  },
                   "metadata": {
                     "$ref": "#/components/schemas/SubscriptionMetadata"
                   }
@@ -6826,6 +6831,7 @@
                 "example": {
                   "id": "sub_z1a2b3c4d5e6f7g8",
                   "object": "subscription",
+                  "versionPolicy": "floating",
                   "autoCharge": false,
                   "taxExempt": false,
                   "createdAt": "2024-01-10T08:00:00Z",
@@ -6855,6 +6861,7 @@
                 "example": {
                   "id": "sub_a1b2c3d4e5f6g7h8",
                   "object": "subscription",
+                  "versionPolicy": "floating",
                   "autoCharge": false,
                   "taxExempt": false,
                   "createdAt": "2024-01-15T10:30:00Z",
@@ -6937,6 +6944,7 @@
                 "example": {
                   "id": "sub_j1k2l3m4n5o6p7q8",
                   "object": "subscription",
+                  "versionPolicy": "floating",
                   "autoCharge": true,
                   "taxExempt": true,
                   "createdAt": "2024-02-01T14:45:30Z",
@@ -7048,6 +7056,9 @@
                     "description": "Payment term in days (\"Net X\") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid alongside bankTransferOnly=true. Set 0 for \"due on issue\". Already-issued invoices keep their snapshotted dueAt.",
                     "minimum": 0,
                     "maximum": 365
+                  },
+                  "versionPolicy": {
+                    "$ref": "#/components/schemas/SubscriptionVersionPolicy"
                   }
                 }
               }
@@ -7065,6 +7076,7 @@
                 "example": {
                   "id": "sub_z1a2b3c4d5e6f7g8",
                   "object": "subscription",
+                  "versionPolicy": "floating",
                   "autoCharge": true,
                   "taxExempt": false,
                   "createdAt": "2024-01-10T08:00:00Z",
@@ -7095,6 +7107,171 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/subscriptions/{id}/intervals": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Get Price Intervals",
+        "description": "Returns all the price intervals of the subscription, ordered by start date. This includes intervals that ended and intervals that start in the future. If there are none, returns an empty array.",
+        "operationId": "getSubscriptionIntervals",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The subscription ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription's price intervals.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionIntervalsResponse"
+                },
+                "example": {
+                  "intervals": [
+                    {
+                      "id": "spi_p9q0r1s2t3u4v5w6",
+                      "priceId": "price_x7y8z9a0b1c2d3e4",
+                      "priceKey": "pk_m4n5o6p7q8r9s0t1",
+                      "kind": "plan_line",
+                      "planVersionId": "pv_u2v3w4x5y6z7a8b9",
+                      "unitPrice": null,
+                      "baseQuantity": "1",
+                      "quantityTransitions": [],
+                      "billingCadence": "P1M",
+                      "billingMode": "advance",
+                      "billDate": null,
+                      "startDate": "2024-02-01T14:45:30Z",
+                      "endDate": null
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Edit Price Intervals",
+        "description": "Adds, edits, or removes price intervals on the subscription. Use an add to override a plan price for a period. Use an edit to change unitPrice, baseQuantity, quantityTransitions, or endDate. Use a remove to delete an interval. To close a price, set endDate. To re-open it, set endDate to null. To send an interval from a GET response as an edit, remove kind from it. An edit with no changed field changes nothing. If you send an add again after a timeout, it fails with 409 because it overlaps the first add. Use GET to check the result. The request is rejected if it changes a billing period that already exists, leaves a gap or an overlap, or bills a one-off price more than once.",
+        "operationId": "editSubscriptionIntervals",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The subscription ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditSubscriptionIntervalsRequest"
+              },
+              "example": {
+                "edit": [
+                  {
+                    "id": "spi_p9q0r1s2t3u4v5w6",
+                    "unitPrice": "9.00"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The price intervals after the changes. If the request changed nothing, unchanged is true.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EditSubscriptionIntervalsResponse"
+                },
+                "example": {
+                  "intervals": [
+                    {
+                      "id": "spi_p9q0r1s2t3u4v5w6",
+                      "priceId": "price_x7y8z9a0b1c2d3e4",
+                      "priceKey": "pk_m4n5o6p7q8r9s0t1",
+                      "kind": "plan_line",
+                      "planVersionId": "pv_u2v3w4x5y6z7a8b9",
+                      "unitPrice": "9.00",
+                      "baseQuantity": "1",
+                      "quantityTransitions": [],
+                      "billingCadence": "P1M",
+                      "billingMode": "advance",
+                      "billDate": null,
+                      "startDate": "2024-02-01T14:45:30Z",
+                      "endDate": null
+                    }
+                  ],
+                  "unchanged": false,
+                  "lineItems": {
+                    "created": 1,
+                    "removed": 0
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "description": "Another edit is in progress on this subscription. Retry after the time in the Retry-After header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -7236,6 +7413,7 @@
                 "example": {
                   "id": "sub_z1a2b3c4d5e6f7g8",
                   "object": "subscription",
+                  "versionPolicy": "floating",
                   "autoCharge": false,
                   "taxExempt": false,
                   "createdAt": "2024-01-10T08:00:00Z",
@@ -10086,6 +10264,20 @@
                 "customer",
                 "currency"
               ]
+            }
+          },
+          {
+            "name": "periodBasis",
+            "in": "query",
+            "required": false,
+            "description": "Which date places revenue inside the window. 'issued' (default) counts whole invoices by their issue date, the basis revenue is recognised on. 'billingPeriod' counts invoice lines by the start of the period each line bills, so a window covering one billing period returns that period's charges, whichever invoices carry them: this month's advance fee and this month's arrears usage. Paid, outstanding and written-off follow each line's invoice; a refund splits across its invoice's lines by subtotal; payments not tied to an invoice are excluded because they bill no period.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "issued",
+                "billingPeriod"
+              ],
+              "default": "issued"
             }
           }
         ],
@@ -16093,6 +16285,14 @@
           }
         }
       },
+      "SubscriptionVersionPolicy": {
+        "type": "string",
+        "enum": [
+          "floating",
+          "pinned"
+        ],
+        "description": "How the subscription follows new versions of its plan. `floating` follows the plan's default version: when the default changes, the subscription bills from the new default from its next billing period. `pinned` keeps the plan version that the subscription holds. A subscription created without a value is `floating`. A change to this value does not change a billing period that has already started."
+      },
       "SubscriptionMetadata": {
         "type": "object",
         "description": "Free-form merchant metadata to attach to the subscription. Values must be strings, numbers, or booleans.",
@@ -16117,7 +16317,8 @@
           "startedAt",
           "createdAt",
           "updatedAt",
-          "paymentTermDays"
+          "paymentTermDays",
+          "versionPolicy"
         ],
         "properties": {
           "id": {
@@ -16283,6 +16484,9 @@
             "minimum": 1,
             "description": "The version number of the plan version referenced by planVersionId, as of subscription creation."
           },
+          "versionPolicy": {
+            "$ref": "#/components/schemas/SubscriptionVersionPolicy"
+          },
           "prefundAmount": {
             "type": "string",
             "deprecated": true,
@@ -16407,6 +16611,379 @@
             }
           }
         }
+      },
+      "SubscriptionInterval": {
+        "type": "object",
+        "description": "A price interval of the subscription.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "priceId": {
+            "type": "string",
+            "description": "The catalog price this interval bills."
+          },
+          "priceKey": {
+            "type": "string",
+            "description": "Identifies the price line. An override keeps the key of the plan price that it replaces."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "plan_line",
+              "subscription_owned"
+            ],
+            "description": "plan_line if the plan version has a line with this priceKey. subscription_owned if it does not, so the interval belongs to this subscription only. After an add, check the kind. A mistyped priceKey creates a subscription_owned interval."
+          },
+          "planVersionId": {
+            "type": "string",
+            "description": "The plan version of this interval."
+          },
+          "unitPrice": {
+            "type": "string",
+            "nullable": true,
+            "description": "Signed net unit price for each period, as a decimal string. Null means the interval bills the catalog price."
+          },
+          "baseQuantity": {
+            "type": "string",
+            "description": "Quantity at interval start, as a decimal string."
+          },
+          "quantityTransitions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "effectiveDate",
+                "quantity"
+              ],
+              "properties": {
+                "effectiveDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "quantity": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "billingCadence": {
+            "type": "string",
+            "description": "ISO-8601 duration or 'one_off'"
+          },
+          "billingMode": {
+            "type": "string",
+            "enum": [
+              "advance",
+              "arrears"
+            ]
+          },
+          "billDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The one-time date this interval bills on. Set iff billingCadence is 'one_off'; null for a recurring interval."
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Null for an open-ended interval."
+          }
+        },
+        "required": [
+          "id",
+          "priceId",
+          "priceKey",
+          "kind",
+          "planVersionId",
+          "unitPrice",
+          "baseQuantity",
+          "quantityTransitions",
+          "billingCadence",
+          "billingMode",
+          "billDate",
+          "startDate",
+          "endDate"
+        ]
+      },
+      "SubscriptionIntervalsResponse": {
+        "type": "object",
+        "properties": {
+          "intervals": {
+            "type": "array",
+            "description": "The subscription's price intervals, ordered by start date. Empty when it has none.",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionInterval"
+            }
+          }
+        },
+        "required": [
+          "intervals"
+        ]
+      },
+      "SubscriptionIntervalAddOp": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Adds an interval. If the plan version has a line with this priceKey, the interval overrides that line. If not, send priceId. The interval then belongs to this subscription only and keeps the rate that you write. A plan version change does not carry it forward, so it stops billing at the version boundary. If a later plan version adds the same priceKey, the change is refused until the plan drops the key or the interval ends on or before the boundary.",
+        "required": [
+          "priceKey",
+          "unitPrice",
+          "baseQuantity",
+          "billingCadence",
+          "billingMode",
+          "startDate"
+        ],
+        "properties": {
+          "priceKey": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The price line that this interval bills. Use a priceKey from the plan version. A new key must start with a lowercase letter or a digit, use only lowercase letters, digits, hyphens, and underscores, and have 64 characters or fewer."
+          },
+          "priceId": {
+            "type": "string",
+            "description": "The catalog price to bill. Required if priceKey is not on the plan version. If it is on the plan, omit this field or send the price of that line. The price must belong to your merchant account."
+          },
+          "planVersionId": {
+            "type": "string",
+            "description": "Optional. If the subscription is on a different plan version, the request fails with 409."
+          },
+          "unitPrice": {
+            "type": "string",
+            "nullable": true,
+            "description": "Signed net unit price for each period, as a decimal string. Null bills the catalog price. For a subscription-only interval, null saves the current catalog price."
+          },
+          "baseQuantity": {
+            "type": "string",
+            "description": "Quantity at interval start, as a non-negative decimal string."
+          },
+          "quantityTransitions": {
+            "type": "array",
+            "description": "Step changes in quantity partway through the interval.",
+            "items": {
+              "type": "object",
+              "required": [
+                "effectiveDate",
+                "quantity"
+              ],
+              "properties": {
+                "effectiveDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "quantity": {
+                  "type": "string",
+                  "description": "Non-negative decimal string."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "billingCadence": {
+            "type": "string",
+            "description": "ISO-8601 duration or 'one_off'"
+          },
+          "billingMode": {
+            "type": "string",
+            "enum": [
+              "advance",
+              "arrears"
+            ]
+          },
+          "billDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Required when billingCadence is 'one_off'; must be absent otherwise."
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Null for an open-ended interval; when set, must be strictly after startDate."
+          }
+        }
+      },
+      "SubscriptionIntervalEditOp": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Edits an interval by id. You can change unitPrice, baseQuantity, quantityTransitions, and endDate. Other fields must match the current value if you send them. To bill a different priceId, remove the interval and add a new one.",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The interval being edited."
+          },
+          "unitPrice": {
+            "type": "string",
+            "nullable": true,
+            "description": "Signed per-period net unit price as a decimal string. Set to null to revert to the catalog price. Omit to leave unchanged."
+          },
+          "baseQuantity": {
+            "type": "string",
+            "description": "Quantity at interval start, as a non-negative decimal string. Omit to leave unchanged."
+          },
+          "quantityTransitions": {
+            "type": "array",
+            "description": "Step changes in quantity partway through the interval. Omit to leave unchanged.",
+            "items": {
+              "type": "object",
+              "required": [
+                "effectiveDate",
+                "quantity"
+              ],
+              "properties": {
+                "effectiveDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "quantity": {
+                  "type": "string",
+                  "description": "Non-negative decimal string."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "priceId": {
+            "type": "string",
+            "description": "Not editable. Must match the interval's current value if supplied."
+          },
+          "priceKey": {
+            "type": "string",
+            "description": "Not editable. Must match the interval's current value if supplied."
+          },
+          "planVersionId": {
+            "type": "string",
+            "description": "Not editable. Must match the interval's current value if supplied."
+          },
+          "billingCadence": {
+            "type": "string",
+            "description": "Not editable. Must match the interval's current value if supplied."
+          },
+          "billingMode": {
+            "type": "string",
+            "enum": [
+              "advance",
+              "arrears"
+            ],
+            "description": "Not editable. Must match the interval's current value if supplied."
+          },
+          "billDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Not editable. Must match the interval's current value if supplied."
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Not editable. Must match the interval's current value if supplied."
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "When the interval stops billing. Send a date on or inside one of the billing periods to close the price. Send null to re-open it. Omit to keep the current value."
+          }
+        }
+      },
+      "SubscriptionIntervalRemoveOp": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The interval being removed."
+          }
+        }
+      },
+      "EditSubscriptionIntervalsRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "minProperties": 1,
+        "description": "An add/edit/remove op set to apply to the subscription's price timeline. At least one operation is required.",
+        "properties": {
+          "add": {
+            "type": "array",
+            "maxItems": 25,
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionIntervalAddOp"
+            },
+            "description": "New override segments to add."
+          },
+          "edit": {
+            "type": "array",
+            "maxItems": 25,
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionIntervalEditOp"
+            },
+            "description": "Changes to existing intervals."
+          },
+          "remove": {
+            "type": "array",
+            "maxItems": 25,
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionIntervalRemoveOp"
+            },
+            "description": "Intervals to remove outright."
+          }
+        }
+      },
+      "EditSubscriptionIntervalsResponse": {
+        "type": "object",
+        "properties": {
+          "intervals": {
+            "type": "array",
+            "description": "The timeline's effective price intervals after applying the op set, ordered by start date.",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionInterval"
+            }
+          },
+          "unchanged": {
+            "type": "boolean",
+            "description": "True when the op set resolved to no change and nothing was written."
+          },
+          "lineItems": {
+            "type": "object",
+            "properties": {
+              "created": {
+                "type": "integer",
+                "description": "Number of distinct prices that gained a line item as this timeline edit was re-derived into billing."
+              },
+              "removed": {
+                "type": "integer",
+                "description": "Number of distinct prices whose future/uninvoiced line items were removed as this timeline edit was re-derived into billing."
+              },
+              "syncFailed": {
+                "type": "boolean",
+                "description": "True when the timeline edit was saved but the line-item re-derive failed. The edit is not rolled back, and the re-derive is retried automatically. Resubmitting the same request retries it sooner."
+              }
+            },
+            "required": [
+              "created",
+              "removed"
+            ]
+          }
+        },
+        "required": [
+          "intervals",
+          "unchanged",
+          "lineItems"
+        ]
       },
       "SubscriptionPortal": {
         "type": "object",

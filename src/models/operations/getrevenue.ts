@@ -31,6 +31,18 @@ export const GroupBy = {
  */
 export type GroupBy = ClosedEnum<typeof GroupBy>;
 
+/**
+ * Which date places revenue inside the window. 'issued' (default) counts whole invoices by their issue date, the basis revenue is recognised on. 'billingPeriod' counts invoice lines by the start of the period each line bills, so a window covering one billing period returns that period's charges, whichever invoices carry them: this month's advance fee and this month's arrears usage. Paid, outstanding and written-off follow each line's invoice; a refund splits across its invoice's lines by subtotal; payments not tied to an invoice are excluded because they bill no period.
+ */
+export const PeriodBasis = {
+  Issued: "issued",
+  BillingPeriod: "billingPeriod",
+} as const;
+/**
+ * Which date places revenue inside the window. 'issued' (default) counts whole invoices by their issue date, the basis revenue is recognised on. 'billingPeriod' counts invoice lines by the start of the period each line bills, so a window covering one billing period returns that period's charges, whichever invoices carry them: this month's advance fee and this month's arrears usage. Paid, outstanding and written-off follow each line's invoice; a refund splits across its invoice's lines by subtotal; payments not tied to an invoice are excluded because they bill no period.
+ */
+export type PeriodBasis = ClosedEnum<typeof PeriodBasis>;
+
 export type GetRevenueRequest = {
   /**
    * Start of the time range (ISO 8601 format)
@@ -64,6 +76,10 @@ export type GetRevenueRequest = {
    * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
    */
   groupBy?: GroupBy | undefined;
+  /**
+   * Which date places revenue inside the window. 'issued' (default) counts whole invoices by their issue date, the basis revenue is recognised on. 'billingPeriod' counts invoice lines by the start of the period each line bills, so a window covering one billing period returns that period's charges, whichever invoices carry them: this month's advance fee and this month's arrears usage. Paid, outstanding and written-off follow each line's invoice; a refund splits across its invoice's lines by subtotal; payments not tied to an invoice are excluded because they bill no period.
+   */
+  periodBasis?: PeriodBasis | undefined;
 };
 
 /** @internal */
@@ -76,6 +92,10 @@ export const GroupBy$outboundSchema: z.ZodNativeEnum<typeof GroupBy> = z
   .nativeEnum(GroupBy);
 
 /** @internal */
+export const PeriodBasis$outboundSchema: z.ZodNativeEnum<typeof PeriodBasis> = z
+  .nativeEnum(PeriodBasis);
+
+/** @internal */
 export type GetRevenueRequest$Outbound = {
   startTime: string;
   endTime: string;
@@ -85,6 +105,7 @@ export type GetRevenueRequest$Outbound = {
   subscriptionIds?: Array<string> | undefined;
   currency?: string | undefined;
   groupBy?: string | undefined;
+  periodBasis: string;
 };
 
 /** @internal */
@@ -101,6 +122,7 @@ export const GetRevenueRequest$outboundSchema: z.ZodType<
   subscriptionIds: z.array(z.string()).optional(),
   currency: z.string().optional(),
   groupBy: GroupBy$outboundSchema.optional(),
+  periodBasis: PeriodBasis$outboundSchema.default("issued"),
 });
 
 export function getRevenueRequestToJSON(

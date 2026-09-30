@@ -118,6 +118,10 @@ export type CreateSubscriptionRequest = {
    */
   sessionExpiryMinutes?: number | undefined;
   /**
+   * How the subscription follows new versions of its plan. `floating` follows the plan's default version: when the default changes, the subscription bills from the new default from its next billing period. `pinned` keeps the plan version that the subscription holds. A subscription created without a value is `floating`. A change to this value does not change a billing period that has already started.
+   */
+  versionPolicy?: models.SubscriptionVersionPolicy | undefined;
+  /**
    * Free-form merchant metadata to attach to the subscription. Values must be strings, numbers, or booleans.
    */
   metadata?: { [k: string]: models.SubscriptionMetadata } | undefined;
@@ -215,6 +219,7 @@ export type CreateSubscriptionRequest$Outbound = {
   renewalReminderDays?: number | null | undefined;
   paymentTermDays?: number | undefined;
   sessionExpiryMinutes?: number | undefined;
+  versionPolicy?: string | undefined;
   metadata?: { [k: string]: models.SubscriptionMetadata$Outbound } | undefined;
 };
 
@@ -240,6 +245,7 @@ export const CreateSubscriptionRequest$outboundSchema: z.ZodType<
   renewalReminderDays: z.nullable(z.number().int()).optional(),
   paymentTermDays: z.number().int().optional(),
   sessionExpiryMinutes: z.number().optional(),
+  versionPolicy: models.SubscriptionVersionPolicy$outboundSchema.optional(),
   metadata: z.record(models.SubscriptionMetadata$outboundSchema).optional(),
 });
 

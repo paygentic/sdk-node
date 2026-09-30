@@ -1144,7 +1144,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z","paymentTermDays":186713}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z","paymentTermDays":186713}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1446,7 +1446,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z","paymentTermDays":868201}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"pinned","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z","paymentTermDays":868201}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1504,7 +1504,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z","paymentTermDays":472943}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z","paymentTermDays":472943}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1951,6 +1951,9 @@ workflows:
           - name: bucketWidth
             in: query
             value: day
+          - name: periodBasis
+            in: query
+            value: issued
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -3014,7 +3017,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z","paymentTermDays":349693}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z","paymentTermDays":349693}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -3956,6 +3959,43 @@ workflows:
           - context: $response.body
             condition: |
               {"object":"subscriptionAdjustment","id":"<id>","subscriptionId":"<id>","type":"maximumQuantity","percentageDiscount":"<value>","usageDiscount":"<value>","minimumQuantity":"<value>","maximumQuantity":"<value>","targetPriceIds":["<value 1>","<value 2>"],"effectiveFrom":"2026-08-16T16:31:19.794Z","effectiveTo":"2024-03-01T05:31:19.703Z","description":"phew hammock vain especially trolley dress","createdAt":"2025-01-30T16:16:28.658Z"}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: getSubscriptionIntervals
+    steps:
+      - stepId: test
+        operationId: getSubscriptionIntervals
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"intervals":[]}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: editSubscriptionIntervals
+    steps:
+      - stepId: test
+        operationId: editSubscriptionIntervals
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload: {}
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"intervals":[{"id":"<id>","priceId":"<id>","priceKey":"<value>","kind":"subscription_owned","planVersionId":"<id>","unitPrice":"<value>","baseQuantity":"<value>","quantityTransitions":[],"billingCadence":"<value>","billingMode":"arrears","billDate":"2024-02-20T13:11:32.225Z","startDate":"2026-07-04T12:49:14.200Z","endDate":"2025-12-14T13:27:12.500Z"}],"unchanged":false,"lineItems":{"created":32019,"removed":767193}}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
