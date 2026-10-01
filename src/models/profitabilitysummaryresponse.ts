@@ -49,9 +49,25 @@ export type ProfitabilitySummaryResponse = {
    */
   currency: string;
   /**
-   * Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed.
+   * Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed. With `excludeEmpty=true`, customers with neither revenue nor cost in the period are left out.
    */
   rows: Array<ProfitabilityRow>;
+  /**
+   * The merchant's customers this summary scored, whether or not they made a row.
+   */
+  customerCount?: number | undefined;
+  /**
+   * Customers with neither revenue nor cost in the period, counted whether or not `excludeEmpty` left them out of `rows`. Null when a cost read failed: their cost was never established, so none is counted and `excludeEmpty` leaves nobody out.
+   */
+  emptyCustomerCount?: number | null | undefined;
+  /**
+   * Customers `rows` does not carry because a cost read failed (see `warnings`) and they had no revenue in the period. Null when every cost read settled.
+   */
+  unloadedCustomerCount?: number | null | undefined;
+  /**
+   * The customers `emptyCustomerCount` counts that `rows` does not carry, either as a row or folded into the 'Other' row, sorted by name, each reading zero with a null margin. Present only when `includeEmpty=true` and the count is answered. They are never ranked, never part of the top-N and never folded into the 'Other' row.
+   */
+  emptyCustomers?: Array<ProfitabilityRow> | undefined;
   /**
    * Non-fatal warnings collected during cost discovery (e.g. an individual cost query failed). Empty array on a clean run.
    */
@@ -122,6 +138,10 @@ export const ProfitabilitySummaryResponse$inboundSchema: z.ZodType<
   object: z.literal("profitability_summary"),
   currency: z.string(),
   rows: z.array(ProfitabilityRow$inboundSchema),
+  customerCount: z.number().int().optional(),
+  emptyCustomerCount: z.nullable(z.number().int()).optional(),
+  unloadedCustomerCount: z.nullable(z.number().int()).optional(),
+  emptyCustomers: z.array(ProfitabilityRow$inboundSchema).optional(),
   warnings: z.array(z.string()).optional(),
   revenueRange: z.nullable(
     z.lazy(() => ProfitabilitySummaryResponseRevenueRange$inboundSchema),

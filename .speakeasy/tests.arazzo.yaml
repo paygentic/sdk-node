@@ -2806,6 +2806,9 @@ workflows:
           - name: limit
             in: query
             value: 25
+          - name: excludeEmpty
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -2847,6 +2850,9 @@ workflows:
           - name: limit
             in: query
             value: 25
+          - name: excludeEmpty
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -2888,6 +2894,9 @@ workflows:
           - name: limit
             in: query
             value: 25
+          - name: excludeEmpty
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -2929,6 +2938,9 @@ workflows:
           - name: limit
             in: query
             value: 25
+          - name: excludeEmpty
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
@@ -2955,15 +2967,18 @@ workflows:
           - name: topN
             in: query
             value: 10
-          - name: bucketWidth
+          - name: excludeEmpty
             in: query
-            value: day
+            value: false
+          - name: includeEmpty
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"profitability_summary","currency":"Philippine Peso","rows":[{"customerId":"<id>","customerName":"<value>","netRevenue":"<value>","totalCost":"<value>","profit":"<value>","marginPct":"<value>","trend":{"values":["<value 1>","<value 2>"],"periodChange":4924.32}}]}
+              {"object":"profitability_summary","currency":"Philippine Peso","rows":[{"customerId":"<id>","customerName":"<value>","netRevenue":"<value>","totalCost":"<value>","profit":"<value>","marginPct":"<value>"}]}
             type: simple
     x-speakeasy-test-group: Profitability
     x-speakeasy-test-rebuild: true
@@ -3989,13 +4004,58 @@ workflows:
             value: <id>
         requestBody:
           contentType: application/json
-          payload: {}
+          payload:
+            remove:
+              - id: <id>
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"intervals":[{"id":"<id>","priceId":"<id>","priceKey":"<value>","kind":"subscription_owned","planVersionId":"<id>","unitPrice":"<value>","baseQuantity":"<value>","quantityTransitions":[],"billingCadence":"<value>","billingMode":"arrears","billDate":"2024-02-20T13:11:32.225Z","startDate":"2026-07-04T12:49:14.200Z","endDate":"2025-12-14T13:27:12.500Z"}],"unchanged":false,"lineItems":{"created":32019,"removed":767193}}
+              {"intervals":[{"id":"<id>","priceId":"<id>","priceKey":"<value>","kind":"subscription_owned","planVersionId":"<id>","unitPrice":"<value>","baseQuantity":"<value>","quantityTransitions":[],"billingCadence":"<value>","billingMode":"arrears","billDate":"2024-02-20T13:11:32.225Z","startDate":"2026-07-04T12:49:14.200Z","endDate":"2025-12-14T13:27:12.500Z"}],"unchanged":false,"lineItems":{"created":32019,"removed":767193},"intervalChange":{"id":"<id>","merchantId":"<id>","subscriptionId":"<id>","changeReason":"commercial","description":"ruin yet gadzooks metabolite storyboard","metadata":{},"createdAt":"2026-01-11T12:11:04.200Z","intervals":[]}}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSubscriptionIntervalChanges
+    steps:
+      - stepId: test
+        operationId: listSubscriptionIntervalChanges
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: "10"
+          - name: offset
+            in: query
+            value: "0"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[],"pagination":{"limit":228772,"offset":298131,"total":794576}}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: listIntervalChanges
+    steps:
+      - stepId: test
+        operationId: listIntervalChanges
+        parameters:
+          - name: limit
+            in: query
+            value: "10"
+          - name: offset
+            in: query
+            value: "0"
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[],"pagination":{"limit":613590,"offset":371832,"total":360633}}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true

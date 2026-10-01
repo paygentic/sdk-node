@@ -7,13 +7,24 @@ import { EditSubscriptionIntervalsRequest } from "@paygentic/sdk/models/operatio
 
 let value: EditSubscriptionIntervalsRequest = {
   id: "<id>",
-  editSubscriptionIntervalsRequest: {},
+  editSubscriptionIntervalsRequest: {
+    add: [
+      {
+        priceKey: "<value>",
+        unitPrice: null,
+        baseQuantity: "<value>",
+        billingCadence: "<value>",
+        billingMode: "advance",
+        startDate: new Date("2025-11-04T22:49:10.595Z"),
+      },
+    ],
+  },
 };
 ```
 
 ## Fields
 
-| Field                                                                                       | Type                                                                                        | Required                                                                                    | Description                                                                                 |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `id`                                                                                        | *string*                                                                                    | :heavy_check_mark:                                                                          | The subscription ID                                                                         |
-| `editSubscriptionIntervalsRequest`                                                          | [models.EditSubscriptionIntervalsRequest](../../models/editsubscriptionintervalsrequest.md) | :heavy_check_mark:                                                                          | N/A                                                                                         |
+| Field                                          | Type                                           | Required                                       | Description                                    |
+| ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| `id`                                           | *string*                                       | :heavy_check_mark:                             | The subscription ID                            |
+| `editSubscriptionIntervalsRequest`             | *models.EditSubscriptionIntervalsRequestUnion* | :heavy_check_mark:                             | N/A                                            |

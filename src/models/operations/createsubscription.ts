@@ -125,6 +125,18 @@ export type CreateSubscriptionRequest = {
    * Free-form merchant metadata to attach to the subscription. Values must be strings, numbers, or booleans.
    */
   metadata?: { [k: string]: models.SubscriptionMetadata } | undefined;
+  /**
+   * Why a change was made. `correction` fixes data to match what was agreed; `migration` moves a contract from another system; `commercial` is a real change to the deal. Defaults to `unspecified`.
+   */
+  changeReason?: models.ChangeReason | undefined;
+  /**
+   * A free-text note on why these intervals are changing.
+   */
+  changeDescription?: string | undefined;
+  /**
+   * Your own key-value data about the change, such as a CRM deal ID.
+   */
+  changeMetadata?: { [k: string]: models.IntervalChangeMetadata } | undefined;
 };
 
 /** @internal */
@@ -221,6 +233,11 @@ export type CreateSubscriptionRequest$Outbound = {
   sessionExpiryMinutes?: number | undefined;
   versionPolicy?: string | undefined;
   metadata?: { [k: string]: models.SubscriptionMetadata$Outbound } | undefined;
+  changeReason?: string | undefined;
+  changeDescription?: string | undefined;
+  changeMetadata?:
+    | { [k: string]: models.IntervalChangeMetadata$Outbound }
+    | undefined;
 };
 
 /** @internal */
@@ -247,6 +264,10 @@ export const CreateSubscriptionRequest$outboundSchema: z.ZodType<
   sessionExpiryMinutes: z.number().optional(),
   versionPolicy: models.SubscriptionVersionPolicy$outboundSchema.optional(),
   metadata: z.record(models.SubscriptionMetadata$outboundSchema).optional(),
+  changeReason: models.ChangeReason$outboundSchema.optional(),
+  changeDescription: z.string().optional(),
+  changeMetadata: z.record(models.IntervalChangeMetadata$outboundSchema)
+    .optional(),
 });
 
 export function createSubscriptionRequestToJSON(

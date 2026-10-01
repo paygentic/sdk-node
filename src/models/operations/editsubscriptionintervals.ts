@@ -11,14 +11,15 @@ export type EditSubscriptionIntervalsRequest = {
    * The subscription ID
    */
   id: string;
-  editSubscriptionIntervalsRequest: models.EditSubscriptionIntervalsRequest;
+  editSubscriptionIntervalsRequest:
+    models.EditSubscriptionIntervalsRequestUnion;
 };
 
 /** @internal */
 export type EditSubscriptionIntervalsRequest$Outbound = {
   id: string;
   EditSubscriptionIntervalsRequest:
-    models.EditSubscriptionIntervalsRequest$Outbound;
+    models.EditSubscriptionIntervalsRequestUnion$Outbound;
 };
 
 /** @internal */
@@ -29,7 +30,7 @@ export const EditSubscriptionIntervalsRequest$outboundSchema: z.ZodType<
 > = z.object({
   id: z.string(),
   editSubscriptionIntervalsRequest:
-    models.EditSubscriptionIntervalsRequest$outboundSchema,
+    models.EditSubscriptionIntervalsRequestUnion$outboundSchema,
 }).transform((v) => {
   return remap$(v, {
     editSubscriptionIntervalsRequest: "EditSubscriptionIntervalsRequest",

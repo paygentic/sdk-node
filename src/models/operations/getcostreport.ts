@@ -82,6 +82,10 @@ export type GetCostReportRequest = {
    */
   comparePriorPeriod?: boolean | undefined;
   /**
+   * When true, leave out groups with neither cost nor usage in the period. They are dropped before ranking, so they take no top-N slot, do not appear in the 'Other' bucket and are not counted in `pagination.total`. `emptyGroupCount` says how many were left out.
+   */
+  excludeEmpty?: boolean | undefined;
+  /**
    * Time window granularity for the time-series breakdown.
    */
   windowSize?: GetCostReportWindowSize | undefined;
@@ -132,6 +136,7 @@ export type GetCostReportRequest$Outbound = {
   filterGroupBy?: string | undefined;
   topN: number;
   comparePriorPeriod: boolean;
+  excludeEmpty: boolean;
   windowSize?: string | undefined;
   sort: string;
   sortDir: string;
@@ -155,6 +160,7 @@ export const GetCostReportRequest$outboundSchema: z.ZodType<
   filterGroupBy: z.string().optional(),
   topN: z.number().int().default(9),
   comparePriorPeriod: z.boolean().default(false),
+  excludeEmpty: z.boolean().default(false),
   windowSize: GetCostReportWindowSize$outboundSchema.optional(),
   sort: Sort$outboundSchema.default("totalCost"),
   sortDir: SortDir$outboundSchema.default("desc"),

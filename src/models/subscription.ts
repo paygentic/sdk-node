@@ -4,7 +4,8 @@
 
 import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
-import { ClosedEnum } from "../types/enums.js";
+import * as openEnums from "../types/enums.js";
+import { ClosedEnum, OpenEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import {
@@ -113,6 +114,20 @@ export const SubscriptionStatusEnum = {
 } as const;
 export type SubscriptionStatusEnum = ClosedEnum<typeof SubscriptionStatusEnum>;
 
+/**
+ * Why the subscription was terminated. Null while it is not terminated.
+ */
+export const TerminationChangeReason = {
+  Commercial: "commercial",
+  Correction: "correction",
+  Migration: "migration",
+  Unspecified: "unspecified",
+} as const;
+/**
+ * Why the subscription was terminated. Null while it is not terminated.
+ */
+export type TerminationChangeReason = OpenEnum<typeof TerminationChangeReason>;
+
 export type Merchant = {
   id: string;
   name: string;
@@ -204,6 +219,10 @@ export type Subscription = {
    * Reason for termination
    */
   terminationReason?: string | undefined;
+  /**
+   * Why the subscription was terminated. Null while it is not terminated.
+   */
+  terminationChangeReason?: TerminationChangeReason | null | undefined;
   /**
    * Test clock ID if this subscription is attached to a test clock. Only present in non-production environments.
    */
@@ -359,6 +378,13 @@ export const SubscriptionStatusEnum$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(SubscriptionStatusEnum);
 
 /** @internal */
+export const TerminationChangeReason$inboundSchema: z.ZodType<
+  TerminationChangeReason,
+  z.ZodTypeDef,
+  unknown
+> = openEnums.inboundSchema(TerminationChangeReason);
+
+/** @internal */
 export const Merchant$inboundSchema: z.ZodType<
   Merchant,
   z.ZodTypeDef,
@@ -457,6 +483,8 @@ export const Subscription$inboundSchema: z.ZodType<
   ).optional(),
   terminatedBy: z.string().optional(),
   terminationReason: z.string().optional(),
+  terminationChangeReason: z.nullable(TerminationChangeReason$inboundSchema)
+    .optional(),
   testClockId: z.string().optional(),
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   walletId: z.string().optional(),

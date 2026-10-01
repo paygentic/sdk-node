@@ -10,6 +10,10 @@ import {
   SubscriptionInterval,
   SubscriptionInterval$inboundSchema,
 } from "./subscriptioninterval.js";
+import {
+  SubscriptionIntervalChange,
+  SubscriptionIntervalChange$inboundSchema,
+} from "./subscriptionintervalchange.js";
 
 export type EditSubscriptionIntervalsResponseLineItems = {
   /**
@@ -36,6 +40,10 @@ export type EditSubscriptionIntervalsResponse = {
    */
   unchanged: boolean;
   lineItems: EditSubscriptionIntervalsResponseLineItems;
+  /**
+   * The record this edit wrote. Null when the edit changed nothing.
+   */
+  intervalChange: SubscriptionIntervalChange | null;
 };
 
 /** @internal */
@@ -74,6 +82,7 @@ export const EditSubscriptionIntervalsResponse$inboundSchema: z.ZodType<
   lineItems: z.lazy(() =>
     EditSubscriptionIntervalsResponseLineItems$inboundSchema
   ),
+  intervalChange: z.nullable(SubscriptionIntervalChange$inboundSchema),
 });
 
 export function editSubscriptionIntervalsResponseFromJSON(

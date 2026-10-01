@@ -27,18 +27,18 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get profitability summary
+ * List Merchant Interval Changes
  *
  * @remarks
- * Returns a per-customer profitability summary for a merchant over a date range. Each row aggregates revenue (from issued + paid invoices), cost (from metered cost discovery), profit, and margin. Customers are ranked by profit descending and capped at topN; the remainder is rolled into a single self-consistent 'Other' row whose revenue, cost, and profit reflect the same set of customers. Rows are inner-joined against the merchant's customer list, so orphaned meter subjects from deleted or unknown customers are dropped.
+ * Lists the interval changes of all your subscriptions, oldest first. `from` is included and `to` is excluded.
  */
-export function profitabilityGetProfitability(
+export function subscriptionsListIntervalChanges(
   client: PaygenticCore,
-  request: operations.GetProfitabilityRequest,
+  request?: operations.ListIntervalChangesRequest | undefined,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.ProfitabilitySummaryResponse,
+    models.SubscriptionIntervalChangesResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -60,12 +60,12 @@ export function profitabilityGetProfitability(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.GetProfitabilityRequest,
+  request?: operations.ListIntervalChangesRequest | undefined,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.ProfitabilitySummaryResponse,
+      models.SubscriptionIntervalChangesResponse,
       | errors.BadRequest
       | errors.ErrorT
       | PaygenticError
@@ -82,7 +82,10 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.GetProfitabilityRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.ListIntervalChangesRequest$outboundSchema.optional().parse(
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -91,16 +94,14 @@ async function $do(
   const payload = parsed.value;
   const body = null;
 
-  const path = pathToFunc("/v0/profitability")();
+  const path = pathToFunc("/v0/intervalChanges")();
 
   const query = encodeFormQuery({
-    "currency": payload.currency,
-    "excludeEmpty": payload.excludeEmpty,
-    "from": payload.from,
-    "includeEmpty": payload.includeEmpty,
-    "merchantId": payload.merchantId,
-    "to": payload.to,
-    "topN": payload.topN,
+    "changeReason": payload?.changeReason,
+    "from": payload?.from,
+    "limit": payload?.limit,
+    "offset": payload?.offset,
+    "to": payload?.to,
   });
 
   const headers = new Headers(compactMap({
@@ -114,7 +115,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "getProfitability",
+    operationID: "listIntervalChanges",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -158,7 +159,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.ProfitabilitySummaryResponse,
+    models.SubscriptionIntervalChangesResponse,
     | errors.BadRequest
     | errors.ErrorT
     | PaygenticError
@@ -170,7 +171,7 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.ProfitabilitySummaryResponse$inboundSchema),
+    M.json(200, models.SubscriptionIntervalChangesResponse$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
     M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),

@@ -97,6 +97,7 @@ async function $do(
     "comparePriorPeriod": payload.comparePriorPeriod,
     "costId": payload.costId,
     "currency": payload.currency,
+    "excludeEmpty": payload.excludeEmpty,
     "filterGroupBy": payload.filterGroupBy,
     "from": payload.from,
     "groupBy": payload.groupBy,

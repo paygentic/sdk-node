@@ -3,7 +3,7 @@
  */
 
 import { PaygenticCore } from "../core.js";
-import { encodeFormQuery } from "../lib/encodings.js";
+import { encodeFormQuery, encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
@@ -27,19 +27,18 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Get profitability summary
+ * List Interval Changes
  *
  * @remarks
- * Returns a per-customer profitability summary for a merchant over a date range. Each row aggregates revenue (from issued + paid invoices), cost (from metered cost discovery), profit, and margin. Customers are ranked by profit descending and capped at topN; the remainder is rolled into a single self-consistent 'Other' row whose revenue, cost, and profit reflect the same set of customers. Rows are inner-joined against the merchant's customer list, so orphaned meter subjects from deleted or unknown customers are dropped.
+ * Lists the subscription's interval changes, oldest first. Each shows why it was made and each interval before and after.
  */
-export function profitabilityGetProfitability(
+export function subscriptionsListSubscriptionIntervalChanges(
   client: PaygenticCore,
-  request: operations.GetProfitabilityRequest,
+  request: operations.ListSubscriptionIntervalChangesRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    models.ProfitabilitySummaryResponse,
-    | errors.BadRequest
+    models.SubscriptionIntervalChangesResponse,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -60,13 +59,12 @@ export function profitabilityGetProfitability(
 
 async function $do(
   client: PaygenticCore,
-  request: operations.GetProfitabilityRequest,
+  request: operations.ListSubscriptionIntervalChangesRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      models.ProfitabilitySummaryResponse,
-      | errors.BadRequest
+      models.SubscriptionIntervalChangesResponse,
       | errors.ErrorT
       | PaygenticError
       | ResponseValidationError
@@ -82,7 +80,10 @@ async function $do(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.GetProfitabilityRequest$outboundSchema.parse(value),
+    (value) =>
+      operations.ListSubscriptionIntervalChangesRequest$outboundSchema.parse(
+        value,
+      ),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -91,16 +92,17 @@ async function $do(
   const payload = parsed.value;
   const body = null;
 
-  const path = pathToFunc("/v0/profitability")();
+  const pathParams = {
+    id: encodeSimple("id", payload.id, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+  const path = pathToFunc("/v0/subscriptions/{id}/intervalChanges")(pathParams);
 
   const query = encodeFormQuery({
-    "currency": payload.currency,
-    "excludeEmpty": payload.excludeEmpty,
-    "from": payload.from,
-    "includeEmpty": payload.includeEmpty,
-    "merchantId": payload.merchantId,
-    "to": payload.to,
-    "topN": payload.topN,
+    "limit": payload.limit,
+    "offset": payload.offset,
   });
 
   const headers = new Headers(compactMap({
@@ -114,7 +116,7 @@ async function $do(
   const context = {
     options: client._options,
     baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "getProfitability",
+    operationID: "listSubscriptionIntervalChanges",
     oAuth2Scopes: null,
 
     resolvedSecurity: requestSecurity,
@@ -144,7 +146,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "4XX", "500", "5XX"],
+    errorCodes: ["401", "403", "404", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -158,8 +160,7 @@ async function $do(
   };
 
   const [result] = await M.match<
-    models.ProfitabilitySummaryResponse,
-    | errors.BadRequest
+    models.SubscriptionIntervalChangesResponse,
     | errors.ErrorT
     | PaygenticError
     | ResponseValidationError
@@ -170,9 +171,8 @@ async function $do(
     | UnexpectedClientError
     | SDKValidationError
   >(
-    M.json(200, models.ProfitabilitySummaryResponse$inboundSchema),
-    M.jsonErr(400, errors.BadRequest$inboundSchema),
-    M.jsonErr([401, 403], errors.ErrorT$inboundSchema),
+    M.json(200, models.SubscriptionIntervalChangesResponse$inboundSchema),
+    M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

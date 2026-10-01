@@ -422,6 +422,8 @@ run();
 * [updateSubscription](docs/sdks/subscriptions/README.md#updatesubscription) - Update
 * [getSubscriptionIntervals](docs/sdks/subscriptions/README.md#getsubscriptionintervals) - Get Price Intervals
 * [editSubscriptionIntervals](docs/sdks/subscriptions/README.md#editsubscriptionintervals) - Edit Price Intervals
+* [listSubscriptionIntervalChanges](docs/sdks/subscriptions/README.md#listsubscriptionintervalchanges) - List Interval Changes
+* [listIntervalChanges](docs/sdks/subscriptions/README.md#listintervalchanges) - List Merchant Interval Changes
 * [generatePortalLink](docs/sdks/subscriptions/README.md#generateportallink) - Generate Portal Link
 * [terminate](docs/sdks/subscriptions/README.md#terminate) - Terminate
 * [reconcileSubscriptionFeatures](docs/sdks/subscriptions/README.md#reconcilesubscriptionfeatures) - Reconcile Features
@@ -590,7 +592,9 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`subscriptionsGet`](docs/sdks/subscriptions/README.md#get) - Get
 - [`subscriptionsGetSubscriptionIntervals`](docs/sdks/subscriptions/README.md#getsubscriptionintervals) - Get Price Intervals
 - [`subscriptionsList`](docs/sdks/subscriptions/README.md#list) - List
+- [`subscriptionsListIntervalChanges`](docs/sdks/subscriptions/README.md#listintervalchanges) - List Merchant Interval Changes
 - [`subscriptionsListSubscriptionAdjustments`](docs/sdks/subscriptions/README.md#listsubscriptionadjustments) - List Adjustments
+- [`subscriptionsListSubscriptionIntervalChanges`](docs/sdks/subscriptions/README.md#listsubscriptionintervalchanges) - List Interval Changes
 - [`subscriptionsReconcileSubscriptionFeatures`](docs/sdks/subscriptions/README.md#reconcilesubscriptionfeatures) - Reconcile Features
 - [`subscriptionsTerminate`](docs/sdks/subscriptions/README.md#terminate) - Terminate
 - [`subscriptionsUpdateSubscription`](docs/sdks/subscriptions/README.md#updatesubscription) - Update
@@ -761,11 +765,11 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 91 of 141 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 141 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 141 methods.*
-* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be restructured because a subscription still bills it directly. Status code `409`. Applicable to 1 of 141 methods.*
-* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 141 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 92 of 143 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 143 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 143 methods.*
+* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be restructured because a subscription still bills it directly. Status code `409`. Applicable to 1 of 143 methods.*
+* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 143 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

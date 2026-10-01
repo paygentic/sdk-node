@@ -6808,6 +6808,17 @@
                   },
                   "metadata": {
                     "$ref": "#/components/schemas/SubscriptionMetadata"
+                  },
+                  "changeReason": {
+                    "$ref": "#/components/schemas/ChangeReason"
+                  },
+                  "changeDescription": {
+                    "type": "string",
+                    "maxLength": 1000,
+                    "description": "A free-text note on why these intervals are changing."
+                  },
+                  "changeMetadata": {
+                    "$ref": "#/components/schemas/IntervalChangeMetadata"
                   }
                 }
               },
@@ -7279,6 +7290,149 @@
         }
       }
     },
+    "/v0/subscriptions/{id}/intervalChanges": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "List Interval Changes",
+        "description": "Lists the subscription's interval changes, oldest first. Each shows why it was made and each interval before and after.",
+        "operationId": "listSubscriptionIntervalChanges",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The subscription ID"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "default": "10"
+            },
+            "description": "Number of interval changes to return"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "string",
+              "default": "0"
+            },
+            "description": "Number of interval changes to skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription's interval changes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionIntervalChangesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/intervalChanges": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "List Merchant Interval Changes",
+        "description": "Lists the interval changes of all your subscriptions, oldest first. `from` is included and `to` is excluded.",
+        "operationId": "listIntervalChanges",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "string",
+              "default": "10"
+            },
+            "description": "Number of interval changes to return"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "string",
+              "default": "0"
+            },
+            "description": "Number of interval changes to skip"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only return changes recorded at or after this time"
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Only return changes recorded before this time"
+          },
+          {
+            "in": "query",
+            "name": "changeReason",
+            "schema": {
+              "$ref": "#/components/schemas/ChangeReason"
+            },
+            "description": "Only return changes with this reason."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your interval changes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionIntervalChangesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v0/subscriptions/{id}/portal": {
       "post": {
         "tags": [
@@ -7396,6 +7550,9 @@
                     "description": "Cancellation explanation text. Sample values: 'Customer requested cancellation', 'Payment failure', 'Service migration', 'Contract expiration'",
                     "minLength": 1,
                     "maxLength": 1000
+                  },
+                  "changeReason": {
+                    "$ref": "#/components/schemas/ChangeReason"
                   }
                 }
               }
@@ -10067,6 +10224,16 @@
             "description": "When true, include prior-period comparison data in each group."
           },
           {
+            "name": "excludeEmpty",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "When true, leave out groups with neither cost nor usage in the period. They are dropped before ranking, so they take no top-N slot, do not appear in the 'Other' bucket and are not counted in `pagination.total`. `emptyGroupCount` says how many were left out."
+          },
+          {
             "name": "windowSize",
             "in": "query",
             "required": false,
@@ -10208,7 +10375,8 @@
                 "day",
                 "week"
               ],
-              "default": "day"
+              "default": "day",
+              "x-speakeasy-name-override": "GetRevenueBucketWidth"
             }
           },
           {
@@ -10389,18 +10557,23 @@
             }
           },
           {
-            "name": "bucketWidth",
+            "name": "excludeEmpty",
             "in": "query",
             "required": false,
-            "description": "Time bucket granularity for the per-customer revenue trend. When omitted, the server picks a reasonable bucket from the window length.",
+            "description": "When true, leave customers with neither revenue nor cost in the period out of `rows`. They are dropped before ranking, so they take no top-N slot and are not folded into the 'Other' row. `emptyCustomerCount` says how many there are either way.",
             "schema": {
-              "type": "string",
-              "enum": [
-                "hour",
-                "day",
-                "week"
-              ],
-              "default": "day"
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "includeEmpty",
+            "in": "query",
+            "required": false,
+            "description": "When true, also return in `emptyCustomers` the customers counted in `emptyCustomerCount` that `rows` does not carry, so a caller can show the complete customer list.",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           }
         ],
@@ -16521,6 +16694,19 @@
             "type": "string",
             "description": "Reason for termination"
           },
+          "terminationChangeReason": {
+            "type": "string",
+            "nullable": true,
+            "enum": [
+              "commercial",
+              "correction",
+              "migration",
+              "unspecified",
+              null
+            ],
+            "x-speakeasy-unknown-values": "allow",
+            "description": "Why the subscription was terminated. Null while it is not terminated."
+          },
           "testClockId": {
             "type": "string",
             "description": "Test clock ID if this subscription is attached to a test clock. Only present in non-production environments."
@@ -16610,6 +16796,33 @@
               }
             }
           }
+        }
+      },
+      "ChangeReason": {
+        "type": "string",
+        "enum": [
+          "commercial",
+          "correction",
+          "migration",
+          "unspecified"
+        ],
+        "x-speakeasy-unknown-values": "allow",
+        "description": "Why a change was made. `correction` fixes data to match what was agreed; `migration` moves a contract from another system; `commercial` is a real change to the deal. Defaults to `unspecified`."
+      },
+      "IntervalChangeMetadata": {
+        "type": "object",
+        "description": "Your own key-value data about the change, such as a CRM deal ID.",
+        "maxProperties": 50,
+        "propertyNames": {
+          "maxLength": 100
+        },
+        "additionalProperties": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ],
+          "maxLength": 500
         }
       },
       "SubscriptionInterval": {
@@ -16914,8 +17127,7 @@
       "EditSubscriptionIntervalsRequest": {
         "type": "object",
         "additionalProperties": false,
-        "minProperties": 1,
-        "description": "An add/edit/remove op set to apply to the subscription's price timeline. At least one operation is required.",
+        "description": "The operations to apply. At least one of add, edit or remove is required.",
         "properties": {
           "add": {
             "type": "array",
@@ -16940,8 +17152,206 @@
               "$ref": "#/components/schemas/SubscriptionIntervalRemoveOp"
             },
             "description": "Intervals to remove outright."
+          },
+          "changeReason": {
+            "$ref": "#/components/schemas/ChangeReason"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000,
+            "description": "A free-text note on why these intervals are changing."
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/IntervalChangeMetadata"
           }
-        }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "add"
+            ]
+          },
+          {
+            "required": [
+              "edit"
+            ]
+          },
+          {
+            "required": [
+              "remove"
+            ]
+          }
+        ]
+      },
+      "SubscriptionIntervalChangeCopy": {
+        "type": "object",
+        "description": "What an interval billed at one point in time.",
+        "properties": {
+          "priceId": {
+            "type": "string"
+          },
+          "priceKey": {
+            "type": "string"
+          },
+          "planVersionId": {
+            "type": "string",
+            "description": "The plan version the interval belongs to."
+          },
+          "unitPrice": {
+            "type": "string",
+            "nullable": true,
+            "description": "The rate as a decimal string, or null when the interval bills the catalog rate."
+          },
+          "resolvedUnitPrice": {
+            "type": "string",
+            "description": "The per-unit rate the interval charged when the change was made."
+          },
+          "baseQuantity": {
+            "type": "string"
+          },
+          "quantityTransitions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "effectiveDate",
+                "quantity"
+              ],
+              "properties": {
+                "effectiveDate": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "quantity": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "billingCadence": {
+            "type": "string",
+            "description": "ISO-8601 duration or 'one_off'"
+          },
+          "billingMode": {
+            "type": "string",
+            "enum": [
+              "advance",
+              "arrears"
+            ],
+            "x-speakeasy-unknown-values": "allow"
+          },
+          "billDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "When a one-off interval bills. Null for every other cadence."
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "required": [
+          "priceId",
+          "priceKey",
+          "planVersionId",
+          "unitPrice",
+          "resolvedUnitPrice",
+          "baseQuantity",
+          "quantityTransitions",
+          "billingCadence",
+          "billingMode",
+          "billDate",
+          "startDate",
+          "endDate"
+        ]
+      },
+      "SubscriptionIntervalChangeEntry": {
+        "type": "object",
+        "properties": {
+          "intervalId": {
+            "type": "string"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionIntervalChangeCopy"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The interval before the edit. Null when the edit added it."
+          },
+          "after": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionIntervalChangeCopy"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The interval after the edit. Null when the edit removed it."
+          }
+        },
+        "required": [
+          "intervalId",
+          "before",
+          "after"
+        ],
+        "description": "One interval that the change added, edited or removed, with its state before and after."
+      },
+      "SubscriptionIntervalChange": {
+        "type": "object",
+        "description": "The record of one change to a subscription's price intervals: what changed, and why.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "merchantId": {
+            "type": "string"
+          },
+          "subscriptionId": {
+            "type": "string"
+          },
+          "changeReason": {
+            "$ref": "#/components/schemas/ChangeReason"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/IntervalChangeMetadata"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "intervals": {
+            "type": "array",
+            "description": "One entry per interval the edit added, changed or removed.",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionIntervalChangeEntry"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "merchantId",
+          "subscriptionId",
+          "changeReason",
+          "description",
+          "metadata",
+          "createdAt",
+          "intervals"
+        ]
       },
       "EditSubscriptionIntervalsResponse": {
         "type": "object",
@@ -16977,13 +17387,43 @@
               "created",
               "removed"
             ]
+          },
+          "intervalChange": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionIntervalChange"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The record this edit wrote. Null when the edit changed nothing."
           }
         },
         "required": [
           "intervals",
           "unchanged",
-          "lineItems"
+          "lineItems",
+          "intervalChange"
         ]
+      },
+      "SubscriptionIntervalChangesResponse": {
+        "type": "object",
+        "required": [
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionIntervalChange"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
+          }
+        }
       },
       "SubscriptionPortal": {
         "type": "object",
@@ -18013,6 +18453,12 @@
             "format": "date-time",
             "nullable": true,
             "description": "When the invoice was paid (null if not yet paid)"
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "When the invoice was issued, in the subscription's effective time (test-clock time on a test clock). Revenue and profitability windows count the invoice by this instant. Null until the invoice is issued."
           },
           "dueAt": {
             "type": "string",
@@ -19136,6 +19582,19 @@
               }
             }
           },
+          "groupCount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Every group the report found, empty groups included, before top-N folding into 'Other' and before pagination."
+          },
+          "emptyGroupCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "description": "Groups with neither cost nor usage in the period, counted over the whole report and reported whether or not `excludeEmpty` is set. Null when a cost read failed (see `warnings`): a group empty in the costs that loaded may have usage in the one that failed, so none is counted and `excludeEmpty` leaves nobody out."
+          },
           "costRange": {
             "type": [
               "object",
@@ -19448,29 +19907,6 @@
           }
         }
       },
-      "ProfitabilityTrend": {
-        "type": "object",
-        "required": [
-          "values",
-          "periodChange"
-        ],
-        "properties": {
-          "values": {
-            "type": "array",
-            "description": "Revenue values per time bucket, oldest first, in unit currency with two decimals.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "periodChange": {
-            "type": [
-              "number",
-              "null"
-            ],
-            "description": "Period-over-period % change (current half vs prior half). Null when prior is zero."
-          }
-        }
-      },
       "ProfitabilityRow": {
         "type": "object",
         "required": [
@@ -19479,8 +19915,7 @@
           "netRevenue",
           "totalCost",
           "profit",
-          "marginPct",
-          "trend"
+          "marginPct"
         ],
         "properties": {
           "customerId": {
@@ -19509,17 +19944,6 @@
               "null"
             ],
             "description": "Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero."
-          },
-          "trend": {
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/ProfitabilityTrend"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Per-customer revenue trend over the period. Null for the 'Other' row and when there's insufficient data."
           }
         }
       },
@@ -19542,8 +19966,36 @@
           },
           "rows": {
             "type": "array",
-            "description": "Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed.",
+            "description": "Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed. With `excludeEmpty=true`, customers with neither revenue nor cost in the period are left out.",
             "maxItems": 101,
+            "items": {
+              "$ref": "#/components/schemas/ProfitabilityRow"
+            }
+          },
+          "customerCount": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The merchant's customers this summary scored, whether or not they made a row."
+          },
+          "emptyCustomerCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "description": "Customers with neither revenue nor cost in the period, counted whether or not `excludeEmpty` left them out of `rows`. Null when a cost read failed: their cost was never established, so none is counted and `excludeEmpty` leaves nobody out."
+          },
+          "unloadedCustomerCount": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "description": "Customers `rows` does not carry because a cost read failed (see `warnings`) and they had no revenue in the period. Null when every cost read settled."
+          },
+          "emptyCustomers": {
+            "type": "array",
+            "description": "The customers `emptyCustomerCount` counts that `rows` does not carry, either as a row or folded into the 'Other' row, sorted by name, each reading zero with a null margin. Present only when `includeEmpty=true` and the count is answered. They are never ranked, never part of the top-N and never folded into the 'Other' row.",
             "items": {
               "$ref": "#/components/schemas/ProfitabilityRow"
             }

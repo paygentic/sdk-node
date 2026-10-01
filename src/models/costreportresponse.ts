@@ -85,6 +85,14 @@ export type CostReportResponse = {
   warnings?: Array<string> | undefined;
   pagination: Pagination;
   /**
+   * Every group the report found, empty groups included, before top-N folding into 'Other' and before pagination.
+   */
+  groupCount?: number | undefined;
+  /**
+   * Groups with neither cost nor usage in the period, counted over the whole report and reported whether or not `excludeEmpty` is set. Null when a cost read failed (see `warnings`): a group empty in the costs that loaded may have usage in the one that failed, so none is counted and `excludeEmpty` leaves nobody out.
+   */
+  emptyGroupCount?: number | null | undefined;
+  /**
    * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.
    */
   costRange?: CostReportResponseCostRange | null | undefined;
@@ -170,6 +178,8 @@ export const CostReportResponse$inboundSchema: z.ZodType<
   availableDimensions: z.array(z.string()),
   warnings: z.array(z.string()).optional(),
   pagination: z.lazy(() => Pagination$inboundSchema),
+  groupCount: z.number().int().optional(),
+  emptyGroupCount: z.nullable(z.number().int()).optional(),
   costRange: z.nullable(z.lazy(() => CostReportResponseCostRange$inboundSchema))
     .optional(),
 });

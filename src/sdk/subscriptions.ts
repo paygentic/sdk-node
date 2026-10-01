@@ -10,7 +10,9 @@ import { subscriptionsGeneratePortalLink } from "../funcs/subscriptionsGenerateP
 import { subscriptionsGet } from "../funcs/subscriptionsGet.js";
 import { subscriptionsGetSubscriptionIntervals } from "../funcs/subscriptionsGetSubscriptionIntervals.js";
 import { subscriptionsList } from "../funcs/subscriptionsList.js";
+import { subscriptionsListIntervalChanges } from "../funcs/subscriptionsListIntervalChanges.js";
 import { subscriptionsListSubscriptionAdjustments } from "../funcs/subscriptionsListSubscriptionAdjustments.js";
+import { subscriptionsListSubscriptionIntervalChanges } from "../funcs/subscriptionsListSubscriptionIntervalChanges.js";
 import { subscriptionsReconcileSubscriptionFeatures } from "../funcs/subscriptionsReconcileSubscriptionFeatures.js";
 import { subscriptionsTerminate } from "../funcs/subscriptionsTerminate.js";
 import { subscriptionsUpdateSubscription } from "../funcs/subscriptionsUpdateSubscription.js";
@@ -107,6 +109,40 @@ export class Subscriptions extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.EditSubscriptionIntervalsResponse> {
     return unwrapAsync(subscriptionsEditSubscriptionIntervals(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * List Interval Changes
+   *
+   * @remarks
+   * Lists the subscription's interval changes, oldest first. Each shows why it was made and each interval before and after.
+   */
+  async listSubscriptionIntervalChanges(
+    request: operations.ListSubscriptionIntervalChangesRequest,
+    options?: RequestOptions,
+  ): Promise<models.SubscriptionIntervalChangesResponse> {
+    return unwrapAsync(subscriptionsListSubscriptionIntervalChanges(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * List Merchant Interval Changes
+   *
+   * @remarks
+   * Lists the interval changes of all your subscriptions, oldest first. `from` is included and `to` is excluded.
+   */
+  async listIntervalChanges(
+    request?: operations.ListIntervalChangesRequest | undefined,
+    options?: RequestOptions,
+  ): Promise<models.SubscriptionIntervalChangesResponse> {
+    return unwrapAsync(subscriptionsListIntervalChanges(
       this,
       request,
       options,

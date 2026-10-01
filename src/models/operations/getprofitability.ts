@@ -3,22 +3,6 @@
  */
 
 import * as z from "zod/v3";
-import { ClosedEnum } from "../../types/enums.js";
-
-/**
- * Time bucket granularity for the per-customer revenue trend. When omitted, the server picks a reasonable bucket from the window length.
- */
-export const GetProfitabilityBucketWidth = {
-  Hour: "hour",
-  Day: "day",
-  Week: "week",
-} as const;
-/**
- * Time bucket granularity for the per-customer revenue trend. When omitted, the server picks a reasonable bucket from the window length.
- */
-export type GetProfitabilityBucketWidth = ClosedEnum<
-  typeof GetProfitabilityBucketWidth
->;
 
 export type GetProfitabilityRequest = {
   /**
@@ -42,15 +26,14 @@ export type GetProfitabilityRequest = {
    */
   currency?: string | undefined;
   /**
-   * Time bucket granularity for the per-customer revenue trend. When omitted, the server picks a reasonable bucket from the window length.
+   * When true, leave customers with neither revenue nor cost in the period out of `rows`. They are dropped before ranking, so they take no top-N slot and are not folded into the 'Other' row. `emptyCustomerCount` says how many there are either way.
    */
-  bucketWidth?: GetProfitabilityBucketWidth | undefined;
+  excludeEmpty?: boolean | undefined;
+  /**
+   * When true, also return in `emptyCustomers` the customers counted in `emptyCustomerCount` that `rows` does not carry, so a caller can show the complete customer list.
+   */
+  includeEmpty?: boolean | undefined;
 };
-
-/** @internal */
-export const GetProfitabilityBucketWidth$outboundSchema: z.ZodNativeEnum<
-  typeof GetProfitabilityBucketWidth
-> = z.nativeEnum(GetProfitabilityBucketWidth);
 
 /** @internal */
 export type GetProfitabilityRequest$Outbound = {
@@ -59,7 +42,8 @@ export type GetProfitabilityRequest$Outbound = {
   to: string;
   topN: number;
   currency?: string | undefined;
-  bucketWidth: string;
+  excludeEmpty: boolean;
+  includeEmpty: boolean;
 };
 
 /** @internal */
@@ -73,7 +57,8 @@ export const GetProfitabilityRequest$outboundSchema: z.ZodType<
   to: z.date().transform(v => v.toISOString()),
   topN: z.number().int().default(10),
   currency: z.string().optional(),
-  bucketWidth: GetProfitabilityBucketWidth$outboundSchema.default("day"),
+  excludeEmpty: z.boolean().default(false),
+  includeEmpty: z.boolean().default(false),
 });
 
 export function getProfitabilityRequestToJSON(

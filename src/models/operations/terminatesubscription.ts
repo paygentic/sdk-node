@@ -4,12 +4,17 @@
 
 import * as z from "zod/v3";
 import { remap as remap$ } from "../../lib/primitives.js";
+import * as models from "../index.js";
 
 export type TerminateSubscriptionRequestBody = {
   /**
    * Cancellation explanation text. Sample values: 'Customer requested cancellation', 'Payment failure', 'Service migration', 'Contract expiration'
    */
   reason: string;
+  /**
+   * Why a change was made. `correction` fixes data to match what was agreed; `migration` moves a contract from another system; `commercial` is a real change to the deal. Defaults to `unspecified`.
+   */
+  changeReason?: models.ChangeReason | undefined;
 };
 
 export type TerminateSubscriptionRequest = {
@@ -23,6 +28,7 @@ export type TerminateSubscriptionRequest = {
 /** @internal */
 export type TerminateSubscriptionRequestBody$Outbound = {
   reason: string;
+  changeReason?: string | undefined;
 };
 
 /** @internal */
@@ -32,6 +38,7 @@ export const TerminateSubscriptionRequestBody$outboundSchema: z.ZodType<
   TerminateSubscriptionRequestBody
 > = z.object({
   reason: z.string(),
+  changeReason: models.ChangeReason$outboundSchema.optional(),
 });
 
 export function terminateSubscriptionRequestBodyToJSON(

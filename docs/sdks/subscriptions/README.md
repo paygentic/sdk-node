@@ -12,6 +12,8 @@ A `Subscription` is a customer's commitment to purchase a `Product` following th
 * [updateSubscription](#updatesubscription) - Update
 * [getSubscriptionIntervals](#getsubscriptionintervals) - Get Price Intervals
 * [editSubscriptionIntervals](#editsubscriptionintervals) - Edit Price Intervals
+* [listSubscriptionIntervalChanges](#listsubscriptionintervalchanges) - List Interval Changes
+* [listIntervalChanges](#listintervalchanges) - List Merchant Interval Changes
 * [generatePortalLink](#generateportallink) - Generate Portal Link
 * [terminate](#terminate) - Terminate
 * [reconcileSubscriptionFeatures](#reconcilesubscriptionfeatures) - Reconcile Features
@@ -494,6 +496,154 @@ run();
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
 | errors.ErrorT                | 401, 403, 404, 409, 429      | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## listSubscriptionIntervalChanges
+
+Lists the subscription's interval changes, oldest first. Each shows why it was made and each interval before and after.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="listSubscriptionIntervalChanges" method="get" path="/v0/subscriptions/{id}/intervalChanges" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.subscriptions.listSubscriptionIntervalChanges({
+    id: "<id>",
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { subscriptionsListSubscriptionIntervalChanges } from "@paygentic/sdk/funcs/subscriptionsListSubscriptionIntervalChanges.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await subscriptionsListSubscriptionIntervalChanges(paygentic, {
+    id: "<id>",
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("subscriptionsListSubscriptionIntervalChanges failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.ListSubscriptionIntervalChangesRequest](../../models/operations/listsubscriptionintervalchangesrequest.md)                                                         | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.SubscriptionIntervalChangesResponse](../../models/subscriptionintervalchangesresponse.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## listIntervalChanges
+
+Lists the interval changes of all your subscriptions, oldest first. `from` is included and `to` is excluded.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="listIntervalChanges" method="get" path="/v0/intervalChanges" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.subscriptions.listIntervalChanges({});
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { subscriptionsListIntervalChanges } from "@paygentic/sdk/funcs/subscriptionsListIntervalChanges.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await subscriptionsListIntervalChanges(paygentic, {});
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("subscriptionsListIntervalChanges failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.ListIntervalChangesRequest](../../models/operations/listintervalchangesrequest.md)                                                                                 | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.SubscriptionIntervalChangesResponse](../../models/subscriptionintervalchangesresponse.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 401, 403                     | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 

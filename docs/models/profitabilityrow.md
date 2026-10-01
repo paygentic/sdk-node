@@ -12,10 +12,6 @@ let value: ProfitabilityRow = {
   totalCost: "<value>",
   profit: "<value>",
   marginPct: "<value>",
-  trend: {
-    values: [],
-    periodChange: 8182.99,
-  },
 };
 ```
 
@@ -29,4 +25,3 @@ let value: ProfitabilityRow = {
 | `totalCost`                                                                                                    | *string*                                                                                                       | :heavy_check_mark:                                                                                             | Aggregated cost in unit currency, with two decimals.                                                           |
 | `profit`                                                                                                       | *string*                                                                                                       | :heavy_check_mark:                                                                                             | Profit (revenue − cost) in unit currency, with two decimals. May be negative.                                  |
 | `marginPct`                                                                                                    | *string*                                                                                                       | :heavy_check_mark:                                                                                             | Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero.                         |
-| `trend`                                                                                                        | [models.ProfitabilityTrend](../models/profitabilitytrend.md)                                                   | :heavy_check_mark:                                                                                             | Per-customer revenue trend over the period. Null for the 'Other' row and when there's insufficient data.       |

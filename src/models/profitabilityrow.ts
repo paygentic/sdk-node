@@ -6,10 +6,6 @@ import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
-import {
-  ProfitabilityTrend,
-  ProfitabilityTrend$inboundSchema,
-} from "./profitabilitytrend.js";
 
 export type ProfitabilityRow = {
   /**
@@ -36,10 +32,6 @@ export type ProfitabilityRow = {
    * Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero.
    */
   marginPct: string | null;
-  /**
-   * Per-customer revenue trend over the period. Null for the 'Other' row and when there's insufficient data.
-   */
-  trend: ProfitabilityTrend | null;
 };
 
 /** @internal */
@@ -54,7 +46,6 @@ export const ProfitabilityRow$inboundSchema: z.ZodType<
   totalCost: z.string(),
   profit: z.string(),
   marginPct: z.nullable(z.string()),
-  trend: z.nullable(ProfitabilityTrend$inboundSchema),
 });
 
 export function profitabilityRowFromJSON(

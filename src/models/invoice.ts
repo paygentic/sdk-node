@@ -211,6 +211,10 @@ export type Invoice = {
    */
   paidAt?: Date | null | undefined;
   /**
+   * When the invoice was issued, in the subscription's effective time (test-clock time on a test clock). Revenue and profitability windows count the invoice by this instant. Null until the invoice is issued.
+   */
+  issuedAt?: Date | null | undefined;
+  /**
    * Payment due date snapshotted at invoice-create time as the issue date + subscription.paymentTermDays, anchored to midnight UTC. Null only for invoices created before this feature shipped (no backfill).
    */
   dueAt?: Date | null | undefined;
@@ -379,6 +383,9 @@ export const Invoice$inboundSchema: z.ZodType<Invoice, z.ZodTypeDef, unknown> =
     ).optional(),
     paidAmount: z.string(),
     paidAt: z.nullable(
+      z.string().datetime({ offset: true }).transform(v => new Date(v)),
+    ).optional(),
+    issuedAt: z.nullable(
       z.string().datetime({ offset: true }).transform(v => new Date(v)),
     ).optional(),
     dueAt: z.nullable(
