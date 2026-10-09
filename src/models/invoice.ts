@@ -79,7 +79,7 @@ export const DocumentWithheldReason = {
 export type DocumentWithheldReason = OpenEnum<typeof DocumentWithheldReason>;
 
 /**
- * The current status of the invoice
+ * The current status of the invoice. PROJECTED is returned only by GET /v2/invoices/projected and is never the status of a stored invoice.
  */
 export const InvoiceStatus = {
   Active: "ACTIVE",
@@ -93,9 +93,10 @@ export const InvoiceStatus = {
   Cancelled: "CANCELLED",
   WrittenOff: "WRITTEN_OFF",
   Failed: "FAILED",
+  Projected: "PROJECTED",
 } as const;
 /**
- * The current status of the invoice
+ * The current status of the invoice. PROJECTED is returned only by GET /v2/invoices/projected and is never the status of a stored invoice.
  */
 export type InvoiceStatus = ClosedEnum<typeof InvoiceStatus>;
 
@@ -251,7 +252,7 @@ export type Invoice = {
    */
   sequenceNumber: number;
   /**
-   * The current status of the invoice
+   * The current status of the invoice. PROJECTED is returned only by GET /v2/invoices/projected and is never the status of a stored invoice.
    */
   status: InvoiceStatus;
   /**

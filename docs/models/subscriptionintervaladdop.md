@@ -1,6 +1,6 @@
 # SubscriptionIntervalAddOp
 
-Adds an interval. If the plan version has a line with this priceKey, the interval overrides that line. If not, send priceId. The interval then belongs to this subscription only and keeps the rate that you write. A plan version change does not carry it forward, so it stops billing at the version boundary. If a later plan version adds the same priceKey, the change is refused until the plan drops the key or the interval ends on or before the boundary.
+Adds an interval. If the plan version has a line with this priceKey, the interval overrides that line. If not, send priceId. The interval then belongs to this subscription only and keeps the rate that you write. A plan version change keeps it: it continues to bill after the subscription moves to another plan version. If a later plan version adds the same priceKey, the change is refused until the plan drops the key or the interval ends on or before the boundary.
 
 ## Example Usage
 

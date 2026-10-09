@@ -17,7 +17,11 @@ export type GroupTrendEntry = {
    */
   groupLabel: string;
   /**
-   * Total issued invoice amount in dollars for this group in this bucket, excluding tax
+   * Revenue for this group in this bucket, computed exactly as netRevenue. A group outside the top N, or with only a refund in the window, counts under 'other'.
+   */
+  revenue: string;
+  /**
+   * Total issued invoice amount in dollars for this group in this bucket, excluding tax, before refunds
    */
   issuedInvoices: string;
 };
@@ -30,6 +34,7 @@ export const GroupTrendEntry$inboundSchema: z.ZodType<
 > = z.object({
   groupKey: z.string(),
   groupLabel: z.string(),
+  revenue: z.string(),
   issuedInvoices: z.string(),
 });
 

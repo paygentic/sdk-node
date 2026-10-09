@@ -107,6 +107,20 @@ export type PaymentUnion =
   | PaymentPaid
   | PaymentAwaitingApproval;
 
+/**
+ * Whether this subscription's backdated start bills its elapsed periods, as chosen at creation. `null` for a subscription created before the choice existed. `null` is listed in the enum as well as via `nullable` because the response validator checks the enum independently.
+ */
+export const SubscriptionElapsedPeriodBilling = {
+  None: "none",
+  PerPeriod: "per_period",
+} as const;
+/**
+ * Whether this subscription's backdated start bills its elapsed periods, as chosen at creation. `null` for a subscription created before the choice existed. `null` is listed in the enum as well as via `nullable` because the response validator checks the enum independently.
+ */
+export type SubscriptionElapsedPeriodBilling = ClosedEnum<
+  typeof SubscriptionElapsedPeriodBilling
+>;
+
 export const SubscriptionStatusEnum = {
   PendingPayment: "pending_payment",
   Active: "active",
@@ -209,6 +223,22 @@ export type Subscription = {
    */
   minimumAccountBalance?: string | undefined;
   startedAt: Date;
+  /**
+   * Whether this subscription's backdated start bills its elapsed periods, as chosen at creation. `null` for a subscription created before the choice existed. `null` is listed in the enum as well as via `nullable` because the response validator checks the enum independently.
+   */
+  elapsedPeriodBilling: SubscriptionElapsedPeriodBilling | null;
+  /**
+   * The billing start: a charge is billed only if it falls due at or after this moment. Fixed at creation and never changed. It is `startedAt`, unless the start was backdated with `elapsedPeriodBilling` of `none`, in which case it is the moment of creation.
+   */
+  billingStartsAt: Date | null;
+  /**
+   * The instant the subscription's billing periods are anchored on: its billing anchor, else its start. Every recurring period boundary is this instant plus a whole number of cadences.
+   */
+  billingAnchor: Date;
+  /**
+   * The ISO-8601 duration the subscription's billing periods step by where no price sets its own: the subscription's cadence, else its plan's.
+   */
+  billingCadence: string;
   status: SubscriptionStatusEnum;
   terminatedAt?: Date | undefined;
   /**
@@ -373,6 +403,11 @@ export function paymentUnionFromJSON(
 }
 
 /** @internal */
+export const SubscriptionElapsedPeriodBilling$inboundSchema: z.ZodNativeEnum<
+  typeof SubscriptionElapsedPeriodBilling
+> = z.nativeEnum(SubscriptionElapsedPeriodBilling);
+
+/** @internal */
 export const SubscriptionStatusEnum$inboundSchema: z.ZodNativeEnum<
   typeof SubscriptionStatusEnum
 > = z.nativeEnum(SubscriptionStatusEnum);
@@ -477,6 +512,16 @@ export const Subscription$inboundSchema: z.ZodType<
   prefundAmount: z.string().optional(),
   minimumAccountBalance: z.string().optional(),
   startedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  elapsedPeriodBilling: z.nullable(
+    SubscriptionElapsedPeriodBilling$inboundSchema,
+  ),
+  billingStartsAt: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ),
+  billingAnchor: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ),
+  billingCadence: z.string(),
   status: SubscriptionStatusEnum$inboundSchema,
   terminatedAt: z.string().datetime({ offset: true }).transform(v =>
     new Date(v)

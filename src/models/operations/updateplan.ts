@@ -107,6 +107,10 @@ export type UpdatePlanRequestBody = {
    * Governs price identity when a price is replaced by minting a new plan version and making it default. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id. Has no effect on this request's own prices field: prices carried over keep their ids, but swapping one price for another there moves the plan to the new price's id rather than keeping the original live.
    */
   stablePriceIds?: boolean | undefined;
+  /**
+   * When a move to a new plan version takes effect for this plan's subscriptions. `end_of_current_period` (the default) moves everything at the end of the current billing period. `immediate` changes entitlements at the move, in-arrears prices for the whole current period, and in-advance prices from the next period. Neither prorates.
+   */
+  versionTransition?: models.VersionTransition | undefined;
 };
 
 export type UpdatePlanRequest = {
@@ -148,6 +152,7 @@ export type UpdatePlanRequestBody$Outbound = {
   billingAnchor?: string | null | undefined;
   creditAllocations?: Array<models.PlanCreditAllocation$Outbound> | undefined;
   stablePriceIds?: boolean | undefined;
+  versionTransition?: models.VersionTransition$Outbound | undefined;
 };
 
 /** @internal */
@@ -172,6 +177,7 @@ export const UpdatePlanRequestBody$outboundSchema: z.ZodType<
   creditAllocations: z.array(models.PlanCreditAllocation$outboundSchema)
     .optional(),
   stablePriceIds: z.boolean().optional(),
+  versionTransition: models.VersionTransition$outboundSchema.optional(),
 });
 
 export function updatePlanRequestBodyToJSON(

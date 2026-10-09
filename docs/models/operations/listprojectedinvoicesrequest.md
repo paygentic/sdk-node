@@ -1,0 +1,21 @@
+# ListProjectedInvoicesRequest
+
+## Example Usage
+
+```typescript
+import { ListProjectedInvoicesRequest } from "@paygentic/sdk/models/operations";
+
+let value: ListProjectedInvoicesRequest = {
+  subscriptionId: "<id>",
+};
+```
+
+## Fields
+
+| Field                                                                                                                                | Type                                                                                                                                 | Required                                                                                                                             | Description                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `subscriptionId`                                                                                                                     | *string*                                                                                                                             | :heavy_check_mark:                                                                                                                   | The subscription to project invoices for                                                                                             |
+| `from`                                                                                                                               | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                        | :heavy_minus_sign:                                                                                                                   | Start of the range of invoice moments, inclusive. Defaults to now. A value before now is treated as now.                             |
+| `to`                                                                                                                                 | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                        | :heavy_minus_sign:                                                                                                                   | End of the range of invoice moments, exclusive. Defaults to one month after from. Must be after from and at most one year after now. |
+| `limit`                                                                                                                              | *number*                                                                                                                             | :heavy_minus_sign:                                                                                                                   | Maximum number of invoices to return                                                                                                 |
+| `offset`                                                                                                                             | *number*                                                                                                                             | :heavy_minus_sign:                                                                                                                   | Number of invoices to skip for pagination                                                                                            |

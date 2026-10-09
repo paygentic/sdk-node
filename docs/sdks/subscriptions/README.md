@@ -12,6 +12,7 @@ A `Subscription` is a customer's commitment to purchase a `Product` following th
 * [updateSubscription](#updatesubscription) - Update
 * [getSubscriptionIntervals](#getsubscriptionintervals) - Get Price Intervals
 * [editSubscriptionIntervals](#editsubscriptionintervals) - Edit Price Intervals
+* [migrateSubscriptionVersion](#migratesubscriptionversion) - Migrate To A Plan Version
 * [listSubscriptionIntervalChanges](#listsubscriptionintervalchanges) - List Interval Changes
 * [listIntervalChanges](#listintervalchanges) - List Merchant Interval Changes
 * [generatePortalLink](#generateportallink) - Generate Portal Link
@@ -488,6 +489,89 @@ run();
 ### Response
 
 **Promise\<[models.EditSubscriptionIntervalsResponse](../../models/editsubscriptionintervalsresponse.md)\>**
+
+### Errors
+
+| Error Type                   | Status Code                  | Content Type                 |
+| ---------------------------- | ---------------------------- | ---------------------------- |
+| errors.ErrorT                | 400                          | application/json             |
+| errors.ValidationError       | 400                          | application/json             |
+| errors.ErrorT                | 401, 403, 404, 409, 429      | application/json             |
+| errors.ErrorT                | 500                          | application/json             |
+| errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
+
+## migrateSubscriptionVersion
+
+Moves the subscription to a named version of its plan. By default the move follows the plan's versionTransition. With timing next_period, the move takes effect at the end of the current billing period: the current period bills as before, and each period that starts at or after that boundary bills from the target version. With timing immediate, entitlements change at once, in-arrears prices bill the whole current period at the target version, and in-advance prices change at the end of the current period, with no proration. The target can be an older or a newer published version. A migration always sets versionPolicy to pinned, so a later change of the plan's default version does not move the subscription. To follow the plan default again, call PATCH /v0/subscriptions/{id} with versionPolicy: 'floating'. A second migration before the boundary replaces the first. Migrating to the version the subscription is already on changes nothing except that it pins a floating subscription, so it is safe to repeat. A version number that does not exist on the plan and an archived version both return 404. The request is refused with 409 and a code when: the subscription is not live; the subscription ends at or before the boundary; a kept override has a rate that would mean something else on the new price; a feature's reset period, metric or pricing unit changes; or the new version sells a price that a continuing interval already covers.
+
+### Example Usage
+
+<!-- UsageSnippet language="typescript" operationID="migrateSubscriptionVersion" method="post" path="/v0/subscriptions/{id}/versionMigration" -->
+```typescript
+import { Paygentic } from "@paygentic/sdk";
+
+const paygentic = new Paygentic({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const result = await paygentic.subscriptions.migrateSubscriptionVersion({
+    id: "<id>",
+    migrateSubscriptionVersionRequest: {
+      targetVersionNumber: 2,
+    },
+  });
+
+  console.log(result);
+}
+
+run();
+```
+
+### Standalone function
+
+The standalone function version of this method:
+
+```typescript
+import { PaygenticCore } from "@paygentic/sdk/core.js";
+import { subscriptionsMigrateSubscriptionVersion } from "@paygentic/sdk/funcs/subscriptionsMigrateSubscriptionVersion.js";
+
+// Use `PaygenticCore` for best tree-shaking performance.
+// You can create one instance of it to use across an application.
+const paygentic = new PaygenticCore({
+  bearerAuth: process.env["PAYGENTIC_BEARER_AUTH"] ?? "",
+});
+
+async function run() {
+  const res = await subscriptionsMigrateSubscriptionVersion(paygentic, {
+    id: "<id>",
+    migrateSubscriptionVersionRequest: {
+      targetVersionNumber: 2,
+    },
+  });
+  if (res.ok) {
+    const { value: result } = res;
+    console.log(result);
+  } else {
+    console.log("subscriptionsMigrateSubscriptionVersion failed:", res.error);
+  }
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.MigrateSubscriptionVersionRequest](../../models/operations/migratesubscriptionversionrequest.md)                                                                   | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+| `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
+
+### Response
+
+**Promise\<[models.MigrateSubscriptionVersionResponse](../../models/migratesubscriptionversionresponse.md)\>**
 
 ### Errors
 

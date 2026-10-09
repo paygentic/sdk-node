@@ -47,7 +47,7 @@ export type RevenueSummaryResponse = {
    */
   object: "revenue_summary";
   /**
-   * Revenue in dollars, excluding tax: invoices issued in the period plus completed payments, less non-voided refunds issued in the period. Invoices and refunds are counted excluding tax. Omitted when groupBy=currency is active.
+   * Revenue: what was billed in the period, excluding tax, in units of the currency. On the default issue-date basis it is recognised when each invoice is issued; with periodBasis=billingPeriod, each invoice line counts in the period it bills, and a refund splits across its invoice's lines. An invoice counts whether it was since paid, is still outstanding, failed payment or was written off, less non-voided refunds. It is billings, not cash collected: what customers still owe is invoices.outstanding, including tax, and payment-link collections are under payments. Omitted when groupBy=currency is active.
    */
   netRevenue?: string | undefined;
   /**

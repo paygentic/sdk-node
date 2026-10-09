@@ -1,0 +1,25 @@
+# Migration
+
+## Example Usage
+
+```typescript
+import { Migration } from "@paygentic/sdk/models";
+
+let value: Migration = {
+  fromVersionNumber: 524178,
+  toVersionNumber: 97949,
+  effectiveAt: new Date("2024-03-01T00:25:32.185Z"),
+  entitlementsEffectiveAt: new Date("2026-09-16T08:43:55.304Z"),
+  changed: true,
+};
+```
+
+## Fields
+
+| Field                                                                                                                                                              | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `fromVersionNumber`                                                                                                                                                | *number*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | The version the subscription was on. Null for a legacy subscription with no version pin.                                                                           |
+| `toVersionNumber`                                                                                                                                                  | *number*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | The version the subscription is now pinned to.                                                                                                                     |
+| `effectiveAt`                                                                                                                                                      | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                                                      | :heavy_check_mark:                                                                                                                                                 | When in-advance prices start to bill from the target version: the end of the current billing period. Null when nothing moved.                                      |
+| `entitlementsEffectiveAt`                                                                                                                                          | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                                                      | :heavy_check_mark:                                                                                                                                                 | When the subscription's entitlements change. Equal to effectiveAt for a next_period migration; the time of the call for an immediate one. Null when nothing moved. |
+| `changed`                                                                                                                                                          | *boolean*                                                                                                                                                          | :heavy_check_mark:                                                                                                                                                 | False when the subscription was already on the target and already pinned.                                                                                          |

@@ -309,12 +309,15 @@ run();
 * [list](docs/sdks/invoicesv2/README.md#list) - List
 * [listLineItems](docs/sdks/invoicesv2/README.md#listlineitems) - List Line Items
 * [createLineItem](docs/sdks/invoicesv2/README.md#createlineitem) - Create Manual Line Item
+* [listProjectedInvoices](docs/sdks/invoicesv2/README.md#listprojectedinvoices) - List projected
 * [get](docs/sdks/invoicesv2/README.md#get) - Get
 * [getLineItems](docs/sdks/invoicesv2/README.md#getlineitems) - Get Line Items
 * [downloadInvoicePdf](docs/sdks/invoicesv2/README.md#downloadinvoicepdf) - Download Invoice PDF
+* [recordInvoicePayment](docs/sdks/invoicesv2/README.md#recordinvoicepayment) - Settle Invoice Payment
 * [createInvoiceRefund](docs/sdks/invoicesv2/README.md#createinvoicerefund) - Refund Invoice
 * [listInvoiceRefunds](docs/sdks/invoicesv2/README.md#listinvoicerefunds) - List Invoice Refunds
 * [voidInvoiceRefund](docs/sdks/invoicesv2/README.md#voidinvoicerefund) - Void Invoice Refund
+* [retryInvoicePayment](docs/sdks/invoicesv2/README.md#retryinvoicepayment) - Retry Payment
 
 ### [Items](docs/sdks/items/README.md)
 
@@ -329,6 +332,10 @@ run();
 * [upsertMerchantIntegration](docs/sdks/merchantintegrations/README.md#upsertmerchantintegration) - Upsert
 * [getMerchantIntegration](docs/sdks/merchantintegrations/README.md#getmerchantintegration) - Get
 * [disconnectMerchantIntegration](docs/sdks/merchantintegrations/README.md#disconnectmerchantintegration) - Disconnect
+
+### [Merchants](docs/sdks/merchants/README.md)
+
+* [reset](docs/sdks/merchants/README.md#reset) - Reset a merchant's data
 
 ### [Orders](docs/sdks/orders/README.md)
 
@@ -422,6 +429,7 @@ run();
 * [updateSubscription](docs/sdks/subscriptions/README.md#updatesubscription) - Update
 * [getSubscriptionIntervals](docs/sdks/subscriptions/README.md#getsubscriptionintervals) - Get Price Intervals
 * [editSubscriptionIntervals](docs/sdks/subscriptions/README.md#editsubscriptionintervals) - Edit Price Intervals
+* [migrateSubscriptionVersion](docs/sdks/subscriptions/README.md#migratesubscriptionversion) - Migrate To A Plan Version
 * [listSubscriptionIntervalChanges](docs/sdks/subscriptions/README.md#listsubscriptionintervalchanges) - List Interval Changes
 * [listIntervalChanges](docs/sdks/subscriptions/README.md#listintervalchanges) - List Merchant Interval Changes
 * [generatePortalLink](docs/sdks/subscriptions/README.md#generateportallink) - Generate Portal Link
@@ -443,6 +451,14 @@ run();
 
 * [get](docs/sdks/users/README.md#get) - Get
 * [update](docs/sdks/users/README.md#update) - Update
+
+### [Webhooks](docs/sdks/webhooks/README.md)
+
+* [get](docs/sdks/webhooks/README.md#get) - Get
+* [enable](docs/sdks/webhooks/README.md#enable) - Enable
+* [update](docs/sdks/webhooks/README.md#update) - Update
+* [disable](docs/sdks/webhooks/README.md#disable) - Disable
+* [getPortal](docs/sdks/webhooks/README.md#getportal) - Get Portal Access
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
@@ -527,6 +543,9 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`invoicesV2List`](docs/sdks/invoicesv2/README.md#list) - List
 - [`invoicesV2ListInvoiceRefunds`](docs/sdks/invoicesv2/README.md#listinvoicerefunds) - List Invoice Refunds
 - [`invoicesV2ListLineItems`](docs/sdks/invoicesv2/README.md#listlineitems) - List Line Items
+- [`invoicesV2ListProjectedInvoices`](docs/sdks/invoicesv2/README.md#listprojectedinvoices) - List projected
+- [`invoicesV2RecordInvoicePayment`](docs/sdks/invoicesv2/README.md#recordinvoicepayment) - Settle Invoice Payment
+- [`invoicesV2RetryInvoicePayment`](docs/sdks/invoicesv2/README.md#retryinvoicepayment) - Retry Payment
 - [`invoicesV2VoidInvoiceRefund`](docs/sdks/invoicesv2/README.md#voidinvoicerefund) - Void Invoice Refund
 - [`itemsCreateItem`](docs/sdks/items/README.md#createitem) - Create
 - [`itemsGetItem`](docs/sdks/items/README.md#getitem) - Get
@@ -536,6 +555,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`merchantIntegrationsGetMerchantIntegration`](docs/sdks/merchantintegrations/README.md#getmerchantintegration) - Get
 - [`merchantIntegrationsListMerchantIntegrations`](docs/sdks/merchantintegrations/README.md#listmerchantintegrations) - List
 - [`merchantIntegrationsUpsertMerchantIntegration`](docs/sdks/merchantintegrations/README.md#upsertmerchantintegration) - Upsert
+- [`merchantsReset`](docs/sdks/merchants/README.md#reset) - Reset a merchant's data
 - [`ordersCreateOrder`](docs/sdks/orders/README.md#createorder) - Create an order
 - [`ordersCreateOrderApproval`](docs/sdks/orders/README.md#createorderapproval) - Create an approval for the order
 - [`ordersCreateOrderLineItem`](docs/sdks/orders/README.md#createorderlineitem) - Add a line item
@@ -595,6 +615,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`subscriptionsListIntervalChanges`](docs/sdks/subscriptions/README.md#listintervalchanges) - List Merchant Interval Changes
 - [`subscriptionsListSubscriptionAdjustments`](docs/sdks/subscriptions/README.md#listsubscriptionadjustments) - List Adjustments
 - [`subscriptionsListSubscriptionIntervalChanges`](docs/sdks/subscriptions/README.md#listsubscriptionintervalchanges) - List Interval Changes
+- [`subscriptionsMigrateSubscriptionVersion`](docs/sdks/subscriptions/README.md#migratesubscriptionversion) - Migrate To A Plan Version
 - [`subscriptionsReconcileSubscriptionFeatures`](docs/sdks/subscriptions/README.md#reconcilesubscriptionfeatures) - Reconcile Features
 - [`subscriptionsTerminate`](docs/sdks/subscriptions/README.md#terminate) - Terminate
 - [`subscriptionsUpdateSubscription`](docs/sdks/subscriptions/README.md#updatesubscription) - Update
@@ -605,6 +626,11 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`testClocksList`](docs/sdks/testclocks/README.md#list) - List
 - [`usersGet`](docs/sdks/users/README.md#get) - Get
 - [`usersUpdate`](docs/sdks/users/README.md#update) - Update
+- [`webhooksDisable`](docs/sdks/webhooks/README.md#disable) - Disable
+- [`webhooksEnable`](docs/sdks/webhooks/README.md#enable) - Enable
+- [`webhooksGet`](docs/sdks/webhooks/README.md#get) - Get
+- [`webhooksGetPortal`](docs/sdks/webhooks/README.md#getportal) - Get Portal Access
+- [`webhooksUpdate`](docs/sdks/webhooks/README.md#update) - Update
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->
@@ -752,7 +778,7 @@ run();
 * [`PaygenticError`](./src/models/errors/paygenticerror.ts): The base class for HTTP error responses.
   * [`ErrorT`](./src/models/errors/errort.ts): *
 
-<details><summary>Less common errors (11)</summary>
+<details><summary>Less common errors (13)</summary>
 
 <br />
 
@@ -765,11 +791,13 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 92 of 143 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 143 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 143 methods.*
-* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be restructured because a subscription still bills it directly. Status code `409`. Applicable to 1 of 143 methods.*
-* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 143 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 99 of 153 methods.*
+* [`RetryPaymentResponseError`](./src/models/errors/retrypaymentresponseerror.ts): The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape. Applicable to 1 of 153 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 153 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 153 methods.*
+* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be restructured because a subscription still bills it directly. Status code `409`. Applicable to 1 of 153 methods.*
+* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 153 methods.*
+* [`UnprocessableEntityError`](./src/models/errors/unprocessableentityerror.ts): `hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete). Status code `422`. Applicable to 1 of 153 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

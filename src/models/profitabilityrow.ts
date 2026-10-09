@@ -4,20 +4,34 @@
 
 import * as z from "zod/v3";
 import { safeParse } from "../lib/schemas.js";
+import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
+/**
+ * Whether metering recorded usage against a cost for every customer the row covers (`recorded`), some of them (`partial`, only on the 'Other' and 'deleted' rows) or none (`none`). Usage that prices at zero is recorded, so `recorded` with a zero `totalCost` is a measured zero. `none` means no cost data, not a zero cost.
+ */
+export const CostData = {
+  Recorded: "recorded",
+  Partial: "partial",
+  None: "none",
+} as const;
+/**
+ * Whether metering recorded usage against a cost for every customer the row covers (`recorded`), some of them (`partial`, only on the 'Other' and 'deleted' rows) or none (`none`). Usage that prices at zero is recorded, so `recorded` with a zero `totalCost` is a measured zero. `none` means no cost data, not a zero cost.
+ */
+export type CostData = ClosedEnum<typeof CostData>;
+
 export type ProfitabilityRow = {
   /**
-   * Customer ID, or the literal 'other' for the overflow row.
+   * Customer ID, the literal 'other' for the overflow row, or the literal 'deleted' for the row that folds every soft-deleted customer with revenue or cost in the period.
    */
   customerId: string;
   /**
-   * Display name for the row. 'Other' for the overflow row.
+   * Display name for the row. 'Other' for the overflow row, 'Deleted customers' for the deleted row.
    */
   customerName: string;
   /**
-   * Revenue excluding tax (paid + outstanding invoices issued in the period), in unit currency, with two decimals.
+   * Revenue excluding tax, in units of the currency, with two decimals: what was billed in the period, recognised when each invoice is issued. Every invoice issued in the period counts, whether it was since paid, is still outstanding, failed payment or was written off, less non-voided refunds issued in the period. It is billings, not cash collected, and the same figure /v0/revenue reports.
    */
   netRevenue: string;
   /**
@@ -29,10 +43,18 @@ export type ProfitabilityRow = {
    */
   profit: string;
   /**
-   * Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero.
+   * Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero or negative, and when `costData` is not `recorded`: a cost nobody recorded reads as zero, and a margin over it would claim the row costs nothing.
    */
   marginPct: string | null;
+  /**
+   * Whether metering recorded usage against a cost for every customer the row covers (`recorded`), some of them (`partial`, only on the 'Other' and 'deleted' rows) or none (`none`). Usage that prices at zero is recorded, so `recorded` with a zero `totalCost` is a measured zero. `none` means no cost data, not a zero cost.
+   */
+  costData?: CostData | undefined;
 };
+
+/** @internal */
+export const CostData$inboundSchema: z.ZodNativeEnum<typeof CostData> = z
+  .nativeEnum(CostData);
 
 /** @internal */
 export const ProfitabilityRow$inboundSchema: z.ZodType<
@@ -46,6 +68,7 @@ export const ProfitabilityRow$inboundSchema: z.ZodType<
   totalCost: z.string(),
   profit: z.string(),
   marginPct: z.nullable(z.string()),
+  costData: CostData$inboundSchema.optional(),
 });
 
 export function profitabilityRowFromJSON(

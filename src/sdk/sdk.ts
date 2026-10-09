@@ -16,6 +16,7 @@ import { Fees } from "./fees.js";
 import { InvoicesV2 } from "./invoicesv2.js";
 import { Items } from "./items.js";
 import { MerchantIntegrations } from "./merchantintegrations.js";
+import { Merchants } from "./merchants.js";
 import { Orders } from "./orders.js";
 import { Payments } from "./payments.js";
 import { PaymentSessions } from "./paymentsessions.js";
@@ -29,6 +30,7 @@ import { Sources } from "./sources.js";
 import { Subscriptions } from "./subscriptions.js";
 import { TestClocks } from "./testclocks.js";
 import { Users } from "./users.js";
+import { Webhooks } from "./webhooks.js";
 
 export class Paygentic extends ClientSDK {
   private _billableMetrics?: BillableMetrics;
@@ -126,6 +128,11 @@ export class Paygentic extends ClientSDK {
     return (this._testClocks ??= new TestClocks(this._options));
   }
 
+  private _merchants?: Merchants;
+  get merchants(): Merchants {
+    return (this._merchants ??= new Merchants(this._options));
+  }
+
   private _externalReferences?: ExternalReferences;
   get externalReferences(): ExternalReferences {
     return (this._externalReferences ??= new ExternalReferences(this._options));
@@ -161,5 +168,10 @@ export class Paygentic extends ClientSDK {
   private _approvals?: Approvals;
   get approvals(): Approvals {
     return (this._approvals ??= new Approvals(this._options));
+  }
+
+  private _webhooks?: Webhooks;
+  get webhooks(): Webhooks {
+    return (this._webhooks ??= new Webhooks(this._options));
   }
 }

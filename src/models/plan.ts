@@ -13,6 +13,10 @@ import {
   PlanCreditAllocation$inboundSchema,
 } from "./plancreditallocation.js";
 import { PlanPrice, PlanPrice$inboundSchema } from "./planprice.js";
+import {
+  VersionTransition,
+  VersionTransition$inboundSchema,
+} from "./versiontransition.js";
 
 export const PlanObject = {
   Plan: "plan",
@@ -126,6 +130,10 @@ export type Plan = {
    * Governs price identity when a price on this plan's default version is replaced. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id.
    */
   stablePriceIds: boolean;
+  /**
+   * When a move to a new plan version takes effect for this plan's subscriptions. `end_of_current_period` (the default) moves everything at the end of the current billing period. `immediate` changes entitlements at the move, in-arrears prices for the whole current period, and in-advance prices from the next period. Neither prorates.
+   */
+  versionTransition: VersionTransition;
 };
 
 /** @internal */
@@ -202,6 +210,7 @@ export const Plan$inboundSchema: z.ZodType<Plan, z.ZodTypeDef, unknown> = z
     creditAllocations: z.array(PlanCreditAllocation$inboundSchema).optional(),
     defaultVersionId: z.string().optional(),
     stablePriceIds: z.boolean().default(true),
+    versionTransition: VersionTransition$inboundSchema,
   });
 
 export function planFromJSON(

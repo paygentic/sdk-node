@@ -13,6 +13,7 @@ import { subscriptionsList } from "../funcs/subscriptionsList.js";
 import { subscriptionsListIntervalChanges } from "../funcs/subscriptionsListIntervalChanges.js";
 import { subscriptionsListSubscriptionAdjustments } from "../funcs/subscriptionsListSubscriptionAdjustments.js";
 import { subscriptionsListSubscriptionIntervalChanges } from "../funcs/subscriptionsListSubscriptionIntervalChanges.js";
+import { subscriptionsMigrateSubscriptionVersion } from "../funcs/subscriptionsMigrateSubscriptionVersion.js";
 import { subscriptionsReconcileSubscriptionFeatures } from "../funcs/subscriptionsReconcileSubscriptionFeatures.js";
 import { subscriptionsTerminate } from "../funcs/subscriptionsTerminate.js";
 import { subscriptionsUpdateSubscription } from "../funcs/subscriptionsUpdateSubscription.js";
@@ -109,6 +110,23 @@ export class Subscriptions extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.EditSubscriptionIntervalsResponse> {
     return unwrapAsync(subscriptionsEditSubscriptionIntervals(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Migrate To A Plan Version
+   *
+   * @remarks
+   * Moves the subscription to a named version of its plan. By default the move follows the plan's versionTransition. With timing next_period, the move takes effect at the end of the current billing period: the current period bills as before, and each period that starts at or after that boundary bills from the target version. With timing immediate, entitlements change at once, in-arrears prices bill the whole current period at the target version, and in-advance prices change at the end of the current period, with no proration. The target can be an older or a newer published version. A migration always sets versionPolicy to pinned, so a later change of the plan's default version does not move the subscription. To follow the plan default again, call PATCH /v0/subscriptions/{id} with versionPolicy: 'floating'. A second migration before the boundary replaces the first. Migrating to the version the subscription is already on changes nothing except that it pins a floating subscription, so it is safe to repeat. A version number that does not exist on the plan and an archived version both return 404. The request is refused with 409 and a code when: the subscription is not live; the subscription ends at or before the boundary; a kept override has a rate that would mean something else on the new price; a feature's reset period, metric or pricing unit changes; or the new version sells a price that a continuing interval already covers.
+   */
+  async migrateSubscriptionVersion(
+    request: operations.MigrateSubscriptionVersionRequest,
+    options?: RequestOptions,
+  ): Promise<models.MigrateSubscriptionVersionResponse> {
+    return unwrapAsync(subscriptionsMigrateSubscriptionVersion(
       this,
       request,
       options,

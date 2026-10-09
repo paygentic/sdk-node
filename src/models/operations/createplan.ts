@@ -134,6 +134,10 @@ export type CreatePlanRequest = {
    * Governs price identity when a price on this plan's default version is replaced. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id.
    */
   stablePriceIds?: boolean | undefined;
+  /**
+   * When a move to a new plan version takes effect for this plan's subscriptions. `end_of_current_period` (the default) moves everything at the end of the current billing period. `immediate` changes entitlements at the move, in-arrears prices for the whole current period, and in-advance prices from the next period. Neither prorates.
+   */
+  versionTransition?: models.VersionTransition | undefined;
 };
 
 /** @internal */
@@ -176,6 +180,7 @@ export type CreatePlanRequest$Outbound = {
   billingAnchor?: string | null | undefined;
   creditAllocations?: Array<models.PlanCreditAllocation$Outbound> | undefined;
   stablePriceIds: boolean;
+  versionTransition?: models.VersionTransition$Outbound | undefined;
 };
 
 /** @internal */
@@ -204,6 +209,7 @@ export const CreatePlanRequest$outboundSchema: z.ZodType<
   creditAllocations: z.array(models.PlanCreditAllocation$outboundSchema)
     .optional(),
   stablePriceIds: z.boolean().default(true),
+  versionTransition: models.VersionTransition$outboundSchema.optional(),
 });
 
 export function createPlanRequestToJSON(

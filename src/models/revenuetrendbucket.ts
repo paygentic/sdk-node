@@ -17,7 +17,11 @@ export type RevenueTrendBucket = {
    */
   timestamp: Date;
   /**
-   * Total amount of all invoices issued in this bucket (all statuses, by issuedAt), excluding tax
+   * Revenue for this bucket, computed exactly as netRevenue: invoices issued in the bucket (on periodBasis=billingPeriod, lines billing it), excluding tax, less refunds issued in it, excluding tax. The buckets sum to netRevenue.
+   */
+  revenue: string;
+  /**
+   * Total amount of all invoices issued in this bucket (all statuses, by issuedAt), excluding tax, before refunds. Revenue is the revenue field.
    */
   issuedInvoices: string;
   /**
@@ -25,7 +29,7 @@ export type RevenueTrendBucket = {
    */
   writtenOffInvoices: string;
   /**
-   * Revenue from completed payments in dollars for this bucket
+   * Completed payment-link payments in dollars for this bucket, reported beside revenue, not in it
    */
   completedPayments: string;
   /**
@@ -45,6 +49,7 @@ export const RevenueTrendBucket$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   timestamp: z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  revenue: z.string(),
   issuedInvoices: z.string(),
   writtenOffInvoices: z.string(),
   completedPayments: z.string(),

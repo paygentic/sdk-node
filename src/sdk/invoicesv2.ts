@@ -10,6 +10,9 @@ import { invoicesV2GetLineItems } from "../funcs/invoicesV2GetLineItems.js";
 import { invoicesV2List } from "../funcs/invoicesV2List.js";
 import { invoicesV2ListInvoiceRefunds } from "../funcs/invoicesV2ListInvoiceRefunds.js";
 import { invoicesV2ListLineItems } from "../funcs/invoicesV2ListLineItems.js";
+import { invoicesV2ListProjectedInvoices } from "../funcs/invoicesV2ListProjectedInvoices.js";
+import { invoicesV2RecordInvoicePayment } from "../funcs/invoicesV2RecordInvoicePayment.js";
+import { invoicesV2RetryInvoicePayment } from "../funcs/invoicesV2RetryInvoicePayment.js";
 import { invoicesV2VoidInvoiceRefund } from "../funcs/invoicesV2VoidInvoiceRefund.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
@@ -69,6 +72,23 @@ export class InvoicesV2 extends ClientSDK {
   }
 
   /**
+   * List projected
+   *
+   * @remarks
+   * List the invoices a subscription will issue in a range of invoice moments, one projected invoice for each distinct invoice moment. Projected invoices are derived on each read and never stored. Each has status PROJECTED, and its id is stable between reads, but GET /v2/invoices/{id} returns 404 for it. Totals EXCLUDE usage: metered charges are not projected, and an invoice moment that has only metered charges is omitted. Tax and sequenceNumber are estimates. The range filters on the invoice moment (invoiceAt) in [from, to). A from before now is treated as now. to must be after from and at most one year after now; now is the subscription's test-clock time when it has a test clock. A terminated subscription returns an empty list. Each invoice carries its lines in lineItems. Authorization is the same as listing invoices.
+   */
+  async listProjectedInvoices(
+    request: operations.ListProjectedInvoicesRequest,
+    options?: RequestOptions,
+  ): Promise<operations.ListProjectedInvoicesResponse> {
+    return unwrapAsync(invoicesV2ListProjectedInvoices(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
    * Get
    *
    * @remarks
@@ -120,6 +140,32 @@ export class InvoicesV2 extends ClientSDK {
   }
 
   /**
+   * Settle Invoice Payment
+   *
+   * @remarks
+   * Settle an unpaid invoice in status `ISSUED` or `PAYMENT_FAILED`. The `method` field selects how.
+   *
+   * - `hosted_link`: create a new hosted payment link and email it to the customer. The invoice stays unpaid until the customer pays on the link. Each call replaces the previous link. A payment link expires after 30 days; to collect an invoice whose link has expired, call this method again.
+   * - `out_of_band`: record a payment that you collected outside Paygentic. The invoice changes to `PAID` immediately. A second call returns 409.
+   *
+   * For `hosted_link`, an invoice that does not exist returns 403, the same as an invoice of another merchant.
+   *
+   * Paygentic selects the payment provider from your connected payment account. The response reports the provider.
+   *
+   * **Warning:** each `hosted_link` call creates a new link and sends the customer a new email. Do not retry a `hosted_link` call after a timeout: first read the invoice to see if a new link exists.
+   */
+  async recordInvoicePayment(
+    request: operations.RecordInvoicePaymentRequest,
+    options?: RequestOptions,
+  ): Promise<operations.RecordInvoicePaymentResponse> {
+    return unwrapAsync(invoicesV2RecordInvoicePayment(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
    * Refund Invoice
    *
    * @remarks
@@ -164,6 +210,44 @@ export class InvoicesV2 extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.InvoiceRefund> {
     return unwrapAsync(invoicesV2VoidInvoiceRefund(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * Retry Payment
+   *
+   * @remarks
+   * Charge the customer's saved payment method again for an unpaid invoice.
+   *
+   * The invoice must be in status `ISSUED` or `PAYMENT_FAILED`, auto-charge must be on for its subscription, and the invoice must have a payment session. If not, the response is 400.
+   *
+   * The response status tells you the result. Only 200 means that the charge succeeded. Every other response from this operation that has a `retry_payment_result` body has `success: false`, and `error.code` gives the reason:
+   *
+   * | Status | `error.code` | Meaning |
+   * | --- | --- | --- |
+   * | 200 | — | The charge succeeded, the provider had already collected it, or no amount is unpaid. |
+   * | 202 | `processing` | The provider accepted the charge. It settles later (for example, a bank debit). |
+   * | 402 | a decline code, for example `card_declined`, `insufficient_funds`, `do_not_honor`, `authentication_required` | The provider declined the payment method. |
+   * | 409 | `concurrent_attempt` | Another payment attempt for this invoice is in progress. |
+   * | 409 | `PAYMENT_SESSION_EXPIRED` | The payment link expired (after 30 days). Create a new link with `POST /v2/invoices/{id}/payment` and `method: hosted_link`, then retry. If the customer also has no usable saved payment method, the response is 422 instead. |
+   * | 409 | another value, or no `code` | The payment session cannot be charged in its current state (for example `session_unusable`, `non_confirmable`, `PAYMENT_PROCESSING`, `PAYMENT_ALREADY_COMPLETED`). Read `error.message` for the cause. |
+   * | 422 | `no_payment_method` | The customer has no usable saved payment method. Send a payment link instead. |
+   * | 502 | `provider_unavailable` or none | The payment provider did not answer, or the provider failed the charge for a reason that is not known. Retry later. |
+   *
+   * A 500 response has the standard error body, not `retry_payment_result`. It is an internal error, and a retry does not fix it.
+   *
+   * An invoice that does not exist returns 403, the same as an invoice of another merchant.
+   *
+   * This operation is rate limited to one call each minute for each invoice.
+   */
+  async retryInvoicePayment(
+    request: operations.RetryInvoicePaymentRequest,
+    options?: RequestOptions,
+  ): Promise<models.RetryPaymentResponse> {
+    return unwrapAsync(invoicesV2RetryInvoicePayment(
       this,
       request,
       options,

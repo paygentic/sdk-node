@@ -89,6 +89,10 @@
       "description": "Test clocks provide programmable time control to simulate subscription and billing scenarios during testing."
     },
     {
+      "name": "Merchant Data",
+      "description": "Reset a merchant's data outside production"
+    },
+    {
       "name": "Events",
       "description": "Ingest raw metering events that are processed by the meters service."
     },
@@ -127,6 +131,10 @@
     {
       "name": "Billing Schedules",
       "description": "Owner-polymorphic billing schedules with intervals and staged invoice projections. A BillingSchedule belongs to exactly one Order or one Subscription (XOR). Cadence lives on ScheduleIntervals (cadence-on-the-line)."
+    },
+    {
+      "name": "Webhooks",
+      "description": "Endpoints for setting up webhook integrations and administering webhook settings"
     }
   ],
   "paths": {
@@ -3531,6 +3539,9 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Governs price identity when a price on this plan's default version is replaced. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id."
+                  },
+                  "versionTransition": {
+                    "$ref": "#/components/schemas/VersionTransition"
                   }
                 }
               }
@@ -4042,6 +4053,9 @@
                   "stablePriceIds": {
                     "type": "boolean",
                     "description": "Governs price identity when a price is replaced by minting a new plan version and making it default. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id. Has no effect on this request's own prices field: prices carried over keep their ids, but swapping one price for another there moves the plan to the new price's id rather than keeping the original live."
+                  },
+                  "versionTransition": {
+                    "$ref": "#/components/schemas/VersionTransition"
                   }
                 }
               }
@@ -6609,6 +6623,10 @@
                       "payment": null,
                       "planId": "plan_t9u0v1w2x3y4z5a6",
                       "startedAt": "2024-01-10T08:00:00Z",
+                      "elapsedPeriodBilling": "none",
+                      "billingStartsAt": "2024-01-10T08:00:00Z",
+                      "billingAnchor": "2024-01-10T08:00:00Z",
+                      "billingCadence": "P1M",
                       "status": "active",
                       "terminatedAt": null,
                       "terminatedBy": null,
@@ -6629,6 +6647,10 @@
                       "payment": null,
                       "planId": "plan_z7a8b9c0d1e2f3g4",
                       "startedAt": "2024-02-01T14:45:30Z",
+                      "elapsedPeriodBilling": "none",
+                      "billingStartsAt": "2024-02-01T14:45:30Z",
+                      "billingAnchor": "2024-02-01T14:00:00Z",
+                      "billingCadence": "P1M",
                       "status": "active",
                       "terminatedAt": null,
                       "terminatedBy": null,
@@ -6776,6 +6798,9 @@
                     "format": "date-time",
                     "description": "Subscription activation timestamp in ISO 8601 format. Sample values: '2024-01-15T10:30:00Z', '2024-02-01T00:00:00Z'"
                   },
+                  "elapsedPeriodBilling": {
+                    "$ref": "#/components/schemas/ElapsedPeriodBilling"
+                  },
                   "testClockId": {
                     "type": "string",
                     "description": "Test clock identifier for simulating time-based billing scenarios. Sample values: 'tc_abc123xyz', 'tc_789def456'. Restricted to non-production environments (local, dev, sandbox). Must belong to the same merchant organization."
@@ -6853,6 +6878,10 @@
                   "payment": null,
                   "planId": "plan_t9u0v1w2x3y4z5a6",
                   "startedAt": "2024-01-10T08:00:00Z",
+                  "elapsedPeriodBilling": "none",
+                  "billingStartsAt": "2024-01-10T08:00:00Z",
+                  "billingAnchor": "2024-01-10T08:00:00Z",
+                  "billingCadence": "P1M",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
@@ -6891,6 +6920,10 @@
                   },
                   "planId": "plan_q7r8s9t0u1v2w3x4",
                   "startedAt": "2024-01-15T10:30:00Z",
+                  "elapsedPeriodBilling": "none",
+                  "billingStartsAt": "2024-01-15T10:30:00Z",
+                  "billingAnchor": "2024-01-15T10:00:00Z",
+                  "billingCadence": "P1M",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
@@ -6966,11 +6999,17 @@
                   "payment": null,
                   "planId": "plan_z7a8b9c0d1e2f3g4",
                   "startedAt": "2024-02-01T14:45:30Z",
+                  "elapsedPeriodBilling": "none",
+                  "billingStartsAt": "2024-02-01T14:45:30Z",
+                  "billingAnchor": "2024-02-01T14:00:00Z",
+                  "billingCadence": "P1M",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
                   "terminationReason": null,
-                  "updatedAt": "2024-02-15T09:20:00Z"
+                  "updatedAt": "2024-02-15T09:20:00Z",
+                  "planVersionId": "pver_u2v3w4x5y6z7a8b9",
+                  "versionNumber": 2
                 }
               }
             }
@@ -7098,6 +7137,10 @@
                   "payment": null,
                   "planId": "plan_t9u0v1w2x3y4z5a6",
                   "startedAt": "2024-01-10T08:00:00Z",
+                  "elapsedPeriodBilling": "none",
+                  "billingStartsAt": "2024-01-10T08:00:00Z",
+                  "billingAnchor": "2024-01-10T08:00:00Z",
+                  "billingCadence": "P1M",
                   "status": "active",
                   "terminatedAt": null,
                   "terminatedBy": null,
@@ -7276,6 +7319,116 @@
           },
           "429": {
             "description": "Another edit is in progress on this subscription. Retry after the time in the Retry-After header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v0/subscriptions/{id}/versionMigration": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Migrate To A Plan Version",
+        "description": "Moves the subscription to a named version of its plan. By default the move follows the plan's versionTransition. With timing next_period, the move takes effect at the end of the current billing period: the current period bills as before, and each period that starts at or after that boundary bills from the target version. With timing immediate, entitlements change at once, in-arrears prices bill the whole current period at the target version, and in-advance prices change at the end of the current period, with no proration. The target can be an older or a newer published version. A migration always sets versionPolicy to pinned, so a later change of the plan's default version does not move the subscription. To follow the plan default again, call PATCH /v0/subscriptions/{id} with versionPolicy: 'floating'. A second migration before the boundary replaces the first. Migrating to the version the subscription is already on changes nothing except that it pins a floating subscription, so it is safe to repeat. A version number that does not exist on the plan and an archived version both return 404. The request is refused with 409 and a code when: the subscription is not live; the subscription ends at or before the boundary; a kept override has a rate that would mean something else on the new price; a feature's reset period, metric or pricing unit changes; or the new version sells a price that a continuing interval already covers.",
+        "operationId": "migrateSubscriptionVersion",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The subscription ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrateSubscriptionVersionRequest"
+              },
+              "example": {
+                "targetVersionNumber": 2
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The subscription after the migration, and what the migration did. If changed is false, nothing moved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MigrateSubscriptionVersionResponse"
+                },
+                "example": {
+                  "subscription": {
+                    "id": "sub_j1k2l3m4n5o6p7q8",
+                    "object": "subscription",
+                    "versionPolicy": "pinned",
+                    "autoCharge": true,
+                    "taxExempt": true,
+                    "createdAt": "2024-02-01T14:45:30Z",
+                    "customerId": "cus_r9s0t1u2v3w4x5y6",
+                    "endingAt": "2024-12-31T23:59:59Z",
+                    "estimatedTaxRate": 0,
+                    "name": "Analytics Co - Data Platform Enterprise",
+                    "payment": null,
+                    "planId": "plan_z7a8b9c0d1e2f3g4",
+                    "startedAt": "2024-02-01T14:45:30Z",
+                    "billingAnchor": "2024-02-01T14:00:00Z",
+                    "billingCadence": "P1M",
+                    "status": "active",
+                    "terminatedAt": null,
+                    "terminatedBy": null,
+                    "terminationReason": null,
+                    "updatedAt": "2024-02-15T09:20:00Z",
+                    "planVersionId": "pver_u2v3w4x5y6z7a8b9",
+                    "versionNumber": 2
+                  },
+                  "migration": {
+                    "fromVersionNumber": 1,
+                    "toVersionNumber": 2,
+                    "effectiveAt": "2024-03-01T00:00:00Z",
+                    "entitlementsEffectiveAt": "2024-03-01T00:00:00Z",
+                    "changed": true
+                  },
+                  "lineItems": {
+                    "syncFailed": false
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "429": {
+            "description": "Another change is in progress on this subscription or its plan. Retry after the time in the Retry-After header.",
             "content": {
               "application/json": {
                 "schema": {
@@ -7581,6 +7734,10 @@
                   "payment": null,
                   "planId": "plan_t9u0v1w2x3y4z5a6",
                   "startedAt": "2024-01-10T08:00:00Z",
+                  "elapsedPeriodBilling": "none",
+                  "billingStartsAt": "2024-01-10T08:00:00Z",
+                  "billingAnchor": "2024-01-10T08:00:00Z",
+                  "billingCadence": "P1M",
                   "status": "terminated",
                   "terminatedAt": "2024-03-15T14:20:00Z",
                   "terminatedBy": "org_f7g8h9i0j1k2l3m4",
@@ -8582,6 +8739,117 @@
         }
       }
     },
+    "/v2/invoices/projected": {
+      "get": {
+        "tags": [
+          "Invoices V2"
+        ],
+        "summary": "List projected",
+        "description": "List the invoices a subscription will issue in a range of invoice moments, one projected invoice for each distinct invoice moment. Projected invoices are derived on each read and never stored. Each has status PROJECTED, and its id is stable between reads, but GET /v2/invoices/{id} returns 404 for it. Totals EXCLUDE usage: metered charges are not projected, and an invoice moment that has only metered charges is omitted. Tax and sequenceNumber are estimates. The range filters on the invoice moment (invoiceAt) in [from, to). A from before now is treated as now. to must be after from and at most one year after now; now is the subscription's test-clock time when it has a test clock. A terminated subscription returns an empty list. Each invoice carries its lines in lineItems. Authorization is the same as listing invoices.",
+        "operationId": "listProjectedInvoices",
+        "x-rate-limit": {
+          "max": 60,
+          "timeWindow": "1 minute"
+        },
+        "parameters": [
+          {
+            "in": "query",
+            "name": "subscriptionId",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SubscriptionId"
+            },
+            "description": "The subscription to project invoices for"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Start of the range of invoice moments, inclusive. Defaults to now. A value before now is treated as now."
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "End of the range of invoice moments, exclusive. Defaults to one month after from. Must be after from and at most one year after now."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Maximum number of invoices to return"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "description": "Number of invoices to skip for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Projected invoices ordered by invoice moment, earliest first",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "enum": [
+                        "list"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Invoice"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  },
+                  "required": [
+                    "object",
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v2/invoices/{id}": {
       "parameters": [
         {
@@ -8875,6 +9143,126 @@
         }
       }
     },
+    "/v2/invoices/{id}/payment": {
+      "post": {
+        "tags": [
+          "Invoices V2"
+        ],
+        "summary": "Settle Invoice Payment",
+        "description": "Settle an unpaid invoice in status `ISSUED` or `PAYMENT_FAILED`. The `method` field selects how.\n\n- `hosted_link`: create a new hosted payment link and email it to the customer. The invoice stays unpaid until the customer pays on the link. Each call replaces the previous link. A payment link expires after 30 days; to collect an invoice whose link has expired, call this method again.\n- `out_of_band`: record a payment that you collected outside Paygentic. The invoice changes to `PAID` immediately. A second call returns 409.\n\nFor `hosted_link`, an invoice that does not exist returns 403, the same as an invoice of another merchant.\n\nPaygentic selects the payment provider from your connected payment account. The response reports the provider.\n\n**Warning:** each `hosted_link` call creates a new link and sends the customer a new email. Do not retry a `hosted_link` call after a timeout: first read the invoice to see if a new link exists.",
+        "operationId": "recordInvoicePayment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The invoice ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "method"
+                ],
+                "properties": {
+                  "method": {
+                    "$ref": "#/components/schemas/InvoicePaymentMethod",
+                    "description": "How the invoice is settled. `hosted_link` creates a new payment link and emails it to the customer. `out_of_band` records a payment collected outside Paygentic and marks the invoice as `PAID`."
+                  },
+                  "reason": {
+                    "type": "string",
+                    "maxLength": 500,
+                    "description": "Optional note for `out_of_band` that describes how you received the payment (for example, 'Wire transfer received 2026-03-25'). Ignored for `hosted_link`."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The invoice is settled, or a new payment link exists. The `method` field identifies the shape: `out_of_band` returns the `PAID` invoice; `hosted_link` returns the provider and the new payment link.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OutOfBandPaymentResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HostedLinkPaymentResult"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "method",
+                    "mapping": {
+                      "out_of_band": "#/components/schemas/OutOfBandPaymentResult",
+                      "hosted_link": "#/components/schemas/HostedLinkPaymentResult"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "description": "`out_of_band`: the invoice is already paid or in a final status. Do not retry. `hosted_link`: a payment on the current link is in progress or complete, or its status could not be read. A new link could cause a second charge, so Paygentic does not create one. Retry after the payment in progress is complete.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "`hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "$ref": "#/components/schemas/InvoicePaymentLinkErrorCode",
+                          "description": "Machine-readable cause for the 422. Branch on this rather than parsing `message`."
+                        }
+                      },
+                      "required": [
+                        "error",
+                        "code"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
     "/v2/invoices/{id}/refunds": {
       "post": {
         "tags": [
@@ -9040,6 +9428,184 @@
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/v2/invoices/{id}/retryPayment": {
+      "post": {
+        "tags": [
+          "Invoices V2"
+        ],
+        "summary": "Retry Payment",
+        "description": "Charge the customer's saved payment method again for an unpaid invoice.\n\nThe invoice must be in status `ISSUED` or `PAYMENT_FAILED`, auto-charge must be on for its subscription, and the invoice must have a payment session. If not, the response is 400.\n\nThe response status tells you the result. Only 200 means that the charge succeeded. Every other response from this operation that has a `retry_payment_result` body has `success: false`, and `error.code` gives the reason:\n\n| Status | `error.code` | Meaning |\n| --- | --- | --- |\n| 200 | — | The charge succeeded, the provider had already collected it, or no amount is unpaid. |\n| 202 | `processing` | The provider accepted the charge. It settles later (for example, a bank debit). |\n| 402 | a decline code, for example `card_declined`, `insufficient_funds`, `do_not_honor`, `authentication_required` | The provider declined the payment method. |\n| 409 | `concurrent_attempt` | Another payment attempt for this invoice is in progress. |\n| 409 | `PAYMENT_SESSION_EXPIRED` | The payment link expired (after 30 days). Create a new link with `POST /v2/invoices/{id}/payment` and `method: hosted_link`, then retry. If the customer also has no usable saved payment method, the response is 422 instead. |\n| 409 | another value, or no `code` | The payment session cannot be charged in its current state (for example `session_unusable`, `non_confirmable`, `PAYMENT_PROCESSING`, `PAYMENT_ALREADY_COMPLETED`). Read `error.message` for the cause. |\n| 422 | `no_payment_method` | The customer has no usable saved payment method. Send a payment link instead. |\n| 502 | `provider_unavailable` or none | The payment provider did not answer, or the provider failed the charge for a reason that is not known. Retry later. |\n\nA 500 response has the standard error body, not `retry_payment_result`. It is an internal error, and a retry does not fix it.\n\nAn invoice that does not exist returns 403, the same as an invoice of another merchant.\n\nThis operation is rate limited to one call each minute for each invoice.",
+        "operationId": "retryInvoicePayment",
+        "x-rate-limit": {
+          "max": 1,
+          "platformMax": 100,
+          "timeWindow": "1 minute",
+          "errorMessage": "A payment retry for this invoice was just attempted. Please wait before retrying."
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The invoice ID"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "description": "Optional reason for the manual retry (for audit logging)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The charge succeeded, the provider had already collected it, or the invoice has no unpaid amount. `success` is `true`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryPaymentResponse"
+                },
+                "example": {
+                  "object": "retry_payment_result",
+                  "success": true,
+                  "invoiceId": "inv_a1b2c3d4e5f6g7h8",
+                  "paymentIntentId": "pi_1234567890abcdef"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The provider accepted the charge and it settles later. `error.code` is `processing`. The invoice changes to `PAID` when the payment settles.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryPaymentResponse"
+                },
+                "example": {
+                  "object": "retry_payment_result",
+                  "success": false,
+                  "invoiceId": "inv_a1b2c3d4e5f6g7h8",
+                  "paymentIntentId": "pi_1234567890abcdef",
+                  "error": {
+                    "message": "Payment is settling asynchronously: processing",
+                    "code": "processing"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "402": {
+            "description": "The provider declined the payment method. `error.code` and `error.declineCode` give the reason.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryPaymentResponse"
+                },
+                "example": {
+                  "object": "retry_payment_result",
+                  "success": false,
+                  "invoiceId": "inv_a1b2c3d4e5f6g7h8",
+                  "paymentIntentId": "pi_1234567890abcdef",
+                  "error": {
+                    "message": "Payment failed: card_declined",
+                    "type": "card_error",
+                    "code": "card_declined",
+                    "declineCode": "insufficient_funds"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "409": {
+            "description": "The payment session cannot be charged now. `error.code` gives the reason when one is known: `concurrent_attempt` (another attempt is in progress), `PAYMENT_SESSION_EXPIRED` (the payment link expired; create a new link first), or another value such as `session_unusable`, `non_confirmable`, `PAYMENT_PROCESSING` or `PAYMENT_ALREADY_COMPLETED`. `error.code` can be absent; then read `error.message`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryPaymentResponse"
+                },
+                "example": {
+                  "object": "retry_payment_result",
+                  "success": false,
+                  "invoiceId": "inv_a1b2c3d4e5f6g7h8",
+                  "error": {
+                    "message": "Payment session has expired",
+                    "code": "PAYMENT_SESSION_EXPIRED"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The customer has no usable saved payment method. `error.code` is `no_payment_method`. Send a payment link instead.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryPaymentResponse"
+                },
+                "example": {
+                  "object": "retry_payment_result",
+                  "success": false,
+                  "invoiceId": "inv_a1b2c3d4e5f6g7h8",
+                  "error": {
+                    "message": "Cannot retry payment: no usable stored payment method",
+                    "code": "no_payment_method"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "502": {
+            "description": "The payment provider did not answer, or the provider failed the charge for a reason that is not known. Retry later.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryPaymentResponse"
+                },
+                "example": {
+                  "object": "retry_payment_result",
+                  "success": false,
+                  "invoiceId": "inv_a1b2c3d4e5f6g7h8",
+                  "error": {
+                    "message": "Cannot retry payment: the payment provider did not answer. Try again later.",
+                    "code": "provider_unavailable"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -10338,7 +10904,7 @@
       "get": {
         "operationId": "getRevenue",
         "summary": "Get revenue summary",
-        "description": "Returns revenue summary with invoice and payment breakdowns (outstanding/paid/writtenOff), plus a time-series trend. Revenue is sourced from all issued invoices (v0 + v1) and completed payments.",
+        "description": "Returns revenue summary with invoice and payment breakdowns (outstanding/paid/writtenOff), plus a time-series trend. Revenue is what was billed in the period (by default, invoices issued in it; see periodBasis), whatever their status since, less refunds, both excluding tax; completed payments are reported under payments, never in revenue.",
         "tags": [
           "Revenue"
         ],
@@ -10499,7 +11065,7 @@
       "get": {
         "operationId": "getProfitability",
         "summary": "Get profitability summary",
-        "description": "Returns a per-customer profitability summary for a merchant over a date range. Each row aggregates revenue (from issued + paid invoices), cost (from metered cost discovery), profit, and margin. Customers are ranked by profit descending and capped at topN; the remainder is rolled into a single self-consistent 'Other' row whose revenue, cost, and profit reflect the same set of customers. Rows are inner-joined against the merchant's customer list, so orphaned meter subjects from deleted or unknown customers are dropped.",
+        "description": "Returns a per-customer profitability summary for a merchant over a date range. Each row aggregates revenue (invoices issued in the period, whatever their status since, less refunds, both excluding tax; the same figure /v0/revenue reports), cost (from metered cost discovery), profit, and margin. Customers are ranked by profit descending and capped at topN; the remainder is rolled into a single self-consistent 'Other' row whose revenue, cost, and profit reflect the same set of customers. Rows are joined against the merchant's customer list, so meter subjects that match no customer are dropped. Soft-deleted customers with revenue or cost in the period are folded into a single 'deleted' row, which always comes last, after 'Other', and takes no top-N slot.",
         "tags": [
           "Profitability"
         ],
@@ -11100,6 +11666,65 @@
           }
         },
         "x-speakeasy-name-override": "delete"
+      }
+    },
+    "/v0/merchants/{merchantId}/reset": {
+      "post": {
+        "tags": [
+          "Merchant Data"
+        ],
+        "summary": "Reset a merchant's data",
+        "description": "With `scope: merchant`, deletes the merchant's customers and everything attached to them: subscriptions, invoices, line items, payments, entitlements, grants, orders, test clocks, usage events, invoice documents and, when tax is enabled, the documents in the merchant's Quaderno sandbox account. `keepCatalog: true` keeps the catalog (products, plans, prices, fees, features, billable metrics), and `keepCatalog: false` deletes it too; the merchant's configuration is always kept. With `scope: customer`, deletes one customer and what is attached to it; test clocks and the Quaderno account's documents are kept, since they belong to no single customer.\n\nA `204` means every delete is done or scheduled: usage events and Quaderno documents finish in the background, and usage events still being ingested while it runs can survive it. A `502` means a store outside Postgres failed; the customers are already out of the API, and calling again with the same body finishes the reset. Calling again is always safe. While a customer waits for that, its external id is free for a new customer to take; a retry then deletes usage events by customer id only.\n\nNot available in production.",
+        "operationId": "resetMerchant",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MerchantReset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Every delete is done or scheduled"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          },
+          "502": {
+            "description": "A store outside Postgres failed, so the reset is incomplete. The error has `code: RESET_INCOMPLETE` and `details.pending`, a list of `usageEvents`, `invoiceDocuments` and `taxDocuments`. Call again with the same body to finish it.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-speakeasy-group": "merchants",
+        "x-speakeasy-name-override": "reset"
       }
     },
     "/v0/externalReferences": {
@@ -13349,6 +13974,362 @@
           }
         }
       }
+    },
+    "/v0/webhooks": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Get",
+        "description": "Returns the webhook configuration for your account. Returns 404 if webhooks have never been enabled.",
+        "operationId": "getWebhooks",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Organization ID"
+            },
+            "description": "The merchant organization ID. If omitted, defaults to the merchant associated with the authenticated API key."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhook configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhooks"
+                },
+                "example": {
+                  "object": "webhooks",
+                  "applicationId": "app_svix_123456",
+                  "createdAt": "2024-01-20T10:00:00Z",
+                  "enabled": true,
+                  "merchantId": "org_t9u0v1w2x3y4z5a6",
+                  "updatedAt": "2024-03-10T14:30:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhooks not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-speakeasy-name-override": "get"
+      },
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Enable",
+        "description": "Turns on webhook delivery for your account. Call it once: when a configuration already exists, enabled or disabled, the response is 400 with code `DUPLICATE_RESOURCE`. Use the update operation to turn delivery on or off after that. Endpoint URLs, event subscriptions and the signing secret are managed in the webhook portal.",
+        "operationId": "createWebhooks",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Organization ID"
+            },
+            "description": "The merchant organization ID. If omitted, defaults to the merchant associated with the authenticated API key."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Webhooks enabled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhooks"
+                },
+                "example": {
+                  "object": "webhooks",
+                  "applicationId": "app_svix_789012",
+                  "createdAt": "2024-02-15T11:00:00Z",
+                  "enabled": true,
+                  "merchantId": "org_b7c8d9e0f1g2h3i4",
+                  "updatedAt": "2024-02-15T11:00:00Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-speakeasy-name-override": "enable"
+      },
+      "patch": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Update",
+        "description": "Turns webhook delivery on or off. Set `enabled` to `false` to pause delivery and to `true` to resume it. Endpoints and their event subscriptions are kept. Returns 404 if webhooks have never been enabled.",
+        "operationId": "updateWebhooks",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Organization ID"
+            },
+            "description": "The merchant organization ID. If omitted, defaults to the merchant associated with the authenticated API key."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "Whether webhooks are enabled"
+                  }
+                },
+                "required": [
+                  "enabled"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Webhook configuration updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Webhooks"
+                },
+                "example": {
+                  "object": "webhooks",
+                  "applicationId": "app_svix_345678",
+                  "createdAt": "2024-01-10T08:00:00Z",
+                  "enabled": false,
+                  "merchantId": "org_j5k6l7m8n9o0p1q2",
+                  "updatedAt": "2024-03-18T16:00:00Z"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook configuration not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-speakeasy-name-override": "update"
+      },
+      "delete": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Disable",
+        "description": "Pauses webhook delivery. This has the same effect as the update operation with `enabled: false`: it does not delete the configuration, the endpoints or their event subscriptions. Use the update operation with `enabled: true` to resume delivery. Returns 404 if webhooks have never been enabled.",
+        "operationId": "deleteWebhooks",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Organization ID"
+            },
+            "description": "The merchant organization ID. If omitted, defaults to the merchant associated with the authenticated API key."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Webhooks disabled successfully"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhook configuration not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-speakeasy-name-override": "disable"
+      }
+    },
+    "/v0/webhooks/portal": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Get Portal Access",
+        "description": "Returns a link to the webhook portal, where you add endpoints, choose event types, read the signing secret and inspect deliveries. The link opens without a login and expires one hour after it is issued, at `expiresAt`. Treat it as a secret. Returns 404 unless webhooks are enabled.",
+        "operationId": "getWebhookPortal",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Organization ID"
+            },
+            "description": "The merchant organization ID. If omitted, defaults to the merchant associated with the authenticated API key."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Portal access URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhookPortal"
+                },
+                "example": {
+                  "object": "webhookPortal",
+                  "url": "https://portal.svix.com/app/app_svix_123456?token=magic_link_token_xyz789",
+                  "expiresAt": "2024-03-10T15:30:00Z"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Webhooks not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "x-speakeasy-name-override": "getPortal"
+      }
     }
   },
   "components": {
@@ -15411,6 +16392,31 @@
         "pattern": "^pver_[a-zA-Z0-9]+$",
         "description": "Unique identifier for a plan version"
       },
+      "VersionTransition": {
+        "type": "object",
+        "required": [
+          "effectiveDate",
+          "proration"
+        ],
+        "description": "When a move to a new plan version takes effect for this plan's subscriptions. `end_of_current_period` (the default) moves everything at the end of the current billing period. `immediate` changes entitlements at the move, in-arrears prices for the whole current period, and in-advance prices from the next period. Neither prorates.",
+        "properties": {
+          "effectiveDate": {
+            "type": "string",
+            "enum": [
+              "end_of_current_period",
+              "immediate"
+            ],
+            "description": "When the move takes effect."
+          },
+          "proration": {
+            "type": "string",
+            "enum": [
+              "none"
+            ],
+            "description": "How the current period is split. Only `none` is supported."
+          }
+        }
+      },
       "Plan": {
         "type": "object",
         "required": [
@@ -15423,7 +16429,8 @@
           "merchantId",
           "productId",
           "createdAt",
-          "updatedAt"
+          "updatedAt",
+          "versionTransition"
         ],
         "properties": {
           "id": {
@@ -15552,6 +16559,9 @@
             "type": "boolean",
             "default": true,
             "description": "Governs price identity when a price on this plan's default version is replaced. When true (default), replacing a price at make-default keeps the original price id live (its value changes) and the superseded value is preserved under a new id. When false, the replacement price's id goes live instead and the superseded value stays under the original id."
+          },
+          "versionTransition": {
+            "$ref": "#/components/schemas/VersionTransition"
           }
         }
       },
@@ -16488,10 +17498,14 @@
           "planId",
           "status",
           "startedAt",
+          "billingAnchor",
+          "billingCadence",
           "createdAt",
           "updatedAt",
           "paymentTermDays",
-          "versionPolicy"
+          "versionPolicy",
+          "elapsedPeriodBilling",
+          "billingStartsAt"
         ],
         "properties": {
           "id": {
@@ -16674,6 +17688,32 @@
             "type": "string",
             "format": "date-time"
           },
+          "elapsedPeriodBilling": {
+            "type": "string",
+            "enum": [
+              "none",
+              "per_period",
+              null
+            ],
+            "nullable": true,
+            "description": "Whether this subscription's backdated start bills its elapsed periods, as chosen at creation. `null` for a subscription created before the choice existed. `null` is listed in the enum as well as via `nullable` because the response validator checks the enum independently."
+          },
+          "billingStartsAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "The billing start: a charge is billed only if it falls due at or after this moment. Fixed at creation and never changed. It is `startedAt`, unless the start was backdated with `elapsedPeriodBilling` of `none`, in which case it is the moment of creation."
+          },
+          "billingAnchor": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The instant the subscription's billing periods are anchored on: its billing anchor, else its start. Every recurring period boundary is this instant plus a whole number of cadences."
+          },
+          "billingCadence": {
+            "type": "string",
+            "description": "The ISO-8601 duration the subscription's billing periods step by where no price sets its own: the subscription's cadence, else its plan's.",
+            "example": "P1M"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -16797,6 +17837,15 @@
             }
           }
         }
+      },
+      "ElapsedPeriodBilling": {
+        "type": "string",
+        "enum": [
+          "none",
+          "per_period"
+        ],
+        "default": "none",
+        "description": "Whether a backdated start bills its elapsed periods. A start is backdated when `startedAt` is more than 24 hours before the subscription is created. `none` bills only charges that fall due from the moment of creation, for a customer whose earlier periods another system already billed. `per_period` bills every charge that fell due from `startedAt`, on one first invoice; it refuses a `startedAt` more than 12 months back. Has no effect on a start that is not backdated. Defaults to `none`."
       },
       "ChangeReason": {
         "type": "string",
@@ -16942,7 +17991,7 @@
       "SubscriptionIntervalAddOp": {
         "type": "object",
         "additionalProperties": false,
-        "description": "Adds an interval. If the plan version has a line with this priceKey, the interval overrides that line. If not, send priceId. The interval then belongs to this subscription only and keeps the rate that you write. A plan version change does not carry it forward, so it stops billing at the version boundary. If a later plan version adds the same priceKey, the change is refused until the plan drops the key or the interval ends on or before the boundary.",
+        "description": "Adds an interval. If the plan version has a line with this priceKey, the interval overrides that line. If not, send priceId. The interval then belongs to this subscription only and keeps the rate that you write. A plan version change keeps it: it continues to bill after the subscription moves to another plan version. If a later plan version adds the same priceKey, the change is refused until the plan drops the key or the interval ends on or before the boundary.",
         "required": [
           "priceKey",
           "unitPrice",
@@ -17406,6 +18455,98 @@
           "lineItems",
           "intervalChange"
         ]
+      },
+      "MigrateSubscriptionVersionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "targetVersionNumber"
+        ],
+        "description": "The plan version to move the subscription to.",
+        "properties": {
+          "targetVersionNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2.147483647e+09,
+            "description": "The number of a published version of the subscription's plan."
+          },
+          "timing": {
+            "type": "string",
+            "enum": [
+              "next_period",
+              "immediate"
+            ],
+            "description": "When the migration takes effect. `next_period` moves everything at the end of the current billing period. `immediate` changes entitlements at once, bills in-arrears prices for the whole current period at the target version, and changes in-advance prices at the end of the current period. Neither prorates. If absent, the plan's versionTransition applies."
+          }
+        }
+      },
+      "MigrateSubscriptionVersionResponse": {
+        "type": "object",
+        "required": [
+          "subscription",
+          "migration",
+          "lineItems"
+        ],
+        "properties": {
+          "subscription": {
+            "$ref": "#/components/schemas/Subscription"
+          },
+          "migration": {
+            "type": "object",
+            "required": [
+              "fromVersionNumber",
+              "toVersionNumber",
+              "effectiveAt",
+              "entitlementsEffectiveAt",
+              "changed"
+            ],
+            "properties": {
+              "fromVersionNumber": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "The version the subscription was on. Null for a legacy subscription with no version pin."
+              },
+              "toVersionNumber": {
+                "type": "integer",
+                "description": "The version the subscription is now pinned to."
+              },
+              "effectiveAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time",
+                "description": "When in-advance prices start to bill from the target version: the end of the current billing period. Null when nothing moved."
+              },
+              "entitlementsEffectiveAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time",
+                "description": "When the subscription's entitlements change. Equal to effectiveAt for a next_period migration; the time of the call for an immediate one. Null when nothing moved."
+              },
+              "changed": {
+                "type": "boolean",
+                "description": "False when the subscription was already on the target and already pinned."
+              }
+            }
+          },
+          "lineItems": {
+            "type": "object",
+            "required": [
+              "syncFailed"
+            ],
+            "properties": {
+              "syncFailed": {
+                "type": "boolean",
+                "description": "True when the migration was saved but the line-item re-derive failed. The migration is not rolled back, and the re-derive is retried automatically."
+              }
+            }
+          }
+        }
       },
       "SubscriptionIntervalChangesResponse": {
         "type": "object",
@@ -18535,9 +19676,10 @@
               "PAID",
               "CANCELLED",
               "WRITTEN_OFF",
-              "FAILED"
+              "FAILED",
+              "PROJECTED"
             ],
-            "description": "The current status of the invoice"
+            "description": "The current status of the invoice. PROJECTED is returned only by GET /v2/invoices/projected and is never the status of a stored invoice."
           },
           "subscriptionId": {
             "type": "string",
@@ -18966,6 +20108,145 @@
             "description": "Total number of line items across all pages"
           }
         }
+      },
+      "InvoicePaymentMethod": {
+        "type": "string",
+        "enum": [
+          "out_of_band",
+          "hosted_link"
+        ],
+        "description": "How an invoice payment is settled."
+      },
+      "OutOfBandPaymentResult": {
+        "type": "object",
+        "required": [
+          "method",
+          "invoice"
+        ],
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "out_of_band"
+            ],
+            "description": "Discriminator: an out-of-band payment was recorded."
+          },
+          "invoice": {
+            "$ref": "#/components/schemas/Invoice",
+            "description": "The invoice, now PAID."
+          }
+        }
+      },
+      "InvoicePaymentProvider": {
+        "type": "string",
+        "enum": [
+          "stripe",
+          "airwallex"
+        ],
+        "description": "The payment provider that a hosted payment link routes to."
+      },
+      "HostedLinkPaymentResult": {
+        "type": "object",
+        "required": [
+          "method",
+          "provider",
+          "paymentSessionId",
+          "paymentUrl",
+          "invoice"
+        ],
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "hosted_link"
+            ],
+            "description": "Discriminator: a hosted payment link was minted/regenerated."
+          },
+          "provider": {
+            "$ref": "#/components/schemas/InvoicePaymentProvider",
+            "description": "The PSP the link routes to. Resolved internally from the merchant's account (Connect-exempt merchants route to the Stripe platform account) and reported here — not chosen by the caller."
+          },
+          "paymentSessionId": {
+            "type": "string",
+            "description": "The newly created payment session ID."
+          },
+          "paymentUrl": {
+            "type": "string",
+            "description": "The customer-facing payment link for the new session."
+          },
+          "invoice": {
+            "$ref": "#/components/schemas/Invoice",
+            "description": "The invoice refreshed with the new payment link."
+          }
+        }
+      },
+      "InvoicePaymentLinkErrorCode": {
+        "type": "string",
+        "enum": [
+          "INVOICE_NOT_LINKABLE_STATUS",
+          "INVOICE_NO_BALANCE",
+          "MERCHANT_NO_PAYMENT_ACCOUNT"
+        ],
+        "description": "Why Paygentic cannot create a payment link for the invoice."
+      },
+      "RetryPaymentError": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Human-readable message. Do not parse it; use `code`."
+          },
+          "type": {
+            "type": "string",
+            "description": "Error category, for example `card_error` or `processing`."
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable reason. See the operation description for the values."
+          },
+          "declineCode": {
+            "type": "string",
+            "description": "The card decline code from the provider, when one is available."
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "description": "Why a payment retry did not collect the money."
+      },
+      "RetryPaymentResponse": {
+        "type": "object",
+        "required": [
+          "object",
+          "success",
+          "invoiceId"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "retry_payment_result"
+            ],
+            "description": "The object type"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "True only when the charge succeeded or no amount is unpaid. The response status is 200 only when this is true."
+          },
+          "invoiceId": {
+            "type": "string",
+            "description": "The invoice ID"
+          },
+          "paymentIntentId": {
+            "type": "string",
+            "description": "The provider's payment reference for the charge, when the provider has one."
+          },
+          "error": {
+            "$ref": "#/components/schemas/RetryPaymentError",
+            "description": "Present when `success` is false."
+          }
+        },
+        "description": "The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape."
       },
       "Payment": {
         "type": "object",
@@ -19703,6 +20984,7 @@
         "required": [
           "groupKey",
           "groupLabel",
+          "revenue",
           "issuedInvoices"
         ],
         "properties": {
@@ -19714,9 +20996,13 @@
             "type": "string",
             "description": "Human-readable label for the group (e.g. plan name)"
           },
+          "revenue": {
+            "type": "string",
+            "description": "Revenue for this group in this bucket, computed exactly as netRevenue. A group outside the top N, or with only a refund in the window, counts under 'other'."
+          },
           "issuedInvoices": {
             "type": "string",
-            "description": "Total issued invoice amount in dollars for this group in this bucket, excluding tax"
+            "description": "Total issued invoice amount in dollars for this group in this bucket, excluding tax, before refunds"
           }
         }
       },
@@ -19724,6 +21010,7 @@
         "type": "object",
         "required": [
           "timestamp",
+          "revenue",
           "issuedInvoices",
           "writtenOffInvoices",
           "completedPayments",
@@ -19735,9 +21022,13 @@
             "format": "date-time",
             "description": "Start time of this bucket"
           },
+          "revenue": {
+            "type": "string",
+            "description": "Revenue for this bucket, computed exactly as netRevenue: invoices issued in the bucket (on periodBasis=billingPeriod, lines billing it), excluding tax, less refunds issued in it, excluding tax. The buckets sum to netRevenue."
+          },
           "issuedInvoices": {
             "type": "string",
-            "description": "Total amount of all invoices issued in this bucket (all statuses, by issuedAt), excluding tax"
+            "description": "Total amount of all invoices issued in this bucket (all statuses, by issuedAt), excluding tax, before refunds. Revenue is the revenue field."
           },
           "writtenOffInvoices": {
             "type": "string",
@@ -19745,7 +21036,7 @@
           },
           "completedPayments": {
             "type": "string",
-            "description": "Revenue from completed payments in dollars for this bucket"
+            "description": "Completed payment-link payments in dollars for this bucket, reported beside revenue, not in it"
           },
           "rebates": {
             "type": "string",
@@ -19805,7 +21096,7 @@
           },
           "netRevenue": {
             "type": "string",
-            "description": "Revenue in dollars for this currency, excluding tax: invoices issued in the period plus completed payments"
+            "description": "Revenue for this currency: what was billed in the period, excluding tax, in units of this currency. On the default issue-date basis it is recognised when each invoice is issued; with periodBasis=billingPeriod, each invoice line counts in the period it bills, and a refund splits across its invoice's lines. An invoice counts whether it was since paid, is still outstanding, failed payment or was written off, less non-voided refunds, the same way as the ungrouped netRevenue. It is billings, not cash collected: what customers still owe is invoices.outstanding, including tax, and payment-link collections are under payments."
           },
           "invoices": {
             "$ref": "#/components/schemas/InvoiceSummary"
@@ -19835,7 +21126,7 @@
           },
           "netRevenue": {
             "type": "string",
-            "description": "Revenue in dollars, excluding tax: invoices issued in the period plus completed payments, less non-voided refunds issued in the period. Invoices and refunds are counted excluding tax. Omitted when groupBy=currency is active."
+            "description": "Revenue: what was billed in the period, excluding tax, in units of the currency. On the default issue-date basis it is recognised when each invoice is issued; with periodBasis=billingPeriod, each invoice line counts in the period it bills, and a refund splits across its invoice's lines. An invoice counts whether it was since paid, is still outstanding, failed payment or was written off, less non-voided refunds. It is billings, not cash collected: what customers still owe is invoices.outstanding, including tax, and payment-link collections are under payments. Omitted when groupBy=currency is active."
           },
           "totalRefunds": {
             "type": "string",
@@ -19920,15 +21211,15 @@
         "properties": {
           "customerId": {
             "type": "string",
-            "description": "Customer ID, or the literal 'other' for the overflow row."
+            "description": "Customer ID, the literal 'other' for the overflow row, or the literal 'deleted' for the row that folds every soft-deleted customer with revenue or cost in the period."
           },
           "customerName": {
             "type": "string",
-            "description": "Display name for the row. 'Other' for the overflow row."
+            "description": "Display name for the row. 'Other' for the overflow row, 'Deleted customers' for the deleted row."
           },
           "netRevenue": {
             "type": "string",
-            "description": "Revenue excluding tax (paid + outstanding invoices issued in the period), in unit currency, with two decimals."
+            "description": "Revenue excluding tax, in units of the currency, with two decimals: what was billed in the period, recognised when each invoice is issued. Every invoice issued in the period counts, whether it was since paid, is still outstanding, failed payment or was written off, less non-voided refunds issued in the period. It is billings, not cash collected, and the same figure /v0/revenue reports."
           },
           "totalCost": {
             "type": "string",
@@ -19943,7 +21234,16 @@
               "string",
               "null"
             ],
-            "description": "Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero."
+            "description": "Margin percent (profit / revenue × 100), with two decimals. Null when revenue is zero or negative, and when `costData` is not `recorded`: a cost nobody recorded reads as zero, and a margin over it would claim the row costs nothing."
+          },
+          "costData": {
+            "type": "string",
+            "enum": [
+              "recorded",
+              "partial",
+              "none"
+            ],
+            "description": "Whether metering recorded usage against a cost for every customer the row covers (`recorded`), some of them (`partial`, only on the 'Other' and 'deleted' rows) or none (`none`). Usage that prices at zero is recorded, so `recorded` with a zero `totalCost` is a measured zero. `none` means no cost data, not a zero cost."
           }
         }
       },
@@ -19966,7 +21266,7 @@
           },
           "rows": {
             "type": "array",
-            "description": "Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed. With `excludeEmpty=true`, customers with neither revenue nor cost in the period are left out.",
+            "description": "Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed. Soft-deleted customers appear only through the 'deleted' row, which comes last, never by name. With `excludeEmpty=true`, customers with neither revenue nor cost in the period are left out.",
             "maxItems": 101,
             "items": {
               "$ref": "#/components/schemas/ProfitabilityRow"
@@ -20107,6 +21407,44 @@
           "currentTime",
           "createdAt",
           "updatedAt"
+        ]
+      },
+      "MerchantReset": {
+        "description": "What the reset deletes. Every field of the chosen shape is required, so each call says what goes.",
+        "oneOf": [
+          {
+            "type": "object",
+            "title": "MerchantScope",
+            "required": [
+              "scope",
+              "keepCatalog"
+            ],
+            "properties": {
+              "scope": {
+                "const": "merchant"
+              },
+              "keepCatalog": {
+                "type": "boolean",
+                "description": "`false` also deletes the catalog: products, plans, plan versions, prices, fees, features, billable metrics, pricing units, items, costs and sources, back to an empty account."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "CustomerScope",
+            "required": [
+              "scope",
+              "customerId"
+            ],
+            "properties": {
+              "scope": {
+                "const": "customer"
+              },
+              "customerId": {
+                "$ref": "#/components/schemas/CustomerId"
+              }
+            }
+          }
         ]
       },
       "ExternalRecordId": {
@@ -21661,6 +22999,75 @@
             "description": "Optional. The real user id performing the action. Used when the request is made via a platform-level key on behalf of a human user. Ignored when the caller is a non-platform API key."
           }
         }
+      },
+      "Webhooks": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "webhooks"
+            ],
+            "description": "Object type identifier"
+          },
+          "applicationId": {
+            "type": "string",
+            "description": "Svix application identifier"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When webhooks were first enabled"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether webhooks are enabled"
+          },
+          "merchantId": {
+            "type": "string",
+            "description": "Merchant identifier"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When webhooks were last updated"
+          }
+        },
+        "required": [
+          "object",
+          "merchantId",
+          "enabled",
+          "applicationId",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "WebhookPortal": {
+        "type": "object",
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "webhookPortal"
+            ],
+            "description": "Object type identifier"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the portal link expires"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Magic link URL to access the webhook portal"
+          }
+        },
+        "required": [
+          "object",
+          "url",
+          "expiresAt"
+        ]
       }
     },
     "responses": {

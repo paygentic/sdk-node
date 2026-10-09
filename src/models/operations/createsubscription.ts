@@ -98,6 +98,10 @@ export type CreateSubscriptionRequest = {
    */
   startedAt: Date;
   /**
+   * Whether a backdated start bills its elapsed periods. A start is backdated when `startedAt` is more than 24 hours before the subscription is created. `none` bills only charges that fall due from the moment of creation, for a customer whose earlier periods another system already billed. `per_period` bills every charge that fell due from `startedAt`, on one first invoice; it refuses a `startedAt` more than 12 months back. Has no effect on a start that is not backdated. Defaults to `none`.
+   */
+  elapsedPeriodBilling?: models.ElapsedPeriodBilling | undefined;
+  /**
    * Test clock identifier for simulating time-based billing scenarios. Sample values: 'tc_abc123xyz', 'tc_789def456'. Restricted to non-production environments (local, dev, sandbox). Must belong to the same merchant organization.
    */
   testClockId?: string | undefined;
@@ -226,6 +230,7 @@ export type CreateSubscriptionRequest$Outbound = {
   minimumAccountBalance?: string | undefined;
   redirectUrls?: RedirectUrls$Outbound | undefined;
   startedAt: string;
+  elapsedPeriodBilling: string;
   testClockId?: string | undefined;
   renewalReminderEnabled?: boolean | null | undefined;
   renewalReminderDays?: number | null | undefined;
@@ -257,6 +262,9 @@ export const CreateSubscriptionRequest$outboundSchema: z.ZodType<
   minimumAccountBalance: z.string().optional(),
   redirectUrls: z.lazy(() => RedirectUrls$outboundSchema).optional(),
   startedAt: z.date().transform(v => v.toISOString()),
+  elapsedPeriodBilling: models.ElapsedPeriodBilling$outboundSchema.default(
+    "none",
+  ),
   testClockId: z.string().optional(),
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),

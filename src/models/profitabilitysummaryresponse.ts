@@ -49,7 +49,7 @@ export type ProfitabilitySummaryResponse = {
    */
   currency: string;
   /**
-   * Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed. With `excludeEmpty=true`, customers with neither revenue nor cost in the period are left out.
+   * Top-N customer rows by profit descending, optionally followed by a single 'Other' row when more than topN customers contributed. Soft-deleted customers appear only through the 'deleted' row, which comes last, never by name. With `excludeEmpty=true`, customers with neither revenue nor cost in the period are left out.
    */
   rows: Array<ProfitabilityRow>;
   /**

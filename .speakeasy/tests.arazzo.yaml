@@ -631,7 +631,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-01-04T18:47:28.165Z","currency":"North Korean Won","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-06-07T06:34:20.265Z","stablePriceIds":true}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-01-04T18:47:28.165Z","currency":"North Korean Won","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-06-07T06:34:20.265Z","stablePriceIds":true,"versionTransition":{"effectiveDate":"end_of_current_period","proration":"none"}}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -668,7 +668,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-11-12T08:13:08.969Z","currency":"Moldovan Leu","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-05-14T02:22:53.032Z","stablePriceIds":true}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-11-12T08:13:08.969Z","currency":"Moldovan Leu","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2026-05-14T02:22:53.032Z","stablePriceIds":true,"versionTransition":{"effectiveDate":"immediate","proration":"none"}}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -688,7 +688,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-02-25T08:23:09.829Z","currency":"Lek","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2025-09-29T06:50:28.959Z","stablePriceIds":true}
+              {"id":"<id>","object":"plan","billingCadence":"P1M","billingInterval":"<value>","createdAt":"2025-02-25T08:23:09.829Z","currency":"Lek","merchantId":"<id>","name":"<value>","productId":"<id>","updatedAt":"2025-09-29T06:50:28.959Z","stablePriceIds":true,"versionTransition":{"effectiveDate":"end_of_current_period","proration":"none"}}
             type: simple
     x-speakeasy-test-group: Plans
     x-speakeasy-test-rebuild: true
@@ -1127,7 +1127,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {}
+              {"data":[{"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2026-09-17T00:03:41.402Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"pinned","startedAt":"2025-06-27T13:32:07.971Z","elapsedPeriodBilling":"none","billingStartsAt":"2026-08-06T17:41:52.004Z","billingAnchor":"2025-05-26T13:53:26.740Z","billingCadence":"P1M","status":"active","updatedAt":"2026-06-11T03:12:43.532Z","paymentTermDays":913193}]}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1144,7 +1144,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2024-04-08T18:26:09.428Z","status":"active","updatedAt":"2024-04-25T21:55:26.643Z","paymentTermDays":186713}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2024-07-23T15:18:45.410Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2024-04-08T18:26:09.428Z","elapsedPeriodBilling":"none","billingStartsAt":"2024-04-25T21:55:26.643Z","billingAnchor":"2025-11-22T01:29:53.242Z","billingCadence":"P1M","status":"active","updatedAt":"2024-04-25T21:55:26.643Z","paymentTermDays":186713}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1437,6 +1437,7 @@ workflows:
           contentType: application/json
           payload:
             autoCharge: false
+            elapsedPeriodBilling: none
             name: Monthly API Service
             planId: <id>
             startedAt: "2026-08-09T13:09:26.829Z"
@@ -1446,7 +1447,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"pinned","startedAt":"2026-02-12T13:24:02.807Z","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z","paymentTermDays":868201}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-10-04T05:26:12.259Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"pinned","startedAt":"2026-02-12T13:24:02.807Z","elapsedPeriodBilling":"per_period","billingStartsAt":"2024-06-06T16:25:42.484Z","billingAnchor":"2026-02-28T00:23:19.112Z","billingCadence":"P1M","status":"pending_payment","updatedAt":"2026-02-28T00:23:19.112Z","paymentTermDays":868201}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -1504,7 +1505,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2026-06-24T00:11:37.150Z","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z","paymentTermDays":472943}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-06-02T08:17:12.899Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2026-06-24T00:11:37.150Z","elapsedPeriodBilling":"per_period","billingStartsAt":"2024-07-15T23:15:55.932Z","billingAnchor":"2026-05-31T23:59:53.192Z","billingCadence":"P1M","status":"terminated","updatedAt":"2024-07-15T23:15:55.932Z","paymentTermDays":472943}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -3032,7 +3033,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2026-01-02T09:19:04.663Z","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z","paymentTermDays":349693}
+              {"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-01-18T06:20:25.243Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"floating","startedAt":"2026-01-02T09:19:04.663Z","elapsedPeriodBilling":"per_period","billingStartsAt":"2026-08-30T00:11:32.073Z","billingAnchor":"2026-08-20T22:54:23.094Z","billingCadence":"P1M","status":"terminated","updatedAt":"2026-08-30T00:11:32.073Z","paymentTermDays":349693}
             type: simple
     x-speakeasy-test-group: Subscriptions
     x-speakeasy-test-rebuild: true
@@ -4058,4 +4059,142 @@ workflows:
               {"data":[],"pagination":{"limit":613590,"offset":371832,"total":360633}}
             type: simple
     x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: migrateSubscriptionVersion
+    steps:
+      - stepId: test
+        operationId: migrateSubscriptionVersion
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            targetVersionNumber: 532040
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"subscription":{"id":"<id>","object":"subscription","merchantId":"<id>","autoCharge":false,"createdAt":"2025-09-25T13:00:08.633Z","customerId":"<id>","taxExempt":false,"name":"<value>","planId":"<id>","versionPolicy":"pinned","startedAt":"2024-12-24T04:50:12.691Z","elapsedPeriodBilling":"none","billingStartsAt":"2025-09-06T16:21:10.521Z","billingAnchor":"2025-05-01T13:53:03.898Z","billingCadence":"P1M","status":"terminated","updatedAt":"2026-06-19T21:15:31.222Z","paymentTermDays":944791},"migration":{"fromVersionNumber":331504,"toVersionNumber":236475,"effectiveAt":"2026-06-02T14:52:29.009Z","entitlementsEffectiveAt":"2026-08-21T08:07:31.403Z","changed":true},"lineItems":{"syncFailed":false}}
+            type: simple
+    x-speakeasy-test-group: Subscriptions
+    x-speakeasy-test-rebuild: true
+  - workflowId: listProjectedInvoices
+    steps:
+      - stepId: test
+        operationId: listProjectedInvoices
+        parameters:
+          - name: subscriptionId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[{"id":"<id>","object":"invoice","autoApprove":true,"billingAnchor":"2024-07-14T15:06:20.499Z","billingCadence":"<value>","createdAt":"2024-01-30T09:51:19.136Z","currency":"Chilean Peso","gracePeriodEnd":"2024-10-15T16:20:16.770Z","grandTotal":"<value>","itemCount":335115,"merchantId":"<id>","paidAmount":"<value>","periodEnd":"2025-01-05T18:28:04.048Z","periodStart":"2025-05-12T00:16:31.667Z","sequenceNumber":665138,"status":"ACTIVE","subscriptionId":"<id>","customerId":"<id>","subtotal":"<value>","totalTax":"<value>","unpaidAmount":"<value>","updatedAt":"2024-07-03T06:52:43.056Z"}],"pagination":{"limit":225843,"offset":923789,"total":310432}}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: recordInvoicePayment
+    steps:
+      - stepId: test
+        operationId: recordInvoicePayment
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            method: hosted_link
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"method":"out_of_band","invoice":{"id":"<id>","object":"invoice","autoApprove":false,"billingAnchor":"2026-04-20T15:11:37.980Z","billingCadence":"<value>","createdAt":"2025-09-18T18:41:38.580Z","currency":"Canadian Dollar","gracePeriodEnd":"2024-03-27T18:33:53.717Z","grandTotal":"<value>","itemCount":897342,"merchantId":"<id>","paidAmount":"<value>","periodEnd":"2024-10-27T17:38:03.992Z","periodStart":"2025-03-12T10:01:07.889Z","sequenceNumber":298656,"status":"PAID","subscriptionId":"<id>","customerId":"<id>","subtotal":"<value>","totalTax":"<value>","unpaidAmount":"<value>","updatedAt":"2025-05-14T21:56:11.351Z"}}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: retryInvoicePayment
+    steps:
+      - stepId: test
+        operationId: retryInvoicePayment
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"retry_payment_result","success":false,"invoiceId":"<id>"}
+            type: simple
+    x-speakeasy-test-group: Invoices V2
+    x-speakeasy-test-rebuild: true
+  - workflowId: getWebhooks
+    steps:
+      - stepId: test
+        operationId: getWebhooks
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"webhooks","applicationId":"<id>","createdAt":"2026-08-03T05:57:46.024Z","enabled":false,"merchantId":"<id>","updatedAt":"2024-11-04T17:02:06.119Z"}
+            type: simple
+    x-speakeasy-test-group: Webhooks
+    x-speakeasy-test-rebuild: true
+  - workflowId: createWebhooks
+    steps:
+      - stepId: test
+        operationId: createWebhooks
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"webhooks","applicationId":"<id>","createdAt":"2025-10-04T16:48:10.531Z","enabled":true,"merchantId":"<id>","updatedAt":"2026-10-05T11:11:36.271Z"}
+            type: simple
+    x-speakeasy-test-group: Webhooks
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateWebhooks
+    steps:
+      - stepId: test
+        operationId: updateWebhooks
+        requestBody:
+          contentType: application/json
+          payload:
+            enabled: true
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"webhooks","applicationId":"<id>","createdAt":"2025-05-11T06:34:02.281Z","enabled":false,"merchantId":"<id>","updatedAt":"2025-11-14T09:48:44.759Z"}
+            type: simple
+    x-speakeasy-test-group: Webhooks
+    x-speakeasy-test-rebuild: true
+  - workflowId: getWebhookPortal
+    steps:
+      - stepId: test
+        operationId: getWebhookPortal
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"webhookPortal","expiresAt":"2025-03-22T18:36:46.825Z","url":"https://circular-riser.biz"}
+            type: simple
+    x-speakeasy-test-group: Webhooks
     x-speakeasy-test-rebuild: true
