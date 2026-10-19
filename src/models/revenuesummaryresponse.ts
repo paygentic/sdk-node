@@ -47,6 +47,10 @@ export type RevenueSummaryResponse = {
    */
   object: "revenue_summary";
   /**
+   * ISO 4217 currency code every figure in the response is in: the requested currency, or the merchant's primary currency when none was requested. Omitted when groupBy=currency is active.
+   */
+  currency?: string | undefined;
+  /**
    * Revenue: what was billed in the period, excluding tax, in units of the currency. On the default issue-date basis it is recognised when each invoice is issued; with periodBasis=billingPeriod, each invoice line counts in the period it bills, and a refund splits across its invoice's lines. An invoice counts whether it was since paid, is still outstanding, failed payment or was written off, less non-voided refunds. It is billings, not cash collected: what customers still owe is invoices.outstanding, including tax, and payment-link collections are under payments. Omitted when groupBy=currency is active.
    */
   netRevenue?: string | undefined;
@@ -114,6 +118,7 @@ export const RevenueSummaryResponse$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   object: z.literal("revenue_summary"),
+  currency: z.string().optional(),
   netRevenue: z.string().optional(),
   totalRefunds: z.string().optional(),
   refundCount: z.number().optional(),

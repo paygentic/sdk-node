@@ -10949,7 +10949,7 @@
             "name": "merchantId",
             "in": "query",
             "required": false,
-            "description": "Filter by merchant ID. At least one of merchantId, subscriptionIds, or customerId must be provided.",
+            "description": "The merchant whose revenue to read. Defaults to the merchant your API key belongs to, and is required when you belong to several merchants. Every read is scoped to one merchant; customerId and subscriptionIds narrow it further.",
             "schema": {
               "$ref": "#/components/schemas/OrganizationId"
             }
@@ -10958,7 +10958,7 @@
             "name": "customerId",
             "in": "query",
             "required": false,
-            "description": "Filter by customer ID. At least one of merchantId, subscriptionIds, or customerId must be provided.",
+            "description": "Narrow the read to one of the merchant's customers.",
             "schema": {
               "type": "string"
             }
@@ -10967,7 +10967,7 @@
             "name": "subscriptionIds",
             "in": "query",
             "required": false,
-            "description": "Filter by subscription IDs. At least one of merchantId, subscriptionIds, or customerId must be provided.",
+            "description": "Narrow the invoice figures to some of the merchant's subscriptions. A payment is not tied to a subscription, so the payment figures are not narrowed by it.",
             "schema": {
               "type": "array",
               "items": {
@@ -10981,16 +10981,18 @@
             "name": "currency",
             "in": "query",
             "required": false,
-            "description": "Filter all results to a single ISO 4217 currency code (e.g. 'USD'). When omitted, results include all currencies.",
+            "description": "ISO 4217 currency code (e.g. 'USD') to scope every figure to. Defaults to the merchant's primary currency, except with groupBy=currency, where omitting it returns every currency.",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3
             }
           },
           {
             "name": "groupBy",
             "in": "query",
             "required": false,
-            "description": "Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.",
+            "description": "Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), both in one currency like an ungrouped read, 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.",
             "schema": {
               "type": "string",
               "enum": [
@@ -11015,25 +11017,6 @@
             }
           }
         ],
-        "x-query-validation": {
-          "anyOf": [
-            {
-              "required": [
-                "merchantId"
-              ]
-            },
-            {
-              "required": [
-                "customerId"
-              ]
-            },
-            {
-              "required": [
-                "subscriptionIds"
-              ]
-            }
-          ]
-        },
         "responses": {
           "200": {
             "description": "Revenue summary data",
@@ -11059,6 +11042,94 @@
           }
         },
         "x-speakeasy-name-override": "get"
+      }
+    },
+    "/v0/revenue/accounts": {
+      "get": {
+        "operationId": "getRevenueAccounts",
+        "summary": "List customer accounts",
+        "description": "Returns each customer's account as at today, one row per customer and currency, with a total per currency. Every figure covers all dates: there is no date window.\n\n`outstanding` is what customers owe: every invoice with status `ISSUED` or `PAYMENT_FAILED`, at the amount due printed on the invoice (subtotal and tax, each rounded to the currency's minor unit), so it is gross of tax. Revenue (`GET /v0/revenue`) is net of tax. `outstanding` splits into `awaitingPayment` (status `ISSUED`) and `paymentFailed` (status `PAYMENT_FAILED`, collection has ended); the two always add up to it, in count and amount. A credit invoice (a negative amount due) nets against what is owed and is counted in no `count`; nor is an invoice whose amount due rounds to zero. A customer with nothing counted and nothing owed has no row.\n\nAmounts are grouped by currency and never combined or converted. `totals` covers every row in the filter, not only the returned page, so the rows on one page add up to `totals` only when the page holds every row. Pages fetched in separate requests are separate reads.",
+        "tags": [
+          "Revenue"
+        ],
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "required": true,
+            "description": "Merchant whose customer accounts to report",
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            }
+          },
+          {
+            "name": "customerIds",
+            "in": "query",
+            "required": false,
+            "description": "Limit the rows and the totals to these customers of the merchant. A customer of another merchant, or one that does not exist, returns 404. A customer billed in several currencies has a row for each, so set `limit` to cover them.",
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 100,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "style": "form",
+            "explode": true
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Number of rows to return",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500,
+              "default": 50
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "description": "Number of rows to skip",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevenueAccountsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
       }
     },
     "/v0/profitability": {
@@ -21124,6 +21195,10 @@
             "const": "revenue_summary",
             "description": "Object type identifier"
           },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code every figure in the response is in: the requested currency, or the merchant's primary currency when none was requested. Omitted when groupBy=currency is active."
+          },
           "netRevenue": {
             "type": "string",
             "description": "Revenue: what was billed in the period, excluding tax, in units of the currency. On the default issue-date basis it is recognised when each invoice is issued; with periodBasis=billingPeriod, each invoice line counts in the period it bills, and a refund splits across its invoice's lines. An invoice counts whether it was since paid, is still outstanding, failed payment or was written off, less non-voided refunds. It is billings, not cash collected: what customers still owe is invoices.outstanding, including tax, and payment-link collections are under payments. Omitted when groupBy=currency is active."
@@ -21195,6 +21270,139 @@
                 "description": "Latest invoice issue instant."
               }
             }
+          }
+        }
+      },
+      "AccountFigure": {
+        "type": "object",
+        "required": [
+          "count",
+          "amount"
+        ],
+        "description": "A number of invoices and their total amount due, gross of tax.",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of invoices with an amount due above zero. A credit invoice, or one whose amount due rounds to zero, is not counted."
+          },
+          "amount": {
+            "type": "string",
+            "description": "Total amount due in major units of the currency, in its decimal places"
+          }
+        }
+      },
+      "OutstandingBlock": {
+        "type": "object",
+        "required": [
+          "count",
+          "amount",
+          "awaitingPayment",
+          "paymentFailed"
+        ],
+        "description": "What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount.",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of unpaid invoices with an amount due above zero. A credit invoice, or one whose amount due rounds to zero, is not counted."
+          },
+          "amount": {
+            "type": "string",
+            "description": "Total amount due in major units of the currency, in its decimal places (for example \"123.00\"). Negative when credits exceed what is owed."
+          },
+          "awaitingPayment": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AccountFigure"
+              }
+            ],
+            "description": "The part with status `ISSUED`, including any credit invoice"
+          },
+          "paymentFailed": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AccountFigure"
+              }
+            ],
+            "description": "The part with status `PAYMENT_FAILED`: collection has ended"
+          }
+        }
+      },
+      "RevenueAccountTotal": {
+        "type": "object",
+        "required": [
+          "currency",
+          "outstanding"
+        ],
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code of every amount in this entry"
+          },
+          "outstanding": {
+            "$ref": "#/components/schemas/OutstandingBlock"
+          }
+        }
+      },
+      "RevenueAccountRow": {
+        "type": "object",
+        "required": [
+          "customerId",
+          "customerName",
+          "currency",
+          "outstanding"
+        ],
+        "properties": {
+          "customerId": {
+            "type": "string",
+            "description": "Customer ID"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Customer display name, or the customer ID when no name is recorded. A deleted customer who still owes money keeps its row."
+          },
+          "currency": {
+            "type": "string",
+            "description": "ISO 4217 currency code of every amount in this row"
+          },
+          "outstanding": {
+            "$ref": "#/components/schemas/OutstandingBlock"
+          }
+        }
+      },
+      "RevenueAccountsResponse": {
+        "type": "object",
+        "required": [
+          "object",
+          "totals",
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "list"
+            ],
+            "description": "Object type identifier"
+          },
+          "totals": {
+            "type": "array",
+            "description": "One entry per currency with at least one row in the filter, over every row and not only this page. The merchant's primary currency comes first, then the rest in alphabetical order. Empty when there are no rows.",
+            "items": {
+              "$ref": "#/components/schemas/RevenueAccountTotal"
+            }
+          },
+          "data": {
+            "type": "array",
+            "description": "One row per customer and currency with at least one unpaid invoice, in the currency order of `totals`, then by `outstanding.amount` descending, then by `customerId`. A customer billed in two currencies has two rows.",
+            "items": {
+              "$ref": "#/components/schemas/RevenueAccountRow"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
           }
         }
       },

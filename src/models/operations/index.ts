@@ -71,6 +71,7 @@ export * from "./getprice.js";
 export * from "./getproduct.js";
 export * from "./getprofitability.js";
 export * from "./getrevenue.js";
+export * from "./getrevenueaccounts.js";
 export * from "./getsource.js";
 export * from "./getsourcerule.js";
 export * from "./getsubscription.js";

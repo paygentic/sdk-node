@@ -393,6 +393,7 @@ run();
 ### [Revenue](docs/sdks/revenue/README.md)
 
 * [get](docs/sdks/revenue/README.md#get) - Get revenue summary
+* [getRevenueAccounts](docs/sdks/revenue/README.md#getrevenueaccounts) - List customer accounts
 
 ### [Salesforce](docs/sdks/salesforce/README.md)
 
@@ -589,6 +590,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`productsUpdate`](docs/sdks/products/README.md#update) - Update
 - [`profitabilityGetProfitability`](docs/sdks/profitability/README.md#getprofitability) - Get profitability summary
 - [`revenueGet`](docs/sdks/revenue/README.md#get) - Get revenue summary
+- [`revenueGetRevenueAccounts`](docs/sdks/revenue/README.md#getrevenueaccounts) - List customer accounts
 - [`salesforceListSalesforceAccounts`](docs/sdks/salesforce/README.md#listsalesforceaccounts) - List Salesforce accounts
 - [`sourcesCreate`](docs/sdks/sources/README.md#create) - Create
 - [`sourcesEventsApprove`](docs/sdks/sourcesevents/README.md#approve) - Approve
@@ -791,13 +793,13 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 99 of 153 methods.*
-* [`RetryPaymentResponseError`](./src/models/errors/retrypaymentresponseerror.ts): The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape. Applicable to 1 of 153 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 153 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 153 methods.*
-* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be restructured because a subscription still bills it directly. Status code `409`. Applicable to 1 of 153 methods.*
-* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 153 methods.*
-* [`UnprocessableEntityError`](./src/models/errors/unprocessableentityerror.ts): `hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete). Status code `422`. Applicable to 1 of 153 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 100 of 154 methods.*
+* [`RetryPaymentResponseError`](./src/models/errors/retrypaymentresponseerror.ts): The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape. Applicable to 1 of 154 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 154 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 154 methods.*
+* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be restructured because a subscription still bills it directly. Status code `409`. Applicable to 1 of 154 methods.*
+* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted because a live plan still references it. Status code `409`. Applicable to 1 of 154 methods.*
+* [`UnprocessableEntityError`](./src/models/errors/unprocessableentityerror.ts): `hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete). Status code `422`. Applicable to 1 of 154 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

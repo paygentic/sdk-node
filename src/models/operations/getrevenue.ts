@@ -19,7 +19,7 @@ export const GetRevenueBucketWidth = {
 export type GetRevenueBucketWidth = ClosedEnum<typeof GetRevenueBucketWidth>;
 
 /**
- * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
+ * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), both in one currency like an ungrouped read, 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
  */
 export const GroupBy = {
   Plan: "plan",
@@ -27,7 +27,7 @@ export const GroupBy = {
   Currency: "currency",
 } as const;
 /**
- * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
+ * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), both in one currency like an ungrouped read, 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
  */
 export type GroupBy = ClosedEnum<typeof GroupBy>;
 
@@ -57,23 +57,23 @@ export type GetRevenueRequest = {
    */
   bucketWidth?: GetRevenueBucketWidth | undefined;
   /**
-   * Filter by merchant ID. At least one of merchantId, subscriptionIds, or customerId must be provided.
+   * The merchant whose revenue to read. Defaults to the merchant your API key belongs to, and is required when you belong to several merchants. Every read is scoped to one merchant; customerId and subscriptionIds narrow it further.
    */
   merchantId?: string | undefined;
   /**
-   * Filter by customer ID. At least one of merchantId, subscriptionIds, or customerId must be provided.
+   * Narrow the read to one of the merchant's customers.
    */
   customerId?: string | undefined;
   /**
-   * Filter by subscription IDs. At least one of merchantId, subscriptionIds, or customerId must be provided.
+   * Narrow the invoice figures to some of the merchant's subscriptions. A payment is not tied to a subscription, so the payment figures are not narrowed by it.
    */
   subscriptionIds?: Array<string> | undefined;
   /**
-   * Filter all results to a single ISO 4217 currency code (e.g. 'USD'). When omitted, results include all currencies.
+   * ISO 4217 currency code (e.g. 'USD') to scope every figure to. Defaults to the merchant's primary currency, except with groupBy=currency, where omitting it returns every currency.
    */
   currency?: string | undefined;
   /**
-   * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
+   * Group invoice data by dimension. Allowed values: 'plan' (max 5 groups, top 4 + 'other' when exceeding), 'customer' (max 25 groups, top 24 + 'other' when exceeding, sorted by revenue descending), both in one currency like an ungrouped read, 'currency' (one entry per currency, primary currency first then alphabetical). Note: groupBy values are mutually exclusive — combining them returns a 400 error. When groupBy=currency is active, top-level netRevenue, invoices, and payments fields are omitted; currencyBreakdown is the sole data source.
    */
   groupBy?: GroupBy | undefined;
   /**

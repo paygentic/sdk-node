@@ -3,6 +3,7 @@
  */
 
 import { revenueGet } from "../funcs/revenueGet.js";
+import { revenueGetRevenueAccounts } from "../funcs/revenueGetRevenueAccounts.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as models from "../models/index.js";
 import * as operations from "../models/operations/index.js";
@@ -20,6 +21,27 @@ export class Revenue extends ClientSDK {
     options?: RequestOptions,
   ): Promise<models.RevenueSummaryResponse> {
     return unwrapAsync(revenueGet(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  /**
+   * List customer accounts
+   *
+   * @remarks
+   * Returns each customer's account as at today, one row per customer and currency, with a total per currency. Every figure covers all dates: there is no date window.
+   *
+   * `outstanding` is what customers owe: every invoice with status `ISSUED` or `PAYMENT_FAILED`, at the amount due printed on the invoice (subtotal and tax, each rounded to the currency's minor unit), so it is gross of tax. Revenue (`GET /v0/revenue`) is net of tax. `outstanding` splits into `awaitingPayment` (status `ISSUED`) and `paymentFailed` (status `PAYMENT_FAILED`, collection has ended); the two always add up to it, in count and amount. A credit invoice (a negative amount due) nets against what is owed and is counted in no `count`; nor is an invoice whose amount due rounds to zero. A customer with nothing counted and nothing owed has no row.
+   *
+   * Amounts are grouped by currency and never combined or converted. `totals` covers every row in the filter, not only the returned page, so the rows on one page add up to `totals` only when the page holds every row. Pages fetched in separate requests are separate reads.
+   */
+  async getRevenueAccounts(
+    request: operations.GetRevenueAccountsRequest,
+    options?: RequestOptions,
+  ): Promise<models.RevenueAccountsResponse> {
+    return unwrapAsync(revenueGetRevenueAccounts(
       this,
       request,
       options,

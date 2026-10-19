@@ -4198,3 +4198,26 @@ workflows:
             type: simple
     x-speakeasy-test-group: Webhooks
     x-speakeasy-test-rebuild: true
+  - workflowId: getRevenueAccounts
+    steps:
+      - stepId: test
+        operationId: getRevenueAccounts
+        parameters:
+          - name: merchantId
+            in: query
+            value: <id>
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","totals":[{"currency":"Nuevo Sol","outstanding":{"count":756373,"amount":"625.11","awaitingPayment":{"count":274308,"amount":"808.76"},"paymentFailed":{"count":733558,"amount":"669.37"}}}],"data":[{"customerId":"<id>","customerName":"<value>","currency":"Venezuelan bolívar","outstanding":{"count":756373,"amount":"625.11","awaitingPayment":{"count":274308,"amount":"808.76"},"paymentFailed":{"count":733558,"amount":"669.37"}}}],"pagination":{"limit":695281,"offset":79625,"total":252071}}
+            type: simple
+    x-speakeasy-test-group: Revenue
+    x-speakeasy-test-rebuild: true
