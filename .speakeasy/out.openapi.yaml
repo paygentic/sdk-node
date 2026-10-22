@@ -6558,14 +6558,20 @@
           {
             "in": "query",
             "name": "status",
+            "style": "form",
+            "explode": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "active",
-                "terminated",
-                "pending_payment"
-              ]
-            }
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "active",
+                  "terminated",
+                  "pending_payment"
+                ]
+              }
+            },
+            "description": "Return subscriptions in any of these statuses. Repeat the parameter to pass several, e.g. `?status=active&status=pending_payment`. Omit it to return every status. An SDK leaves an empty list out of the request, so an empty list also returns every status: check for one before calling if it should match nothing."
           },
           {
             "in": "query",

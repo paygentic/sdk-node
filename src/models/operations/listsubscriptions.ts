@@ -50,7 +50,10 @@ export type ListSubscriptionsRequest = {
    * Number of subscriptions to skip
    */
   offset?: string | undefined;
-  status?: ListSubscriptionsStatus | undefined;
+  /**
+   * Return subscriptions in any of these statuses. Repeat the parameter to pass several, e.g. `?status=active&status=pending_payment`. Omit it to return every status. An SDK leaves an empty list out of the request, so an empty list also returns every status: check for one before calling if it should match nothing.
+   */
+  status?: Array<ListSubscriptionsStatus> | undefined;
   /**
    * Filter subscriptions started at or before this ISO 8601 date-time
    */
@@ -88,7 +91,7 @@ export type ListSubscriptionsRequest$Outbound = {
   limit: string;
   merchantId?: string | undefined;
   offset: string;
-  status?: string | undefined;
+  status?: Array<string> | undefined;
   startedBefore?: string | undefined;
   include?: string | undefined;
 };
@@ -104,7 +107,7 @@ export const ListSubscriptionsRequest$outboundSchema: z.ZodType<
   limit: z.string().default("10"),
   merchantId: z.string().optional(),
   offset: z.string().default("0"),
-  status: ListSubscriptionsStatus$outboundSchema.optional(),
+  status: z.array(ListSubscriptionsStatus$outboundSchema).optional(),
   startedBefore: z.date().transform(v => v.toISOString()).optional(),
   include: Include$outboundSchema.optional(),
 });
