@@ -7,6 +7,10 @@ import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  LineProvenance,
+  LineProvenance$inboundSchema,
+} from "./lineprovenance.js";
 
 /**
  * Type of event: 'usage' for billable metric events, 'fee' for fee events, 'discount' for grant discount line items (subtotal/total are negative, representing a credit)
@@ -134,6 +138,10 @@ export type InvoiceLineItem = {
    * Unit price in decimal dollars
    */
   unitPrice: string;
+  /**
+   * How the line's amount before tax was calculated: a trace of one evaluation, saved when the invoice was calculated and fixed once it is issued. Returned only with `expand=lineProvenance`. Every field but `status` is present when `status` is `recorded`. Every number is a plain decimal string.
+   */
+  provenance?: LineProvenance | undefined;
 };
 
 /** @internal */
@@ -179,6 +187,7 @@ export const InvoiceLineItem$inboundSchema: z.ZodType<
   totalPrice: z.string(),
   totalTax: z.string(),
   unitPrice: z.string(),
+  provenance: LineProvenance$inboundSchema.optional(),
 });
 
 export function invoiceLineItemFromJSON(

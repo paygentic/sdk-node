@@ -31,7 +31,7 @@ export type ListLineItemsRequest = {
    */
   invoiceId?: string | undefined;
   /**
-   * Comma-separated list of fields to expand. Supports: items — resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call.
+   * Comma-separated list of fields to expand. Supports: items, lineProvenance. `items` resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call. `lineProvenance` adds `provenance` to each returned line: how its amount before tax was calculated.
    */
   expand?: string | undefined;
   /**

@@ -7,6 +7,10 @@ import { safeParse } from "../lib/schemas.js";
 import { ClosedEnum } from "../types/enums.js";
 import { Result as SafeParseResult } from "../types/fp.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
+import {
+  LineProvenance,
+  LineProvenance$inboundSchema,
+} from "./lineprovenance.js";
 
 /**
  * The type of line item. 'discount' and 'adjustment' line items have negative subtotal/total amounts: 'discount' is a grant discount, 'adjustment' is a discount agreed on the subscription.
@@ -156,6 +160,10 @@ export type LineItem = {
    * Real-time estimated subtotal for a line whose amount is not final yet: current usage for a metered item, the rate the subscription is on for a fee. Null for manual items, and for any line whose amount is already final or cannot be estimated.
    */
   estimatedSubtotal?: string | null | undefined;
+  /**
+   * How the line's amount before tax was calculated: a trace of one evaluation, saved when the invoice was calculated and fixed once it is issued. Returned only with `expand=lineProvenance`. Every field but `status` is present when `status` is `recorded`. Every number is a plain decimal string.
+   */
+  provenance?: LineProvenance | undefined;
 };
 
 /** @internal */
@@ -209,6 +217,7 @@ export const LineItem$inboundSchema: z.ZodType<
   updatedAt: z.string().datetime({ offset: true }).transform(v => new Date(v)),
   estimatedMeteredQuantity: z.nullable(z.string()).optional(),
   estimatedSubtotal: z.nullable(z.string()).optional(),
+  provenance: LineProvenance$inboundSchema.optional(),
 });
 
 export function lineItemFromJSON(

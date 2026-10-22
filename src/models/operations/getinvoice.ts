@@ -10,7 +10,7 @@ export type GetInvoiceRequest = {
    */
   id: string;
   /**
-   * Comma-separated list of fields to expand. Supports: lineItems, items. `items` resolves each returned line's item and its external accounting codes into an `items` collection inside the lineItems block; because those ids come from the lines, requesting `items` also expands `lineItems` on its default paging.
+   * Comma-separated list of fields to expand. Supports: lineItems, items, lineProvenance. `items` resolves each returned line's item and its external accounting codes into an `items` collection inside the lineItems block; because those ids come from the lines, requesting `items` also expands `lineItems` on its default paging. `lineProvenance` adds `provenance` to each returned line: how its amount before tax was calculated. It also expands `lineItems`.
    */
   expand?: string | undefined;
   /**

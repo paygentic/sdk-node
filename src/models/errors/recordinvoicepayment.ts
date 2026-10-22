@@ -26,6 +26,14 @@ export type UnprocessableEntityErrorData = {
    * Additional error details
    */
   details?: { [k: string]: any } | undefined;
+  /**
+   * Present on a 403 from the authorization check. Says why access was refused: the caller has no role that grants the permission, the OAuth token lacks the scope, or the caller is not a member of the organization.
+   */
+  reason?: models.AuthorizationDenialReason | undefined;
+  /**
+   * Present on a 403 from the authorization check. The permissions the caller needs for this request.
+   */
+  requiredPermissions?: Array<string> | undefined;
 };
 
 /**
@@ -44,6 +52,14 @@ export class UnprocessableEntityError extends PaygenticError {
    * Additional error details
    */
   details?: { [k: string]: any } | undefined;
+  /**
+   * Present on a 403 from the authorization check. Says why access was refused: the caller has no role that grants the permission, the OAuth token lacks the scope, or the caller is not a member of the organization.
+   */
+  reason?: models.AuthorizationDenialReason | undefined;
+  /**
+   * Present on a 403 from the authorization check. The permissions the caller needs for this request.
+   */
+  requiredPermissions?: Array<string> | undefined;
 
   /** The original data that was passed to this error instance. */
   data$: UnprocessableEntityErrorData;
@@ -58,6 +74,10 @@ export class UnprocessableEntityError extends PaygenticError {
     this.error = err.error;
     this.code = err.code;
     if (err.details != null) this.details = err.details;
+    if (err.reason != null) this.reason = err.reason;
+    if (err.requiredPermissions != null) {
+      this.requiredPermissions = err.requiredPermissions;
+    }
 
     this.name = "UnprocessableEntityError";
   }
@@ -73,6 +93,8 @@ export const UnprocessableEntityError$inboundSchema: z.ZodType<
   message: z.string(),
   code: models.InvoicePaymentLinkErrorCode$inboundSchema,
   details: z.record(z.any()).optional(),
+  reason: models.AuthorizationDenialReason$inboundSchema.optional(),
+  requiredPermissions: z.array(z.string()).optional(),
   request$: z.instanceof(Request),
   response$: z.instanceof(Response),
   body$: z.string(),

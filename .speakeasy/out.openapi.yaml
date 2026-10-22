@@ -8567,7 +8567,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Comma-separated list of fields to expand. Supports: items — resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call."
+            "description": "Comma-separated list of fields to expand. Supports: items, lineProvenance. `items` resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call. `lineProvenance` adds `provenance` to each returned line: how its amount before tax was calculated."
           },
           {
             "in": "query",
@@ -8885,7 +8885,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Comma-separated list of fields to expand. Supports: lineItems, items. `items` resolves each returned line's item and its external accounting codes into an `items` collection inside the lineItems block; because those ids come from the lines, requesting `items` also expands `lineItems` on its default paging."
+            "description": "Comma-separated list of fields to expand. Supports: lineItems, items, lineProvenance. `items` resolves each returned line's item and its external accounting codes into an `items` collection inside the lineItems block; because those ids come from the lines, requesting `items` also expands `lineItems` on its default paging. `lineProvenance` adds `provenance` to each returned line: how its amount before tax was calculated. It also expands `lineItems`."
           },
           {
             "in": "query",
@@ -9019,7 +9019,7 @@
             "schema": {
               "type": "string"
             },
-            "description": "Comma-separated list of fields to expand. Supports: items — resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call."
+            "description": "Comma-separated list of fields to expand. Supports: items, lineProvenance. `items` resolves each returned line's item and that item's external accounting codes into an `items` collection, so a line can be translated to a GL/SKU code without a second call. `lineProvenance` adds `provenance` to each returned line: how its amount before tax was calculated."
           },
           {
             "in": "query",
@@ -14739,6 +14739,15 @@
           }
         }
       },
+      "AuthorizationDenialReason": {
+        "type": "string",
+        "enum": [
+          "no_permission",
+          "insufficient_scope",
+          "not_member"
+        ],
+        "description": "Present on a 403 from the authorization check. Says why access was refused: the caller has no role that grants the permission, the OAuth token lacks the scope, or the caller is not a member of the organization."
+      },
       "Error": {
         "type": "object",
         "required": [
@@ -14765,6 +14774,16 @@
             "type": "object",
             "description": "Additional error details",
             "additionalProperties": true
+          },
+          "reason": {
+            "$ref": "#/components/schemas/AuthorizationDenialReason"
+          },
+          "requiredPermissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Present on a 403 from the authorization check. The permissions the caller needs for this request."
           }
         },
         "example": {
@@ -19290,6 +19309,409 @@
           }
         }
       },
+      "LineProvenanceStatus": {
+        "type": "string",
+        "description": "`recorded`: the trace is present. `notRecorded`: the line was calculated but has no saved trace, for example a line calculated before traces were saved (show \"Calculation not recorded\"). `pending`: the line's invoice has not been calculated yet. An open set, so it is a string rather than an enum: known values are `recorded`, `notRecorded`, `pending`, and new values may be added."
+      },
+      "LineCalculationPrecision": {
+        "type": "object",
+        "required": [
+          "significantDigits",
+          "rounding"
+        ],
+        "properties": {
+          "significantDigits": {
+            "type": "integer"
+          },
+          "rounding": {
+            "type": "string"
+          }
+        },
+        "description": "The default arithmetic of every step. Any other rounding is an explicit `round` step."
+      },
+      "LineCalculationPeriod": {
+        "type": "object",
+        "required": [
+          "start",
+          "end"
+        ],
+        "properties": {
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "The period the line bills."
+      },
+      "LineCalculationInputsKind": {
+        "type": "string",
+        "description": "`priced`: a charge from a price, with `quantity`, `selector` and `price`. `fromLine`: a line whose base is another line's amount, with `amount`. `given`: an amount nobody priced on this run, with `amount`. An open set, so it is a string rather than an enum: known values are `priced`, `fromLine`, `given`, and new values may be added."
+      },
+      "LineCalculationGiven": {
+        "type": "object",
+        "required": [
+          "value",
+          "source"
+        ],
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "The value."
+          },
+          "source": {
+            "type": "string",
+            "description": "The key of the source in `sources` that stated it."
+          }
+        },
+        "description": "A value the evaluation started from, and its source."
+      },
+      "LineCalculationPriceModel": {
+        "type": "string",
+        "description": "`unit`: `rate` per unit. `volume`: `bands`, each with `upTo` (null for the open band) and `rate`; one band prices every unit. `percentage`: `rate` as a fraction, with `min` and `max` charge or null. `flat`: one `amount`. `dynamic`: the quantity is already money. An open set, so it is a string rather than an enum: known values are `unit`, `volume`, `percentage`, `flat`, `dynamic`, and new values may be added."
+      },
+      "LineCalculationPriceBand": {
+        "type": "object",
+        "required": [
+          "upTo",
+          "rate"
+        ],
+        "properties": {
+          "upTo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rate": {
+            "type": "string"
+          }
+        }
+      },
+      "LineCalculationPriceFn": {
+        "type": "object",
+        "required": [
+          "model"
+        ],
+        "description": "A price as a function from quantity to money. A new model may carry fields not listed here.",
+        "properties": {
+          "model": {
+            "$ref": "#/components/schemas/LineCalculationPriceModel"
+          },
+          "rate": {
+            "type": "string",
+            "description": "`unit`, `percentage`: the rate."
+          },
+          "bands": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineCalculationPriceBand"
+            },
+            "description": "`volume` only: the bands in ascending order."
+          },
+          "min": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "`percentage` only: the minimum charge, or null."
+          },
+          "max": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "`percentage` only: the maximum charge, or null."
+          },
+          "amount": {
+            "type": "string",
+            "description": "`flat` only: the amount for the period."
+          }
+        },
+        "additionalProperties": true
+      },
+      "LineCalculationInputPrice": {
+        "type": "object",
+        "required": [
+          "fn",
+          "source"
+        ],
+        "properties": {
+          "fn": {
+            "$ref": "#/components/schemas/LineCalculationPriceFn"
+          },
+          "source": {
+            "type": "string",
+            "description": "The key of the source in `sources` that stated the price."
+          }
+        },
+        "description": "`priced` only: the price as a function, and its source."
+      },
+      "LineCalculationInputs": {
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "description": "The values the evaluation started from.",
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/LineCalculationInputsKind"
+          },
+          "quantity": {
+            "$ref": "#/components/schemas/LineCalculationGiven"
+          },
+          "selector": {
+            "$ref": "#/components/schemas/LineCalculationGiven"
+          },
+          "price": {
+            "$ref": "#/components/schemas/LineCalculationInputPrice"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/LineCalculationGiven"
+          }
+        }
+      },
+      "LineCalculationSourceType": {
+        "type": "string",
+        "description": "`interval`: a subscription price interval. `price`: a catalog price. `meter`: a billable metric read directly. `entitlement`: the grant engine's reading of an entitlement. `grant`: a grant. `adjustment`: a subscription adjustment. `line`: another line on the invoice. `storedRow`: a figure the line already stored, with `reason`. `merchant`: an amount a merchant entered. `input` is reserved for a value from a system that is not a meter, with `ref` `name` and `eventId` and `asUsed` `value` and `unit`; nothing produces it yet. An open set, so it is a string rather than an enum: known values are `interval`, `price`, `meter`, `entitlement`, `grant`, `adjustment`, `line`, `storedRow`, `merchant`, and new values may be added."
+      },
+      "LineCalculationStoredRowReason": {
+        "type": "string",
+        "description": "`storedRow` only: why the stored figure stands. An open set, so it is a string rather than an enum: known values are `precedes_timeline`, `no_timeline`, `not_derived`, `no_covering_charge`, and new values may be added."
+      },
+      "LineCalculationSource": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "description": "Where a value came from: `ref`, a link that can break after the invoice is issued, and `asUsed`, the values the calculation read, which never change.",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/LineCalculationSourceType"
+          },
+          "ref": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The ids that link to the resource."
+          },
+          "asUsed": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The values the calculation read from the resource. A `line` source has `amount`, and `unitPrice` where a step read the line's rate."
+          },
+          "reason": {
+            "$ref": "#/components/schemas/LineCalculationStoredRowReason"
+          }
+        }
+      },
+      "LineCalculationOp": {
+        "type": "string",
+        "description": "`allow`: units a grant covered (`covered`). `clamp`: `min` and `max`, null when open. `scaleToBound`: a minimum or maximum applied to a group of lines by uniform scaling (`bound`, `side`, `measured`, `factor`). `setToBound`: a minimum applied to a group that measured zero (`bound`, `sumOfShares`). `prorate`: `fraction` of the period, with the `billed` and full (`of`) windows and the `basis`. `evaluate`: the one join of quantity and price into an amount (`quantity`, `selector`, `fn`, `applied`); its `in` is null. `cap`: `max` and `scope`; on an `invoice` cap also `total`, what the cap started at, and `usedBefore`, what earlier credits took from it. `replace`: a value set by a rule, with `reason`. `subtract`: `units`. `scale`: ordered `terms`, each `by`, `value` and `label`. A `subtract`, `clamp` or `scale` that did not use the envelope's precision says so in `arithmetic`: `float64` or `decimal120`. `round`: `scale` and `mode`. An open set, so it is a string rather than an enum: known values are `allow`, `clamp`, `scaleToBound`, `setToBound`, `prorate`, `evaluate`, `cap`, `replace`, `subtract`, `scale`, `round`, and new values may be added."
+      },
+      "LineCalculationValue": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "$ref": "#/components/schemas/LineCalculationPriceFn"
+          }
+        ],
+        "description": "A decimal string, or a price function."
+      },
+      "LineCalculationContribution": {
+        "type": "object",
+        "required": [
+          "lineItemId",
+          "value",
+          "share"
+        ],
+        "properties": {
+          "lineItemId": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "share": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "LineCalculationStep": {
+        "type": "object",
+        "required": [
+          "op",
+          "on",
+          "in",
+          "out",
+          "params",
+          "source"
+        ],
+        "description": "One step: the value it changed (`on`), the value before (`in`) and after (`out`), the rule's parameters, and the source of the rule. A reader that does not know an op shows it as \"in → out, because source\".",
+        "properties": {
+          "op": {
+            "$ref": "#/components/schemas/LineCalculationOp"
+          },
+          "on": {
+            "type": "string",
+            "description": "The value the step changes. `quantity`, `selector` (the quantity a volume band is chosen on), `price` and `amount` are reserved; other names may be added."
+          },
+          "in": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LineCalculationValue"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The value before the step. Null only on `evaluate`."
+          },
+          "out": {
+            "$ref": "#/components/schemas/LineCalculationValue"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The parameters of the op. See `op`."
+          },
+          "source": {
+            "type": "string",
+            "description": "The key of the source in `sources` whose rule this is."
+          },
+          "inputsFrom": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineCalculationContribution"
+            },
+            "description": "The other lines a group rule read, with each one's value and period share."
+          },
+          "trace": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Reserved for an `evaluate` of a custom pricing function: the steps inside it, each of the same shape as a step. Free-form here so the schema does not refer to itself. Nothing produces it yet."
+          }
+        }
+      },
+      "LineCalculationNotApplied": {
+        "type": "object",
+        "required": [
+          "source",
+          "reason"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "The key of the rule's source in `sources`."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Why the rule did not change the line, for example `within` or `notBinding`."
+          }
+        },
+        "description": "A rule in force for the line that did not change it."
+      },
+      "LineCalculationResult": {
+        "type": "object",
+        "required": [
+          "amount",
+          "quantity",
+          "unitPrice"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "The line's amount before tax."
+          },
+          "quantity": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The line's quantity."
+          },
+          "unitPrice": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The line's unit price. It can be rounded, so quantity times unit price can differ from the amount."
+          }
+        },
+        "description": "Equal to the line's stored amount, quantity and unit price."
+      },
+      "LineProvenance": {
+        "type": "object",
+        "description": "How the line's amount before tax was calculated: a trace of one evaluation, saved when the invoice was calculated and fixed once it is issued. Returned only with `expand=lineProvenance`. Every field but `status` is present when `status` is `recorded`. Every number is a plain decimal string.",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/LineProvenanceStatus"
+          },
+          "version": {
+            "type": "integer",
+            "description": "The format version. It changes only when a field is removed or renamed, or a field changes meaning. A new op, source type, price model, reason or label is not a new version."
+          },
+          "currency": {
+            "type": "string",
+            "description": "The currency of every amount in the trace."
+          },
+          "precision": {
+            "$ref": "#/components/schemas/LineCalculationPrecision"
+          },
+          "period": {
+            "$ref": "#/components/schemas/LineCalculationPeriod"
+          },
+          "calculatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the calculation ran."
+          },
+          "subscriptionId": {
+            "type": "string",
+            "description": "The subscription the line belongs to."
+          },
+          "inputs": {
+            "$ref": "#/components/schemas/LineCalculationInputs"
+          },
+          "sources": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/LineCalculationSource"
+            },
+            "description": "Every source a step or an input names, by key."
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineCalculationStep"
+            },
+            "description": "The steps in the order they were applied. Each starts where the last step on the same value ended."
+          },
+          "notApplied": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineCalculationNotApplied"
+            },
+            "description": "Rules in force for the line that did not change it, and why."
+          },
+          "result": {
+            "$ref": "#/components/schemas/LineCalculationResult"
+          }
+        }
+      },
       "InvoiceLineItem": {
         "type": "object",
         "required": [
@@ -19413,6 +19835,9 @@
           "unitPrice": {
             "type": "string",
             "description": "Unit price in decimal dollars"
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/LineProvenance"
           }
         }
       },
@@ -20000,6 +20425,9 @@
             "type": "string",
             "nullable": true,
             "description": "Real-time estimated subtotal for a line whose amount is not final yet: current usage for a metered item, the rate the subscription is on for a fee. Null for manual items, and for any line whose amount is already final or cannot be estimated."
+          },
+          "provenance": {
+            "$ref": "#/components/schemas/LineProvenance"
           }
         }
       },
