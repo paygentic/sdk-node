@@ -93,6 +93,6 @@ run();
 | ---------------------------- | ---------------------------- | ---------------------------- |
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
-| errors.ErrorT                | 401, 403, 422                | application/json             |
+| errors.ErrorT                | 401, 403, 404, 422           | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |

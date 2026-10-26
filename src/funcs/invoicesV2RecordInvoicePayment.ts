@@ -34,7 +34,7 @@ import { Result } from "../types/fp.js";
  * - `hosted_link`: create a new hosted payment link and email it to the customer. The invoice stays unpaid until the customer pays on the link. Each call replaces the previous link. A payment link expires after 30 days; to collect an invoice whose link has expired, call this method again.
  * - `out_of_band`: record a payment that you collected outside Paygentic. The invoice changes to `PAID` immediately. A second call returns 409.
  *
- * For `hosted_link`, an invoice that does not exist returns 403, the same as an invoice of another merchant.
+ * For `hosted_link`, an invoice that does not exist returns 404, the same as an invoice of another merchant.
  *
  * Paygentic selects the payment provider from your connected payment account. The response reports the provider.
  *

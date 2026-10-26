@@ -151,7 +151,7 @@ run();
 | ---------------------------- | ---------------------------- | ---------------------------- |
 | errors.ErrorT                | 400                          | application/json             |
 | errors.ValidationError       | 400                          | application/json             |
-| errors.ErrorT                | 401, 403                     | application/json             |
+| errors.ErrorT                | 401, 403, 404                | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |
 
 ## update
@@ -306,7 +306,7 @@ run();
 
 ## getPortal
 
-Returns a link to the webhook portal, where you add endpoints, choose event types, read the signing secret and inspect deliveries. The link opens without a login and expires one hour after it is issued, at `expiresAt`. Treat it as a secret. Returns 404 unless webhooks are enabled.
+Returns a link to the webhook portal, where you add endpoints, choose event types, read the signing secret and inspect deliveries. The link opens without a login and expires one hour after it is issued, at `expiresAt`. Treat it as a secret. The link is read-only unless the caller holds `webhooks:write`: a read-only portal shows endpoints and deliveries but does not let you add or change endpoints, read the signing secret or replay messages. Returns 404 unless webhooks are enabled.
 
 ### Example Usage
 

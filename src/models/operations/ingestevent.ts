@@ -6,7 +6,7 @@ import * as z from "zod/v3";
 
 export type IngestEventRequestBody2 = {
   /**
-   * CloudEvents type. Must match an eventType configured on a BillableMetric.
+   * CloudEvents type. Must match an eventType configured on a BillableMetric. Must not contain control characters.
    */
   type: string;
   /**
@@ -18,7 +18,7 @@ export type IngestEventRequestBody2 = {
    */
   subject?: string | undefined;
   /**
-   * Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, events may resolve to the previous customer for up to one hour. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.
+   * Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, or its customer is deleted, events may resolve to the previous customer for up to one hour, and for up to 48 hours if Paygentic's database is unavailable. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.
    */
   externalSubject: string;
   /**
@@ -45,7 +45,7 @@ export type IngestEventRequestBody2 = {
 
 export type IngestEventRequestBody1 = {
   /**
-   * CloudEvents type. Must match an eventType configured on a BillableMetric.
+   * CloudEvents type. Must match an eventType configured on a BillableMetric. Must not contain control characters.
    */
   type: string;
   /**
@@ -57,7 +57,7 @@ export type IngestEventRequestBody1 = {
    */
   subject: string;
   /**
-   * Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, events may resolve to the previous customer for up to one hour. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.
+   * Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, or its customer is deleted, events may resolve to the previous customer for up to one hour, and for up to 48 hours if Paygentic's database is unavailable. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.
    */
   externalSubject?: string | undefined;
   /**

@@ -49,7 +49,7 @@ import { Result } from "../types/fp.js";
  *
  * A 500 response has the standard error body, not `retry_payment_result`. It is an internal error, and a retry does not fix it.
  *
- * An invoice that does not exist returns 403, the same as an invoice of another merchant.
+ * An invoice that does not exist returns 404, the same as an invoice of another merchant.
  *
  * This operation is rate limited to one call each minute for each invoice.
  */

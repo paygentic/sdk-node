@@ -270,10 +270,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "billableMetrics:write",
         "x-speakeasy-group": "billableMetrics",
         "x-speakeasy-name-override": "create"
       },
@@ -426,6 +430,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "billableMetrics:read",
         "x-speakeasy-group": "billableMetrics",
         "x-speakeasy-name-override": "list"
       }
@@ -481,6 +486,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "billableMetrics:read",
         "x-speakeasy-group": "billableMetrics",
         "x-speakeasy-name-override": "get"
       },
@@ -585,6 +591,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "billableMetrics:write",
         "x-speakeasy-group": "billableMetrics",
         "x-speakeasy-name-override": "update"
       }
@@ -731,10 +738,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "billableMetrics:read",
         "x-speakeasy-group": "billableMetrics",
         "x-speakeasy-name-override": "meter"
       }
@@ -846,10 +857,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "billableMetrics:read",
         "x-speakeasy-group": "billableMetrics",
         "x-speakeasy-name-override": "listEvents"
       }
@@ -1025,6 +1040,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "customers:read",
         "x-speakeasy-name-override": "list"
       },
       "post": {
@@ -1196,6 +1212,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "customers:write",
         "x-speakeasy-name-override": "create",
         "x-speakeasy-usage-example": {
           "title": "Create a customer",
@@ -1259,6 +1276,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "customers:read",
         "x-speakeasy-name-override": "get"
       },
       "delete": {
@@ -1349,6 +1367,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "customers:write",
         "x-speakeasy-name-override": "delete"
       },
       "patch": {
@@ -1464,6 +1483,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "customers:write",
         "x-speakeasy-name-override": "update"
       }
     },
@@ -1524,7 +1544,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "customers:read"
       },
       "post": {
         "tags": [
@@ -1588,7 +1609,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "customers:write"
       }
     },
     "/v1/entitlements": {
@@ -1898,10 +1920,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "entitlements:read",
         "x-speakeasy-name-override": "list"
       },
       "post": {
@@ -1989,6 +2015,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "entitlements:write",
         "x-speakeasy-name-override": "issue"
       }
     },
@@ -2131,6 +2158,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "entitlements:read",
         "x-speakeasy-name-override": "get"
       }
     },
@@ -2246,6 +2274,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "grants:read",
         "x-speakeasy-group": "entitlements.grants",
         "x-speakeasy-name-override": "list"
       },
@@ -2325,6 +2354,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "grants:write",
         "x-speakeasy-group": "entitlements.grants",
         "x-speakeasy-name-override": "create"
       }
@@ -2423,6 +2453,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "grants:write",
         "x-speakeasy-group": "entitlements.grants",
         "x-speakeasy-name-override": "purchase"
       }
@@ -2502,6 +2533,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "grants:read",
         "x-speakeasy-group": "entitlements.grants",
         "x-speakeasy-name-override": "get"
       },
@@ -2558,6 +2590,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "grants:write",
         "x-speakeasy-group": "entitlements.grants",
         "x-speakeasy-name-override": "void"
       }
@@ -2704,6 +2737,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "features:read",
         "x-speakeasy-name-override": "list"
       },
       "post": {
@@ -2809,6 +2843,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "features:write",
         "x-speakeasy-name-override": "create"
       }
     },
@@ -2869,6 +2904,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "features:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -2956,6 +2992,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "features:write",
         "x-speakeasy-name-override": "update"
       },
       "delete": {
@@ -2981,6 +3018,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "features:write",
         "x-speakeasy-name-override": "delete"
       }
     },
@@ -3059,10 +3097,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "fees:write",
         "x-speakeasy-name-override": "create"
       },
       "get": {
@@ -3210,6 +3252,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "fees:read",
         "x-speakeasy-name-override": "list"
       }
     },
@@ -3262,6 +3305,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "fees:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -3333,6 +3377,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "fees:write",
         "x-speakeasy-name-override": "update"
       },
       "delete": {
@@ -3406,6 +3451,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "fees:write",
         "x-speakeasy-name-override": "delete"
       }
     },
@@ -3588,10 +3634,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "plans:write",
         "x-speakeasy-name-override": "create"
       },
       "get": {
@@ -3753,6 +3803,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "plans:read",
         "x-speakeasy-name-override": "list"
       }
     },
@@ -3890,6 +3941,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "plans:read",
         "x-speakeasy-name-override": "listAvailable"
       }
     },
@@ -3958,6 +4010,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "plans:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -4112,6 +4165,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "plans:write",
         "x-speakeasy-name-override": "update"
       }
     },
@@ -4206,7 +4260,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "plans:write"
       },
       "post": {
         "tags": [
@@ -4254,7 +4309,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "plans:write"
       }
     },
     "/v0/plans/{id}/versions/{versionNumber}": {
@@ -4311,7 +4367,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "plans:write"
       },
       "patch": {
         "tags": [
@@ -4359,7 +4416,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "plans:write"
       }
     },
     "/v0/prices": {
@@ -4500,6 +4558,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "prices:write",
         "x-speakeasy-name-override": "create"
       },
       "get": {
@@ -4652,6 +4711,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "prices:read",
         "x-speakeasy-name-override": "list"
       }
     },
@@ -4729,6 +4789,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "prices:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -4915,6 +4976,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "prices:write",
         "x-speakeasy-name-override": "update"
       },
       "delete": {
@@ -5003,6 +5065,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "prices:write",
         "x-speakeasy-name-override": "delete"
       }
     },
@@ -5079,10 +5142,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "products:write",
         "x-speakeasy-name-override": "create"
       },
       "get": {
@@ -5193,6 +5260,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "products:read",
         "x-speakeasy-name-override": "list"
       }
     },
@@ -5251,6 +5319,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "products:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -5316,6 +5385,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "products:write",
         "x-speakeasy-name-override": "update"
       }
     },
@@ -5430,6 +5500,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-name-override": "create"
       },
       "get": {
@@ -5532,6 +5603,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:read",
         "x-speakeasy-name-override": "list"
       }
     },
@@ -5593,6 +5665,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -5686,6 +5759,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-name-override": "update"
       }
     },
@@ -5839,6 +5913,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:read",
         "x-speakeasy-group": "sources.events",
         "x-speakeasy-name-override": "list"
       }
@@ -5914,6 +5989,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-group": "sources.events",
         "x-speakeasy-name-override": "approve"
       }
@@ -5987,6 +6063,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-group": "sources.events",
         "x-speakeasy-name-override": "reject"
       }
@@ -6103,6 +6180,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-group": "sources.events",
         "x-speakeasy-name-override": "bulkApprove"
       }
@@ -6180,6 +6258,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-group": "sources.events",
         "x-speakeasy-name-override": "bulkReject"
       }
@@ -6260,6 +6339,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:read",
         "x-speakeasy-group": "sources.rules",
         "x-speakeasy-name-override": "list"
       },
@@ -6325,6 +6405,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-group": "sources.rules",
         "x-speakeasy-name-override": "create"
       }
@@ -6391,6 +6472,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:read",
         "x-speakeasy-group": "sources.rules",
         "x-speakeasy-name-override": "get"
       },
@@ -6465,6 +6547,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-group": "sources.rules",
         "x-speakeasy-name-override": "update"
       },
@@ -6501,6 +6584,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "sources:write",
         "x-speakeasy-group": "sources.rules",
         "x-speakeasy-name-override": "delete"
       }
@@ -6689,6 +6773,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "subscriptions:read",
         "x-speakeasy-name-override": "list"
       },
       "post": {
@@ -6958,6 +7043,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "subscriptions:write",
         "x-speakeasy-name-override": "create",
         "x-speakeasy-usage-example": {
           "title": "Create a subscription",
@@ -7033,6 +7119,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "subscriptions:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -7171,7 +7258,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptions:update"
       }
     },
     "/v0/subscriptions/{id}/intervals": {
@@ -7235,7 +7323,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptions:read"
       },
       "post": {
         "tags": [
@@ -7336,7 +7425,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptions:update"
       }
     },
     "/v0/subscriptions/{id}/versionMigration": {
@@ -7446,7 +7536,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptions:update"
       }
     },
     "/v0/subscriptions/{id}/intervalChanges": {
@@ -7509,7 +7600,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptions:read"
       }
     },
     "/v0/intervalChanges": {
@@ -7589,7 +7681,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptions:read"
       }
     },
     "/v0/subscriptions/{id}/portal": {
@@ -7672,7 +7765,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptions:read"
       }
     },
     "/v0/subscriptions/{id}/termination": {
@@ -7779,6 +7873,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "subscriptions:terminateWithReason",
         "x-speakeasy-name-override": "terminate"
       }
     },
@@ -7915,7 +8010,8 @@
               }
             }
           }
-        }
+        },
+        "x-permission": "subscriptions:reconcile"
       }
     },
     "/v0/subscriptions/{id}/adjustments": {
@@ -8015,7 +8111,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptionAdjustments:read"
       },
       "post": {
         "tags": [
@@ -8121,7 +8218,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptionAdjustments:write"
       }
     },
     "/v0/subscriptions/{id}/adjustments/{adjustmentId}": {
@@ -8181,7 +8279,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "subscriptionAdjustments:write"
       }
     },
     "/v0/users/{id}": {
@@ -8251,6 +8350,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "profile:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -8357,6 +8457,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "profile:write",
         "x-speakeasy-name-override": "update"
       }
     },
@@ -8525,6 +8626,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "invoices:read",
         "x-speakeasy-name-override": "list"
       }
     },
@@ -8666,7 +8768,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "invoices:read"
       },
       "post": {
         "tags": [
@@ -8742,7 +8845,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "invoices:write"
       }
     },
     "/v2/invoices/projected": {
@@ -8853,7 +8957,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "invoices:read"
       }
     },
     "/v2/invoices/{id}": {
@@ -8979,6 +9084,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "invoices:read",
         "x-speakeasy-name-override": "get"
       }
     },
@@ -9100,6 +9206,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "invoices:read",
         "x-speakeasy-name-override": "getLineItems"
       }
     },
@@ -9146,7 +9253,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "invoices:read"
       }
     },
     "/v2/invoices/{id}/payment": {
@@ -9155,7 +9263,7 @@
           "Invoices V2"
         ],
         "summary": "Settle Invoice Payment",
-        "description": "Settle an unpaid invoice in status `ISSUED` or `PAYMENT_FAILED`. The `method` field selects how.\n\n- `hosted_link`: create a new hosted payment link and email it to the customer. The invoice stays unpaid until the customer pays on the link. Each call replaces the previous link. A payment link expires after 30 days; to collect an invoice whose link has expired, call this method again.\n- `out_of_band`: record a payment that you collected outside Paygentic. The invoice changes to `PAID` immediately. A second call returns 409.\n\nFor `hosted_link`, an invoice that does not exist returns 403, the same as an invoice of another merchant.\n\nPaygentic selects the payment provider from your connected payment account. The response reports the provider.\n\n**Warning:** each `hosted_link` call creates a new link and sends the customer a new email. Do not retry a `hosted_link` call after a timeout: first read the invoice to see if a new link exists.",
+        "description": "Settle an unpaid invoice in status `ISSUED` or `PAYMENT_FAILED`. The `method` field selects how.\n\n- `hosted_link`: create a new hosted payment link and email it to the customer. The invoice stays unpaid until the customer pays on the link. Each call replaces the previous link. A payment link expires after 30 days; to collect an invoice whose link has expired, call this method again.\n- `out_of_band`: record a payment that you collected outside Paygentic. The invoice changes to `PAID` immediately. A second call returns 409.\n\nFor `hosted_link`, an invoice that does not exist returns 404, the same as an invoice of another merchant.\n\nPaygentic selects the payment provider from your connected payment account. The response reports the provider.\n\n**Warning:** each `hosted_link` call creates a new link and sends the customer a new email. Do not retry a `hosted_link` call after a timeout: first read the invoice to see if a new link exists.",
         "operationId": "recordInvoicePayment",
         "parameters": [
           {
@@ -9266,7 +9374,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "invoices:write"
       }
     },
     "/v2/invoices/{id}/refunds": {
@@ -9326,7 +9435,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "payments:refund"
       },
       "get": {
         "tags": [
@@ -9366,7 +9476,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "invoices:read"
       }
     },
     "/v2/invoices/{id}/refunds/{refundId}/void": {
@@ -9435,7 +9546,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "payments:refund"
       }
     },
     "/v2/invoices/{id}/retryPayment": {
@@ -9444,7 +9556,7 @@
           "Invoices V2"
         ],
         "summary": "Retry Payment",
-        "description": "Charge the customer's saved payment method again for an unpaid invoice.\n\nThe invoice must be in status `ISSUED` or `PAYMENT_FAILED`, auto-charge must be on for its subscription, and the invoice must have a payment session. If not, the response is 400.\n\nThe response status tells you the result. Only 200 means that the charge succeeded. Every other response from this operation that has a `retry_payment_result` body has `success: false`, and `error.code` gives the reason:\n\n| Status | `error.code` | Meaning |\n| --- | --- | --- |\n| 200 | — | The charge succeeded, the provider had already collected it, or no amount is unpaid. |\n| 202 | `processing` | The provider accepted the charge. It settles later (for example, a bank debit). |\n| 402 | a decline code, for example `card_declined`, `insufficient_funds`, `do_not_honor`, `authentication_required` | The provider declined the payment method. |\n| 409 | `concurrent_attempt` | Another payment attempt for this invoice is in progress. |\n| 409 | `PAYMENT_SESSION_EXPIRED` | The payment link expired (after 30 days). Create a new link with `POST /v2/invoices/{id}/payment` and `method: hosted_link`, then retry. If the customer also has no usable saved payment method, the response is 422 instead. |\n| 409 | another value, or no `code` | The payment session cannot be charged in its current state (for example `session_unusable`, `non_confirmable`, `PAYMENT_PROCESSING`, `PAYMENT_ALREADY_COMPLETED`). Read `error.message` for the cause. |\n| 422 | `no_payment_method` | The customer has no usable saved payment method. Send a payment link instead. |\n| 502 | `provider_unavailable` or none | The payment provider did not answer, or the provider failed the charge for a reason that is not known. Retry later. |\n\nA 500 response has the standard error body, not `retry_payment_result`. It is an internal error, and a retry does not fix it.\n\nAn invoice that does not exist returns 403, the same as an invoice of another merchant.\n\nThis operation is rate limited to one call each minute for each invoice.",
+        "description": "Charge the customer's saved payment method again for an unpaid invoice.\n\nThe invoice must be in status `ISSUED` or `PAYMENT_FAILED`, auto-charge must be on for its subscription, and the invoice must have a payment session. If not, the response is 400.\n\nThe response status tells you the result. Only 200 means that the charge succeeded. Every other response from this operation that has a `retry_payment_result` body has `success: false`, and `error.code` gives the reason:\n\n| Status | `error.code` | Meaning |\n| --- | --- | --- |\n| 200 | — | The charge succeeded, the provider had already collected it, or no amount is unpaid. |\n| 202 | `processing` | The provider accepted the charge. It settles later (for example, a bank debit). |\n| 402 | a decline code, for example `card_declined`, `insufficient_funds`, `do_not_honor`, `authentication_required` | The provider declined the payment method. |\n| 409 | `concurrent_attempt` | Another payment attempt for this invoice is in progress. |\n| 409 | `PAYMENT_SESSION_EXPIRED` | The payment link expired (after 30 days). Create a new link with `POST /v2/invoices/{id}/payment` and `method: hosted_link`, then retry. If the customer also has no usable saved payment method, the response is 422 instead. |\n| 409 | another value, or no `code` | The payment session cannot be charged in its current state (for example `session_unusable`, `non_confirmable`, `PAYMENT_PROCESSING`, `PAYMENT_ALREADY_COMPLETED`). Read `error.message` for the cause. |\n| 422 | `no_payment_method` | The customer has no usable saved payment method. Send a payment link instead. |\n| 502 | `provider_unavailable` or none | The payment provider did not answer, or the provider failed the charge for a reason that is not known. Retry later. |\n\nA 500 response has the standard error body, not `retry_payment_result`. It is an internal error, and a retry does not fix it.\n\nAn invoice that does not exist returns 404, the same as an invoice of another merchant.\n\nThis operation is rate limited to one call each minute for each invoice.",
         "operationId": "retryInvoicePayment",
         "x-rate-limit": {
           "max": 1,
@@ -9613,7 +9725,8 @@
               }
             }
           }
-        }
+        },
+        "x-permission": "invoices:write"
       }
     },
     "/v0/payments": {
@@ -9721,6 +9834,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "payments:read",
         "x-speakeasy-name-override": "list"
       },
       "post": {
@@ -9876,10 +9990,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "payments:write",
         "x-speakeasy-name-override": "create"
       }
     },
@@ -9926,6 +10044,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "payments:read",
         "x-speakeasy-name-override": "get"
       }
     },
@@ -10056,7 +10175,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "payments:read"
       }
     },
     "/v0/events": {
@@ -10093,7 +10213,8 @@
                 "properties": {
                   "type": {
                     "type": "string",
-                    "description": "CloudEvents type. Must match an eventType configured on a BillableMetric.",
+                    "pattern": "^[^\\u0000-\\u001F\\u007F]*$",
+                    "description": "CloudEvents type. Must match an eventType configured on a BillableMetric. Must not contain control characters.",
                     "example": "ai.inference"
                   },
                   "source": {
@@ -10107,7 +10228,7 @@
                     "example": "cus_abc123"
                   },
                   "externalSubject": {
-                    "description": "Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, events may resolve to the previous customer for up to one hour. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.",
+                    "description": "Your own customer identifier, matched against the customer's externalId. Fallback for when the Paygentic customer ID is not known — prefer subject when it is. Events reported before the customer exists are linked retroactively once a customer with this externalId is created. Resolution is eventually consistent: after an externalId is removed or reassigned, or its customer is deleted, events may resolve to the previous customer for up to one hour, and for up to 48 hours if Paygentic's database is unavailable. If subject is also provided, subject takes precedence and externalSubject is recorded but not used for resolution.",
                     "allOf": [
                       {
                         "$ref": "#/components/schemas/ExternalId"
@@ -10116,6 +10237,7 @@
                   },
                   "namespace": {
                     "type": "string",
+                    "pattern": "^[^\\u0000-\\u001F\\u007F]*$",
                     "description": "Organization/merchant ID. Defaults to the authenticated user's organization. Platform users can specify a different organization."
                   },
                   "timestamp": {
@@ -10173,6 +10295,9 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "422": {
             "$ref": "#/components/responses/UnprocessableEntity"
           },
@@ -10180,6 +10305,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "events:write",
         "x-speakeasy-name-override": "ingest",
         "x-speakeasy-usage-example": {
           "title": "Report usage",
@@ -10299,10 +10425,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:write"
       },
       "get": {
         "tags": [
@@ -10409,7 +10539,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:read"
       }
     },
     "/v0/costs/{id}": {
@@ -10450,7 +10581,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:read"
       },
       "patch": {
         "tags": [
@@ -10545,7 +10677,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:write"
       },
       "delete": {
         "tags": [
@@ -10566,7 +10699,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:write"
       }
     },
     "/v0/costs/{id}/summary": {
@@ -10674,7 +10808,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:read"
       }
     },
     "/v0/costs/report": {
@@ -10903,7 +11038,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:read"
       }
     },
     "/v0/revenue": {
@@ -11047,6 +11183,7 @@
             "$ref": "#/components/responses/InternalServerError"
           }
         },
+        "x-permission": "revenue:read",
         "x-speakeasy-name-override": "get"
       }
     },
@@ -11135,7 +11272,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "revenue:read"
       }
     },
     "/v0/profitability": {
@@ -11243,7 +11381,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "costs:read"
       }
     },
     "/v0/testClocks": {
@@ -11361,6 +11500,7 @@
             }
           }
         },
+        "x-permission": "testClocks:read",
         "x-speakeasy-name-override": "list"
       },
       "post": {
@@ -11449,8 +11589,12 @@
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
+        "x-permission": "testClocks:write",
         "x-speakeasy-name-override": "create"
       }
     },
@@ -11528,7 +11672,7 @@
             }
           },
           "404": {
-            "description": "Test clock not found",
+            "description": "Resource not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11538,6 +11682,7 @@
             }
           }
         },
+        "x-permission": "testClocks:read",
         "x-speakeasy-name-override": "get"
       },
       "patch": {
@@ -11649,7 +11794,7 @@
             }
           },
           "404": {
-            "description": "Test clock not found",
+            "description": "Resource not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11659,6 +11804,7 @@
             }
           }
         },
+        "x-permission": "testClocks:write",
         "x-speakeasy-name-override": "advance"
       },
       "delete": {
@@ -11722,7 +11868,7 @@
             }
           },
           "404": {
-            "description": "Test clock not found",
+            "description": "Resource not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -11742,6 +11888,7 @@
             }
           }
         },
+        "x-permission": "testClocks:write",
         "x-speakeasy-name-override": "delete"
       }
     },
@@ -11786,6 +11933,9 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           },
@@ -11800,6 +11950,7 @@
             }
           }
         },
+        "x-permission": "organization:resetData",
         "x-speakeasy-group": "merchants",
         "x-speakeasy-name-override": "reset"
       }
@@ -11897,7 +12048,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "externalReferences:write"
       },
       "get": {
         "tags": [
@@ -12004,7 +12156,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "externalReferences:read"
       }
     },
     "/v0/externalReferences/{id}": {
@@ -12049,7 +12202,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "externalReferences:read"
       },
       "patch": {
         "tags": [
@@ -12113,7 +12267,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "externalReferences:write"
       },
       "delete": {
         "tags": [
@@ -12137,7 +12292,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "externalReferences:write"
       }
     },
     "/v0/items": {
@@ -12205,7 +12361,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "items:write"
       },
       "get": {
         "tags": [
@@ -12315,7 +12472,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "items:read"
       }
     },
     "/v0/items/{id}": {
@@ -12360,7 +12518,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "items:read"
       },
       "patch": {
         "tags": [
@@ -12423,7 +12582,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "items:write"
       }
     },
     "/v0/orders": {
@@ -12469,7 +12629,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:write"
       },
       "get": {
         "tags": [
@@ -12565,7 +12726,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:read"
       }
     },
     "/v0/orders/{id}": {
@@ -12608,7 +12770,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:read"
       },
       "patch": {
         "tags": [
@@ -12662,7 +12825,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:write"
       },
       "delete": {
         "tags": [
@@ -12696,7 +12860,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:write"
       }
     },
     "/v0/orders/{orderId}/lineItems": {
@@ -12752,7 +12917,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:write"
       }
     },
     "/v0/orders/{orderId}/lineItems/{id}": {
@@ -12816,7 +12982,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:write"
       },
       "delete": {
         "tags": [
@@ -12858,7 +13025,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "orders:write"
       }
     },
     "/v0/orders/{orderId}/approvals": {
@@ -12911,7 +13079,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-permission": "orders:write"
       }
     },
     "/v0/billingSchedules": {
@@ -12989,7 +13158,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:read"
       },
       "post": {
         "tags": [
@@ -13036,7 +13206,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:write"
       }
     },
     "/v0/billingSchedules/{id}": {
@@ -13079,7 +13250,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:read"
       },
       "patch": {
         "tags": [
@@ -13136,7 +13308,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:write"
       },
       "delete": {
         "tags": [
@@ -13170,7 +13343,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:write"
       }
     },
     "/v0/billingSchedules/{id}/intervals": {
@@ -13235,7 +13409,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:read"
       },
       "put": {
         "tags": [
@@ -13315,7 +13490,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:write"
       }
     },
     "/v0/billingSchedules/{id}/invoices": {
@@ -13381,7 +13557,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:read"
       },
       "post": {
         "tags": [
@@ -13451,7 +13628,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "billingSchedules:write"
       }
     },
     "/v0/integrations/salesforce/accounts": {
@@ -13547,7 +13725,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "merchantIntegrations:read"
       }
     },
     "/v0/merchantIntegrations": {
@@ -13632,7 +13811,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "merchantIntegrations:read"
       },
       "put": {
         "tags": [
@@ -13699,10 +13879,14 @@
           "403": {
             "$ref": "#/components/responses/Forbidden"
           },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "merchantIntegrations:write"
       }
     },
     "/v0/merchantIntegrations/{id}": {
@@ -13747,7 +13931,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "merchantIntegrations:read"
       }
     },
     "/v0/merchantIntegrations/{id}/disconnect": {
@@ -13793,7 +13978,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "merchantIntegrations:write"
       }
     },
     "/v0/approvals": {
@@ -13842,7 +14028,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "approvals:write"
       },
       "get": {
         "tags": [
@@ -13949,7 +14136,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "approvals:read"
       }
     },
     "/v0/approvals/{id}": {
@@ -13992,7 +14180,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "approvals:read"
       },
       "patch": {
         "tags": [
@@ -14049,7 +14238,8 @@
           "500": {
             "$ref": "#/components/responses/InternalServerError"
           }
-        }
+        },
+        "x-permission": "approvals:write"
       }
     },
     "/v0/webhooks": {
@@ -14122,6 +14312,7 @@
             }
           }
         },
+        "x-permission": "webhooks:read",
         "x-speakeasy-name-override": "get"
       },
       "post": {
@@ -14184,8 +14375,12 @@
                 }
               }
             }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
+        "x-permission": "webhooks:write",
         "x-speakeasy-name-override": "enable"
       },
       "patch": {
@@ -14279,6 +14474,7 @@
             }
           }
         },
+        "x-permission": "webhooks:write",
         "x-speakeasy-name-override": "update"
       },
       "delete": {
@@ -14335,6 +14531,7 @@
             }
           }
         },
+        "x-permission": "webhooks:write",
         "x-speakeasy-name-override": "disable"
       }
     },
@@ -14344,7 +14541,7 @@
           "Webhooks"
         ],
         "summary": "Get Portal Access",
-        "description": "Returns a link to the webhook portal, where you add endpoints, choose event types, read the signing secret and inspect deliveries. The link opens without a login and expires one hour after it is issued, at `expiresAt`. Treat it as a secret. Returns 404 unless webhooks are enabled.",
+        "description": "Returns a link to the webhook portal, where you add endpoints, choose event types, read the signing secret and inspect deliveries. The link opens without a login and expires one hour after it is issued, at `expiresAt`. Treat it as a secret. The link is read-only unless the caller holds `webhooks:write`: a read-only portal shows endpoints and deliveries but does not let you add or change endpoints, read the signing secret or replay messages. Returns 404 unless webhooks are enabled.",
         "operationId": "getWebhookPortal",
         "parameters": [
           {
@@ -14405,6 +14602,7 @@
             }
           }
         },
+        "x-permission": "webhooks:read",
         "x-speakeasy-name-override": "getPortal"
       }
     }

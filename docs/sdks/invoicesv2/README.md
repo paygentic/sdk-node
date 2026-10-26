@@ -563,7 +563,7 @@ Settle an unpaid invoice in status `ISSUED` or `PAYMENT_FAILED`. The `method` fi
 - `hosted_link`: create a new hosted payment link and email it to the customer. The invoice stays unpaid until the customer pays on the link. Each call replaces the previous link. A payment link expires after 30 days; to collect an invoice whose link has expired, call this method again.
 - `out_of_band`: record a payment that you collected outside Paygentic. The invoice changes to `PAID` immediately. A second call returns 409.
 
-For `hosted_link`, an invoice that does not exist returns 403, the same as an invoice of another merchant.
+For `hosted_link`, an invoice that does not exist returns 404, the same as an invoice of another merchant.
 
 Paygentic selects the payment provider from your connected payment account. The response reports the provider.
 
@@ -901,7 +901,7 @@ The response status tells you the result. Only 200 means that the charge succeed
 
 A 500 response has the standard error body, not `retry_payment_result`. It is an internal error, and a retry does not fix it.
 
-An invoice that does not exist returns 403, the same as an invoice of another merchant.
+An invoice that does not exist returns 404, the same as an invoice of another merchant.
 
 This operation is rate limited to one call each minute for each invoice.
 
