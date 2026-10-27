@@ -54,6 +54,16 @@ export const ListEntitlementsObject = {
 export type ListEntitlementsObject = ClosedEnum<typeof ListEntitlementsObject>;
 
 /**
+ * Present only when the database can't be reached, or the list takes more than a second to compute. The response is then the last result for this same request in the past hour, computed at `computedAt`.
+ */
+export type Stale = {
+  /**
+   * When this result was computed.
+   */
+  computedAt: Date;
+};
+
+/**
  * Successfully retrieved the list of entitlements for the customer.
  */
 export type ListEntitlementsResponse = {
@@ -66,6 +76,10 @@ export type ListEntitlementsResponse = {
    * Offset-based pagination response.
    */
   pagination: models.OffsetPagination;
+  /**
+   * Present only when the database can't be reached, or the list takes more than a second to compute. The response is then the last result for this same request in the past hour, computed at `computedAt`.
+   */
+  stale?: Stale | undefined;
 };
 
 /** @internal */
@@ -112,6 +126,24 @@ export const ListEntitlementsObject$inboundSchema: z.ZodNativeEnum<
 > = z.nativeEnum(ListEntitlementsObject);
 
 /** @internal */
+export const Stale$inboundSchema: z.ZodType<Stale, z.ZodTypeDef, unknown> = z
+  .object({
+    computedAt: z.string().datetime({ offset: true }).transform(v =>
+      new Date(v)
+    ),
+  });
+
+export function staleFromJSON(
+  jsonString: string,
+): SafeParseResult<Stale, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => Stale$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'Stale' from JSON`,
+  );
+}
+
+/** @internal */
 export const ListEntitlementsResponse$inboundSchema: z.ZodType<
   ListEntitlementsResponse,
   z.ZodTypeDef,
@@ -120,6 +152,7 @@ export const ListEntitlementsResponse$inboundSchema: z.ZodType<
   object: ListEntitlementsObject$inboundSchema.default("list"),
   data: z.array(models.EntitlementListItem$inboundSchema),
   pagination: models.OffsetPagination$inboundSchema,
+  stale: z.lazy(() => Stale$inboundSchema).optional(),
 });
 
 export function listEntitlementsResponseFromJSON(

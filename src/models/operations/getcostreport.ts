@@ -50,11 +50,11 @@ export type GetCostReportRequest = {
    */
   merchantId?: string | undefined;
   /**
-   * Start of the query window (ISO 8601).
+   * Start of the query window, included (ISO 8601).
    */
   from: Date;
   /**
-   * End of the query window (ISO 8601).
+   * End of the query window, excluded: the read counts from <= t < to (ISO 8601).
    */
   to: Date;
   /**

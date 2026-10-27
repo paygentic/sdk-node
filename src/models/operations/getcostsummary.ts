@@ -28,11 +28,11 @@ export type GetCostSummaryRequest = {
    */
   subject?: string | undefined;
   /**
-   * Start of the query window (ISO 8601). Required together with 'to'.
+   * Start of the query window, included (ISO 8601). Required together with 'to'.
    */
   from: Date;
   /**
-   * End of the query window (ISO 8601). Required together with 'from'.
+   * End of the query window, excluded: the read counts from <= t < to (ISO 8601). Required together with 'from'.
    */
   to: Date;
   /**

@@ -10,11 +10,11 @@ export type GetProfitabilityRequest = {
    */
   merchantId: string;
   /**
-   * Start of the time range (ISO 8601 format)
+   * Start of the read window, included (ISO 8601 format)
    */
   from: Date;
   /**
-   * End of the time range (ISO 8601 format)
+   * End of the read window, excluded: the read counts from <= t < to, so a month ends at the first instant of the next month (ISO 8601 format)
    */
   to: Date;
   /**

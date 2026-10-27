@@ -45,11 +45,11 @@ export type PeriodBasis = ClosedEnum<typeof PeriodBasis>;
 
 export type GetRevenueRequest = {
   /**
-   * Start of the time range (ISO 8601 format)
+   * Start of the read window, included (ISO 8601 format)
    */
   startTime: Date;
   /**
-   * End of the time range (ISO 8601 format)
+   * End of the read window, excluded: the read counts startTime <= t < endTime, so a month ends at the first instant of the next month (ISO 8601 format)
    */
   endTime: Date;
   /**

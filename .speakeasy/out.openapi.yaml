@@ -1744,6 +1744,20 @@
                     },
                     "pagination": {
                       "$ref": "#/components/schemas/OffsetPagination"
+                    },
+                    "stale": {
+                      "type": "object",
+                      "description": "Present only when the database can't be reached, or the list takes more than a second to compute. The response is then the last result for this same request in the past hour, computed at `computedAt`.",
+                      "required": [
+                        "computedAt"
+                      ],
+                      "properties": {
+                        "computedAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "When this result was computed."
+                        }
+                      }
                     }
                   }
                 },
@@ -10740,7 +10754,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "Start of the query window (ISO 8601). Required together with 'to'."
+            "description": "Start of the query window, included (ISO 8601). Required together with 'to'."
           },
           {
             "name": "to",
@@ -10750,7 +10764,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "End of the query window (ISO 8601). Required together with 'from'."
+            "description": "End of the query window, excluded: the read counts from <= t < to (ISO 8601). Required together with 'from'."
           },
           {
             "name": "groupBy",
@@ -10843,7 +10857,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "Start of the query window (ISO 8601)."
+            "description": "Start of the query window, included (ISO 8601)."
           },
           {
             "name": "to",
@@ -10853,7 +10867,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "End of the query window (ISO 8601)."
+            "description": "End of the query window, excluded: the read counts from <= t < to (ISO 8601)."
           },
           {
             "name": "groupBy",
@@ -11055,7 +11069,7 @@
             "name": "startTime",
             "in": "query",
             "required": true,
-            "description": "Start of the time range (ISO 8601 format)",
+            "description": "Start of the read window, included (ISO 8601 format)",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -11065,7 +11079,7 @@
             "name": "endTime",
             "in": "query",
             "required": true,
-            "description": "End of the time range (ISO 8601 format)",
+            "description": "End of the read window, excluded: the read counts startTime <= t < endTime, so a month ends at the first instant of the next month (ISO 8601 format)",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -11298,7 +11312,7 @@
             "name": "from",
             "in": "query",
             "required": true,
-            "description": "Start of the time range (ISO 8601 format)",
+            "description": "Start of the read window, included (ISO 8601 format)",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -11308,7 +11322,7 @@
             "name": "to",
             "in": "query",
             "required": true,
-            "description": "End of the time range (ISO 8601 format)",
+            "description": "End of the read window, excluded: the read counts from <= t < to, so a month ends at the first instant of the next month (ISO 8601 format)",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -21492,6 +21506,7 @@
           },
           "period": {
             "type": "object",
+            "description": "The read window, as requested: the report counts from <= t < to. Unlike `costRange`, `to` is not an instant the report covers, so a chart axis ends before it.",
             "required": [
               "from",
               "to"
@@ -21499,11 +21514,13 @@
             "properties": {
               "from": {
                 "type": "string",
-                "format": "date-time"
+                "format": "date-time",
+                "description": "Start of the read window, included."
               },
               "to": {
                 "type": "string",
-                "format": "date-time"
+                "format": "date-time",
+                "description": "End of the read window, excluded."
               }
             }
           },
@@ -21585,7 +21602,7 @@
               "null"
             ],
             "nullable": true,
-            "description": "Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.",
+            "description": "Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence. The bounds are instants that exist and both are included, so a window that holds `to` ends after it.",
             "required": [
               "from",
               "to"
@@ -21885,7 +21902,7 @@
               "object",
               "null"
             ],
-            "description": "Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.",
+            "description": "Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds are instants that exist and both are included, so a window that holds `to` ends after it. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.",
             "required": [
               "from",
               "to"
@@ -22153,7 +22170,7 @@
               "object",
               "null"
             ],
-            "description": "Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.",
+            "description": "Where the caller's revenue actually lies in time. Scoped by the same filters as the request (merchant, and where given customer, subscription and currency), so it is not an account-wide statement. Present only when the selected range returned nothing. An object carries the bounds of the real revenue; null means no revenue under these filters at any time; an absent field means the extent was not resolved, because the result was not empty or because the lookup failed. An absent field must never be read as an absence. The bounds are instants that exist and both are included, so a window that holds `to` ends after it. The bounds may span more than this endpoint's maximum queryable range, so clamp before re-querying.",
             "required": [
               "from",
               "to"
@@ -22177,7 +22194,7 @@
               "null"
             ],
             "nullable": true,
-            "description": "Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.",
+            "description": "Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence. The bounds are instants that exist and both are included, so a window that holds `to` ends after it.",
             "required": [
               "from",
               "to"

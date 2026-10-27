@@ -23,8 +23,17 @@ export type CostReportResponseObject = ClosedEnum<
   typeof CostReportResponseObject
 >;
 
+/**
+ * The read window, as requested: the report counts from <= t < to. Unlike `costRange`, `to` is not an instant the report covers, so a chart axis ends before it.
+ */
 export type Period = {
+  /**
+   * Start of the read window, included.
+   */
   from: Date;
+  /**
+   * End of the read window, excluded.
+   */
   to: Date;
 };
 
@@ -35,7 +44,7 @@ export type Pagination = {
 };
 
 /**
- * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.
+ * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence. The bounds are instants that exist and both are included, so a window that holds `to` ends after it.
  */
 export type CostReportResponseCostRange = {
   /**
@@ -54,6 +63,9 @@ export type CostReportResponse = {
    * ISO 4217 currency code for all monetary values in this response.
    */
   currency: string;
+  /**
+   * The read window, as requested: the report counts from <= t < to. Unlike `costRange`, `to` is not an instant the report covers, so a chart axis ends before it.
+   */
   period: Period;
   /**
    * The active grouping dimension (e.g. 'cost', 'customer', or a dynamic dimension key).
@@ -93,7 +105,7 @@ export type CostReportResponse = {
    */
   emptyGroupCount?: number | null | undefined;
   /**
-   * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence.
+   * Where the caller's cost data actually lies in time. Present only when the selected range returned no cost. An object carries the bounds of the real cost events; null means the caller has no cost event at any time; an absent field means the extent was not resolved, because the result was not empty, because the lookup failed, or because the metering service does not serve the bounds method. An absent field must never be read as an absence. The bounds are instants that exist and both are included, so a window that holds `to` ends after it.
    */
   costRange?: CostReportResponseCostRange | null | undefined;
 };
