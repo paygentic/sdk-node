@@ -9,7 +9,7 @@ import { AccountFigure, AccountFigure$inboundSchema } from "./accountfigure.js";
 import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
- * What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount.
+ * What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount. `overdue` is a part of `awaitingPayment`.
  */
 export type OutstandingBlock = {
   /**
@@ -28,6 +28,10 @@ export type OutstandingBlock = {
    * The part with status `PAYMENT_FAILED`: collection has ended
    */
   paymentFailed: AccountFigure;
+  /**
+   * The invoices of `awaitingPayment` past their due date: status `ISSUED`, no card retry scheduled, and a due date before the start of today, UTC. Today is the subscription's test clock when test clocks are enabled. A subset of `awaitingPayment` by count. A credit invoice is never overdue, so the amount can exceed `awaitingPayment.amount`.
+   */
+  overdue: AccountFigure;
 };
 
 /** @internal */
@@ -40,6 +44,7 @@ export const OutstandingBlock$inboundSchema: z.ZodType<
   amount: z.string(),
   awaitingPayment: AccountFigure$inboundSchema,
   paymentFailed: AccountFigure$inboundSchema,
+  overdue: AccountFigure$inboundSchema,
 });
 
 export function outstandingBlockFromJSON(

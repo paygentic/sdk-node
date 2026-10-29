@@ -1,5 +1,7 @@
 # ErrorT
 
+Unauthorized - Authentication failed or user does not have permissions
+
 ## Example Usage
 
 ```typescript

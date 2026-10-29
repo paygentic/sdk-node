@@ -135,9 +135,42 @@
     {
       "name": "Webhooks",
       "description": "Endpoints for setting up webhook integrations and administering webhook settings"
+    },
+    {
+      "name": "Me",
+      "description": "The caller: who it is in its active organization and what it can do"
     }
   ],
   "paths": {
+    "/v0/me": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Get the caller",
+        "description": "Returns the caller's identity in its active organization, its roles, and the permissions that its credential holds there. The permissions are the effective set for the credential of the call: for a session or an API key, those of the principal; for an OAuth token, those of the principal narrowed to the scopes of the token.",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "description": "The caller",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "x-permission": "public"
+      }
+    },
     "/v0/billableMetrics": {
       "post": {
         "tags": [
@@ -14862,6 +14895,232 @@
           }
         }
       },
+      "Permission": {
+        "type": "string",
+        "description": "A permission of the catalog: a resource read or write, or a sensitive action.",
+        "enum": [
+          "organization:read",
+          "members:read",
+          "profile:read",
+          "apiKeys:read",
+          "merchants:read",
+          "consumers:read",
+          "customers:read",
+          "plans:read",
+          "prices:read",
+          "products:read",
+          "features:read",
+          "fees:read",
+          "billableMetrics:read",
+          "items:read",
+          "pricingUnits:read",
+          "subscriptions:read",
+          "subscriptionAdjustments:read",
+          "discounts:read",
+          "grants:read",
+          "entitlements:read",
+          "creditPools:read",
+          "orders:read",
+          "billingSchedules:read",
+          "invoices:read",
+          "payments:read",
+          "paymentSessions:read",
+          "portalSessions:read",
+          "platformUsers:read",
+          "platformAdmin:read",
+          "organizationCreation:read",
+          "compliance:read",
+          "taxSettings:read",
+          "costs:read",
+          "paymentAccounts:read",
+          "payouts:read",
+          "externalAccounts:read",
+          "externalReferences:read",
+          "merchantIntegrations:read",
+          "webhooks:read",
+          "testClocks:read",
+          "approvals:read",
+          "sources:read",
+          "revenue:read",
+          "organization:write",
+          "members:write",
+          "profile:write",
+          "apiKeys:write",
+          "merchants:write",
+          "consumers:write",
+          "customers:write",
+          "plans:write",
+          "prices:write",
+          "products:write",
+          "features:write",
+          "fees:write",
+          "billableMetrics:write",
+          "items:write",
+          "pricingUnits:write",
+          "subscriptions:write",
+          "subscriptionAdjustments:write",
+          "discounts:write",
+          "grants:write",
+          "entitlements:write",
+          "creditPools:write",
+          "orders:write",
+          "billingSchedules:write",
+          "invoices:write",
+          "payments:write",
+          "paymentSessions:write",
+          "portalSessions:write",
+          "platformUsers:write",
+          "platformAdmin:write",
+          "organizationCreation:write",
+          "compliance:write",
+          "taxSettings:write",
+          "costs:write",
+          "paymentAccounts:write",
+          "payouts:write",
+          "externalAccounts:write",
+          "externalReferences:write",
+          "merchantIntegrations:write",
+          "webhooks:write",
+          "testClocks:write",
+          "approvals:write",
+          "sources:write",
+          "events:write",
+          "invoices:issue",
+          "invoices:void",
+          "payments:refund",
+          "organization:delete",
+          "ownership:transfer",
+          "subscriptions:terminate",
+          "subscriptions:terminateWithReason",
+          "subscriptions:reconcile",
+          "subscriptions:update",
+          "subscriptions:delete",
+          "subscriptions:taxExempt",
+          "subscriptions:autoApprove",
+          "organization:resetData"
+        ]
+      },
+      "MeCredential": {
+        "type": "object",
+        "description": "The credential of the call. clientId is set for an OAuth token and apiKeyId for an API key.",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "session",
+              "apiKey",
+              "oauth",
+              "system"
+            ]
+          },
+          "clientId": {
+            "type": "string",
+            "description": "The OAuth client of the token."
+          },
+          "apiKeyId": {
+            "type": "string",
+            "description": "The API key of the call."
+          }
+        }
+      },
+      "Me": {
+        "type": "object",
+        "required": [
+          "userId",
+          "organizationId",
+          "organizationType",
+          "roles",
+          "permissions",
+          "credential"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "organizationType": {
+            "type": "string",
+            "enum": [
+              "merchant",
+              "consumer"
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The role names of the caller in the active organization."
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Permission"
+            },
+            "description": "The permissions that the credential of the call holds in the active organization."
+          },
+          "credential": {
+            "$ref": "#/components/schemas/MeCredential"
+          }
+        }
+      },
+      "AuthorizationDenialReason": {
+        "type": "string",
+        "enum": [
+          "no_permission",
+          "insufficient_scope",
+          "not_member"
+        ],
+        "description": "Present on a 403 from the authorization check. Says why access was refused: the caller has no role that grants the permission, the OAuth token lacks the scope, or the caller is not a member of the organization."
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Coarse HTTP error category (e.g. 'bad_request', 'forbidden'). Maps to the HTTP status code."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message. Clients must not parse this field programmatically."
+          },
+          "code": {
+            "type": "string",
+            "examples": [
+              "TAX_NOT_ENABLED",
+              "PAYMENT_SESSION_EXPIRED"
+            ],
+            "description": "Optional semantic business error code for machine-readable discrimination (e.g. 'TAX_NOT_ENABLED'). UPPER_SNAKE_CASE. Clients should check this field, not message."
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional error details",
+            "additionalProperties": true
+          },
+          "reason": {
+            "$ref": "#/components/schemas/AuthorizationDenialReason"
+          },
+          "requiredPermissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Present on a 403 from the authorization check. The permissions the caller needs for this request."
+          }
+        },
+        "example": {
+          "message": "The requested resource was not found",
+          "error": "not_found"
+        }
+      },
       "OrganizationId": {
         "type": "string",
         "pattern": "^org_[a-zA-Z0-9]+$",
@@ -14955,58 +15214,6 @@
             "format": "date-time",
             "nullable": true
           }
-        }
-      },
-      "AuthorizationDenialReason": {
-        "type": "string",
-        "enum": [
-          "no_permission",
-          "insufficient_scope",
-          "not_member"
-        ],
-        "description": "Present on a 403 from the authorization check. Says why access was refused: the caller has no role that grants the permission, the OAuth token lacks the scope, or the caller is not a member of the organization."
-      },
-      "Error": {
-        "type": "object",
-        "required": [
-          "message"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "description": "Coarse HTTP error category (e.g. 'bad_request', 'forbidden'). Maps to the HTTP status code."
-          },
-          "message": {
-            "type": "string",
-            "description": "Human-readable error message. Clients must not parse this field programmatically."
-          },
-          "code": {
-            "type": "string",
-            "examples": [
-              "TAX_NOT_ENABLED",
-              "PAYMENT_SESSION_EXPIRED"
-            ],
-            "description": "Optional semantic business error code for machine-readable discrimination (e.g. 'TAX_NOT_ENABLED'). UPPER_SNAKE_CASE. Clients should check this field, not message."
-          },
-          "details": {
-            "type": "object",
-            "description": "Additional error details",
-            "additionalProperties": true
-          },
-          "reason": {
-            "$ref": "#/components/schemas/AuthorizationDenialReason"
-          },
-          "requiredPermissions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Present on a 403 from the authorization check. The permissions the caller needs for this request."
-          }
-        },
-        "example": {
-          "message": "The requested resource was not found",
-          "error": "not_found"
         }
       },
       "ItemId": {
@@ -21947,9 +22154,10 @@
           "count",
           "amount",
           "awaitingPayment",
-          "paymentFailed"
+          "paymentFailed",
+          "overdue"
         ],
-        "description": "What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount.",
+        "description": "What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount. `overdue` is a part of `awaitingPayment`.",
         "properties": {
           "count": {
             "type": "integer",
@@ -21975,6 +22183,14 @@
               }
             ],
             "description": "The part with status `PAYMENT_FAILED`: collection has ended"
+          },
+          "overdue": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AccountFigure"
+              }
+            ],
+            "description": "The invoices of `awaitingPayment` past their due date: status `ISSUED`, no card retry scheduled, and a due date before the start of today, UTC. Today is the subscription's test clock when test clocks are enabled. A subset of `awaitingPayment` by count. A credit invoice is never overdue, so the amount can exceed `awaitingPayment.amount`."
           }
         }
       },

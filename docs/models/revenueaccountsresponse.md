@@ -21,6 +21,10 @@ let value: RevenueAccountsResponse = {
           count: 402102,
           amount: "380.99",
         },
+        overdue: {
+          count: 773117,
+          amount: "347.70",
+        },
       },
     },
   ],
@@ -28,7 +32,7 @@ let value: RevenueAccountsResponse = {
     {
       customerId: "<id>",
       customerName: "<value>",
-      currency: "Lempira",
+      currency: "Somoni",
       outstanding: {
         count: 88617,
         amount: "182.98",
@@ -39,6 +43,10 @@ let value: RevenueAccountsResponse = {
         paymentFailed: {
           count: 402102,
           amount: "380.99",
+        },
+        overdue: {
+          count: 773117,
+          amount: "347.70",
         },
       },
     },

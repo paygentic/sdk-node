@@ -4217,7 +4217,20 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"list","totals":[{"currency":"Nuevo Sol","outstanding":{"count":756373,"amount":"625.11","awaitingPayment":{"count":274308,"amount":"808.76"},"paymentFailed":{"count":733558,"amount":"669.37"}}}],"data":[{"customerId":"<id>","customerName":"<value>","currency":"Venezuelan bolívar","outstanding":{"count":756373,"amount":"625.11","awaitingPayment":{"count":274308,"amount":"808.76"},"paymentFailed":{"count":733558,"amount":"669.37"}}}],"pagination":{"limit":695281,"offset":79625,"total":252071}}
+              {"object":"list","totals":[{"currency":"Nuevo Sol","outstanding":{"count":756373,"amount":"625.11","awaitingPayment":{"count":274308,"amount":"808.76"},"paymentFailed":{"count":733558,"amount":"669.37"},"overdue":{"count":643929,"amount":"658.09"}}}],"data":[{"customerId":"<id>","customerName":"<value>","currency":"Venezuelan bolívar","outstanding":{"count":756373,"amount":"625.11","awaitingPayment":{"count":274308,"amount":"808.76"},"paymentFailed":{"count":733558,"amount":"669.37"},"overdue":{"count":643929,"amount":"658.09"}}}],"pagination":{"limit":695281,"offset":79625,"total":252071}}
             type: simple
     x-speakeasy-test-group: Revenue
+    x-speakeasy-test-rebuild: true
+  - workflowId: getMe
+    steps:
+      - stepId: test
+        operationId: getMe
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"userId":"<id>","organizationId":"<id>","organizationType":"merchant","roles":[],"permissions":[],"credential":{"type":"apiKey"}}
+            type: simple
+    x-speakeasy-test-group: Me
     x-speakeasy-test-rebuild: true

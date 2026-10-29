@@ -6,6 +6,9 @@ import * as z from "zod/v3";
 import * as models from "../index.js";
 import { PaygenticError } from "./paygenticerror.js";
 
+/**
+ * Unauthorized - Authentication failed or user does not have permissions
+ */
 export type ErrorTData = {
   /**
    * Coarse HTTP error category (e.g. 'bad_request', 'forbidden'). Maps to the HTTP status code.
@@ -33,6 +36,9 @@ export type ErrorTData = {
   requiredPermissions?: Array<string> | undefined;
 };
 
+/**
+ * Unauthorized - Authentication failed or user does not have permissions
+ */
 export class ErrorT extends PaygenticError {
   /**
    * Coarse HTTP error category (e.g. 'bad_request', 'forbidden'). Maps to the HTTP status code.

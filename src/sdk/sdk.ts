@@ -15,6 +15,7 @@ import { Features } from "./features.js";
 import { Fees } from "./fees.js";
 import { InvoicesV2 } from "./invoicesv2.js";
 import { Items } from "./items.js";
+import { Me } from "./me.js";
 import { MerchantIntegrations } from "./merchantintegrations.js";
 import { Merchants } from "./merchants.js";
 import { Orders } from "./orders.js";
@@ -33,6 +34,11 @@ import { Users } from "./users.js";
 import { Webhooks } from "./webhooks.js";
 
 export class Paygentic extends ClientSDK {
+  private _me?: Me;
+  get me(): Me {
+    return (this._me ??= new Me(this._options));
+  }
+
   private _billableMetrics?: BillableMetrics;
   get billableMetrics(): BillableMetrics {
     return (this._billableMetrics ??= new BillableMetrics(this._options));

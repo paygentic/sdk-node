@@ -25,7 +25,7 @@ export type RevenueAccountRow = {
    */
   currency: string;
   /**
-   * What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount.
+   * What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount. `overdue` is a part of `awaitingPayment`.
    */
   outstanding: OutstandingBlock;
 };
