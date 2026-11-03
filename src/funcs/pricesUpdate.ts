@@ -28,6 +28,9 @@ import { Result } from "../types/fp.js";
 
 /**
  * Update
+ *
+ * @remarks
+ * Updates a price. `paymentTerm` and `billingCadence` are fixed when the price is created: a request that sends either one is refused with a 400. To change them, create a new price.
  */
 export function pricesUpdate(
   client: PaygenticCore,

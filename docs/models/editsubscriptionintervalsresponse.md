@@ -16,7 +16,7 @@ let value: EditSubscriptionIntervalsResponse = {
     id: "<id>",
     merchantId: "<id>",
     subscriptionId: "<id>",
-    changeReason: "unspecified",
+    changeReason: "contractual",
     description: "whether psst busily chunder regularly duh",
     metadata: {
       "key": 8016.64,

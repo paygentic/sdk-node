@@ -15,5 +15,5 @@ let value: TerminationChangeReason = "unspecified";
 ## Values
 
 ```typescript
-"commercial" | "correction" | "migration" | "unspecified" | Unrecognized<string>
+"commercial" | "correction" | "migration" | "unspecified" | "contractual" | Unrecognized<string>
 ```

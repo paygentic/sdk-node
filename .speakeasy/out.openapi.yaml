@@ -4518,6 +4518,7 @@
                   },
                   "paymentTerm": {
                     "type": "string",
+                    "title": "CreatePricePaymentTerm",
                     "enum": [
                       "in_arrears",
                       "in_advance"
@@ -4844,6 +4845,7 @@
           "Prices"
         ],
         "summary": "Update",
+        "description": "Updates a price. `paymentTerm` and `billingCadence` are fixed when the price is created: a request that sends either one is refused with a 400. To change them, create a new price.",
         "operationId": "updatePrice",
         "requestBody": {
           "required": true,
@@ -4886,19 +4888,6 @@
                   },
                   "properties": {
                     "$ref": "#/components/schemas/PriceProperties"
-                  },
-                  "paymentTerm": {
-                    "type": "string",
-                    "enum": [
-                      "in_arrears",
-                      "in_advance"
-                    ],
-                    "description": "Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end)."
-                  },
-                  "billingCadence": {
-                    "type": "string",
-                    "nullable": true,
-                    "description": "ISO 8601 duration for recurring fees (e.g., 'P1M' for monthly, 'P1Y' for yearly, or 'P0D' for one-time)"
                   },
                   "feature": {
                     "oneOf": [
@@ -14928,6 +14917,8 @@
           "portalSessions:read",
           "platformUsers:read",
           "platformAdmin:read",
+          "loginLockout:read",
+          "platformSystem:read",
           "organizationCreation:read",
           "compliance:read",
           "taxSettings:read",
@@ -14971,6 +14962,8 @@
           "portalSessions:write",
           "platformUsers:write",
           "platformAdmin:write",
+          "loginLockout:write",
+          "platformSystem:write",
           "organizationCreation:write",
           "compliance:write",
           "taxSettings:write",
@@ -18257,6 +18250,7 @@
               "correction",
               "migration",
               "unspecified",
+              "contractual",
               null
             ],
             "x-speakeasy-unknown-values": "allow",
@@ -18368,10 +18362,11 @@
           "commercial",
           "correction",
           "migration",
-          "unspecified"
+          "unspecified",
+          "contractual"
         ],
         "x-speakeasy-unknown-values": "allow",
-        "description": "Why a change was made. `correction` fixes data to match what was agreed; `migration` moves a contract from another system; `commercial` is a real change to the deal. Defaults to `unspecified`."
+        "description": "Why a change was made. `correction` repairs data that was entered wrong; `migration` moves a contract from another system; `commercial` is a real change to the deal; `contractual` applies a step the original contract scheduled, such as an annual uplift. Defaults to `unspecified`."
       },
       "IntervalChangeMetadata": {
         "type": "object",

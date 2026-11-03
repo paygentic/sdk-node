@@ -39,7 +39,7 @@ export type EditSubscriptionIntervalsRequest3 = {
    */
   remove: Array<SubscriptionIntervalRemoveOp>;
   /**
-   * Why a change was made. `correction` fixes data to match what was agreed; `migration` moves a contract from another system; `commercial` is a real change to the deal. Defaults to `unspecified`.
+   * Why a change was made. `correction` repairs data that was entered wrong; `migration` moves a contract from another system; `commercial` is a real change to the deal; `contractual` applies a step the original contract scheduled, such as an annual uplift. Defaults to `unspecified`.
    */
   changeReason?: ChangeReason | undefined;
   /**
@@ -66,7 +66,7 @@ export type EditSubscriptionIntervalsRequest2 = {
    */
   remove?: Array<SubscriptionIntervalRemoveOp> | undefined;
   /**
-   * Why a change was made. `correction` fixes data to match what was agreed; `migration` moves a contract from another system; `commercial` is a real change to the deal. Defaults to `unspecified`.
+   * Why a change was made. `correction` repairs data that was entered wrong; `migration` moves a contract from another system; `commercial` is a real change to the deal; `contractual` applies a step the original contract scheduled, such as an annual uplift. Defaults to `unspecified`.
    */
   changeReason?: ChangeReason | undefined;
   /**
@@ -93,7 +93,7 @@ export type EditSubscriptionIntervalsRequest1 = {
    */
   remove?: Array<SubscriptionIntervalRemoveOp> | undefined;
   /**
-   * Why a change was made. `correction` fixes data to match what was agreed; `migration` moves a contract from another system; `commercial` is a real change to the deal. Defaults to `unspecified`.
+   * Why a change was made. `correction` repairs data that was entered wrong; `migration` moves a contract from another system; `commercial` is a real change to the deal; `contractual` applies a step the original contract scheduled, such as an annual uplift. Defaults to `unspecified`.
    */
   changeReason?: ChangeReason | undefined;
   /**

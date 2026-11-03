@@ -5,22 +5,9 @@
 import * as z from "zod/v3";
 import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
-import { ClosedEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import * as models from "../index.js";
-
-/**
- * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
- */
-export const UpdatePricePaymentTerm = {
-  InArrears: "in_arrears",
-  InAdvance: "in_advance",
-} as const;
-/**
- * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
- */
-export type UpdatePricePaymentTerm = ClosedEnum<typeof UpdatePricePaymentTerm>;
 
 export type UpdatePriceRequestBody = {
   /**
@@ -44,14 +31,6 @@ export type UpdatePriceRequestBody = {
    */
   model?: models.PriceModelInput | undefined;
   properties?: models.PriceProperties | undefined;
-  /**
-   * Billing timing preference: 'in_advance' (prepaid — charged upfront or drawn from a prepaid commitment) or 'in_arrears' (charged at period end).
-   */
-  paymentTerm?: UpdatePricePaymentTerm | undefined;
-  /**
-   * ISO 8601 duration for recurring fees (e.g., 'P1M' for monthly, 'P1Y' for yearly, or 'P0D' for one-time)
-   */
-  billingCadence?: string | null | undefined;
   /**
    * Feature to associate. Set to null to remove existing feature. Omit to leave unchanged.
    */
@@ -93,11 +72,6 @@ export type UpdatePriceDetails = {
 };
 
 /** @internal */
-export const UpdatePricePaymentTerm$outboundSchema: z.ZodNativeEnum<
-  typeof UpdatePricePaymentTerm
-> = z.nativeEnum(UpdatePricePaymentTerm);
-
-/** @internal */
 export type UpdatePriceRequestBody$Outbound = {
   billableMetricId?: string | undefined;
   pricingUnitId?: string | null | undefined;
@@ -105,8 +79,6 @@ export type UpdatePriceRequestBody$Outbound = {
   invoiceDisplayGroup?: string | null | undefined;
   model?: string | undefined;
   properties?: models.PriceProperties$Outbound | undefined;
-  paymentTerm?: string | undefined;
-  billingCadence?: string | null | undefined;
   feature?: models.PriceFeatureInput$Outbound | null | undefined;
   grantDiscountEnabled?: boolean | undefined;
   isObligation?: boolean | undefined;
@@ -127,8 +99,6 @@ export const UpdatePriceRequestBody$outboundSchema: z.ZodType<
   invoiceDisplayGroup: z.nullable(z.string()).optional(),
   model: models.PriceModelInput$outboundSchema.optional(),
   properties: models.PriceProperties$outboundSchema.optional(),
-  paymentTerm: UpdatePricePaymentTerm$outboundSchema.optional(),
-  billingCadence: z.nullable(z.string()).optional(),
   feature: z.nullable(models.PriceFeatureInput$outboundSchema).optional(),
   grantDiscountEnabled: z.boolean().optional(),
   isObligation: z.boolean().optional(),

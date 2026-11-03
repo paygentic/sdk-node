@@ -136,6 +136,7 @@ export const TerminationChangeReason = {
   Correction: "correction",
   Migration: "migration",
   Unspecified: "unspecified",
+  Contractual: "contractual",
 } as const;
 /**
  * Why the subscription was terminated. Null while it is not terminated.

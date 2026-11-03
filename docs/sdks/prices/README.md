@@ -251,7 +251,7 @@ run();
 
 ## update
 
-Update
+Updates a price. `paymentTerm` and `billingCadence` are fixed when the price is created: a request that sends either one is refused with a 400. To change them, create a new price.
 
 ### Example Usage
 
