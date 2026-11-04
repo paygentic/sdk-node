@@ -10,6 +10,10 @@ import { PaygenticError } from "./paygenticerror.js";
  * Price cannot be restructured because a subscription still bills it directly
  */
 export type UpdatePriceConflictErrorData = {
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
   error?: string | undefined;
   message: string;
   /**
@@ -23,6 +27,10 @@ export type UpdatePriceConflictErrorData = {
  * Price cannot be restructured because a subscription still bills it directly
  */
 export class UpdatePriceConflictError extends PaygenticError {
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
   error?: string | undefined;
   /**
    * Machine-readable conflict code. Open set: a new code may appear, so branch on the ones you handle and treat anything else as an unhandled conflict.
@@ -40,6 +48,7 @@ export class UpdatePriceConflictError extends PaygenticError {
     const message = err.message || `API error occurred: ${JSON.stringify(err)}`;
     super(message, httpMeta);
     this.data$ = err;
+    if (err.requestId != null) this.requestId = err.requestId;
     if (err.error != null) this.error = err.error;
     this.code = err.code;
     if (err.details != null) this.details = err.details;
@@ -54,6 +63,7 @@ export const UpdatePriceConflictError$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
+  requestId: z.string().optional(),
   error: z.string().optional(),
   message: z.string(),
   code: z.string(),

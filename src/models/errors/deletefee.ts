@@ -10,6 +10,10 @@ import { PaygenticError } from "./paygenticerror.js";
  * Fee cannot be deleted because it has associated prices
  */
 export type DeleteFeeConflictErrorData = {
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
   error?: string | undefined;
   message?: string | undefined;
   details?: operations.DeleteFeeDetails | undefined;
@@ -19,6 +23,10 @@ export type DeleteFeeConflictErrorData = {
  * Fee cannot be deleted because it has associated prices
  */
 export class DeleteFeeConflictError extends PaygenticError {
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
   error?: string | undefined;
   details?: operations.DeleteFeeDetails | undefined;
 
@@ -32,6 +40,7 @@ export class DeleteFeeConflictError extends PaygenticError {
     const message = err.message || `API error occurred: ${JSON.stringify(err)}`;
     super(message, httpMeta);
     this.data$ = err;
+    if (err.requestId != null) this.requestId = err.requestId;
     if (err.error != null) this.error = err.error;
     if (err.details != null) this.details = err.details;
 
@@ -45,6 +54,7 @@ export const DeleteFeeConflictError$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
+  requestId: z.string().optional(),
   error: z.string().optional(),
   message: z.string().optional(),
   details: z.lazy(() => operations.DeleteFeeDetails$inboundSchema).optional(),

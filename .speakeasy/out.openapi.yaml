@@ -666,7 +666,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "End of query window (ISO 8601)"
+            "description": "End of query window (ISO 8601). At most 403 days after `from`."
           },
           {
             "name": "subject",
@@ -820,7 +820,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "End of query window (ISO 8601)"
+            "description": "End of query window (ISO 8601). At most 403 days after `from`."
           },
           {
             "name": "subject",
@@ -1338,6 +1338,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "requestId": {
+                      "$ref": "#/components/schemas/RequestId"
+                    },
                     "error": {
                       "type": "string",
                       "enum": [
@@ -3450,6 +3453,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "requestId": {
+                      "$ref": "#/components/schemas/RequestId"
+                    },
                     "error": {
                       "type": "string"
                     },
@@ -4968,6 +4974,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "requestId": {
+                      "$ref": "#/components/schemas/RequestId"
+                    },
                     "error": {
                       "type": "string"
                     },
@@ -5044,6 +5053,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "requestId": {
+                      "$ref": "#/components/schemas/RequestId"
+                    },
                     "error": {
                       "type": "string"
                     },
@@ -10786,7 +10798,7 @@
               "type": "string",
               "format": "date-time"
             },
-            "description": "End of the query window, excluded: the read counts from <= t < to (ISO 8601). Required together with 'from'."
+            "description": "End of the query window, excluded: the read counts from <= t < to (ISO 8601). Required together with 'from'. At most 403 days after `from`."
           },
           {
             "name": "groupBy",
@@ -11726,7 +11738,7 @@
           "Test Clocks"
         ],
         "summary": "Advance",
-        "description": "Advances the test clock's current time. You can either specify a new absolute time or advance by a duration.",
+        "description": "Advances the test clock's current time. You can either specify a new absolute time or advance by a duration. A clock moves forward only, and at most 1 year per call: a time earlier than the clock's current time, or more than 1 year after it, returns 400. To move further, advance more than once.",
         "operationId": "advanceTestClock",
         "parameters": [
           {
@@ -14688,6 +14700,9 @@
               ]
             },
             "description": "Array of field-specific validation errors"
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/RequestId"
           }
         },
         "example": {
@@ -14980,6 +14995,7 @@
           "events:write",
           "invoices:issue",
           "invoices:void",
+          "invoices:transition",
           "payments:refund",
           "organization:delete",
           "ownership:transfer",
@@ -15071,6 +15087,13 @@
         ],
         "description": "Present on a 403 from the authorization check. Says why access was refused: the caller has no role that grants the permission, the OAuth token lacks the scope, or the caller is not a member of the organization."
       },
+      "RequestId": {
+        "type": "string",
+        "description": "Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.",
+        "examples": [
+          "105445aa7843bc8bf206b12000100000"
+        ]
+      },
       "Error": {
         "type": "object",
         "required": [
@@ -15107,6 +15130,9 @@
               "type": "string"
             },
             "description": "Present on a 403 from the authorization check. The permissions the caller needs for this request."
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/RequestId"
           }
         },
         "example": {
@@ -21163,6 +21189,9 @@
           "error": {
             "$ref": "#/components/schemas/RetryPaymentError",
             "description": "Present when `success` is false."
+          },
+          "requestId": {
+            "$ref": "#/components/schemas/RequestId"
           }
         },
         "description": "The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape."

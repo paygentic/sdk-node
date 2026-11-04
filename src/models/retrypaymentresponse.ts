@@ -49,6 +49,10 @@ export type RetryPaymentResponse = {
    * Why a payment retry did not collect the money.
    */
   error?: RetryPaymentError | undefined;
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
 };
 
 /** @internal */
@@ -67,6 +71,7 @@ export const RetryPaymentResponse$inboundSchema: z.ZodType<
   invoiceId: z.string(),
   paymentIntentId: z.string().optional(),
   error: RetryPaymentError$inboundSchema.optional(),
+  requestId: z.string().optional(),
 });
 
 export function retryPaymentResponseFromJSON(

@@ -4138,7 +4138,7 @@ workflows:
           - condition: $response.header.Content-Type == application/json
           - context: $response.body
             condition: |
-              {"object":"retry_payment_result","success":false,"invoiceId":"<id>"}
+              {"object":"retry_payment_result","success":false,"invoiceId":"<id>","requestId":"105445aa7843bc8bf206b12000100000"}
             type: simple
     x-speakeasy-test-group: Invoices V2
     x-speakeasy-test-rebuild: true

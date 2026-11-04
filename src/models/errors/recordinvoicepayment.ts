@@ -34,6 +34,10 @@ export type UnprocessableEntityErrorData = {
    * Present on a 403 from the authorization check. The permissions the caller needs for this request.
    */
   requiredPermissions?: Array<string> | undefined;
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
 };
 
 /**
@@ -60,6 +64,10 @@ export class UnprocessableEntityError extends PaygenticError {
    * Present on a 403 from the authorization check. The permissions the caller needs for this request.
    */
   requiredPermissions?: Array<string> | undefined;
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
 
   /** The original data that was passed to this error instance. */
   data$: UnprocessableEntityErrorData;
@@ -78,6 +86,7 @@ export class UnprocessableEntityError extends PaygenticError {
     if (err.requiredPermissions != null) {
       this.requiredPermissions = err.requiredPermissions;
     }
+    if (err.requestId != null) this.requestId = err.requestId;
 
     this.name = "UnprocessableEntityError";
   }
@@ -95,6 +104,7 @@ export const UnprocessableEntityError$inboundSchema: z.ZodType<
   details: z.record(z.any()).optional(),
   reason: models.AuthorizationDenialReason$inboundSchema.optional(),
   requiredPermissions: z.array(z.string()).optional(),
+  requestId: z.string().optional(),
   request$: z.instanceof(Request),
   response$: z.instanceof(Response),
   body$: z.string(),

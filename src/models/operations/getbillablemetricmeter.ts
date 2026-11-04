@@ -28,7 +28,7 @@ export type GetBillableMetricMeterRequest = {
    */
   from: Date;
   /**
-   * End of query window (ISO 8601)
+   * End of query window (ISO 8601). At most 403 days after `from`.
    */
   to: Date;
   /**

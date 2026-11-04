@@ -32,7 +32,7 @@ export type GetCostSummaryRequest = {
    */
   from: Date;
   /**
-   * End of the query window, excluded: the read counts from <= t < to (ISO 8601). Required together with 'from'.
+   * End of the query window, excluded: the read counts from <= t < to (ISO 8601). Required together with 'from'. At most 403 days after `from`.
    */
   to: Date;
   /**

@@ -101,6 +101,7 @@ export const Permission = {
   EventsWrite: "events:write",
   InvoicesIssue: "invoices:issue",
   InvoicesVoid: "invoices:void",
+  InvoicesTransition: "invoices:transition",
   PaymentsRefund: "payments:refund",
   OrganizationDelete: "organization:delete",
   OwnershipTransfer: "ownership:transfer",

@@ -228,7 +228,7 @@ run();
 
 ## advance
 
-Advances the test clock's current time. You can either specify a new absolute time or advance by a duration.
+Advances the test clock's current time. You can either specify a new absolute time or advance by a duration. A clock moves forward only, and at most 1 year per call: a time earlier than the clock's current time, or more than 1 year after it, returns 400. To move further, advance more than once.
 
 ### Example Usage
 

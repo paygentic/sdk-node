@@ -30,6 +30,10 @@ export type RetryPaymentResponseErrorData = {
    * Why a payment retry did not collect the money.
    */
   error?: models.RetryPaymentError | undefined;
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
 };
 
 /**
@@ -56,6 +60,10 @@ export class RetryPaymentResponseError extends PaygenticError {
    * Why a payment retry did not collect the money.
    */
   error?: models.RetryPaymentError | undefined;
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
 
   /** The original data that was passed to this error instance. */
   data$: RetryPaymentResponseErrorData;
@@ -73,6 +81,7 @@ export class RetryPaymentResponseError extends PaygenticError {
     this.invoiceId = err.invoiceId;
     if (err.paymentIntentId != null) this.paymentIntentId = err.paymentIntentId;
     if (err.error != null) this.error = err.error;
+    if (err.requestId != null) this.requestId = err.requestId;
 
     this.name = "RetryPaymentResponseError";
   }
@@ -89,6 +98,7 @@ export const RetryPaymentResponseError$inboundSchema: z.ZodType<
   invoiceId: z.string(),
   paymentIntentId: z.string().optional(),
   error: models.RetryPaymentError$inboundSchema.optional(),
+  requestId: z.string().optional(),
   request$: z.instanceof(Request),
   response$: z.instanceof(Response),
   body$: z.string(),

@@ -19,6 +19,10 @@ export type ValidationErrorData = {
    * Array of field-specific validation errors
    */
   errors: Array<models.ErrorT>;
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
 };
 
 export class ValidationError extends PaygenticError {
@@ -30,6 +34,10 @@ export class ValidationError extends PaygenticError {
    * Array of field-specific validation errors
    */
   errors: Array<models.ErrorT>;
+  /**
+   * Identifies this request in our logs. Include it when you contact support. Also sent in the `request-id` response header.
+   */
+  requestId?: string | undefined;
 
   /** The original data that was passed to this error instance. */
   data$: ValidationErrorData;
@@ -43,6 +51,7 @@ export class ValidationError extends PaygenticError {
     this.data$ = err;
     if (err.error != null) this.error = err.error;
     this.errors = err.errors;
+    if (err.requestId != null) this.requestId = err.requestId;
 
     this.name = "ValidationError";
   }
@@ -57,6 +66,7 @@ export const ValidationError$inboundSchema: z.ZodType<
   error: models.ErrorEnum$inboundSchema.default("validation_error"),
   message: z.string(),
   errors: z.array(z.lazy(() => models.ErrorT$inboundSchema)),
+  requestId: z.string().optional(),
   request$: z.instanceof(Request),
   response$: z.instanceof(Response),
   body$: z.string(),
