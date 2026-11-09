@@ -5,11 +5,11 @@
 ```typescript
 import { UpdateSubscriptionStatus } from "@paygentic/sdk/models/operations";
 
-let value: UpdateSubscriptionStatus = "active";
+let value: UpdateSubscriptionStatus = "terminated";
 ```
 
 ## Values
 
 ```typescript
-"active" | "terminated"
+"terminated"
 ```

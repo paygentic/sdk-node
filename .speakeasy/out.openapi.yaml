@@ -799,7 +799,7 @@
           "Billable Metrics"
         ],
         "summary": "List Meter Events",
-        "description": "List raw underlying events for a billable metric from the metering service. Returns events ordered by time descending.",
+        "description": "List raw underlying events for a billable metric from the metering service. Returns events ordered by time descending. Events before the metric's `eventFrom` are left out, as its usage leaves them out.",
         "operationId": "listBillableMetricEvents",
         "parameters": [
           {
@@ -7200,7 +7200,6 @@
                   "status": {
                     "type": "string",
                     "enum": [
-                      "active",
                       "terminated"
                     ]
                   },
@@ -12028,7 +12027,7 @@
                     "$ref": "#/components/schemas/OrganizationId"
                   },
                   "entityType": {
-                    "$ref": "#/components/schemas/EntityType"
+                    "$ref": "#/components/schemas/EntityTypeInput"
                   },
                   "entityId": {
                     "type": "string",
@@ -12336,6 +12335,9 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -20296,9 +20298,12 @@
         "type": "string",
         "enum": [
           "item",
-          "customer"
+          "customer",
+          "subscriptionProposal",
+          "subscription"
         ],
-        "description": "The type of Paygentic entity this external reference points at"
+        "x-speakeasy-unknown-values": "allow",
+        "description": "The type of Paygentic entity this external reference points at. `subscriptionProposal` and `subscription` references link a subscription proposal, and the subscription its approval creates, to the CRM record they come from. They are read-only through these endpoints."
       },
       "Provider": {
         "type": "string",
@@ -22549,6 +22554,14 @@
         "pattern": "^[a-zA-Z0-9_-]+$",
         "maxLength": 255,
         "description": "Identifier of the record in the external system"
+      },
+      "EntityTypeInput": {
+        "type": "string",
+        "enum": [
+          "item",
+          "customer"
+        ],
+        "description": "The type of Paygentic entity a new external reference points at"
       },
       "Item": {
         "type": "object",

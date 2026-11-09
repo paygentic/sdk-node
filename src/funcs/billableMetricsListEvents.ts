@@ -30,7 +30,7 @@ import { Result } from "../types/fp.js";
  * List Meter Events
  *
  * @remarks
- * List raw underlying events for a billable metric from the metering service. Returns events ordered by time descending.
+ * List raw underlying events for a billable metric from the metering service. Returns events ordered by time descending. Events before the metric's `eventFrom` are left out, as its usage leaves them out.
  */
 export function billableMetricsListEvents(
   client: PaygenticCore,

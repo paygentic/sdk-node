@@ -395,6 +395,6 @@ run();
 
 | Error Type                   | Status Code                  | Content Type                 |
 | ---------------------------- | ---------------------------- | ---------------------------- |
-| errors.ErrorT                | 401, 403, 404                | application/json             |
+| errors.ErrorT                | 401, 403, 404, 409           | application/json             |
 | errors.ErrorT                | 500                          | application/json             |
 | errors.PaygenticDefaultError | 4XX, 5XX                     | \*/\*                        |

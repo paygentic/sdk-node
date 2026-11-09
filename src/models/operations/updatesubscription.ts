@@ -8,7 +8,6 @@ import { ClosedEnum } from "../../types/enums.js";
 import * as models from "../index.js";
 
 export const UpdateSubscriptionStatus = {
-  Active: "active",
   Terminated: "terminated",
 } as const;
 export type UpdateSubscriptionStatus = ClosedEnum<

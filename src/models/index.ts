@@ -41,6 +41,7 @@ export * from "./entitlementlistitem.js";
 export * from "./entitlementstatus.js";
 export * from "./entitlementtemplate.js";
 export * from "./entitytype.js";
+export * from "./entitytypeinput.js";
 export * from "./eventresponse.js";
 export * from "./externalreference.js";
 export * from "./feature.js";

@@ -11,9 +11,9 @@ export type CreateExternalReferenceRequest = {
    */
   merchantId: string;
   /**
-   * The type of Paygentic entity this external reference points at
+   * The type of Paygentic entity a new external reference points at
    */
-  entityType: models.EntityType;
+  entityType: models.EntityTypeInput;
   /**
    * Paygentic id of the entity, e.g. `itm_xxx`
    */
@@ -77,7 +77,7 @@ export const CreateExternalReferenceRequest$outboundSchema: z.ZodType<
   CreateExternalReferenceRequest
 > = z.object({
   merchantId: z.string(),
-  entityType: models.EntityType$outboundSchema,
+  entityType: models.EntityTypeInput$outboundSchema,
   entityId: z.string(),
   provider: z.string(),
   externalId: z.string(),
