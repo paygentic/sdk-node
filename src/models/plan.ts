@@ -115,7 +115,7 @@ export type Plan = {
    */
   billingVersion?: number | undefined;
   /**
-   * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present at the time of creation or update. When set, all subscriptions created under this plan align their first billing period to the next recurrence of this anchor. Null means each subscription uses its own start time (hour-rounded) as the anchor.
+   * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present at the time of creation or update. When set, subscriptions created under this plan align their first billing period to the next recurrence of this anchor, unless the create names its own `billingAnchor`. Null means each subscription uses its own start time (hour-rounded) as the anchor, unless the create names one.
    */
   billingAnchor?: Date | null | undefined;
   /**

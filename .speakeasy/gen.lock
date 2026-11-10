@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: 9be10b4246cb0160175fb9c258a5428e
+  docChecksum: 805f3a4da31b6f588334c6ad20886f6c
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.10.7
-  configChecksum: 58fa7b9fd90577fde3dd8f0968cf3ec3
+  releaseVersion: 0.10.8
+  configChecksum: 2e62487254de3e6d2691fe6424aa0a48
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: 124b964f-093f-458d-a457-4ed3f9e840c3
-  pristine_commit_hash: df2bf94c17c5f7da5e070a3bef26a2f69ca33c0f
-  pristine_tree_hash: 374339697fcd7fc845b6e0a01f35d40dcb7eb3f1
+  generation_id: 47ed9d8f-632e-4d0d-93c5-fd3678d51b69
+  pristine_commit_hash: bc1a39cee30b36b5b29ad1b6c8377f833c388b9c
+  pristine_tree_hash: edcb57c31c6ab40aa3d517c4ba0374fa4734c1ee
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -992,8 +992,8 @@ trackedFiles:
     pristine_git_object: 7357de0535e67e4327beceed989e993ae3eef209
   docs/models/operations/createplanrequest.md:
     id: 4c658c112d73
-    last_write_checksum: sha1:635a56d5803623da1d2dfd9326ac53bb7e687898
-    pristine_git_object: da1a117bc8abe4c54aba9877cbc50f46d59cec9d
+    last_write_checksum: sha1:d7362b4679f251c94c7ece584ad4bd4636c7174d
+    pristine_git_object: 81a2b301afaa676eec795a2dd5d670a0e3aef25d
   docs/models/operations/createplantaxbehavior.md:
     id: e8e865b9b707
     last_write_checksum: sha1:94dd53262b592e0a9569b58cada26c99879ee52d
@@ -1028,8 +1028,8 @@ trackedFiles:
     pristine_git_object: 440eabf423ee1e77d0ce919c56999e4599020ba0
   docs/models/operations/createsubscriptionrequest.md:
     id: e71be0fed944
-    last_write_checksum: sha1:dfe867a258e5fa738381465c26dbc7250e9ca3ef
-    pristine_git_object: fb0f22a93eb5d24c0020ffd5ed201e0fabcfb153
+    last_write_checksum: sha1:670880d129c0873c93732b37b067010450597d42
+    pristine_git_object: cceec10c8f952836fecd4d7056fc095f1e3b51cf
   docs/models/operations/createtestclockrequest.md:
     id: 024f0a664cfd
     last_write_checksum: sha1:3978bd5ebde2a1385b2cb62ba7bb88290b0dbdc2
@@ -2212,12 +2212,12 @@ trackedFiles:
     pristine_git_object: 44699caf0a0147f722af8fdef0b4ab0fd241f660
   docs/models/permission.md:
     id: 2e72d664ef50
-    last_write_checksum: sha1:3b4ea4d4b50f5cfd968c7205d0cb52540dca3543
-    pristine_git_object: 5c2f91b9be2fee7cfb7bf5f2e076bca18a70d0a1
+    last_write_checksum: sha1:700bc7427b8fcc50c7c7ad0dcd46d63c7665effa
+    pristine_git_object: 32b6b3f1ca7b9dfd7c72fe7b6337b3737f57bb28
   docs/models/plan.md:
     id: 900c4149ef4b
-    last_write_checksum: sha1:10a3749ed19152de2403805f9c589d461ffd2862
-    pristine_git_object: ce7039ae2467231d6d43c6cb1572c0ea6133fe07
+    last_write_checksum: sha1:6cf2ae882cc29888d0c184c64bd929e9e2d38e74
+    pristine_git_object: a46e2cff513b8d44a5f25b07fa0aa2f54d2aacbd
   docs/models/plancreditallocation.md:
     id: 02e8d67e8825
     last_write_checksum: sha1:8e19353e12311b90b23d8d2cdf137708ca3f2729
@@ -3008,12 +3008,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:ea6dabe155e9edc4845f5dd70ad3c0eb49d26ab9
-    pristine_git_object: a88a68c3a54efc49da8a0544c998e094f0dba2ed
+    last_write_checksum: sha1:a30a92fb0a161d7494e664bc5b49ff67d46bab2c
+    pristine_git_object: 131b9a63033a1581b417a8eafc4c9604f5adefa3
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:28f3ea03614bb6c2613ad1db5d35dcf4470fcfe8
-    pristine_git_object: 319c9b4a1f95775272a37324a5c4bab1f362f214
+    last_write_checksum: sha1:52aa2bc457bc78adb3b437b00e8190620e52ff4c
+    pristine_git_object: 2df2d364bf7a8c046b9b96be842c584d3608524b
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -3660,8 +3660,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:dec8030367985849d8a004f856bfb09a8a056cb4
-    pristine_git_object: 963c5ddb01618f819122e27ceebbce2d1a907cac
+    last_write_checksum: sha1:1e38c6fae483f171ffc05435610b34dc94e137de
+    pristine_git_object: 83e69180bcbe591784278defbf11bbe51df2cd74
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -4236,8 +4236,8 @@ trackedFiles:
     pristine_git_object: 11466da2109db345147d05ae861d2b07330ecbb8
   src/models/operations/createplan.ts:
     id: 6e91aa4d82a0
-    last_write_checksum: sha1:04304314d63415586e81a8c4a6359601d335857c
-    pristine_git_object: 63a083c3798757d0bc0982c9f742f29f0b690cfb
+    last_write_checksum: sha1:c53d51bfebaf2f8852685fac62723968258b3080
+    pristine_git_object: 8a148bb662ccfe95012b36e38e8fd32cd9aa84ee
   src/models/operations/createprice.ts:
     id: 4059ac2ea9ee
     last_write_checksum: sha1:173afe32cf0872dc1244c6f44546839993bb2810
@@ -4252,8 +4252,8 @@ trackedFiles:
     pristine_git_object: 1fc2b9ab1e1b060e7e4df07e1d5dc4733dec8b62
   src/models/operations/createsubscription.ts:
     id: b22b5adbd83d
-    last_write_checksum: sha1:14dbbc8554f374ceea101b108f21c84f7469fb72
-    pristine_git_object: 51f329c41f1e9070e765637576c8b316dd7ffea7
+    last_write_checksum: sha1:f806828c2eee6a6feb8416b4b25f6d1c511d43ae
+    pristine_git_object: dcffcc679097376340bbea132456eab9bbc4bf07
   src/models/operations/createsubscriptionadjustment.ts:
     id: 4f77d3e62a35
     last_write_checksum: sha1:172d9f065fa3c6cc1c2d14040c34f13352310200
@@ -4808,12 +4808,12 @@ trackedFiles:
     pristine_git_object: f06f5b1c5b2b8755fc3470a7b5194032873323c1
   src/models/permission.ts:
     id: e469b84482ac
-    last_write_checksum: sha1:46ee84ef12813aa1c7ec635fb396d2fde8f20365
-    pristine_git_object: fdb2d14ab8ca3dc07b84d6f392eff11be1a1462a
+    last_write_checksum: sha1:eecd6d542811f77a4319a62fd34c4b2bca4ff96e
+    pristine_git_object: 15997415e73365be1d4b001652b29df4419e8f9e
   src/models/plan.ts:
     id: 9e9698a64fe7
-    last_write_checksum: sha1:e1e12738feb0a38518702ce2a413751c79367295
-    pristine_git_object: 5e9304486b44e1fe3ddfeb6dc8ce268047ee5ea0
+    last_write_checksum: sha1:1d4dd259fccb9400263a061b94b65c49c2148bb5
+    pristine_git_object: 971a987f46b9af8a1355ae68100a4381f355656f
   src/models/plancreditallocation.ts:
     id: 5d7f6e085dba
     last_write_checksum: sha1:9d780b3405e2ea627cbcb16394a3c377a35e1551
@@ -8039,4 +8039,4 @@ generatedTests:
   getWebhookPortal: "2026-10-09T10:19:50Z"
   getRevenueAccounts: "2026-10-19T19:44:08Z"
   getMe: "2026-10-29T09:07:18Z"
-releaseNotes: "## Typescript SDK Changes:\n* `paygentic.externalReferences.listExternalReferences()`: \n  *  `request.entityType` **Changed**\n  *  `response.data[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.externalReferences.getExternalReference()`:  `response.entityType` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.listLineItems()`:  `response.items[].externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.listProjectedInvoices()`:  `response.data[].lineItems.items[].externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.get()`:  `response.lineItems.items[].externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.getLineItems()`:  `response.items[].externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.list()`:  `response.data[].lineItems.items[].externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.invoicesV2.recordInvoicePayment()`:  `response.union(out_of_band).invoice.lineItems.items[].externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.updateSubscription()`: \n  *  `request.requestBody.status.enum(active)` **Removed** (Breaking ⚠️)\n* `paygentic.externalReferences.createExternalReference()`:  `response.entityType` **Changed** (Breaking ⚠️)\n* `paygentic.externalReferences.updateExternalReference()`:  `response.entityType` **Changed** (Breaking ⚠️)\n* `paygentic.items.updateItem()`:  `response.externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.items.createItem()`:  `response.externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.items.listItems()`:  `response.data[].externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.items.getItem()`:  `response.externalReferences[].entityType` **Changed** (Breaking ⚠️)\n* `paygentic.externalReferences.deleteExternalReference()`:  `error.status[409]` **Added**\n"
+releaseNotes: "## Typescript SDK Changes:\n* `paygentic.me.getMe()`:  `response.permissions[]` **Changed** (Breaking ⚠️)\n* `paygentic.subscriptions.create()`: \n  *  `request.billingAnchor` **Added**\n"

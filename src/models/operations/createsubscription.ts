@@ -102,6 +102,10 @@ export type CreateSubscriptionRequest = {
    */
   elapsedPeriodBilling?: models.ElapsedPeriodBilling | undefined;
   /**
+   * A billing anchor for this subscription, in place of the plan's. Any instant, past or future. The subscription's billing anchor is its first recurrence on or after `startedAt`, stepping back or forward by whole billing cadences. Example: on a monthly plan, an anchor of '2027-01-31T00:00:00Z' with a start of '2026-10-10T00:00:00Z' gives '2026-10-31T00:00:00Z'. A create is refused with 400 when the resolved anchor does not line up with the usage period anchor of a feature that credits unused balance. Omit it to use the plan's billing anchor. A repeated create that names an anchor resolving to a different instant than the existing subscription's gets 409.
+   */
+  billingAnchor?: Date | undefined;
+  /**
    * Test clock identifier for simulating time-based billing scenarios. Sample values: 'tc_abc123xyz', 'tc_789def456'. Restricted to non-production environments (local, dev, sandbox). Must belong to the same merchant organization.
    */
   testClockId?: string | undefined;
@@ -231,6 +235,7 @@ export type CreateSubscriptionRequest$Outbound = {
   redirectUrls?: RedirectUrls$Outbound | undefined;
   startedAt: string;
   elapsedPeriodBilling: string;
+  billingAnchor?: string | undefined;
   testClockId?: string | undefined;
   renewalReminderEnabled?: boolean | null | undefined;
   renewalReminderDays?: number | null | undefined;
@@ -265,6 +270,7 @@ export const CreateSubscriptionRequest$outboundSchema: z.ZodType<
   elapsedPeriodBilling: models.ElapsedPeriodBilling$outboundSchema.default(
     "none",
   ),
+  billingAnchor: z.date().transform(v => v.toISOString()).optional(),
   testClockId: z.string().optional(),
   renewalReminderEnabled: z.nullable(z.boolean()).optional(),
   renewalReminderDays: z.nullable(z.number().int()).optional(),

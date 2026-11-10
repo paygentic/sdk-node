@@ -123,7 +123,7 @@ export type CreatePlanRequest = {
    */
   billingVersion?: BillingVersion | undefined;
   /**
-   * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. When set, subscriptions created under this plan align their first billing period to the next recurrence of this anchor.
+   * ISO 8601 datetime reference point for billing period alignment. Must be in the past or present. When set, subscriptions created under this plan align their first billing period to the next recurrence of this anchor, unless the create names its own `billingAnchor`.
    */
   billingAnchor?: Date | null | undefined;
   /**

@@ -3,7 +3,8 @@
  */
 
 import * as z from "zod/v3";
-import { ClosedEnum } from "../types/enums.js";
+import * as openEnums from "../types/enums.js";
+import { OpenEnum } from "../types/enums.js";
 
 /**
  * A permission of the catalog: a resource read or write, or a sensitive action.
@@ -26,6 +27,7 @@ export const Permission = {
   PricingUnitsRead: "pricingUnits:read",
   SubscriptionsRead: "subscriptions:read",
   SubscriptionAdjustmentsRead: "subscriptionAdjustments:read",
+  SubscriptionProposalsRead: "subscriptionProposals:read",
   DiscountsRead: "discounts:read",
   GrantsRead: "grants:read",
   EntitlementsRead: "entitlements:read",
@@ -71,6 +73,7 @@ export const Permission = {
   PricingUnitsWrite: "pricingUnits:write",
   SubscriptionsWrite: "subscriptions:write",
   SubscriptionAdjustmentsWrite: "subscriptionAdjustments:write",
+  SubscriptionProposalsWrite: "subscriptionProposals:write",
   DiscountsWrite: "discounts:write",
   GrantsWrite: "grants:write",
   EntitlementsWrite: "entitlements:write",
@@ -113,12 +116,16 @@ export const Permission = {
   SubscriptionsTaxExempt: "subscriptions:taxExempt",
   SubscriptionsAutoApprove: "subscriptions:autoApprove",
   OrganizationResetData: "organization:resetData",
+  SubscriptionProposalsApprove: "subscriptionProposals:approve",
 } as const;
 /**
  * A permission of the catalog: a resource read or write, or a sensitive action.
  */
-export type Permission = ClosedEnum<typeof Permission>;
+export type Permission = OpenEnum<typeof Permission>;
 
 /** @internal */
-export const Permission$inboundSchema: z.ZodNativeEnum<typeof Permission> = z
-  .nativeEnum(Permission);
+export const Permission$inboundSchema: z.ZodType<
+  Permission,
+  z.ZodTypeDef,
+  unknown
+> = openEnums.inboundSchema(Permission);
