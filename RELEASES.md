@@ -645,3 +645,13 @@ Based on:
 - [typescript v0.10.8] .
 ### Releases
 - [NPM v0.10.8] https://www.npmjs.com/package/@paygentic/sdk/v/0.10.8 - .
+
+## 2026-11-11 22:30:34
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.761.4 (2.879.13) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [typescript v0.10.9] .
+### Releases
+- [NPM v0.10.9] https://www.npmjs.com/package/@paygentic/sdk/v/0.10.9 - .

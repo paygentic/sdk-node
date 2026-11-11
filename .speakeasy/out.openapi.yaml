@@ -6896,7 +6896,7 @@
                   "endingAt": {
                     "type": "string",
                     "format": "date-time",
-                    "description": "Subscription expiration timestamp in ISO 8601 format. Sample values: '2024-12-31T23:59:59Z', '2025-01-15T10:30:00Z'. Omit for indefinite subscriptions."
+                    "description": "Subscription expiration timestamp in ISO 8601 format. Sample values: '2024-12-31T23:59:59Z', '2025-01-15T10:30:00Z'. Omit for indefinite subscriptions. Must be after startedAt: a value at or before it is rejected with 400."
                   },
                   "name": {
                     "type": "string",

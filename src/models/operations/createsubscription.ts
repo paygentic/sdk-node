@@ -66,7 +66,7 @@ export type CreateSubscriptionRequest = {
    */
   customerId?: string | undefined;
   /**
-   * Subscription expiration timestamp in ISO 8601 format. Sample values: '2024-12-31T23:59:59Z', '2025-01-15T10:30:00Z'. Omit for indefinite subscriptions.
+   * Subscription expiration timestamp in ISO 8601 format. Sample values: '2024-12-31T23:59:59Z', '2025-01-15T10:30:00Z'. Omit for indefinite subscriptions. Must be after startedAt: a value at or before it is rejected with 400.
    */
   endingAt?: Date | undefined;
   /**
