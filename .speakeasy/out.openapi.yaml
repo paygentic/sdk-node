@@ -1369,8 +1369,10 @@
                                   "subscriptions",
                                   "invoices",
                                   "disputes",
-                                  "entitlements"
-                                ]
+                                  "entitlements",
+                                  "subscriptionProposals"
+                                ],
+                                "x-speakeasy-unknown-values": "allow"
                               },
                               "count": {
                                 "type": "integer"
@@ -4968,7 +4970,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "409": {
-            "description": "Price cannot be restructured because a subscription still bills it directly",
+            "description": "Price cannot be changed: a subscription still bills it directly, or a pending subscription proposal names it",
             "content": {
               "application/json": {
                 "schema": {
@@ -4987,6 +4989,7 @@
                       "type": "string",
                       "examples": [
                         "PRICE_STRUCTURALLY_LOCKED_BY_SUBSCRIPTION",
+                        "PRICE_NAMED_BY_PENDING_PROPOSAL",
                         "TRANSIENT_CONTENTION"
                       ],
                       "description": "Machine-readable conflict code. Open set: a new code may appear, so branch on the ones you handle and treat anything else as an unhandled conflict."
@@ -5005,6 +5008,17 @@
                         },
                         "subscriptionCount": {
                           "type": "integer"
+                        },
+                        "subscriptionProposalIds": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Up to ten of the pending subscription proposals that name the price"
+                        },
+                        "subscriptionProposalCount": {
+                          "type": "integer",
+                          "description": "How many pending subscription proposals name the price"
                         }
                       }
                     }
@@ -5047,7 +5061,7 @@
             "$ref": "#/components/responses/NotFound"
           },
           "409": {
-            "description": "Price cannot be deleted because a live plan still references it",
+            "description": "Price cannot be deleted: a live plan or subscription still references it, or a pending subscription proposal names it",
             "content": {
               "application/json": {
                 "schema": {

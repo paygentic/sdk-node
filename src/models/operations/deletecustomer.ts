@@ -4,7 +4,8 @@
 
 import * as z from "zod/v3";
 import { safeParse } from "../../lib/schemas.js";
-import { ClosedEnum } from "../../types/enums.js";
+import * as openEnums from "../../types/enums.js";
+import { ClosedEnum, OpenEnum } from "../../types/enums.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
@@ -25,8 +26,9 @@ export const DeleteCustomerType = {
   Invoices: "invoices",
   Disputes: "disputes",
   Entitlements: "entitlements",
+  SubscriptionProposals: "subscriptionProposals",
 } as const;
-export type DeleteCustomerType = ClosedEnum<typeof DeleteCustomerType>;
+export type DeleteCustomerType = OpenEnum<typeof DeleteCustomerType>;
 
 export type DeleteCustomerItem = {
   id?: string | undefined;
@@ -70,9 +72,11 @@ export const ErrorT$inboundSchema: z.ZodNativeEnum<typeof ErrorT> = z
   .nativeEnum(ErrorT);
 
 /** @internal */
-export const DeleteCustomerType$inboundSchema: z.ZodNativeEnum<
-  typeof DeleteCustomerType
-> = z.nativeEnum(DeleteCustomerType);
+export const DeleteCustomerType$inboundSchema: z.ZodType<
+  DeleteCustomerType,
+  z.ZodTypeDef,
+  unknown
+> = openEnums.inboundSchema(DeleteCustomerType);
 
 /** @internal */
 export const DeleteCustomerItem$inboundSchema: z.ZodType<

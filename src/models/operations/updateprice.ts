@@ -69,6 +69,14 @@ export type UpdatePriceDetails = {
   priceId?: string | undefined;
   fields?: Array<string> | undefined;
   subscriptionCount?: number | undefined;
+  /**
+   * Up to ten of the pending subscription proposals that name the price
+   */
+  subscriptionProposalIds?: Array<string> | undefined;
+  /**
+   * How many pending subscription proposals name the price
+   */
+  subscriptionProposalCount?: number | undefined;
 };
 
 /** @internal */
@@ -152,6 +160,8 @@ export const UpdatePriceDetails$inboundSchema: z.ZodType<
   priceId: z.string().optional(),
   fields: z.array(z.string()).optional(),
   subscriptionCount: z.number().int().optional(),
+  subscriptionProposalIds: z.array(z.string()).optional(),
+  subscriptionProposalCount: z.number().int().optional(),
 });
 
 export function updatePriceDetailsFromJSON(

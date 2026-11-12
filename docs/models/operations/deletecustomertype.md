@@ -5,11 +5,13 @@
 ```typescript
 import { DeleteCustomerType } from "@paygentic/sdk/models/operations";
 
-let value: DeleteCustomerType = "entitlements";
+let value: DeleteCustomerType = "subscriptionProposals";
+
+// Open enum: unrecognized values are captured as Unrecognized<string>
 ```
 
 ## Values
 
 ```typescript
-"subscriptions" | "invoices" | "disputes" | "entitlements"
+"subscriptions" | "invoices" | "disputes" | "entitlements" | "subscriptionProposals" | Unrecognized<string>
 ```

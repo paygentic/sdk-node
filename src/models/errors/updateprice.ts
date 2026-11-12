@@ -7,7 +7,7 @@ import * as operations from "../operations/index.js";
 import { PaygenticError } from "./paygenticerror.js";
 
 /**
- * Price cannot be restructured because a subscription still bills it directly
+ * Price cannot be changed: a subscription still bills it directly, or a pending subscription proposal names it
  */
 export type UpdatePriceConflictErrorData = {
   /**
@@ -24,7 +24,7 @@ export type UpdatePriceConflictErrorData = {
 };
 
 /**
- * Price cannot be restructured because a subscription still bills it directly
+ * Price cannot be changed: a subscription still bills it directly, or a pending subscription proposal names it
  */
 export class UpdatePriceConflictError extends PaygenticError {
   /**

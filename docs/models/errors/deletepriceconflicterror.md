@@ -1,6 +1,6 @@
 # DeletePriceConflictError
 
-Price cannot be deleted because a live plan still references it
+Price cannot be deleted: a live plan or subscription still references it, or a pending subscription proposal names it
 
 ## Example Usage
 
