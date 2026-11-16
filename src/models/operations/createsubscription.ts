@@ -98,7 +98,7 @@ export type CreateSubscriptionRequest = {
    */
   startedAt: Date;
   /**
-   * Whether a backdated start bills its elapsed periods. A start is backdated when `startedAt` is more than 24 hours before the subscription is created. `none` bills only charges that fall due from the moment of creation, for a customer whose earlier periods another system already billed. `per_period` bills every charge that fell due from `startedAt`, on one first invoice; it refuses a `startedAt` more than 12 months back. Has no effect on a start that is not backdated. Defaults to `none`.
+   * Whether a backdated start bills its elapsed periods. A start is backdated when `startedAt` is more than 24 hours before the subscription is created. `none` bills only charges that fall due from the moment of creation, for a customer whose earlier periods another system already billed. `per_period` bills every charge that fell due from `startedAt`, on one first invoice; it refuses a `startedAt` more than 12 months back, with the code `PER_PERIOD_LOOKBACK_EXCEEDED`. Has no effect on a start that is not backdated. Defaults to `none`.
    */
   elapsedPeriodBilling?: models.ElapsedPeriodBilling | undefined;
   /**
@@ -118,7 +118,7 @@ export type CreateSubscriptionRequest = {
    */
   renewalReminderDays?: number | null | undefined;
   /**
-   * Payment term in days ("Net X") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 ("due on issue"). A non-zero value is only valid alongside bankTransferOnly=true.
+   * Payment term in days ("Net X") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 ("due on issue"). A non-zero value needs `metadata.bankTransferOnly: true`; without it the request answers 400 `PAYMENT_TERM_DAYS_REQUIRES_BANK_TRANSFER_ONLY`.
    */
   paymentTermDays?: number | undefined;
   /**

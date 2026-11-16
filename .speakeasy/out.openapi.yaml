@@ -6977,7 +6977,7 @@
                   },
                   "paymentTermDays": {
                     "type": "integer",
-                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). A non-zero value is only valid alongside bankTransferOnly=true.",
+                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). A non-zero value needs `metadata.bankTransferOnly: true`; without it the request answers 400 `PAYMENT_TERM_DAYS_REQUIRES_BANK_TRANSFER_ONLY`.",
                     "minimum": 0,
                     "maximum": 365
                   },
@@ -7262,7 +7262,7 @@
                   },
                   "paymentTermDays": {
                     "type": "integer",
-                    "description": "Payment term in days (\"Net X\") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid alongside bankTransferOnly=true. Set 0 for \"due on issue\". Already-issued invoices keep their snapshotted dueAt.",
+                    "description": "Payment term in days (\"Net X\") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid on a subscription created with `metadata.bankTransferOnly: true`. Set 0 for \"due on issue\". Already-issued invoices keep their snapshotted dueAt.",
                     "minimum": 0,
                     "maximum": 365
                   },
@@ -18332,7 +18332,7 @@
           },
           "paymentTermDays": {
             "type": "integer",
-            "description": "Payment term in days (\"Net X\") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 (\"due on issue\"); a non-zero value is only set on bankTransferOnly subscriptions.",
+            "description": "Payment term in days (\"Net X\") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 (\"due on issue\"); a non-zero value is only set on a subscription created with `metadata.bankTransferOnly: true`.",
             "minimum": 0,
             "maximum": 365
           },
@@ -18405,7 +18405,7 @@
           "per_period"
         ],
         "default": "none",
-        "description": "Whether a backdated start bills its elapsed periods. A start is backdated when `startedAt` is more than 24 hours before the subscription is created. `none` bills only charges that fall due from the moment of creation, for a customer whose earlier periods another system already billed. `per_period` bills every charge that fell due from `startedAt`, on one first invoice; it refuses a `startedAt` more than 12 months back. Has no effect on a start that is not backdated. Defaults to `none`."
+        "description": "Whether a backdated start bills its elapsed periods. A start is backdated when `startedAt` is more than 24 hours before the subscription is created. `none` bills only charges that fall due from the moment of creation, for a customer whose earlier periods another system already billed. `per_period` bills every charge that fell due from `startedAt`, on one first invoice; it refuses a `startedAt` more than 12 months back, with the code `PER_PERIOD_LOOKBACK_EXCEEDED`. Has no effect on a start that is not backdated. Defaults to `none`."
       },
       "ChangeReason": {
         "type": "string",
