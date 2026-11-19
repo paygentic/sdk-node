@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod/v3";
+import { safeParse } from "../lib/schemas.js";
+import { Result as SafeParseResult } from "../types/fp.js";
+import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 export type CreateMinimumQuantityAdjustment = {
   /**
@@ -36,6 +39,24 @@ export type CreateMinimumQuantityAdjustment = {
 };
 
 /** @internal */
+export const CreateMinimumQuantityAdjustment$inboundSchema: z.ZodType<
+  CreateMinimumQuantityAdjustment,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  type: z.literal("minimumQuantity"),
+  minimumQuantity: z.string(),
+  targetPriceIds: z.array(z.string()),
+  effectiveFrom: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ),
+  effectiveTo: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ).optional(),
+  description: z.nullable(z.string()).optional(),
+  idempotencyKey: z.string().optional(),
+});
+/** @internal */
 export type CreateMinimumQuantityAdjustment$Outbound = {
   type: "minimumQuantity";
   minimumQuantity: string;
@@ -68,5 +89,14 @@ export function createMinimumQuantityAdjustmentToJSON(
     CreateMinimumQuantityAdjustment$outboundSchema.parse(
       createMinimumQuantityAdjustment,
     ),
+  );
+}
+export function createMinimumQuantityAdjustmentFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateMinimumQuantityAdjustment, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateMinimumQuantityAdjustment$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateMinimumQuantityAdjustment' from JSON`,
   );
 }

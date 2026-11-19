@@ -3,26 +3,33 @@
  */
 
 import * as z from "zod/v3";
+import { safeParse } from "../lib/schemas.js";
+import { Result as SafeParseResult } from "../types/fp.js";
 import {
   CreateMaximumQuantityAdjustment,
+  CreateMaximumQuantityAdjustment$inboundSchema,
   CreateMaximumQuantityAdjustment$Outbound,
   CreateMaximumQuantityAdjustment$outboundSchema,
 } from "./createmaximumquantityadjustment.js";
 import {
   CreateMinimumQuantityAdjustment,
+  CreateMinimumQuantityAdjustment$inboundSchema,
   CreateMinimumQuantityAdjustment$Outbound,
   CreateMinimumQuantityAdjustment$outboundSchema,
 } from "./createminimumquantityadjustment.js";
 import {
   CreatePercentageDiscountAdjustment,
+  CreatePercentageDiscountAdjustment$inboundSchema,
   CreatePercentageDiscountAdjustment$Outbound,
   CreatePercentageDiscountAdjustment$outboundSchema,
 } from "./createpercentagediscountadjustment.js";
 import {
   CreateUsageDiscountAdjustment,
+  CreateUsageDiscountAdjustment$inboundSchema,
   CreateUsageDiscountAdjustment$Outbound,
   CreateUsageDiscountAdjustment$outboundSchema,
 } from "./createusagediscountadjustment.js";
+import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 /**
  * One adjustment to attach to the subscription. The type decides which number the body carries: a rate for percentageDiscount, a unit count and one target price for usageDiscount, and a contracted quantity and one target price for minimumQuantity and maximumQuantity.
@@ -33,6 +40,17 @@ export type CreateSubscriptionAdjustmentRequest =
   | CreateMinimumQuantityAdjustment
   | CreateMaximumQuantityAdjustment;
 
+/** @internal */
+export const CreateSubscriptionAdjustmentRequest$inboundSchema: z.ZodType<
+  CreateSubscriptionAdjustmentRequest,
+  z.ZodTypeDef,
+  unknown
+> = z.union([
+  CreatePercentageDiscountAdjustment$inboundSchema,
+  CreateUsageDiscountAdjustment$inboundSchema,
+  CreateMinimumQuantityAdjustment$inboundSchema,
+  CreateMaximumQuantityAdjustment$inboundSchema,
+]);
 /** @internal */
 export type CreateSubscriptionAdjustmentRequest$Outbound =
   | CreatePercentageDiscountAdjustment$Outbound
@@ -59,5 +77,15 @@ export function createSubscriptionAdjustmentRequestToJSON(
     CreateSubscriptionAdjustmentRequest$outboundSchema.parse(
       createSubscriptionAdjustmentRequest,
     ),
+  );
+}
+export function createSubscriptionAdjustmentRequestFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateSubscriptionAdjustmentRequest, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreateSubscriptionAdjustmentRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateSubscriptionAdjustmentRequest' from JSON`,
   );
 }

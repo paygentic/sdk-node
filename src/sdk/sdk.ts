@@ -28,6 +28,7 @@ import { Profitability } from "./profitability.js";
 import { Revenue } from "./revenue.js";
 import { Salesforce } from "./salesforce.js";
 import { Sources } from "./sources.js";
+import { SubscriptionProposals } from "./subscriptionproposals.js";
 import { Subscriptions } from "./subscriptions.js";
 import { TestClocks } from "./testclocks.js";
 import { Users } from "./users.js";
@@ -87,6 +88,13 @@ export class Paygentic extends ClientSDK {
   private _subscriptions?: Subscriptions;
   get subscriptions(): Subscriptions {
     return (this._subscriptions ??= new Subscriptions(this._options));
+  }
+
+  private _subscriptionProposals?: SubscriptionProposals;
+  get subscriptionProposals(): SubscriptionProposals {
+    return (this._subscriptionProposals ??= new SubscriptionProposals(
+      this._options,
+    ));
   }
 
   private _users?: Users;

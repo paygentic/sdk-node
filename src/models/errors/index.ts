@@ -14,5 +14,6 @@ export * from "./recordinvoicepayment.js";
 export * from "./responsevalidationerror.js";
 export * from "./retrypaymentresponseerror.js";
 export * from "./sdkvalidationerror.js";
+export * from "./subscriptionproposalconflicterror.js";
 export * from "./updateprice.js";
 export * from "./validationerror.js";

@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod/v3";
+import { safeParse } from "../lib/schemas.js";
+import { Result as SafeParseResult } from "../types/fp.js";
+import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 export type CreateMaximumQuantityAdjustment = {
   /**
@@ -36,6 +39,24 @@ export type CreateMaximumQuantityAdjustment = {
 };
 
 /** @internal */
+export const CreateMaximumQuantityAdjustment$inboundSchema: z.ZodType<
+  CreateMaximumQuantityAdjustment,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  type: z.literal("maximumQuantity"),
+  maximumQuantity: z.string(),
+  targetPriceIds: z.array(z.string()),
+  effectiveFrom: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ),
+  effectiveTo: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ).optional(),
+  description: z.nullable(z.string()).optional(),
+  idempotencyKey: z.string().optional(),
+});
+/** @internal */
 export type CreateMaximumQuantityAdjustment$Outbound = {
   type: "maximumQuantity";
   maximumQuantity: string;
@@ -68,5 +89,14 @@ export function createMaximumQuantityAdjustmentToJSON(
     CreateMaximumQuantityAdjustment$outboundSchema.parse(
       createMaximumQuantityAdjustment,
     ),
+  );
+}
+export function createMaximumQuantityAdjustmentFromJSON(
+  jsonString: string,
+): SafeParseResult<CreateMaximumQuantityAdjustment, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) => CreateMaximumQuantityAdjustment$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateMaximumQuantityAdjustment' from JSON`,
   );
 }

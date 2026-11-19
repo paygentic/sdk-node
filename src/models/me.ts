@@ -10,15 +10,23 @@ import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 import { MeCredential, MeCredential$inboundSchema } from "./mecredential.js";
 import { Permission, Permission$inboundSchema } from "./permission.js";
 
+/**
+ * The type of the active organization. Always merchant: the API makes no merchant/consumer distinction.
+ */
 export const OrganizationType = {
   Merchant: "merchant",
-  Consumer: "consumer",
 } as const;
+/**
+ * The type of the active organization. Always merchant: the API makes no merchant/consumer distinction.
+ */
 export type OrganizationType = ClosedEnum<typeof OrganizationType>;
 
 export type Me = {
   userId: string;
   organizationId: string;
+  /**
+   * The type of the active organization. Always merchant: the API makes no merchant/consumer distinction.
+   */
   organizationType: OrganizationType;
   /**
    * The role names of the caller in the active organization.

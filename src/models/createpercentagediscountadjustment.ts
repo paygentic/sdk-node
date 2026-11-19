@@ -3,6 +3,9 @@
  */
 
 import * as z from "zod/v3";
+import { safeParse } from "../lib/schemas.js";
+import { Result as SafeParseResult } from "../types/fp.js";
+import { SDKValidationError } from "./errors/sdkvalidationerror.js";
 
 export type CreatePercentageDiscountAdjustment = {
   /**
@@ -31,6 +34,23 @@ export type CreatePercentageDiscountAdjustment = {
   idempotencyKey?: string | undefined;
 };
 
+/** @internal */
+export const CreatePercentageDiscountAdjustment$inboundSchema: z.ZodType<
+  CreatePercentageDiscountAdjustment,
+  z.ZodTypeDef,
+  unknown
+> = z.object({
+  type: z.literal("percentageDiscount"),
+  percentageDiscount: z.string(),
+  effectiveFrom: z.string().datetime({ offset: true }).transform(v =>
+    new Date(v)
+  ),
+  effectiveTo: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ).optional(),
+  description: z.nullable(z.string()).optional(),
+  idempotencyKey: z.string().optional(),
+});
 /** @internal */
 export type CreatePercentageDiscountAdjustment$Outbound = {
   type: "percentageDiscount";
@@ -62,5 +82,15 @@ export function createPercentageDiscountAdjustmentToJSON(
     CreatePercentageDiscountAdjustment$outboundSchema.parse(
       createPercentageDiscountAdjustment,
     ),
+  );
+}
+export function createPercentageDiscountAdjustmentFromJSON(
+  jsonString: string,
+): SafeParseResult<CreatePercentageDiscountAdjustment, SDKValidationError> {
+  return safeParse(
+    jsonString,
+    (x) =>
+      CreatePercentageDiscountAdjustment$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreatePercentageDiscountAdjustment' from JSON`,
   );
 }

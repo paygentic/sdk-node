@@ -4234,3 +4234,139 @@ workflows:
             type: simple
     x-speakeasy-test-group: Me
     x-speakeasy-test-rebuild: true
+  - workflowId: listSubscriptionProposals
+    steps:
+      - stepId: test
+        operationId: listSubscriptionProposals
+        parameters:
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[],"pagination":{"limit":822990,"offset":886322,"total":352262}}
+            type: simple
+    x-speakeasy-test-group: Subscription Proposals
+    x-speakeasy-test-rebuild: true
+  - workflowId: createSubscriptionProposal
+    steps:
+      - stepId: test
+        operationId: createSubscriptionProposal
+        requestBody:
+          contentType: application/json
+          payload:
+            adjustments:
+              - effectiveFrom: "2026-04-27T04:00:33.243Z"
+                percentageDiscount: <value>
+                type: percentageDiscount
+            autoCharge: false
+            customerId: <id>
+            elapsedPeriodBilling: none
+            name: <value>
+            planId: <id>
+            startedAt: "2024-06-17T10:38:54.507Z"
+            taxExempt: false
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscriptionProposal","merchantId":"<id>","status":"approved","customerId":"<id>","planId":"<id>","planVersionId":"<id>","resolvedPlanVersionId":"<id>","hash":"<value>","testClockId":"<id>","requested":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-09-09T15:26:17.054Z","adjustments":[{"type":"usageDiscount","usageDiscount":"<value>","targetPriceIds":[],"effectiveFrom":"2026-09-08T17:39:22.097Z"}]},"current":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-03-21T15:05:07.838Z","adjustments":[{"type":"minimumQuantity","minimumQuantity":"<value>","targetPriceIds":["<value 1>","<value 2>"],"effectiveFrom":"2024-03-08T14:11:56.743Z"}]},"amendedFields":["<value 1>"],"refusedResync":null,"lockVersion":384347,"source":"<value>","externalReference":{"provider":"<value>","externalId":"<id>"},"subscriptionId":"<id>","rejectionReason":"wrong_plan","rejectionText":"<value>","decidedAt":"2024-01-21T08:34:04.384Z","decidedByPrincipalId":null,"decidedBy":{"type":"user","name":"<value>"},"strandedAt":"2024-03-17T01:32:23.334Z","createdByPrincipalId":"<id>","createdByCredentialId":"<id>","createdAt":"2026-06-07T16:30:13.597Z","updatedAt":"2024-12-27T02:06:19.388Z","revisions":[{"id":"<id>","version":664274,"values":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-02-08T00:26:21.990Z","adjustments":[{"type":"percentageDiscount","percentageDiscount":"<value>","effectiveFrom":"2025-02-09T19:30:09.845Z"}]},"createdAt":"2024-09-03T02:02:47.128Z","createdByCredentialId":"<id>"}]}
+            type: simple
+    x-speakeasy-test-group: Subscription Proposals
+    x-speakeasy-test-rebuild: true
+  - workflowId: getSubscriptionProposal
+    steps:
+      - stepId: test
+        operationId: getSubscriptionProposal
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscriptionProposal","merchantId":"<id>","status":"approved","customerId":"<id>","planId":"<id>","planVersionId":"<id>","resolvedPlanVersionId":"<id>","hash":"<value>","testClockId":"<id>","requested":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-11-05T00:53:41.815Z","adjustments":[{"type":"maximumQuantity","maximumQuantity":"<value>","targetPriceIds":["<value 1>"],"effectiveFrom":"2026-04-25T20:53:12.128Z"}]},"current":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-01-04T17:50:28.155Z","adjustments":[{"type":"minimumQuantity","minimumQuantity":"<value>","targetPriceIds":["<value 1>"],"effectiveFrom":"2024-04-10T14:15:51.607Z"}]},"amendedFields":[],"refusedResync":{"receivedAt":"2024-05-28T05:43:32.273Z","code":"SUBSCRIPTION_PROPOSAL_ALREADY_APPROVED","fields":["<value 1>","<value 2>"],"values":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-12-06T13:17:22.155Z","adjustments":[{"type":"usageDiscount","usageDiscount":"<value>","targetPriceIds":["<value 1>"],"effectiveFrom":"2025-03-29T05:59:51.719Z"}]},"credentialId":"<id>"},"lockVersion":951314,"source":"<value>","externalReference":{"provider":"<value>","externalId":"<id>"},"subscriptionId":"<id>","rejectionReason":"price_mismatch","rejectionText":"<value>","decidedAt":"2024-06-22T11:05:53.727Z","decidedByPrincipalId":"<id>","decidedBy":{"type":"user","name":"<value>"},"strandedAt":"2026-10-04T08:27:31.004Z","createdByPrincipalId":"<id>","createdByCredentialId":"<id>","createdAt":"2024-07-23T06:05:46.620Z","updatedAt":"2025-03-08T16:46:38.824Z","revisions":[{"id":"<id>","version":8664,"values":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-12-06T13:17:22.155Z","adjustments":[{"type":"usageDiscount","usageDiscount":"<value>","targetPriceIds":["<value 1>"],"effectiveFrom":"2025-03-29T05:59:51.719Z"}]},"createdAt":"2024-01-24T07:41:30.838Z","createdByCredentialId":"<id>"}]}
+            type: simple
+    x-speakeasy-test-group: Subscription Proposals
+    x-speakeasy-test-rebuild: true
+  - workflowId: updateSubscriptionProposal
+    steps:
+      - stepId: test
+        operationId: updateSubscriptionProposal
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            adjustments:
+              - effectiveFrom: "2024-07-04T21:55:42.464Z"
+                maximumQuantity: <value>
+                targetPriceIds:
+                  - <value 1>
+                  - <value 2>
+                type: maximumQuantity
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscriptionProposal","merchantId":"<id>","status":"rejected","customerId":"<id>","planId":"<id>","planVersionId":"<id>","resolvedPlanVersionId":null,"hash":"<value>","testClockId":"<id>","requested":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-05-04T23:48:31.483Z","adjustments":[{"type":"minimumQuantity","minimumQuantity":"<value>","targetPriceIds":["<value 1>","<value 2>","<value 3>"],"effectiveFrom":"2024-01-11T01:05:10.575Z"}]},"current":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2024-04-13T21:30:27.639Z","adjustments":[{"type":"usageDiscount","usageDiscount":"<value>","targetPriceIds":[],"effectiveFrom":"2024-02-21T06:47:49.929Z"}]},"amendedFields":["<value 1>","<value 2>","<value 3>"],"refusedResync":{"receivedAt":"2024-02-20T12:49:08.502Z","code":"SUBSCRIPTION_PROPOSAL_ALREADY_APPROVED","fields":["<value 1>"],"values":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2025-02-05T06:51:39.335Z","adjustments":[{"type":"maximumQuantity","maximumQuantity":"<value>","targetPriceIds":["<value 1>","<value 2>","<value 3>"],"effectiveFrom":"2024-12-06T11:47:51.285Z"}]},"credentialId":"<id>"},"lockVersion":35097,"source":"<value>","externalReference":{"provider":"<value>","externalId":"<id>"},"subscriptionId":"<id>","rejectionReason":null,"rejectionText":"<value>","decidedAt":null,"decidedByPrincipalId":"<id>","decidedBy":{"type":"apiKey","name":"<value>"},"strandedAt":null,"createdByPrincipalId":"<id>","createdByCredentialId":"<id>","createdAt":"2024-06-08T05:20:00.458Z","updatedAt":"2024-05-28T20:44:10.678Z","revisions":[{"id":"<id>","version":958028,"values":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2025-02-05T06:51:39.335Z","adjustments":[{"type":"maximumQuantity","maximumQuantity":"<value>","targetPriceIds":["<value 1>","<value 2>","<value 3>"],"effectiveFrom":"2024-12-06T11:47:51.285Z"}]},"createdAt":"2026-08-31T20:52:43.220Z","createdByCredentialId":"<id>"}]}
+            type: simple
+    x-speakeasy-test-group: Subscription Proposals
+    x-speakeasy-test-rebuild: true
+  - workflowId: decideSubscriptionProposal
+    steps:
+      - stepId: test
+        operationId: decideSubscriptionProposal
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            basedOnHash: <value>
+            decision: approve
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"subscriptionProposal","merchantId":"<id>","status":"rejected","customerId":"<id>","planId":"<id>","planVersionId":"<id>","resolvedPlanVersionId":"<id>","hash":"<value>","testClockId":"<id>","requested":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2024-11-01T13:22:57.960Z","adjustments":[{"type":"minimumQuantity","minimumQuantity":"<value>","targetPriceIds":["<value 1>"],"effectiveFrom":"2026-01-01T21:32:17.433Z"}]},"current":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2026-11-01T00:46:57.910Z","adjustments":[{"type":"maximumQuantity","maximumQuantity":"<value>","targetPriceIds":["<value 1>","<value 2>"],"effectiveFrom":"2024-04-01T01:29:12.321Z"}]},"amendedFields":[],"refusedResync":{"receivedAt":"2026-01-01T17:47:45.008Z","code":"SUBSCRIPTION_PROPOSAL_ALREADY_APPROVED","fields":[],"values":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2025-05-27T06:34:25.422Z","adjustments":[{"type":"usageDiscount","usageDiscount":"<value>","targetPriceIds":["<value 1>","<value 2>"],"effectiveFrom":"2026-08-09T17:56:04.185Z"}]},"credentialId":"<id>"},"lockVersion":142173,"source":"<value>","externalReference":null,"subscriptionId":"<id>","rejectionReason":"price_mismatch","rejectionText":"<value>","decidedAt":"2026-06-28T13:26:49.778Z","decidedByPrincipalId":null,"decidedBy":{"type":"user","name":"<value>"},"strandedAt":"2024-05-13T04:57:19.613Z","createdByPrincipalId":"<id>","createdByCredentialId":"<id>","createdAt":"2025-05-13T15:13:09.509Z","updatedAt":"2026-04-14T21:58:49.285Z","revisions":[{"id":"<id>","version":781662,"values":{"customerId":"<id>","name":"<value>","planId":"<id>","startedAt":"2025-05-27T06:34:25.422Z","adjustments":[{"type":"usageDiscount","usageDiscount":"<value>","targetPriceIds":["<value 1>","<value 2>"],"effectiveFrom":"2026-08-09T17:56:04.185Z"}]},"createdAt":"2024-06-05T00:44:09.835Z","createdByCredentialId":"<id>"}]}
+            type: simple
+    x-speakeasy-test-group: Subscription Proposals
+    x-speakeasy-test-rebuild: true
+  - workflowId: listSubscriptionProposalProjectedInvoices
+    steps:
+      - stepId: test
+        operationId: listSubscriptionProposalProjectedInvoices
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: 10
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{"limit":422230,"offset":659298,"total":461650}}
+            type: simple
+    x-speakeasy-test-group: Subscription Proposals
+    x-speakeasy-test-rebuild: true

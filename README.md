@@ -418,6 +418,15 @@ run();
 * [update](docs/sdks/rules/README.md#update) - Update Rule
 * [delete](docs/sdks/rules/README.md#delete) - Delete Rule
 
+### [SubscriptionProposals](docs/sdks/subscriptionproposals/README.md)
+
+* [listSubscriptionProposals](docs/sdks/subscriptionproposals/README.md#listsubscriptionproposals) - List
+* [createSubscriptionProposal](docs/sdks/subscriptionproposals/README.md#createsubscriptionproposal) - Create
+* [getSubscriptionProposal](docs/sdks/subscriptionproposals/README.md#getsubscriptionproposal) - Get
+* [updateSubscriptionProposal](docs/sdks/subscriptionproposals/README.md#updatesubscriptionproposal) - Amend
+* [decideSubscriptionProposal](docs/sdks/subscriptionproposals/README.md#decidesubscriptionproposal) - Approve or reject
+* [listSubscriptionProposalProjectedInvoices](docs/sdks/subscriptionproposals/README.md#listsubscriptionproposalprojectedinvoices) - List projected
+
 ### [Subscriptions](docs/sdks/subscriptions/README.md)
 
 * [list](docs/sdks/subscriptions/README.md#list) - List
@@ -603,6 +612,12 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`sourcesRulesList`](docs/sdks/rules/README.md#list) - List Rules
 - [`sourcesRulesUpdate`](docs/sdks/rules/README.md#update) - Update Rule
 - [`sourcesUpdate`](docs/sdks/sources/README.md#update) - Update
+- [`subscriptionProposalsCreateSubscriptionProposal`](docs/sdks/subscriptionproposals/README.md#createsubscriptionproposal) - Create
+- [`subscriptionProposalsDecideSubscriptionProposal`](docs/sdks/subscriptionproposals/README.md#decidesubscriptionproposal) - Approve or reject
+- [`subscriptionProposalsGetSubscriptionProposal`](docs/sdks/subscriptionproposals/README.md#getsubscriptionproposal) - Get
+- [`subscriptionProposalsListSubscriptionProposalProjectedInvoices`](docs/sdks/subscriptionproposals/README.md#listsubscriptionproposalprojectedinvoices) - List projected
+- [`subscriptionProposalsListSubscriptionProposals`](docs/sdks/subscriptionproposals/README.md#listsubscriptionproposals) - List
+- [`subscriptionProposalsUpdateSubscriptionProposal`](docs/sdks/subscriptionproposals/README.md#updatesubscriptionproposal) - Amend
 - [`subscriptionsCreate`](docs/sdks/subscriptions/README.md#create) - Create
 - [`subscriptionsCreateSubscriptionAdjustment`](docs/sdks/subscriptions/README.md#createsubscriptionadjustment) - Create Adjustment
 - [`subscriptionsDeleteSubscriptionAdjustment`](docs/sdks/subscriptions/README.md#deletesubscriptionadjustment) - Delete Adjustment
@@ -754,7 +769,7 @@ run();
 * [`PaygenticError`](./src/models/errors/paygenticerror.ts): The base class for HTTP error responses.
   * [`ErrorT`](./src/models/errors/errort.ts): Unauthorized - Authentication failed or user does not have permissions. *
 
-<details><summary>Less common errors (13)</summary>
+<details><summary>Less common errors (14)</summary>
 
 <br />
 
@@ -767,13 +782,14 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 100 of 155 methods.*
-* [`RetryPaymentResponseError`](./src/models/errors/retrypaymentresponseerror.ts): The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape. Applicable to 1 of 155 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 155 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 155 methods.*
-* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be changed: a subscription still bills it directly, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 155 methods.*
-* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted: a live plan or subscription still references it, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 155 methods.*
-* [`UnprocessableEntityError`](./src/models/errors/unprocessableentityerror.ts): `hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete). Status code `422`. Applicable to 1 of 155 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 106 of 161 methods.*
+* [`SubscriptionProposalConflictError`](./src/models/errors/subscriptionproposalconflicterror.ts): A 409 of a proposal route. Branch on `code`, never on `message`. Status code `409`. Applicable to 4 of 161 methods.*
+* [`RetryPaymentResponseError`](./src/models/errors/retrypaymentresponseerror.ts): The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape. Applicable to 1 of 161 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 161 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 161 methods.*
+* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be changed: a subscription still bills it directly, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 161 methods.*
+* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted: a live plan or subscription still references it, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 161 methods.*
+* [`UnprocessableEntityError`](./src/models/errors/unprocessableentityerror.ts): `hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete). Status code `422`. Applicable to 1 of 161 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

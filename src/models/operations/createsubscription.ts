@@ -145,6 +145,18 @@ export type CreateSubscriptionRequest = {
    * Your own key-value data about the change, such as a CRM deal ID.
    */
   changeMetadata?: { [k: string]: models.IntervalChangeMetadata } | undefined;
+  /**
+   * Catalog prices to bill on this subscription that its plan version does not carry. Each must be owned by the same merchant and use the standard price model.
+   */
+  addPrices?: Array<models.SubscriptionCreateAddPriceOp> | undefined;
+  /**
+   * Rate or quantity overrides for prices the plan version does carry.
+   */
+  overridePrices?: Array<models.SubscriptionCreateOverridePriceOp> | undefined;
+  /**
+   * Plan prices this subscription does not bill.
+   */
+  removePrices?: Array<models.SubscriptionCreateRemovePriceOp> | undefined;
 };
 
 /** @internal */
@@ -248,6 +260,13 @@ export type CreateSubscriptionRequest$Outbound = {
   changeMetadata?:
     | { [k: string]: models.IntervalChangeMetadata$Outbound }
     | undefined;
+  addPrices?: Array<models.SubscriptionCreateAddPriceOp$Outbound> | undefined;
+  overridePrices?:
+    | Array<models.SubscriptionCreateOverridePriceOp$Outbound>
+    | undefined;
+  removePrices?:
+    | Array<models.SubscriptionCreateRemovePriceOp$Outbound>
+    | undefined;
 };
 
 /** @internal */
@@ -281,6 +300,13 @@ export const CreateSubscriptionRequest$outboundSchema: z.ZodType<
   changeReason: models.ChangeReason$outboundSchema.optional(),
   changeDescription: z.string().optional(),
   changeMetadata: z.record(models.IntervalChangeMetadata$outboundSchema)
+    .optional(),
+  addPrices: z.array(models.SubscriptionCreateAddPriceOp$outboundSchema)
+    .optional(),
+  overridePrices: z.array(
+    models.SubscriptionCreateOverridePriceOp$outboundSchema,
+  ).optional(),
+  removePrices: z.array(models.SubscriptionCreateRemovePriceOp$outboundSchema)
     .optional(),
 });
 

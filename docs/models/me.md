@@ -9,11 +9,10 @@ let value: Me = {
   userId: "<id>",
   organizationId: "<id>",
   organizationType: "merchant",
-  roles: [
-    "<value 1>",
-    "<value 2>",
+  roles: [],
+  permissions: [
+    "testClocks:read",
   ],
-  permissions: [],
   credential: {
     type: "apiKey",
   },
@@ -22,11 +21,11 @@ let value: Me = {
 
 ## Fields
 
-| Field                                                                                       | Type                                                                                        | Required                                                                                    | Description                                                                                 |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `userId`                                                                                    | *string*                                                                                    | :heavy_check_mark:                                                                          | N/A                                                                                         |
-| `organizationId`                                                                            | *string*                                                                                    | :heavy_check_mark:                                                                          | N/A                                                                                         |
-| `organizationType`                                                                          | [models.OrganizationType](../models/organizationtype.md)                                    | :heavy_check_mark:                                                                          | N/A                                                                                         |
-| `roles`                                                                                     | *string*[]                                                                                  | :heavy_check_mark:                                                                          | The role names of the caller in the active organization.                                    |
-| `permissions`                                                                               | [models.Permission](../models/permission.md)[]                                              | :heavy_check_mark:                                                                          | The permissions that the credential of the call holds in the active organization.           |
-| `credential`                                                                                | [models.MeCredential](../models/mecredential.md)                                            | :heavy_check_mark:                                                                          | The credential of the call. clientId is set for an OAuth token and apiKeyId for an API key. |
+| Field                                                                                                 | Type                                                                                                  | Required                                                                                              | Description                                                                                           |
+| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `userId`                                                                                              | *string*                                                                                              | :heavy_check_mark:                                                                                    | N/A                                                                                                   |
+| `organizationId`                                                                                      | *string*                                                                                              | :heavy_check_mark:                                                                                    | N/A                                                                                                   |
+| `organizationType`                                                                                    | [models.OrganizationType](../models/organizationtype.md)                                              | :heavy_check_mark:                                                                                    | The type of the active organization. Always merchant: the API makes no merchant/consumer distinction. |
+| `roles`                                                                                               | *string*[]                                                                                            | :heavy_check_mark:                                                                                    | The role names of the caller in the active organization.                                              |
+| `permissions`                                                                                         | [models.Permission](../models/permission.md)[]                                                        | :heavy_check_mark:                                                                                    | The permissions that the credential of the call holds in the active organization.                     |
+| `credential`                                                                                          | [models.MeCredential](../models/mecredential.md)                                                      | :heavy_check_mark:                                                                                    | The credential of the call. clientId is set for an OAuth token and apiKeyId for an API key.           |
