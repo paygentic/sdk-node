@@ -85,6 +85,9 @@ const value: models.MeteredEntitlementListItem = {
   pricingUnitId: "<id>",
   currentPeriodStart: new Date("2025-06-15T11:35:12.121Z"),
   currentPeriodEnd: null,
+  usageCountedFrom: new Date("2025-03-05T21:37:05.533Z"),
+  billableMetricId: "<id>",
+  usageNotCountedUrl: "https://assured-issue.org/",
 };
 ```
 

@@ -136,11 +136,11 @@ export type SubscriptionProposalValues = {
    */
   renewalReminderDays?: number | null | undefined;
   /**
-   * Payment term in days ("Net X") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 ("due on issue"). A non-zero value needs `metadata.bankTransferOnly: true`; without it the request answers 400 `PAYMENT_TERM_DAYS_REQUIRES_BANK_TRANSFER_ONLY`.
+   * Payment term in days ("Net X") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 ("due on issue"). Valid on any subscription, whatever its payment method. With a non-zero value Invoice 0's payment session expires at its due date, and sending `sessionExpiryMinutes` with it answers 400 `SESSION_EXPIRY_NOT_ALLOWED_WITH_PAYMENT_TERM`.
    */
   paymentTermDays?: number | undefined;
   /**
-   * Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.
+   * Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided. Not accepted with a non-zero `paymentTermDays`: the session then expires at the invoice due date.
    */
   sessionExpiryMinutes?: number | undefined;
   /**

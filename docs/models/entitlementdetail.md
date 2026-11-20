@@ -81,6 +81,9 @@ const value: models.MeteredEntitlementDetail = {
   pricingUnitId: "<id>",
   currentPeriodStart: new Date("2024-01-09T16:17:56.144Z"),
   currentPeriodEnd: new Date("2026-11-03T06:12:43.946Z"),
+  usageCountedFrom: new Date("2025-06-01T11:27:25.450Z"),
+  billableMetricId: "<id>",
+  usageNotCountedUrl: "https://somber-designation.org/",
 };
 ```
 

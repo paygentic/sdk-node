@@ -92,6 +92,18 @@ export type MeteredEntitlementListItem = {
    * End of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation "dark window", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window.
    */
   currentPeriodEnd: Date | null;
+  /**
+   * Usage counts against `balance` only if it is dated at or after this moment. It is the later of the entitlement's start and when Paygentic created it, or the test clock's time when the subscription runs on one, and it never changes after the entitlement is created. When `pricingUnitId` is set, it is instead the moment the customer's credit pool for that unit was created, because the pool's balance is the one that applies. It is `null` until that pool exists, since there is no balance to count against yet, and never changes once set. Usage dated earlier is still accepted and still shows on the metric's meter, but never draws down this balance; `usageNotCountedUrl` returns it.
+   */
+  usageCountedFrom: Date | null;
+  /**
+   * The billable metric this entitlement measures. `null` only for a metered entitlement issued directly with no price attached.
+   */
+  billableMetricId: string | null;
+  /**
+   * A link to the meter (`GET /v0/billableMetrics/{id}/meter`) for this customer and `billableMetricId`, covering the 403 days before `usageCountedFrom` and ending at it (exclusive). It returns the usage the metric recorded that this balance does not count because it is dated before `usageCountedFrom`. An event dated exactly at `usageCountedFrom` counts against the balance and is not in it. The total covers every event on the metric for this customer, so it can include usage an earlier entitlement already counted: one from an earlier subscription, or from before a plan change on the same subscription. `null` when `pricingUnitId` is set (the balance is in credits, and a native-unit total beside it would mislead) or when `billableMetricId` is `null`.
+   */
+  usageNotCountedUrl: string | null;
 };
 
 /** @internal */
@@ -126,6 +138,11 @@ export const MeteredEntitlementListItem$inboundSchema: z.ZodType<
   currentPeriodEnd: z.nullable(
     z.string().datetime({ offset: true }).transform(v => new Date(v)),
   ),
+  usageCountedFrom: z.nullable(
+    z.string().datetime({ offset: true }).transform(v => new Date(v)),
+  ),
+  billableMetricId: z.nullable(z.string()),
+  usageNotCountedUrl: z.nullable(z.string()),
 });
 
 export function meteredEntitlementListItemFromJSON(

@@ -274,7 +274,7 @@ export type Subscription = {
    */
   renewalReminderDays?: number | null | undefined;
   /**
-   * Payment term in days ("Net X") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 ("due on issue"); a non-zero value is only set on a subscription created with `metadata.bankTransferOnly: true`.
+   * Payment term in days ("Net X") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 ("due on issue"); a non-zero value is valid on any subscription, whatever its payment method.
    */
   paymentTermDays: number;
   /**

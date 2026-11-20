@@ -52,7 +52,7 @@ export type UpdateSubscriptionRequestBody = {
    */
   renewalReminderDays?: number | null | undefined;
   /**
-   * Payment term in days ("Net X") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid on a subscription created with `metadata.bankTransferOnly: true`. Set 0 for "due on issue". Already-issued invoices keep their snapshotted dueAt.
+   * Payment term in days ("Net X") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. Valid on any subscription, whatever its payment method. Set 0 for "due on issue". Already-issued invoices keep their snapshotted dueAt.
    */
   paymentTermDays?: number | undefined;
   /**

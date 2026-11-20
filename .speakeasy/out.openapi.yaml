@@ -1943,7 +1943,10 @@
                           "overage": 0,
                           "currentPeriodStart": "2024-03-01T00:00:00Z",
                           "currentPeriodEnd": "2024-04-01T00:00:00Z",
-                          "pricingUnitId": null
+                          "pricingUnitId": null,
+                          "usageCountedFrom": "2024-03-01T00:00:00Z",
+                          "billableMetricId": "bm_a1b2c3d4e5f6g7h8",
+                          "usageNotCountedUrl": "https://api.paygentic.io/v0/billableMetrics/bm_a1b2c3d4e5f6g7h8/meter?subject=cus_q3r4s5t6u7v8w9x0&from=2023-01-23T00%3A00%3A00.000Z&to=2024-03-01T00%3A00%3A00.000Z"
                         }
                       ],
                       "pagination": {
@@ -2194,7 +2197,10 @@
                       "currentPeriodStart": "2024-03-01T00:00:00Z",
                       "currentPeriodEnd": "2024-04-01T00:00:00Z",
                       "pricingUnitId": null,
-                      "metadata": {}
+                      "metadata": {},
+                      "usageCountedFrom": "2024-03-01T00:00:00Z",
+                      "billableMetricId": "bm_a1b2c3d4e5f6g7h8",
+                      "usageNotCountedUrl": "https://api.paygentic.io/v0/billableMetrics/bm_a1b2c3d4e5f6g7h8/meter?subject=cus_x1y2z3a4b5c6d7e8&from=2023-01-23T00%3A00%3A00.000Z&to=2024-03-01T00%3A00%3A00.000Z"
                     }
                   }
                 }
@@ -6981,13 +6987,13 @@
                   },
                   "paymentTermDays": {
                     "type": "integer",
-                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). A non-zero value needs `metadata.bankTransferOnly: true`; without it the request answers 400 `PAYMENT_TERM_DAYS_REQUIRES_BANK_TRANSFER_ONLY`.",
+                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). Valid on any subscription, whatever its payment method. With a non-zero value Invoice 0's payment session expires at its due date, and sending `sessionExpiryMinutes` with it answers 400 `SESSION_EXPIRY_NOT_ALLOWED_WITH_PAYMENT_TERM`.",
                     "minimum": 0,
                     "maximum": 365
                   },
                   "sessionExpiryMinutes": {
                     "type": "number",
-                    "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.",
+                    "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided. Not accepted with a non-zero `paymentTermDays`: the session then expires at the invoice due date.",
                     "minimum": 1
                   },
                   "versionPolicy": {
@@ -7290,7 +7296,7 @@
                   },
                   "paymentTermDays": {
                     "type": "integer",
-                    "description": "Payment term in days (\"Net X\") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. A non-zero value is only valid on a subscription created with `metadata.bankTransferOnly: true`. Set 0 for \"due on issue\". Already-issued invoices keep their snapshotted dueAt.",
+                    "description": "Payment term in days (\"Net X\") applied to subsequently generated invoices: invoice dueAt = invoice issue date + paymentTermDays. Valid on any subscription, whatever its payment method. Set 0 for \"due on issue\". Already-issued invoices keep their snapshotted dueAt.",
                     "minimum": 0,
                     "maximum": 365
                   },
@@ -8574,13 +8580,13 @@
                   },
                   "paymentTermDays": {
                     "type": "integer",
-                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). A non-zero value needs `metadata.bankTransferOnly: true`; without it the request answers 400 `PAYMENT_TERM_DAYS_REQUIRES_BANK_TRANSFER_ONLY`.",
+                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). Valid on any subscription, whatever its payment method. With a non-zero value Invoice 0's payment session expires at its due date, and sending `sessionExpiryMinutes` with it answers 400 `SESSION_EXPIRY_NOT_ALLOWED_WITH_PAYMENT_TERM`.",
                     "minimum": 0,
                     "maximum": 365
                   },
                   "sessionExpiryMinutes": {
                     "type": "number",
-                    "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.",
+                    "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided. Not accepted with a non-zero `paymentTermDays`: the session then expires at the invoice due date.",
                     "minimum": 1
                   },
                   "versionPolicy": {
@@ -8883,14 +8889,14 @@
                   "paymentTermDays": {
                     "type": "integer",
                     "nullable": true,
-                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). A non-zero value needs `metadata.bankTransferOnly: true`; without it the request answers 400 `PAYMENT_TERM_DAYS_REQUIRES_BANK_TRANSFER_ONLY`.",
+                    "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). Valid on any subscription, whatever its payment method. With a non-zero value Invoice 0's payment session expires at its due date, and sending `sessionExpiryMinutes` with it answers 400 `SESSION_EXPIRY_NOT_ALLOWED_WITH_PAYMENT_TERM`.",
                     "minimum": 0,
                     "maximum": 365
                   },
                   "sessionExpiryMinutes": {
                     "type": "number",
                     "nullable": true,
-                    "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.",
+                    "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided. Not accepted with a non-zero `paymentTermDays`: the session then expires at the invoice due date.",
                     "minimum": 1
                   },
                   "versionPolicy": {
@@ -16739,7 +16745,10 @@
               "config",
               "currentPeriodStart",
               "currentPeriodEnd",
-              "pricingUnitId"
+              "pricingUnitId",
+              "usageCountedFrom",
+              "billableMetricId",
+              "usageNotCountedUrl"
             ],
             "properties": {
               "featureType": {
@@ -16787,6 +16796,23 @@
                 "format": "date-time",
                 "nullable": true,
                 "description": "End of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
+              },
+              "usageCountedFrom": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "description": "Usage counts against `balance` only if it is dated at or after this moment. It is the later of the entitlement's start and when Paygentic created it, or the test clock's time when the subscription runs on one, and it never changes after the entitlement is created. When `pricingUnitId` is set, it is instead the moment the customer's credit pool for that unit was created, because the pool's balance is the one that applies. It is `null` until that pool exists, since there is no balance to count against yet, and never changes once set. Usage dated earlier is still accepted and still shows on the metric's meter, but never draws down this balance; `usageNotCountedUrl` returns it."
+              },
+              "billableMetricId": {
+                "type": "string",
+                "nullable": true,
+                "description": "The billable metric this entitlement measures. `null` only for a metered entitlement issued directly with no price attached."
+              },
+              "usageNotCountedUrl": {
+                "type": "string",
+                "format": "uri",
+                "nullable": true,
+                "description": "A link to the meter (`GET /v0/billableMetrics/{id}/meter`) for this customer and `billableMetricId`, covering the 403 days before `usageCountedFrom` and ending at it (exclusive). It returns the usage the metric recorded that this balance does not count because it is dated before `usageCountedFrom`. An event dated exactly at `usageCountedFrom` counts against the balance and is not in it. The total covers every event on the metric for this customer, so it can include usage an earlier entitlement already counted: one from an earlier subscription, or from before a plan change on the same subscription. `null` when `pricingUnitId` is set (the balance is in credits, and a native-unit total beside it would mislead) or when `billableMetricId` is `null`."
               }
             }
           }
@@ -17109,7 +17135,10 @@
               "config",
               "currentPeriodStart",
               "currentPeriodEnd",
-              "pricingUnitId"
+              "pricingUnitId",
+              "usageCountedFrom",
+              "billableMetricId",
+              "usageNotCountedUrl"
             ],
             "properties": {
               "featureType": {
@@ -17157,6 +17186,23 @@
                 "format": "date-time",
                 "nullable": true,
                 "description": "End of the current usage period. These bounds describe this entitlement's own usage window (not the shared pool's), even for a pool-backed feature (`pricingUnitId` set) whose `balance` and `usageInPeriod` are shared-pool aggregates. Before the entitlement activates (the pre-activation \"dark window\", when the query time is earlier than `activeFrom`) this instead holds `activeFrom` — the end of the pre-activation `[subscription start, activation)` window."
+              },
+              "usageCountedFrom": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true,
+                "description": "Usage counts against `balance` only if it is dated at or after this moment. It is the later of the entitlement's start and when Paygentic created it, or the test clock's time when the subscription runs on one, and it never changes after the entitlement is created. When `pricingUnitId` is set, it is instead the moment the customer's credit pool for that unit was created, because the pool's balance is the one that applies. It is `null` until that pool exists, since there is no balance to count against yet, and never changes once set. Usage dated earlier is still accepted and still shows on the metric's meter, but never draws down this balance; `usageNotCountedUrl` returns it."
+              },
+              "billableMetricId": {
+                "type": "string",
+                "nullable": true,
+                "description": "The billable metric this entitlement measures. `null` only for a metered entitlement issued directly with no price attached."
+              },
+              "usageNotCountedUrl": {
+                "type": "string",
+                "format": "uri",
+                "nullable": true,
+                "description": "A link to the meter (`GET /v0/billableMetrics/{id}/meter`) for this customer and `billableMetricId`, covering the 403 days before `usageCountedFrom` and ending at it (exclusive). It returns the usage the metric recorded that this balance does not count because it is dated before `usageCountedFrom`. An event dated exactly at `usageCountedFrom` counts against the balance and is not in it. The total covers every event on the metric for this customer, so it can include usage an earlier entitlement already counted: one from an earlier subscription, or from before a plan change on the same subscription. `null` when `pricingUnitId` is set (the balance is in credits, and a native-unit total beside it would mislead) or when `billableMetricId` is `null`."
               }
             }
           }
@@ -19191,7 +19237,7 @@
           },
           "paymentTermDays": {
             "type": "integer",
-            "description": "Payment term in days (\"Net X\") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 (\"due on issue\"); a non-zero value is only set on a subscription created with `metadata.bankTransferOnly: true`.",
+            "description": "Payment term in days (\"Net X\") snapshotted onto every invoice the subscription generates (invoice dueAt = invoice issue date + paymentTermDays). Defaults to 0 (\"due on issue\"); a non-zero value is valid on any subscription, whatever its payment method.",
             "minimum": 0,
             "maximum": 365
           },
@@ -20729,13 +20775,13 @@
           },
           "paymentTermDays": {
             "type": "integer",
-            "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). A non-zero value needs `metadata.bankTransferOnly: true`; without it the request answers 400 `PAYMENT_TERM_DAYS_REQUIRES_BANK_TRANSFER_ONLY`.",
+            "description": "Payment term in days (\"Net X\") applied to every invoice the subscription generates: invoice dueAt = invoice issue date + paymentTermDays. Defaults to 0 (\"due on issue\"). Valid on any subscription, whatever its payment method. With a non-zero value Invoice 0's payment session expires at its due date, and sending `sessionExpiryMinutes` with it answers 400 `SESSION_EXPIRY_NOT_ALLOWED_WITH_PAYMENT_TERM`.",
             "minimum": 0,
             "maximum": 365
           },
           "sessionExpiryMinutes": {
             "type": "number",
-            "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided.",
+            "description": "Number of minutes until the payment session expires. Defaults to 240 minutes (4 hours) if not provided. Not accepted with a non-zero `paymentTermDays`: the session then expires at the invoice due date.",
             "minimum": 1
           },
           "versionPolicy": {
@@ -23773,7 +23819,7 @@
           "paymentFailed",
           "overdue"
         ],
-        "description": "What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount. `overdue` is a part of `awaitingPayment`.",
+        "description": "What is owed, gross of tax, from any date. `awaitingPayment` and `paymentFailed` add up to it, in count and amount. `overdue` overlaps both and is a subset of neither, so do not add it to them or subtract it from them.",
         "properties": {
           "count": {
             "type": "integer",
@@ -23806,7 +23852,7 @@
                 "$ref": "#/components/schemas/AccountFigure"
               }
             ],
-            "description": "The invoices of `awaitingPayment` past their due date: status `ISSUED`, no card retry scheduled, and a due date before the start of today, UTC. Today is the subscription's test clock when test clocks are enabled. A subset of `awaitingPayment` by count. A credit invoice is never overdue, so the amount can exceed `awaitingPayment.amount`."
+            "description": "Unpaid invoices past their due date: status `ISSUED` or `PAYMENT_FAILED`, no automatic retry still scheduled, and a due date before the start of today, UTC. Today is the subscription's test clock when test clocks are enabled. Overlaps `awaitingPayment` and `paymentFailed` and is a subset of neither, so do not add it to them or subtract it from them. A credit invoice is never overdue, so the amount can exceed the total `amount`."
           }
         }
       },
