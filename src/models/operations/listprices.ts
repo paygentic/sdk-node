@@ -25,6 +25,10 @@ export type ListPricesRequest = {
    * Number of prices to skip
    */
   offset?: number | undefined;
+  /**
+   * Include a price that is only an older rate of a slot a live plan bills today. It still bills subscriptions pinned to its version, so set this to list every price that can bill.
+   */
+  includeSuperseded?: boolean | undefined;
 };
 
 export type ListPricesPagination = {
@@ -47,6 +51,7 @@ export type ListPricesRequest$Outbound = {
   merchantId?: string | undefined;
   limit: number;
   offset: number;
+  includeSuperseded: boolean;
 };
 
 /** @internal */
@@ -59,6 +64,7 @@ export const ListPricesRequest$outboundSchema: z.ZodType<
   merchantId: z.string().optional(),
   limit: z.number().int().default(10),
   offset: z.number().int().default(0),
+  includeSuperseded: z.boolean().default(false),
 });
 
 export function listPricesRequestToJSON(

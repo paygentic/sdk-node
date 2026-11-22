@@ -99,6 +99,7 @@ async function $do(
     "merchantId": payload?.merchantId,
     "offset": payload?.offset,
     "status": payload?.status,
+    "subscriptionId": payload?.subscriptionId,
   });
 
   const headers = new Headers(compactMap({

@@ -726,6 +726,9 @@ workflows:
           - name: offset
             in: query
             value: 0
+          - name: includeSuperseded
+            in: query
+            value: false
         successCriteria:
           - condition: $statusCode == 200
           - condition: $response.header.Content-Type == application/json

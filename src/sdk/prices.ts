@@ -29,6 +29,9 @@ export class Prices extends ClientSDK {
 
   /**
    * List
+   *
+   * @remarks
+   * Lists the merchant's prices. A price that is only an older rate of a slot a live plan bills today, such as the copy a price edit keeps for the versions it freezes, is left out unless `includeSuperseded` is true: a subscription pinned to that version still bills it, and reads it by id.
    */
   async list(
     request?: operations.ListPricesRequest | undefined,

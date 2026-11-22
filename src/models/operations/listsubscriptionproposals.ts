@@ -14,6 +14,10 @@ export type ListSubscriptionProposalsRequest = {
    */
   merchantId?: string | undefined;
   /**
+   * Return only the proposal whose approval created this subscription. A subscription that no proposal created, or a subscription of a merchant the caller cannot read, gives an empty list. A `merchantId` the caller cannot read is still refused with 403.
+   */
+  subscriptionId?: string | undefined;
+  /**
    * Return proposals in any of these statuses. Repeat the parameter to pass several, e.g. `?status=pending&status=approved`. Omit it to return every status.
    */
   status?: Array<models.SubscriptionProposalStatus> | undefined;
@@ -41,6 +45,7 @@ export type ListSubscriptionProposalsResponse = {
 /** @internal */
 export type ListSubscriptionProposalsRequest$Outbound = {
   merchantId?: string | undefined;
+  subscriptionId?: string | undefined;
   status?: Array<string> | undefined;
   limit: number;
   offset: number;
@@ -53,6 +58,7 @@ export const ListSubscriptionProposalsRequest$outboundSchema: z.ZodType<
   ListSubscriptionProposalsRequest
 > = z.object({
   merchantId: z.string().optional(),
+  subscriptionId: z.string().optional(),
   status: z.array(models.SubscriptionProposalStatus$outboundSchema).optional(),
   limit: z.number().int().default(50),
   offset: z.number().int().default(0),
