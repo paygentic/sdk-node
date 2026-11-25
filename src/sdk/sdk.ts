@@ -7,6 +7,7 @@ import { Approvals } from "./approvals.js";
 import { BillableMetrics } from "./billablemetrics.js";
 import { BillingSchedules } from "./billingschedules.js";
 import { Costs } from "./costs.js";
+import { CreditPools } from "./creditpools.js";
 import { Customers } from "./customers.js";
 import { Entitlements } from "./entitlements.js";
 import { Events } from "./events.js";
@@ -23,6 +24,7 @@ import { Payments } from "./payments.js";
 import { PaymentSessions } from "./paymentsessions.js";
 import { Plans } from "./plans.js";
 import { Prices } from "./prices.js";
+import { PricingUnits } from "./pricingunits.js";
 import { Products } from "./products.js";
 import { Profitability } from "./profitability.js";
 import { Revenue } from "./revenue.js";
@@ -73,6 +75,16 @@ export class Paygentic extends ClientSDK {
   private _prices?: Prices;
   get prices(): Prices {
     return (this._prices ??= new Prices(this._options));
+  }
+
+  private _pricingUnits?: PricingUnits;
+  get pricingUnits(): PricingUnits {
+    return (this._pricingUnits ??= new PricingUnits(this._options));
+  }
+
+  private _creditPools?: CreditPools;
+  get creditPools(): CreditPools {
+    return (this._creditPools ??= new CreditPools(this._options));
   }
 
   private _products?: Products;

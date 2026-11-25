@@ -57,6 +57,14 @@
       "description": "A `Price` determines the monetary value for a single unit of a `Billable Metric`. Prices are exclusively grouped within a `Plan`."
     },
     {
+      "name": "PricingUnits",
+      "description": "A `PricingUnit` is a merchant-scoped catalog object that names a credit denomination and the rate (`conversionRate`) at which it converts to an invoicing `currency`. Credit-denominated prices draw a customer's balance for the unit; the unit holds no balance itself."
+    },
+    {
+      "name": "CreditPools",
+      "description": "A `CreditPool` is the `(customer, pricingUnit)` identity that credit-denominated prices draw down. The balance itself lives on grants, not on the pool; the pool survives subscription changes. There is one pool per `(customer, pricingUnit)`."
+    },
+    {
       "name": "Products",
       "description": "A `Product` is an offering sold by a `Merchant`. It includes product metadata like title, summary, and pricing details. `Plans`, `Prices`, and `Subscriptions` are all associated with products."
     },
@@ -5152,6 +5160,791 @@
         "x-speakeasy-name-override": "delete"
       }
     },
+    "/v0/pricingUnits": {
+      "post": {
+        "tags": [
+          "PricingUnits"
+        ],
+        "summary": "Create",
+        "operationId": "createPricingUnit",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "merchantId",
+                  "identifier",
+                  "displayName",
+                  "shortName",
+                  "conversionRate",
+                  "currency"
+                ],
+                "properties": {
+                  "merchantId": {
+                    "$ref": "#/components/schemas/OrganizationId"
+                  },
+                  "identifier": {
+                    "type": "string",
+                    "description": "Programmatic identifier, a slug unique per merchant (e.g. `credits`)."
+                  },
+                  "displayName": {
+                    "type": "string",
+                    "description": "Human-readable name shown in the UI."
+                  },
+                  "shortName": {
+                    "type": "string",
+                    "description": "Short label used on invoice lines (e.g. `credits`)."
+                  },
+                  "conversionRate": {
+                    "type": "string",
+                    "description": "Default rate converting one credit to the invoicing currency ($/credit), as a decimal string."
+                  },
+                  "currency": {
+                    "type": "string",
+                    "description": "ISO 4217 currency code that `conversionRate` maps to (e.g. `USD`)."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pricing unit created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricingUnit"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "pricingUnits:write"
+      },
+      "get": {
+        "tags": [
+          "PricingUnits"
+        ],
+        "summary": "List",
+        "operationId": "listPricingUnits",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            },
+            "description": "Filter pricing units by merchant organization id"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            },
+            "description": "Maximum pricing units to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Zero-based offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pricing units",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PricingUnit"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "pricingUnits:read"
+      }
+    },
+    "/v0/pricingUnits/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/PricingUnitId"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "PricingUnits"
+        ],
+        "summary": "Get",
+        "operationId": "getPricingUnit",
+        "responses": {
+          "200": {
+            "description": "Pricing unit details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricingUnit"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "pricingUnits:read"
+      }
+    },
+    "/v0/creditPools": {
+      "post": {
+        "tags": [
+          "CreditPools"
+        ],
+        "summary": "Create or resolve",
+        "description": "Resolve-or-create the credit pool for a `(customer, pricingUnit)` pair. Idempotent: returns `201` with a newly created pool, or `200` with the existing pool. Works with no subscription.",
+        "operationId": "createCreditPool",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "customerId",
+                  "pricingUnitId"
+                ],
+                "properties": {
+                  "customerId": {
+                    "$ref": "#/components/schemas/CustomerId"
+                  },
+                  "pricingUnitId": {
+                    "$ref": "#/components/schemas/PricingUnitId"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Existing credit pool resolved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditPool"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Credit pool created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditPool"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "creditPools:write"
+      },
+      "get": {
+        "tags": [
+          "CreditPools"
+        ],
+        "summary": "List",
+        "operationId": "listCreditPools",
+        "parameters": [
+          {
+            "name": "merchantId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/OrganizationId"
+            },
+            "description": "Filter credit pools by merchant organization id (resolved through the pool's customer)"
+          },
+          {
+            "name": "customerId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/CustomerId"
+            },
+            "description": "Filter credit pools by customer id"
+          },
+          {
+            "name": "pricingUnitId",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/PricingUnitId"
+            },
+            "description": "Filter credit pools by pricing unit id"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            },
+            "description": "Maximum credit pools to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Zero-based offset for pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of credit pools",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data",
+                    "pagination"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CreditPool"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/OffsetPagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "creditPools:read"
+      }
+    },
+    "/v0/creditPools/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CreditPoolId"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "CreditPools"
+        ],
+        "summary": "Get",
+        "operationId": "getCreditPool",
+        "responses": {
+          "200": {
+            "description": "Credit pool details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditPool"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "creditPools:read"
+      }
+    },
+    "/v0/creditPools/{id}/grants": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CreditPoolId"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "CreditPools"
+        ],
+        "summary": "List grants",
+        "description": "Lists the grants on the pool, with the credits left on each. Active and scheduled grants come first, in the order they are spent: lowest priority first, then soonest expiry (no expiry last), then oldest. Expired and voided grants come after, newest first. `remainingBalance` is the grant's balance from the same replay the ledger runs, computed at read time from the usage so far. It is 0 unless the grant is active. Statuses and balances are computed at one instant, returned as `asOf`. It defaults to the pool's current time: the test clock time of the customer's newest active subscription if it has one, otherwise now. A later `at` is read as the pool's current time. Pass `at` to read at a different instant.",
+        "operationId": "listCreditPoolGrants",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/CreditPoolGrantStatus"
+            },
+            "description": "Return only grants with this status."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            },
+            "description": "Maximum grants to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Zero-based offset for pagination."
+          },
+          {
+            "name": "at",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "The instant to compute statuses and balances at. Defaults to the pool's current time: the test clock time of the customer's newest active subscription if it has one, otherwise now. A later instant is read as the pool's current time."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The pool's grants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditPoolGrantList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "creditPools:read"
+      },
+      "post": {
+        "tags": [
+          "CreditPools"
+        ],
+        "summary": "Grant credits",
+        "description": "Mint a credit grant on the pool. Set `recurrencePeriod` (+ optional `recurrenceAnchor`, defaults to `effectiveAt`) for a recurring grant that re-adds `amount` each interval; set `expiresAt` for a per-grant expiry. Standalone of any plan or subscription.",
+        "operationId": "createCreditPoolGrant",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "amount"
+                ],
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "maximum": 1e+09,
+                    "description": "Credits to allocate (in the pool's pricing unit)."
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "description": "Drawdown priority (lower = consumed first). Defaults to 0."
+                  },
+                  "effectiveAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the block becomes active. Defaults to now (or the customer's active-subscription test-clock time)."
+                  },
+                  "recurrencePeriod": {
+                    "type": "string",
+                    "description": "ISO-8601 duration (e.g. `P1M`). When set, `amount` is re-added each interval within the block's envelope."
+                  },
+                  "recurrenceAnchor": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Recurrence phase anchor. Defaults to `effectiveAt`. Only valid with `recurrencePeriod`."
+                  },
+                  "expiresAt": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "When the block expires (per-block expiry)."
+                  },
+                  "idempotencyKey": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "description": "Idempotency key; a repeat with the same key returns the existing grant."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Credits allocated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditPoolGrant"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "creditPools:write"
+      }
+    },
+    "/v0/creditPools/{id}/ledger": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CreditPoolId"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "CreditPools"
+        ],
+        "summary": "Get ledger",
+        "description": "Returns a chronologically-ordered ledger of the pool's balance history within a required time window: `increment` (a grant funded the pool, including recurrence refills), `decrement` (usage drawdown), `void` (a grant was cancelled early), and `expiration` (a grant's unused balance lapsed at expiry). Each entry carries the pool's running balance immediately before and after it, and the response reports the window's boundary balances at the top level. Pass `granularity` to receive calendar-aligned buckets instead of itemized entries. There is no full-history view in a single call — page through successive windows to see a pool's complete history.",
+        "operationId": "getCreditPoolLedger",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Start of the requested window (inclusive). Required — this endpoint has no full-lifetime view. Must be before the pool's current time: the test clock time of the customer's newest active subscription if it has one, otherwise now."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "End of the requested window. Must be strictly after `from`. The window is capped at a maximum supported span; a wider request is rejected. A `to` after the pool's current time is read as the current time, so the ledger never includes projected refills or expirations."
+          },
+          {
+            "name": "entryType",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "increment",
+                "decrement",
+                "void",
+                "expiration"
+              ]
+            },
+            "description": "Restrict the response to a single entry type: `increment` (grant funding, including recurrence refills), `decrement` (usage drawdown), `void` (early grant termination), or `expiration` (unused balance lapsing at a grant's expiry). When `granularity` is also set, this filter scopes which entries feed each bucket's net fields and `entryCount`, but never the reported balances."
+          },
+          {
+            "name": "granularity",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "hour",
+                "day",
+                "month"
+              ]
+            },
+            "description": "Roll the ledger up into calendar-aligned buckets (UTC) instead of itemized entries. Calendar periods with no activity are omitted from the response. To see the individual entries behind a bucket, request the itemized ledger (omit `granularity`) with the same `entryType` filter and `from`/`to` narrowed to that bucket's `period`."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 50
+            },
+            "description": "Maximum number of entries (or buckets, when `granularity` is set) to return."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Zero-based offset for pagination."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pool ledger for the requested window. The shape depends on whether `granularity` was set: unset returns itemized `entries`, set returns rolled-up `buckets`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CreditPoolLedgerItemizedResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/CreditPoolLedgerBucketedResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "creditPools:read"
+      }
+    },
+    "/v0/creditPools/{id}/purchase": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/CreditPoolId"
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "CreditPools"
+        ],
+        "summary": "Purchase credits",
+        "description": "Create a grant-purchase invoice for the pool's customer and advance it to a payment session. Price is server-derived from the pricing unit's conversion rate — the caller never supplies a price. On successful payment, the existing billing-worker settlement path mints the purchased credits as a grant on the pool; this endpoint does not mint the grant itself.",
+        "operationId": "createCreditPoolPurchase",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PoolGrantPurchaseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Grant purchase invoice created with payment session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolGrantPurchaseResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Settlement still processing; poll or retry with the same idempotency key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolGrantPurchaseAccepted"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        },
+        "x-permission": "creditPools:write"
+      }
+    },
     "/v0/products": {
       "post": {
         "tags": [
@@ -7239,6 +8032,7 @@
           "Subscriptions"
         ],
         "summary": "Update",
+        "description": "Updates the subscription's settings. Switching `versionPolicy` to `floating` is refused with 400 when following the plan's default version would credit unused balance on a reset cycle that is not the subscription's billing period: a feature the default starts must reset from the subscription's billing anchor, and a feature the subscription keeps goes on resetting on its current cycle.",
         "operationId": "updateSubscription",
         "parameters": [
           {
@@ -7365,6 +8159,16 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "description": "A switch of versionPolicy to floating waited too long for another change on this subscription or its plan. Retry after the time in the Retry-After header.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
             "$ref": "#/components/responses/InternalServerError"
@@ -7546,7 +8350,7 @@
           "Subscriptions"
         ],
         "summary": "Migrate To A Plan Version",
-        "description": "Moves the subscription to a named version of its plan. By default the move follows the plan's versionTransition. With timing next_period, the move takes effect at the end of the current billing period: the current period bills as before, and each period that starts at or after that boundary bills from the target version. With timing immediate, entitlements change at once, in-arrears prices bill the whole current period at the target version, and in-advance prices change at the end of the current period, with no proration. The target can be an older or a newer published version. A migration always sets versionPolicy to pinned, so a later change of the plan's default version does not move the subscription. To follow the plan default again, call PATCH /v0/subscriptions/{id} with versionPolicy: 'floating'. A second migration before the boundary replaces the first. Migrating to the version the subscription is already on changes nothing except that it pins a floating subscription, so it is safe to repeat. A version number that does not exist on the plan and an archived version both return 404. The request is refused with 409 and a code when: the subscription is not live; the subscription ends at or before the boundary; a kept override has a rate that would mean something else on the new price; a feature's reset period, metric or pricing unit changes; or the new version sells a price that a continuing interval already covers.",
+        "description": "Moves the subscription to a named version of its plan. By default the move follows the plan's versionTransition. With timing next_period, the move takes effect at the end of the current billing period: the current period bills as before, and each period that starts at or after that boundary bills from the target version. With timing immediate, entitlements change at once, in-arrears prices bill the whole current period at the target version, and in-advance prices change at the end of the current period, with no proration. The target can be an older or a newer published version. A migration always sets versionPolicy to pinned, so a later change of the plan's default version does not move the subscription. To follow the plan default again, call PATCH /v0/subscriptions/{id} with versionPolicy: 'floating'. A second migration before the boundary replaces the first. Migrating to the version the subscription is already on changes nothing except that it pins a floating subscription, so it is safe to repeat. A version number that does not exist on the plan and an archived version both return 404. The request is refused with 409 and a code when: the subscription is not live; the subscription ends at or before the boundary; a kept override has a rate that would mean something else on the new price; a feature's reset period, metric or pricing unit changes; the new version sells a price that a continuing interval already covers; or the new version starts a feature that credits unused balance, or turns that credit on for a feature the subscription keeps, whose reset cycle is not the subscription's billing period (for a kept feature, the cycle its current entitlement resets on): a usage period interval other than the plan's billing cadence, or a usage period anchor that is not the subscription's billing anchor, date and time, moved by whole periods (code MIGRATION_RESET_CYCLE_MISALIGNED).",
         "operationId": "migrateSubscriptionVersion",
         "parameters": [
           {
@@ -9043,7 +9847,7 @@
           "Subscription Proposals"
         ],
         "summary": "Approve or reject",
-        "description": "Approves or rejects a pending subscription proposal. The body is flat like `PATCH /v0/approvals/{id}`'s, but takes the verbs `approve` and `reject`, a `reason` from a fixed list with optional `text`, and no `cancelled`. Needs the `subscriptionProposals:approve` permission, whoever created the proposal. Send the proposal's `hash` as `basedOnHash`. `approve` creates the subscription that `POST /v0/subscriptions` would create from the proposal's values at the moment of approval, read from the proposal's test clock when it has one, on its pinned version or, for a floating proposal, on the plan's default at that moment. The proposal becomes `approved` with the new `subscriptionId` in the same transaction. The answer comes once the first invoice is raised, as subscription create's does; read the subscription, with its payment state, from `GET /v0/subscriptions/{id}`. An approval takes no `reason` or `text`. An `approve` of an `approved` proposal whose `strandedAt` is set resumes the subscription its approval left waiting for its first invoice, and answers `SUBSCRIPTION_PROPOSAL_CHANGED` when another approve claimed it after this one read it. `reject` records the reason, the text, who decided and when. The proposal becomes `rejected`, which is final. No subscription is created, and nothing is sent to the system the proposal came from. 409 carries a `code`: `SUBSCRIPTION_PROPOSAL_NOT_PENDING` for a proposal that is not `pending`; `SUBSCRIPTION_PROPOSAL_CHANGED` when its `hash` changed since it was read, by an amend or a new default of a floating proposal's plan, or when it changed while the approval ran, with `details` `{ field: 'lockVersion', expected, actual }`; `SUBSCRIPTION_PROPOSAL_INVALID` when approving finds the proposal fails a check subscription create makes, with `details.code` the failed check's own code and `details.details` its details, each only when the check has one; `SUBSCRIPTION_PROPOSAL_DUPLICATE` when the customer already has a live subscription for the plan's product; `SUBSCRIPTION_PROPOSAL_ALREADY_APPROVED` when that subscription is the one a concurrent approval of this proposal created. Both put the subscription's id in `details.subscriptionId`. On any 409 the proposal is left as it is, except that an `approve` of a proposal whose `strandedAt` is set, when its subscription is no longer waiting for its first invoice, clears `strandedAt` and answers `SUBSCRIPTION_PROPOSAL_NOT_PENDING`. A plan, plan version or customer that no longer exists answers 404. A pending proposal blocks deleting its plan and its customer, so this happens only when a delete runs at the same time. A proposal of another merchant answers 404, as an unknown one does.",
+        "description": "Approves or rejects a pending subscription proposal. The body is flat like `PATCH /v0/approvals/{id}`'s, but takes the verbs `approve` and `reject`, a `reason` from a fixed list with optional `text`, and no `cancelled`. Needs the `subscriptionProposals:approve` permission, whoever created the proposal. Send the proposal's `hash` as `basedOnHash`. `approve` creates the subscription that `POST /v0/subscriptions` would create from the proposal's values at the moment of approval, read from the proposal's test clock when it has one, on its pinned version or, for a floating proposal, on the plan's default at that moment. The proposal becomes `approved` with the new `subscriptionId` in the same transaction. The answer comes once the first invoice is raised, as subscription create's does; read the subscription, with its payment state, from `GET /v0/subscriptions/{id}`. An approval takes no `reason` or `text`. An `approve` of an `approved` proposal whose `strandedAt` is set resumes the subscription its approval left waiting for its first invoice, and answers `SUBSCRIPTION_PROPOSAL_CHANGED` when another approve claimed it after this one read it. `reject` records the reason, the text, who decided and when. The proposal becomes `rejected`, which is final. No subscription is created. 409 carries a `code`: `SUBSCRIPTION_PROPOSAL_NOT_PENDING` for a proposal that is not `pending`; `SUBSCRIPTION_PROPOSAL_CHANGED` when its `hash` changed since it was read, by an amend or a new default of a floating proposal's plan, or when it changed while the approval ran, with `details` `{ field: 'lockVersion', expected, actual }`; `SUBSCRIPTION_PROPOSAL_INVALID` when approving finds the proposal fails a check subscription create makes, with `details.code` the failed check's own code and `details.details` its details, each only when the check has one; `SUBSCRIPTION_PROPOSAL_DUPLICATE` when the customer already has a live subscription for the plan's product; `SUBSCRIPTION_PROPOSAL_ALREADY_APPROVED` when that subscription is the one a concurrent approval of this proposal created. Both put the subscription's id in `details.subscriptionId`. On any 409 the proposal is left as it is, except that an `approve` of a proposal whose `strandedAt` is set, when its subscription is no longer waiting for its first invoice, clears `strandedAt` and answers `SUBSCRIPTION_PROPOSAL_NOT_PENDING`. A plan, plan version or customer that no longer exists answers 404. A pending proposal blocks deleting its plan and its customer, so this happens only when a delete runs at the same time. A proposal of another merchant answers 404, as an unknown one does.",
         "operationId": "decideSubscriptionProposal",
         "parameters": [
           {
@@ -15850,6 +16654,7 @@
           "externalAccounts:read",
           "externalReferences:read",
           "merchantIntegrations:read",
+          "accountingConnections:read",
           "webhooks:read",
           "testClocks:read",
           "approvals:read",
@@ -15896,6 +16701,7 @@
           "externalAccounts:write",
           "externalReferences:write",
           "merchantIntegrations:write",
+          "accountingConnections:write",
           "webhooks:write",
           "testClocks:write",
           "approvals:write",
@@ -18539,6 +19345,671 @@
             "type": "object",
             "additionalProperties": true,
             "description": "Template for entitlement values when this feature is provisioned. Omit the field to attach the feature without declaring an allowance. An explicit empty object declares an allowance with default values."
+          }
+        }
+      },
+      "PricingUnit": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "merchantId",
+          "identifier",
+          "displayName",
+          "shortName",
+          "conversionRate",
+          "currency",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/PricingUnitId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "pricingUnit"
+            ],
+            "default": "pricingUnit"
+          },
+          "merchantId": {
+            "$ref": "#/components/schemas/OrganizationId"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "shortName": {
+            "type": "string"
+          },
+          "conversionRate": {
+            "type": "string",
+            "description": "Rate converting one credit to the invoicing currency ($/credit), as a decimal string."
+          },
+          "currency": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreditPoolId": {
+        "type": "string",
+        "pattern": "^crp_[a-zA-Z0-9]+$"
+      },
+      "CreditPool": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "customerId",
+          "pricingUnitId",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CreditPoolId"
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "creditPool"
+            ],
+            "default": "creditPool"
+          },
+          "customerId": {
+            "$ref": "#/components/schemas/CustomerId"
+          },
+          "pricingUnitId": {
+            "$ref": "#/components/schemas/PricingUnitId"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreditPoolGrantStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "scheduled",
+          "expired",
+          "voided"
+        ],
+        "description": "Where the grant stands now. `active` grants have started and are neither expired nor voided; a fully used grant stays `active` with a `remainingBalance` of 0. `scheduled` grants start later. `expired` grants passed their expiry. `voided` grants were cancelled."
+      },
+      "GrantId": {
+        "type": "string",
+        "pattern": "^grt_[a-zA-Z0-9]+$"
+      },
+      "CreditPoolGrantBalance": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "creditPoolId",
+          "amount",
+          "priority",
+          "recurrencePeriod",
+          "recurrenceAnchor",
+          "effectiveAt",
+          "expiresAt",
+          "createdAt",
+          "voidedAt",
+          "status",
+          "remainingBalance",
+          "consumed",
+          "grantedToDate"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/GrantId",
+            "description": "The grant's id (`grt_…`)."
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "grant"
+            ],
+            "default": "grant"
+          },
+          "creditPoolId": {
+            "$ref": "#/components/schemas/CreditPoolId"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Credits allocated in this block. A recurring grant adds this amount each period."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Drawdown priority (lower = consumed first)."
+          },
+          "recurrencePeriod": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ISO-8601 recurrence duration, or null for a one-off block."
+          },
+          "recurrenceAnchor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Recurrence phase anchor, or null for a one-off block."
+          },
+          "effectiveAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "voidedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "When this grant was voided, or null if it is still live."
+          },
+          "status": {
+            "$ref": "#/components/schemas/CreditPoolGrantStatus"
+          },
+          "remainingBalance": {
+            "type": "number",
+            "description": "Credits left on the grant now. Computed at read time. 0 unless the grant is active."
+          },
+          "consumed": {
+            "type": "number",
+            "description": "Credits drawn from the grant so far."
+          },
+          "grantedToDate": {
+            "type": "number",
+            "description": "Credits the grant has added so far: its amount, plus one amount for each refill that has happened. 0 for a scheduled grant."
+          }
+        }
+      },
+      "CreditPoolGrantList": {
+        "type": "object",
+        "required": [
+          "object",
+          "data",
+          "pagination",
+          "asOf"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "list"
+            ],
+            "default": "list"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditPoolGrantBalance"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The instant the statuses and balances were computed at: the requested `at`, or the pool's current time when `at` is absent or later. The pool's current time is the test clock time of the customer's newest active subscription if it has one, otherwise now."
+          }
+        }
+      },
+      "CreditPoolGrant": {
+        "type": "object",
+        "required": [
+          "id",
+          "object",
+          "creditPoolId",
+          "amount",
+          "priority",
+          "recurrencePeriod",
+          "recurrenceAnchor",
+          "effectiveAt",
+          "expiresAt",
+          "createdAt",
+          "voidedAt"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/GrantId",
+            "description": "The grant's id (`grt_…`)."
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "grant"
+            ],
+            "default": "grant"
+          },
+          "creditPoolId": {
+            "$ref": "#/components/schemas/CreditPoolId"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Credits allocated in this block."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Drawdown priority (lower = consumed first). Defaults to 0."
+          },
+          "recurrencePeriod": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ISO-8601 recurrence duration, or null for a one-off block."
+          },
+          "recurrenceAnchor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Recurrence phase anchor, or null for a one-off block."
+          },
+          "effectiveAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "voidedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "When this allocation was voided, or null if it is still live. A voided allocation no longer contributes to the pool's balance."
+          }
+        }
+      },
+      "CreditPoolLedgerEntry": {
+        "type": "object",
+        "description": "A single, typed event in a pool's balance history.",
+        "required": [
+          "id",
+          "object",
+          "entryType",
+          "ledgerSequenceNumber",
+          "at",
+          "amount",
+          "startingBalance",
+          "endingBalance",
+          "grant"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Entry identifier. For an `increment` entry produced by a grant's original funding, this is the grant's own id (`grt_…`) and is stable across requests. For every other entry (recurrence-refill increments, `decrement`, `void`, `expiration`), this id is derived per request and is not a stable identifier for polling — key on `(grant.id, entryType, at)` instead."
+          },
+          "object": {
+            "type": "string",
+            "enum": [
+              "ledgerEntry"
+            ],
+            "default": "ledgerEntry"
+          },
+          "entryType": {
+            "type": "string",
+            "enum": [
+              "increment",
+              "decrement",
+              "void",
+              "expiration"
+            ],
+            "description": "What kind of balance movement this entry represents."
+          },
+          "ledgerSequenceNumber": {
+            "type": "integer",
+            "description": "1-indexed position of this entry within the requested window's chronological order. Not a stable identifier — it can shift across requests as ledger activity changes."
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When this entry occurred."
+          },
+          "amount": {
+            "type": "number",
+            "description": "Signed change to the pool's total balance from this entry. Positive for `increment`; negative (or zero) for `decrement`, `void`, and `expiration`."
+          },
+          "startingBalance": {
+            "type": "number",
+            "description": "Pool's total balance immediately before this entry."
+          },
+          "endingBalance": {
+            "type": "number",
+            "description": "Pool's total balance immediately after this entry."
+          },
+          "grant": {
+            "type": "object",
+            "description": "The grant this entry relates to — the grant that funded the pool for `increment`, or the grant whose balance changed for `decrement`, `void`, and `expiration`.",
+            "required": [
+              "id",
+              "expiresAt",
+              "conversionRate"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/components/schemas/GrantId"
+              },
+              "expiresAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time",
+                "description": "The grant's own expiry, or null if it never expires."
+              },
+              "conversionRate": {
+                "type": "string",
+                "description": "The pool's pricing-unit conversion rate ($ per credit), as a decimal string."
+              }
+            }
+          }
+        }
+      },
+      "CreditPoolLedgerItemizedResponse": {
+        "type": "object",
+        "required": [
+          "startingBalance",
+          "endingBalance",
+          "entries",
+          "pagination"
+        ],
+        "properties": {
+          "startingBalance": {
+            "type": "number",
+            "description": "Pool's total balance at the requested window's `from`."
+          },
+          "endingBalance": {
+            "type": "number",
+            "description": "Pool's total balance at the requested window's `to`."
+          },
+          "entries": {
+            "type": "array",
+            "description": "Ledger entries within the requested window, ordered oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/CreditPoolLedgerEntry"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
+          }
+        }
+      },
+      "CreditPoolLedgerPeriod": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ],
+        "description": "This bucket's calendar-aligned period (UTC). The first and last bucket in the response are clamped to the requested `from`/`to` rather than the full calendar period.",
+        "properties": {
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreditPoolLedgerBucket": {
+        "type": "object",
+        "description": "A rollup of ledger activity over one calendar-aligned period.",
+        "required": [
+          "period",
+          "startingBalance",
+          "endingBalance",
+          "incremented",
+          "decremented",
+          "voided",
+          "expired",
+          "entryCount"
+        ],
+        "properties": {
+          "period": {
+            "$ref": "#/components/schemas/CreditPoolLedgerPeriod"
+          },
+          "startingBalance": {
+            "type": "number",
+            "description": "Pool's total balance at `period.from`."
+          },
+          "endingBalance": {
+            "type": "number",
+            "description": "Pool's total balance at `period.to`."
+          },
+          "incremented": {
+            "type": "number",
+            "description": "Net credits added during this period from `increment` entries. Zero when excluded by an `entryType` filter."
+          },
+          "decremented": {
+            "type": "number",
+            "description": "Net credits drawn down during this period from `decrement` entries (negative or zero). Zero when excluded by an `entryType` filter."
+          },
+          "voided": {
+            "type": "number",
+            "description": "Net credits removed during this period from `void` entries (negative or zero). Zero when excluded by an `entryType` filter."
+          },
+          "expired": {
+            "type": "number",
+            "description": "Net credits removed during this period from `expiration` entries (negative or zero). Zero when excluded by an `entryType` filter."
+          },
+          "entryCount": {
+            "type": "integer",
+            "description": "Number of ledger entries (after any `entryType` filter) that fell within this period."
+          }
+        }
+      },
+      "CreditPoolLedgerBucketedResponse": {
+        "type": "object",
+        "required": [
+          "startingBalance",
+          "endingBalance",
+          "buckets",
+          "pagination"
+        ],
+        "properties": {
+          "startingBalance": {
+            "type": "number",
+            "description": "Pool's total balance at the requested window's `from`."
+          },
+          "endingBalance": {
+            "type": "number",
+            "description": "Pool's total balance at the requested window's `to`."
+          },
+          "buckets": {
+            "type": "array",
+            "description": "Calendar-aligned buckets within the requested window, ordered oldest first. A calendar period with no activity is omitted.",
+            "items": {
+              "$ref": "#/components/schemas/CreditPoolLedgerBucket"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/OffsetPagination"
+          }
+        }
+      },
+      "PoolGrantPurchaseRequest": {
+        "type": "object",
+        "required": [
+          "grantAmount",
+          "idempotencyKey"
+        ],
+        "properties": {
+          "grantAmount": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "exclusiveMaximum": 1e+12,
+            "multipleOf": 1e-08,
+            "description": "The number of credits to grant upon payment completion."
+          },
+          "subscriptionId": {
+            "type": "string",
+            "pattern": "^sub_",
+            "description": "The subscription to anchor the invoice to. Required to disambiguate when the pool's customer has more than one active subscription."
+          },
+          "effectiveAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the grant becomes effective. Defaults to now."
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "When the grant expires. If omitted, the grant does not expire."
+          },
+          "successUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to redirect the customer to after successful payment."
+          },
+          "cancelUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to redirect the customer to if payment is cancelled."
+          },
+          "paymentExpiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the payment session expires. If omitted, uses the default expiry."
+          },
+          "idempotencyKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Caller-provided deduplication key. Retrying with the same key returns the existing invoice."
+          }
+        }
+      },
+      "PoolGrantPurchaseResponse": {
+        "type": "object",
+        "required": [
+          "object",
+          "invoiceId",
+          "poolId",
+          "grantAmount",
+          "price",
+          "currency",
+          "paymentSessions"
+        ],
+        "properties": {
+          "object": {
+            "type": "string",
+            "enum": [
+              "grant_purchase"
+            ],
+            "default": "grant_purchase"
+          },
+          "invoiceId": {
+            "type": "string",
+            "pattern": "^inv_",
+            "description": "The invoice ID for this grant purchase."
+          },
+          "poolId": {
+            "$ref": "#/components/schemas/CreditPoolId",
+            "description": "The pool that will receive the grant."
+          },
+          "grantAmount": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "description": "The number of credits that will be granted on payment."
+          },
+          "price": {
+            "type": "string",
+            "description": "The price in decimal format (e.g., '5.00')."
+          },
+          "currency": {
+            "type": "string",
+            "description": "The three-letter ISO 4217 currency code (e.g., 'usd')."
+          },
+          "paymentSessions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "url"
+              ],
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The Stripe checkout URL for the customer to complete payment."
+                },
+                "expiresAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true,
+                  "description": "When the payment session expires."
+                },
+                "amount": {
+                  "type": "number",
+                  "description": "The payment amount in the currency's minor unit (e.g., cents)."
+                }
+              }
+            },
+            "description": "Payment session(s) for the customer to complete the purchase."
+          }
+        }
+      },
+      "PoolGrantPurchaseAccepted": {
+        "type": "object",
+        "required": [
+          "processing",
+          "invoiceId"
+        ],
+        "properties": {
+          "processing": {
+            "type": "boolean",
+            "description": "True while the invoice's settlement is still in progress."
+          },
+          "invoiceId": {
+            "type": "string",
+            "pattern": "^inv_",
+            "description": "The invoice ID the caller can poll or retry against with the same idempotency key."
           }
         }
       },
@@ -21864,10 +23335,11 @@
           "item",
           "customer",
           "subscriptionProposal",
-          "subscription"
+          "subscription",
+          "contract"
         ],
         "x-speakeasy-unknown-values": "allow",
-        "description": "The type of Paygentic entity this external reference points at. `subscriptionProposal` and `subscription` references link a subscription proposal, and the subscription its approval creates, to the CRM record they come from. They are read-only through these endpoints."
+        "description": "The type of Paygentic entity this external reference points at. `subscriptionProposal` and `subscription` references link a subscription proposal, and the subscription its approval creates, to the CRM record they come from. A `contract` reference links a contract to the CRM record it was created from. These three are read-only through these endpoints."
       },
       "ExternalReference": {
         "type": "object",

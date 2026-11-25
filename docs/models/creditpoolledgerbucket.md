@@ -1,0 +1,36 @@
+# CreditPoolLedgerBucket
+
+A rollup of ledger activity over one calendar-aligned period.
+
+## Example Usage
+
+```typescript
+import { CreditPoolLedgerBucket } from "@paygentic/sdk/models";
+
+let value: CreditPoolLedgerBucket = {
+  period: {
+    from: new Date("2025-10-23T14:35:18.486Z"),
+    to: new Date("2026-05-13T03:04:33.938Z"),
+  },
+  startingBalance: 8718.04,
+  endingBalance: 3485.97,
+  incremented: 7481.92,
+  decremented: 3689.48,
+  voided: 1339.14,
+  expired: 4388.74,
+  entryCount: 34234,
+};
+```
+
+## Fields
+
+| Field                                                                                                                                                                 | Type                                                                                                                                                                  | Required                                                                                                                                                              | Description                                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `period`                                                                                                                                                              | [models.CreditPoolLedgerPeriod](../models/creditpoolledgerperiod.md)                                                                                                  | :heavy_check_mark:                                                                                                                                                    | This bucket's calendar-aligned period (UTC). The first and last bucket in the response are clamped to the requested `from`/`to` rather than the full calendar period. |
+| `startingBalance`                                                                                                                                                     | *number*                                                                                                                                                              | :heavy_check_mark:                                                                                                                                                    | Pool's total balance at `period.from`.                                                                                                                                |
+| `endingBalance`                                                                                                                                                       | *number*                                                                                                                                                              | :heavy_check_mark:                                                                                                                                                    | Pool's total balance at `period.to`.                                                                                                                                  |
+| `incremented`                                                                                                                                                         | *number*                                                                                                                                                              | :heavy_check_mark:                                                                                                                                                    | Net credits added during this period from `increment` entries. Zero when excluded by an `entryType` filter.                                                           |
+| `decremented`                                                                                                                                                         | *number*                                                                                                                                                              | :heavy_check_mark:                                                                                                                                                    | Net credits drawn down during this period from `decrement` entries (negative or zero). Zero when excluded by an `entryType` filter.                                   |
+| `voided`                                                                                                                                                              | *number*                                                                                                                                                              | :heavy_check_mark:                                                                                                                                                    | Net credits removed during this period from `void` entries (negative or zero). Zero when excluded by an `entryType` filter.                                           |
+| `expired`                                                                                                                                                             | *number*                                                                                                                                                              | :heavy_check_mark:                                                                                                                                                    | Net credits removed during this period from `expiration` entries (negative or zero). Zero when excluded by an `entryType` filter.                                     |
+| `entryCount`                                                                                                                                                          | *number*                                                                                                                                                              | :heavy_check_mark:                                                                                                                                                    | Number of ledger entries (after any `entryType` filter) that fell within this period.                                                                                 |

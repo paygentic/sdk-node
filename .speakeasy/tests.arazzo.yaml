@@ -4373,3 +4373,212 @@ workflows:
             type: simple
     x-speakeasy-test-group: Subscription Proposals
     x-speakeasy-test-rebuild: true
+  - workflowId: createPricingUnit
+    steps:
+      - stepId: test
+        operationId: createPricingUnit
+        requestBody:
+          contentType: application/json
+          payload:
+            conversionRate: <value>
+            currency: Seychelles Rupee
+            displayName: Jay.Kerluke70
+            identifier: <value>
+            merchantId: <id>
+            shortName: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"pricingUnit","merchantId":"<id>","identifier":"<value>","displayName":"Donna_McDermott","shortName":"<value>","conversionRate":"<value>","currency":"Australian Dollar","createdAt":"2026-04-05T18:49:20.481Z","updatedAt":"2024-09-02T14:15:34.408Z"}
+            type: simple
+    x-speakeasy-test-group: PricingUnits
+    x-speakeasy-test-rebuild: true
+  - workflowId: listPricingUnits
+    steps:
+      - stepId: test
+        operationId: listPricingUnits
+        parameters:
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[{"id":"<id>","object":"pricingUnit","merchantId":"<id>","identifier":"<value>","displayName":"Gage39","shortName":"<value>","conversionRate":"<value>","currency":"Rial Omani","createdAt":"2024-11-05T12:38:58.971Z","updatedAt":"2026-05-30T10:11:14.677Z"}],"pagination":{"limit":407161,"offset":747382,"total":486600}}
+            type: simple
+    x-speakeasy-test-group: PricingUnits
+    x-speakeasy-test-rebuild: true
+  - workflowId: getPricingUnit
+    steps:
+      - stepId: test
+        operationId: getPricingUnit
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"pricingUnit","merchantId":"<id>","identifier":"<value>","displayName":"Jermaine_Price","shortName":"<value>","conversionRate":"<value>","currency":"Cedi","createdAt":"2024-10-01T18:20:07.851Z","updatedAt":"2024-06-25T05:41:34.611Z"}
+            type: simple
+    x-speakeasy-test-group: PricingUnits
+    x-speakeasy-test-rebuild: true
+  - workflowId: createCreditPool
+    steps:
+      - stepId: test
+        operationId: createCreditPool
+        requestBody:
+          contentType: application/json
+          payload:
+            customerId: <id>
+            pricingUnitId: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"creditPool","customerId":"<id>","pricingUnitId":"<id>","createdAt":"2024-09-20T04:33:04.208Z","updatedAt":"2026-08-17T02:46:07.626Z"}
+            type: simple
+    x-speakeasy-test-group: CreditPools
+    x-speakeasy-test-rebuild: true
+  - workflowId: listCreditPools
+    steps:
+      - stepId: test
+        operationId: listCreditPools
+        parameters:
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"data":[],"pagination":{"limit":78874,"offset":448161,"total":650611}}
+            type: simple
+    x-speakeasy-test-group: CreditPools
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCreditPool
+    steps:
+      - stepId: test
+        operationId: getCreditPool
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"creditPool","customerId":"<id>","pricingUnitId":"<id>","createdAt":"2024-07-07T18:26:17.469Z","updatedAt":"2026-08-29T23:58:24.464Z"}
+            type: simple
+    x-speakeasy-test-group: CreditPools
+    x-speakeasy-test-rebuild: true
+  - workflowId: listCreditPoolGrants
+    steps:
+      - stepId: test
+        operationId: listCreditPoolGrants
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"list","data":[],"pagination":{"limit":965677,"offset":546899,"total":917186},"asOf":"2025-06-20T20:55:05.767Z"}
+            type: simple
+    x-speakeasy-test-group: CreditPools
+    x-speakeasy-test-rebuild: true
+  - workflowId: createCreditPoolGrant
+    steps:
+      - stepId: test
+        operationId: createCreditPoolGrant
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            amount: 5717.01
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"id":"<id>","object":"grant","creditPoolId":"<id>","amount":3391.14,"priority":180700,"recurrencePeriod":"<value>","recurrenceAnchor":"2026-10-12T20:43:26.814Z","effectiveAt":"2024-03-21T00:05:33.694Z","expiresAt":"2024-11-09T00:27:48.726Z","createdAt":"2026-11-15T21:01:52.875Z","voidedAt":"2025-03-29T12:12:26.962Z"}
+            type: simple
+    x-speakeasy-test-group: CreditPools
+    x-speakeasy-test-rebuild: true
+  - workflowId: getCreditPoolLedger
+    steps:
+      - stepId: test
+        operationId: getCreditPoolLedger
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+          - name: from
+            in: query
+            value: "2025-01-03T19:47:34.571Z"
+          - name: to
+            in: query
+            value: "2025-06-15T09:32:08.085Z"
+          - name: limit
+            in: query
+            value: 50
+          - name: offset
+            in: query
+            value: 0
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"startingBalance":7380.75,"endingBalance":2251.8,"entries":[{"id":"<id>","object":"ledgerEntry","entryType":"void","ledgerSequenceNumber":591942,"at":"2026-10-15T13:19:43.778Z","amount":7166.8,"startingBalance":6330.37,"endingBalance":9839.95,"grant":{"id":"<id>","expiresAt":"2025-03-07T19:20:33.105Z","conversionRate":"<value>"}}],"pagination":{"limit":324810,"offset":516218,"total":5417}}
+            type: simple
+    x-speakeasy-test-group: CreditPools
+    x-speakeasy-test-rebuild: true
+  - workflowId: createCreditPoolPurchase
+    steps:
+      - stepId: test
+        operationId: createCreditPoolPurchase
+        parameters:
+          - name: id
+            in: path
+            value: <id>
+        requestBody:
+          contentType: application/json
+          payload:
+            grantAmount: 5185.68
+            idempotencyKey: <value>
+        successCriteria:
+          - condition: $statusCode == 201
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {"object":"grant_purchase","invoiceId":"<id>","poolId":"<id>","grantAmount":3809.03,"price":"139.89","currency":"CFP Franc","paymentSessions":[{"url":"https://smug-receptor.com"}]}
+            type: simple
+    x-speakeasy-test-group: CreditPools
+    x-speakeasy-test-rebuild: true

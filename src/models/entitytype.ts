@@ -7,16 +7,17 @@ import * as openEnums from "../types/enums.js";
 import { OpenEnum } from "../types/enums.js";
 
 /**
- * The type of Paygentic entity this external reference points at. `subscriptionProposal` and `subscription` references link a subscription proposal, and the subscription its approval creates, to the CRM record they come from. They are read-only through these endpoints.
+ * The type of Paygentic entity this external reference points at. `subscriptionProposal` and `subscription` references link a subscription proposal, and the subscription its approval creates, to the CRM record they come from. A `contract` reference links a contract to the CRM record it was created from. These three are read-only through these endpoints.
  */
 export const EntityType = {
   Item: "item",
   Customer: "customer",
   SubscriptionProposal: "subscriptionProposal",
   Subscription: "subscription",
+  Contract: "contract",
 } as const;
 /**
- * The type of Paygentic entity this external reference points at. `subscriptionProposal` and `subscription` references link a subscription proposal, and the subscription its approval creates, to the CRM record they come from. They are read-only through these endpoints.
+ * The type of Paygentic entity this external reference points at. `subscriptionProposal` and `subscription` references link a subscription proposal, and the subscription its approval creates, to the CRM record they come from. A `contract` reference links a contract to the CRM record it was created from. These three are read-only through these endpoints.
  */
 export type EntityType = OpenEnum<typeof EntityType>;
 

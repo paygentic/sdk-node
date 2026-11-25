@@ -1,19 +1,19 @@
 lockVersion: 2.0.0
 id: 0940f8d1-1ce8-40cd-8c42-adf2a1711590
 management:
-  docChecksum: 911eecac0952f6cf1d72a39a968317b3
+  docChecksum: d4daee260d1aa07a29075ebfa67566f3
   docVersion: 0.1.0
   speakeasyVersion: 1.761.4
   generationVersion: 2.879.13
-  releaseVersion: 0.10.14
-  configChecksum: 048c9ccf408bb861ea16ed61fc249a77
+  releaseVersion: 0.10.15
+  configChecksum: 3307ccdde046b5ab6d0b1b444692628d
   repoURL: https://github.com/paygentic/sdk-node.git
   installationURL: https://github.com/paygentic/sdk-node
   published: true
 persistentEdits:
-  generation_id: f51e9856-f246-4215-a84a-be85329c4ed3
-  pristine_commit_hash: fa9050b9b4392d65cfc350a0e7b340d760c72a9b
-  pristine_tree_hash: 6baf48d7be345a0ba8be5ea90cfa55692e738f80
+  generation_id: cb675ff8-378b-4135-852e-2796e811e7ad
+  pristine_commit_hash: 287ecc49c4ddf270b763ff05d62a82f27480f4c1
+  pristine_tree_hash: f9ad1cd14aa8dfea457f79c5ccab9d7eb7129080
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -318,6 +318,70 @@ trackedFiles:
     id: 5951ddf0759d
     last_write_checksum: sha1:a07c0a30903dac46e95f6767d66f17b39c1dc9c1
     pristine_git_object: 68ec3e7dc745478f8c1246700b3a5c026ccbd6b5
+  docs/models/creditpool.md:
+    id: 478dd87e8d05
+    last_write_checksum: sha1:777aec926554242339d8d53be17a285cbeacd93a
+    pristine_git_object: 288e37da47baa54f933225a32bac8b86a524a20d
+  docs/models/creditpoolgrant.md:
+    id: a71224f504ca
+    last_write_checksum: sha1:b5ca0304b8b944a88276be3a5595371924750265
+    pristine_git_object: b82e59a80d6e2970a5c26dbcce6f880b7ac6d7db
+  docs/models/creditpoolgrantbalance.md:
+    id: ebe0a65057ac
+    last_write_checksum: sha1:0669ca936d9f966b0c540c5c1056a9b4ebae0525
+    pristine_git_object: 959137f843a0050bf12e61eff57fcf2a48cf7129
+  docs/models/creditpoolgrantbalanceobject.md:
+    id: 4a3b5005b53c
+    last_write_checksum: sha1:14da6ab0a88cb9309b0eba14b2f52e41eb6bfd91
+    pristine_git_object: d4ca5d586b5f341273d112f2f80739810fe44635
+  docs/models/creditpoolgrantlist.md:
+    id: 12c1e2885124
+    last_write_checksum: sha1:ce25505de90d20e41ccf8ba76154c799becb767a
+    pristine_git_object: 2735c88da90c9f86f53c7ae5e8d8ad567b0d97f1
+  docs/models/creditpoolgrantlistobject.md:
+    id: 3e7fa3348931
+    last_write_checksum: sha1:fb4a105961645374f65643b31964eb19efd2cd2d
+    pristine_git_object: ae53f959b72857ad1b00eb63e09737c507d427cc
+  docs/models/creditpoolgrantobject.md:
+    id: 55c937b6b59b
+    last_write_checksum: sha1:e5c87935ee1f4ff7b3c2b21f8cf20aaf6d5d5acb
+    pristine_git_object: 6f5a94d24f1a1136247fa0cc249aa66858e99fdc
+  docs/models/creditpoolgrantstatus.md:
+    id: bcceb4883936
+    last_write_checksum: sha1:8f3c7690dc826f6735b3ffc873fa98ec08b100b1
+    pristine_git_object: a4b90997885402199de85400109de640b75ca647
+  docs/models/creditpoolledgerbucket.md:
+    id: 0e9431b54f55
+    last_write_checksum: sha1:e6175aa36a4d35fa3556d533a6cd7f23260d16c6
+    pristine_git_object: a731e29fe950887c398cfc605a81f246d3415402
+  docs/models/creditpoolledgerbucketedresponse.md:
+    id: 7d65220347a3
+    last_write_checksum: sha1:408642f454b463a7067d3a68c94628efc473dff2
+    pristine_git_object: 17cac960274db7afaa300736623c69213588e640
+  docs/models/creditpoolledgerentry.md:
+    id: 134bfca644e9
+    last_write_checksum: sha1:ff741dddfc913570554317bd300a50cc2c44497d
+    pristine_git_object: 4ab6cb6f72a0fc275df908e1df06f7b6a06e60c8
+  docs/models/creditpoolledgerentrygrant.md:
+    id: fd7da82e9ff8
+    last_write_checksum: sha1:302ce34a4ced40b90b3e334b58ce72eb4bbf607a
+    pristine_git_object: 87c41da3b254c2a482bcbf58345a94aa0566da68
+  docs/models/creditpoolledgerentryobject.md:
+    id: 67005cc89b8c
+    last_write_checksum: sha1:830b492151058f9e9ff020b0e2566fbff31d00c2
+    pristine_git_object: 18fb7a639737d6f0f376c53e023f7fefcc70a418
+  docs/models/creditpoolledgeritemizedresponse.md:
+    id: 660446e53936
+    last_write_checksum: sha1:3ad92a4ed152d16ded6581b2ae54abab610a4486
+    pristine_git_object: 1ef597d9166d9f7b9beb7596fed6fd59fe70455e
+  docs/models/creditpoolledgerperiod.md:
+    id: 3424da7cab1d
+    last_write_checksum: sha1:ac3bbf86618f8b2ac71b21def0848d154e71d3a9
+    pristine_git_object: 0d8ba77e48c5ee5877a0be3e0d45785c4da56b8d
+  docs/models/creditpoolobject.md:
+    id: 9c9fde165afd
+    last_write_checksum: sha1:0f65b4ce153b6d7de2dec1ace6b5810558afbb65
+    pristine_git_object: a80833133a2c15d2df36aaf598dbe926481ee155
   docs/models/currencybreakdownentry.md:
     id: 53feff780850
     last_write_checksum: sha1:a1949f76d3ac679865728c073781440c8c69f6a8
@@ -420,12 +484,16 @@ trackedFiles:
     pristine_git_object: d0ff1e9ffeabc6d4be9232e703d6889fac41c8ea
   docs/models/entitytype.md:
     id: 130a2f7038b0
-    last_write_checksum: sha1:a516bbb978e2fe16fbf244f0710d658d7a0b269d
-    pristine_git_object: c8b5c06779d17f61cda2f631e3ea09fe2d47f14a
+    last_write_checksum: sha1:172adddb6933808958967f1295552f468ba5509b
+    pristine_git_object: 5c172a9bd6a91ce8e631a812a38459f0d01c8e58
   docs/models/entitytypeinput.md:
     id: 54d009735a2c
     last_write_checksum: sha1:cc204a557384458b4417204e92c5ff874309353f
     pristine_git_object: 53a8e5272b7460cb256615e7467b6f1f39485e06
+  docs/models/entrytype.md:
+    id: b964da3bf48a
+    last_write_checksum: sha1:eef4b540cb03ee92b1015aa76f9a415e55e2e173
+    pristine_git_object: 5778603d270351004bfa1f54a0ec943911bab0c1
   docs/models/errorenum.md:
     id: a66111223d6d
     last_write_checksum: sha1:897515bab6ce0eb63705e41165ec28325a4461dd
@@ -488,8 +556,8 @@ trackedFiles:
     pristine_git_object: 192b55ab2e5974c008f08b3e402aa6604893cbf4
   docs/models/externalreference.md:
     id: d97b79f6185e
-    last_write_checksum: sha1:a7360263d215990a630b3312cafdea21ac2265ae
-    pristine_git_object: 9efd6268ca4ca7894e13051c08304479b64d1b4b
+    last_write_checksum: sha1:b2eb38737cc31948aebd465cc079f22118fc9a10
+    pristine_git_object: 2642015dfc2adcc751ca77d25c16d0ed20aac95c
   docs/models/externalreferenceobject.md:
     id: e3bef0c29e8d
     last_write_checksum: sha1:7890bd33b22bace5658b68013ec257da59eb2078
@@ -918,6 +986,26 @@ trackedFiles:
     id: 5328808e532a
     last_write_checksum: sha1:2bb78fefce9a415530e00da938739c971795af28
     pristine_git_object: c6caa7116136869df3b14fd0a26764ff6e343ceb
+  docs/models/operations/createcreditpoolgrantrequest.md:
+    id: 6e8396f2d9cc
+    last_write_checksum: sha1:fcf7c7fffaf15745168b9fb66d49a825bbcd32aa
+    pristine_git_object: 846dd86fe39d7af4aad73ebebdd4664bc83a4064
+  docs/models/operations/createcreditpoolgrantrequestbody.md:
+    id: dbde2828d036
+    last_write_checksum: sha1:c445894a2a37d2225694cd9456edaaed1ae302df
+    pristine_git_object: abf483ee589d7c5a2d696fd00a79062defcf1980
+  docs/models/operations/createcreditpoolpurchaserequest.md:
+    id: 6ecce48c811c
+    last_write_checksum: sha1:f4634a1b56f9672eaa7199110ce8cfa65dbca252
+    pristine_git_object: 9f054d5291d2fedce888594373e79d0181721c86
+  docs/models/operations/createcreditpoolpurchaseresponse.md:
+    id: c95fbe23851c
+    last_write_checksum: sha1:f59f62ec6cfb7a9ccb18f5abb8ef70b40dcda7ac
+    pristine_git_object: 9e139fc5f14baf571294a0115e9c42f7c19248f0
+  docs/models/operations/createcreditpoolrequest.md:
+    id: b34ff088081f
+    last_write_checksum: sha1:0a5abe3242fbe6040dd7314aae7cdcaca5085e7e
+    pristine_git_object: df6b56cbaccd97f0e9cebd9b45a92f3c25683524
   docs/models/operations/createcustomerpaymentmethodrequest.md:
     id: 2f5737cd18f4
     last_write_checksum: sha1:3ea7c7f8adc7bf7879ed86de78a7fc6c2aa1b772
@@ -1014,6 +1102,10 @@ trackedFiles:
     id: d62e88e82e5f
     last_write_checksum: sha1:dd29f42a71ca3679854b1a4fd252852af12e56e5
     pristine_git_object: afdcf3583080198826aee88e887c4bbc045e058b
+  docs/models/operations/createpricingunitrequest.md:
+    id: 1bdbf03c09ef
+    last_write_checksum: sha1:461142adfcc872a126737323738aa83bae66a1dd
+    pristine_git_object: 2aa92989f66eb6c182135f7e52856d7b8a79337c
   docs/models/operations/createproductrequest.md:
     id: 8d6e174e41cf
     last_write_checksum: sha1:13fc72f6f3d07a2990dac7f8212a3fcb5101b201
@@ -1178,6 +1270,10 @@ trackedFiles:
     id: a6a60799a4dc
     last_write_checksum: sha1:36b08f5473f28390c1d192fddf5ecf1585eb188e
     pristine_git_object: ab738b6a6fc92badc2df2cea6ba969f8f633ef9b
+  docs/models/operations/entrytype.md:
+    id: 82caac33296c
+    last_write_checksum: sha1:5968e301f6860915a5b86be309cb6c6da0f7abc3
+    pristine_git_object: 64135ce8d2e91a8210a7c478729998e3c19e2c8d
   docs/models/operations/errort.md:
     id: fd8a580e4da8
     last_write_checksum: sha1:4dacdc91cf5dda018cfdd48f9b5367b86a3f13a6
@@ -1246,6 +1342,18 @@ trackedFiles:
     id: 64bf8ba77187
     last_write_checksum: sha1:85218613265f6d23563a3da8ae596a026ccde895
     pristine_git_object: 3b5238548e4579d6140bc6cf893e3d80d1a6ca51
+  docs/models/operations/getcreditpoolledgerrequest.md:
+    id: 7577cb8bba7b
+    last_write_checksum: sha1:9803d825247e9c745fae9ac15352626c2ad21762
+    pristine_git_object: 6ab244fbad39368ce273c39393974690feb1c313
+  docs/models/operations/getcreditpoolledgerresponse.md:
+    id: ae8bc8ae829f
+    last_write_checksum: sha1:39589d096bef8f1f09208cd2fc13bc536839e919
+    pristine_git_object: 6dbc89b13f169a01c5326806301ba7995bcb0c01
+  docs/models/operations/getcreditpoolrequest.md:
+    id: 3be7ff813d92
+    last_write_checksum: sha1:c272ea2f135da70d9d2964a00423e1588ff1902e
+    pristine_git_object: c41fb379b50229d5b4fe09a9cd0d24808faf1c81
   docs/models/operations/getcustomerrequest.md:
     id: 2c25d8b5c423
     last_write_checksum: sha1:0a5601a1748b87df2153a941e1c06b62c4ea17fe
@@ -1306,6 +1414,10 @@ trackedFiles:
     id: 385921300d36
     last_write_checksum: sha1:b61144f90a5657eae91a1f0c87798e057e1d09f2
     pristine_git_object: e69deb7d2a98e07ecac1acbd74dd3981b618719b
+  docs/models/operations/getpricingunitrequest.md:
+    id: 2b7c38f9e6d4
+    last_write_checksum: sha1:6b6078b8d6b46adc519ee04e1597c1cf162b1042
+    pristine_git_object: 0a043f496fc2476a0b3eace3530f938b3e73580e
   docs/models/operations/getproductrequest.md:
     id: 4e63228b784b
     last_write_checksum: sha1:f6e5fa4c00b33669b12f9420ecbb079008a4ac17
@@ -1362,6 +1474,10 @@ trackedFiles:
     id: 8aa7efb1f057
     last_write_checksum: sha1:01eca0f753c30a38c28d0ba4b7096bd48ece8f6a
     pristine_git_object: 90922b4748dbb5b9d39f1b81113394e2fdf814af
+  docs/models/operations/granularity.md:
+    id: 22f3b5e85091
+    last_write_checksum: sha1:6076d5106f0a640a88df79f0c84a786209d916fd
+    pristine_git_object: 413bd5cb0f125bc7f57634d2da565e0be758bf07
   docs/models/operations/groupby.md:
     id: 1575cef31f36
     last_write_checksum: sha1:238ce4280739121d9076aff2413066fafaca556d
@@ -1454,6 +1570,18 @@ trackedFiles:
     id: 331d24c89749
     last_write_checksum: sha1:a0647560e8abe804f1a7531d8f35f28cd1d75b8f
     pristine_git_object: 3f054db3c556b69faff607eb10848d37ec1175da
+  docs/models/operations/listcreditpoolgrantsrequest.md:
+    id: 60229d53cc27
+    last_write_checksum: sha1:3c95b382ef40bc16d1f0fb1259aafc38016387cf
+    pristine_git_object: d3ef3227fc7cd971c53a9b7a1179786d0a130086
+  docs/models/operations/listcreditpoolsrequest.md:
+    id: 7391019c90cf
+    last_write_checksum: sha1:1cc4ae376d80e91d9fcc448f963ff7982182a46f
+    pristine_git_object: b0b10766cf0d6f782db372d67fd5260c4124849c
+  docs/models/operations/listcreditpoolsresponse.md:
+    id: 9fb2444e6f11
+    last_write_checksum: sha1:6c56651cc1e8f9c3c8c9cd897732b7edecb37e77
+    pristine_git_object: 80dbf56d48e161865ad802703a30f1abeca2adcd
   docs/models/operations/listcustomerpaymentmethodsobject.md:
     id: 35a63a5de5c9
     last_write_checksum: sha1:6bbcf8dcc93ab2045fd35ca2b116f241676da664
@@ -1670,6 +1798,14 @@ trackedFiles:
     id: fee2cff4e4a4
     last_write_checksum: sha1:7975ddec7453cbd7e5eca245a40fbea94a046cd4
     pristine_git_object: acfc75b1e6991d76300f7926939173a3877c25bb
+  docs/models/operations/listpricingunitsrequest.md:
+    id: c27534575570
+    last_write_checksum: sha1:da423cbf9aa5e570437c77af9a3b4e903301f220
+    pristine_git_object: b7a7e55e58cc99ff14a5d64b5c8060650ef3cb96
+  docs/models/operations/listpricingunitsresponse.md:
+    id: 270644907d45
+    last_write_checksum: sha1:c3d701d106bf26d3da44a50212cddc4663c816b2
+    pristine_git_object: 92001b89b6be1eee17f5ad3162a5299978c1b345
   docs/models/operations/listproductsrequest.md:
     id: e447b353c37d
     last_write_checksum: sha1:01eab89450f40c5d7c4da8e6b73aef402033992b
@@ -2276,8 +2412,8 @@ trackedFiles:
     pristine_git_object: 44699caf0a0147f722af8fdef0b4ab0fd241f660
   docs/models/permission.md:
     id: 2e72d664ef50
-    last_write_checksum: sha1:700bc7427b8fcc50c7c7ad0dcd46d63c7665effa
-    pristine_git_object: 32b6b3f1ca7b9dfd7c72fe7b6337b3737f57bb28
+    last_write_checksum: sha1:44d62ad81290e8ef470bb5a5f36933e757666e44
+    pristine_git_object: eae241c7d4540c473d6cd8068db5926763521a08
   docs/models/plan.md:
     id: 900c4149ef4b
     last_write_checksum: sha1:6cf2ae882cc29888d0c184c64bd929e9e2d38e74
@@ -2366,6 +2502,26 @@ trackedFiles:
     id: e0fb0ae76976
     last_write_checksum: sha1:631663181d8d65aa0785fa35916bafa2dd8d12be
     pristine_git_object: 22d43225fcbc686bb0e3f31f0530850bf2076d6a
+  docs/models/poolgrantpurchaseaccepted.md:
+    id: 756c4829ad40
+    last_write_checksum: sha1:3720e7cc1672509bd137f73e6b868048c3b19ba5
+    pristine_git_object: 6b31fc8ce1b50160119a06a768e89ed818584d57
+  docs/models/poolgrantpurchaserequest.md:
+    id: 95ad9f74752e
+    last_write_checksum: sha1:5691aa84e640903f98390f826e0bb52f616eb092
+    pristine_git_object: 667c961f36bc620108b4fc402280d667d5507a5c
+  docs/models/poolgrantpurchaseresponse.md:
+    id: 108be365c112
+    last_write_checksum: sha1:37f250e0c5927ae5a606a52ad03b348dd2c65ecf
+    pristine_git_object: dfa55293db0b438abbdd0d8cb778c88caf5d687a
+  docs/models/poolgrantpurchaseresponseobject.md:
+    id: ce77ffae7f52
+    last_write_checksum: sha1:b01337e2b72de55a40eb7b2d82c4474d0ed14d16
+    pristine_git_object: 648e18bebc466438c02e2d06c2dc1d94dd63278c
+  docs/models/poolgrantpurchaseresponsepaymentsession.md:
+    id: e2083ce25a47
+    last_write_checksum: sha1:2cb9ad22388f8fb183f4b2ccd02daf212e171ce4
+    pristine_git_object: f4e65f0ed01a60cc131df988cd421a9fcc6e6eb3
   docs/models/price.md:
     id: 8c2608dc8674
     last_write_checksum: sha1:3b3982550a2ff2c1e95bc5e66e0dcd34802c650a
@@ -2410,6 +2566,14 @@ trackedFiles:
     id: baae1077bc2c
     last_write_checksum: sha1:fdad48e1728dd08a31fa4e0d501dbeaa52ca1437
     pristine_git_object: 3cc6062f146e6dd8521e5c8390b475605bb536a5
+  docs/models/pricingunit.md:
+    id: 49f9d8e79160
+    last_write_checksum: sha1:5fcc54b71d40cb07d04a5eadbab64ede6de5ae02
+    pristine_git_object: 0f8f6ebb8ead469e40b20277dc874c2574afb880
+  docs/models/pricingunitobject.md:
+    id: 4669a694975f
+    last_write_checksum: sha1:5069b777b92019d42f50ed6b9b46fe4c00c57e21
+    pristine_git_object: bb85d342fbc2a4feebb04c1333de7cd482c5a8b9
   docs/models/priorperiod.md:
     id: 1db4ef2fc587
     last_write_checksum: sha1:dd60460e529a8fc40802a78d755a478b87eeb5fb
@@ -3014,6 +3178,10 @@ trackedFiles:
     id: 8d96b80b9dde
     last_write_checksum: sha1:9a274e93aba9de49b4995dad7fb0138f89899d15
     pristine_git_object: af09023f2d221d1696626aff040873e0ac7fbcb6
+  docs/sdks/creditpools/README.md:
+    id: f857345feeb9
+    last_write_checksum: sha1:55fcf24815d15e14df5a284b38e69f6fb7c1ca1a
+    pristine_git_object: e356a37a5ad03c39845ca258e504e90c08a5f303
   docs/sdks/customers/README.md:
     id: 9332759cffc2
     last_write_checksum: sha1:fc914131a603a7476fa72e3ee2e524b4c947245a
@@ -3082,6 +3250,10 @@ trackedFiles:
     id: d73b281620ef
     last_write_checksum: sha1:071759a77e7e314a6e88eaa0376f430708ec2918
     pristine_git_object: 1bbf604aeaf6226a77013d31a2cf5259a6d6382b
+  docs/sdks/pricingunits/README.md:
+    id: cddccedfddf8
+    last_write_checksum: sha1:16d8a9e1e0213bba274d861ae138961629fb50f7
+    pristine_git_object: 3edc28d46259fb5921a023c5b58b6bcee7ab7cb0
   docs/sdks/products/README.md:
     id: af06255e12ab
     last_write_checksum: sha1:099201d7c3ea833390a744dc822c0473eae9fc80
@@ -3112,12 +3284,12 @@ trackedFiles:
     pristine_git_object: aa6d312680a8c7c57cc7ef8acfdd82e53def38bb
   docs/sdks/subscriptionproposals/README.md:
     id: ad9a2814ed55
-    last_write_checksum: sha1:1ab806c3e215859f4f17b178614c6bf169881be5
-    pristine_git_object: b7158bf55732265e89505ca35dc56270ca1a179f
+    last_write_checksum: sha1:b66764bb473c7a8cf950de3710a09a6c8c7bcfdf
+    pristine_git_object: 4555eb1d5e485900e0d49fc41c3e90b067d10a84
   docs/sdks/subscriptions/README.md:
     id: 298b9ab3c3e0
-    last_write_checksum: sha1:02267f4bbf1cf1fdee6758928503d53b6e7988fd
-    pristine_git_object: 5fbf1950dbe299da8929cd586f2092262f3e7117
+    last_write_checksum: sha1:fdbcf34c9480d46fe9243dd1049245c7360f3241
+    pristine_git_object: 0655ddf1deb2c9dc1c1c7dd76a3b97abc8c6aa3e
   docs/sdks/testclocks/README.md:
     id: 81d968b006e9
     last_write_checksum: sha1:f7846d87888b1e363dae20e7eabf4ebdafb2d0de
@@ -3156,12 +3328,12 @@ trackedFiles:
     pristine_git_object: b00377b0306810ab76f6df1095454e04b19bcfad
   jsr.json:
     id: 7f6ab7767282
-    last_write_checksum: sha1:3173ed9a0c79d25baafdf165c9710dc22a7bde74
-    pristine_git_object: 94ee6179294b6c8b990d50edf024215066c9bf8b
+    last_write_checksum: sha1:c556c85d2c94047f370f6eb5e0238c4720add30b
+    pristine_git_object: 2d87b6908bba8de0413ae76b7ea9aa5adb97f07c
   package.json:
     id: 7030d0b2f71b
-    last_write_checksum: sha1:f246f7dc0b489e97a8b405000b56b08e87dbfac1
-    pristine_git_object: 968d483b5052f41940e40f67d9b3bede48d8c79f
+    last_write_checksum: sha1:4920e455a3b70456d391f3ac541abfe3ebc69942
+    pristine_git_object: f9a00e0679ed4971126d1278c5315bece929e62b
   src/core.ts:
     id: f431fdbcd144
     last_write_checksum: sha1:872f404dd2d8fa58d67da06ed263dfdbe2dd23b8
@@ -3270,6 +3442,34 @@ trackedFiles:
     id: 48d8d90e3d3e
     last_write_checksum: sha1:0f532d34d0cf2cd707358892b6ce4afdcaa00ebd
     pristine_git_object: f2751a79d71cd857c060f822f1a25a67a71747c0
+  src/funcs/creditPoolsCreateCreditPool.ts:
+    id: 2c43e5d1751d
+    last_write_checksum: sha1:040b38b1454fcd82ecd256423f47bd5ae77f55a3
+    pristine_git_object: 81c3a49e27a452c6431ae27637faf0311d4e9f7c
+  src/funcs/creditPoolsCreateCreditPoolGrant.ts:
+    id: 7cbb482a2cbf
+    last_write_checksum: sha1:d333975d747bee90340cf419a0e4b87f3416dab8
+    pristine_git_object: c54b1ac341051cf90df8112ec2f95574e652bc82
+  src/funcs/creditPoolsCreateCreditPoolPurchase.ts:
+    id: fad035f9c235
+    last_write_checksum: sha1:eef4bdd88746324878bae4aca2aba29c452bc538
+    pristine_git_object: d88989367c1f2206c39b08227872a92c5c83e5df
+  src/funcs/creditPoolsGetCreditPool.ts:
+    id: 136e8d895558
+    last_write_checksum: sha1:bee68198352d4fe77eb4079a1cf15fa97f400c4b
+    pristine_git_object: 7545c7e7c9c9c45d3297ef43d75aafb1c6994a31
+  src/funcs/creditPoolsGetCreditPoolLedger.ts:
+    id: bd8a8ac450aa
+    last_write_checksum: sha1:15dd20f0e93f0318e3229ad6b9b35a0a832cd09a
+    pristine_git_object: 6eade45527a68155186e66221db7f8c780a36643
+  src/funcs/creditPoolsListCreditPoolGrants.ts:
+    id: b08f5dd81bfa
+    last_write_checksum: sha1:ffc187615b1871b3d1799dc5ac6f0806cbf90cc7
+    pristine_git_object: 3f721e7d2579c7051300e1158a57136993d79a9a
+  src/funcs/creditPoolsListCreditPools.ts:
+    id: 0af686ebf07d
+    last_write_checksum: sha1:fc1476240dd0efa3c29072ef6d00a5b94f917386
+    pristine_git_object: cf1b2186bbd09b0016ad88179dfcb621a3816da1
   src/funcs/customersCreate.ts:
     id: c42b63f0745d
     last_write_checksum: sha1:2cebe82129a0edb1d2607f6cab7986ecfabaa6cf
@@ -3590,6 +3790,18 @@ trackedFiles:
     id: f8e184a611f6
     last_write_checksum: sha1:15b94c9db7500f29f7e912af109e7295013fc5e2
     pristine_git_object: b8a09252b7450afc298adf920fdb8ee230701145
+  src/funcs/pricingUnitsCreatePricingUnit.ts:
+    id: c75c011d09dc
+    last_write_checksum: sha1:5c79987dfd159ec6570884a0745b5fe47ed7c2ae
+    pristine_git_object: ed8791916b838789a46e56a8767d938671afa215
+  src/funcs/pricingUnitsGetPricingUnit.ts:
+    id: b2151aca33cd
+    last_write_checksum: sha1:721f34deda969f883ca842bbc5c2ebb94143d676
+    pristine_git_object: 9d8d07daa6b42d216c9a2c86811a210a42ed3aed
+  src/funcs/pricingUnitsListPricingUnits.ts:
+    id: df5993b84b28
+    last_write_checksum: sha1:32918a67febe51fee3bab8fc99203f12db47d570
+    pristine_git_object: 7ed10c16156d393547789dbe13b9e365bc51cf26
   src/funcs/productsCreate.ts:
     id: a5986653742c
     last_write_checksum: sha1:00e0f1478e34d43028bb4c2bb8337327ef6805bb
@@ -3684,8 +3896,8 @@ trackedFiles:
     pristine_git_object: 84fe431645a676a1160b52ccf7041c99a9d9fb02
   src/funcs/subscriptionProposalsDecideSubscriptionProposal.ts:
     id: b8f301fb10ef
-    last_write_checksum: sha1:fa142c4ba784a2c2518510e62e9e99b712c73b95
-    pristine_git_object: 1622f789511e53f417a121c04a5899b64852f0b7
+    last_write_checksum: sha1:ecde7aadea568990ac45822eae0a282a053ff239
+    pristine_git_object: ff31aabadd8d5e9031703338e5dc79bad7dbfad1
   src/funcs/subscriptionProposalsGetSubscriptionProposal.ts:
     id: af99b668fbdc
     last_write_checksum: sha1:e67235adf184e02f2901527192d9a850e13174f8
@@ -3748,8 +3960,8 @@ trackedFiles:
     pristine_git_object: e8430bd7d9526e2625c89d228565dd5f7142d2a3
   src/funcs/subscriptionsMigrateSubscriptionVersion.ts:
     id: 3c264d32d870
-    last_write_checksum: sha1:799cc035462a232323c433d0e107960736511b77
-    pristine_git_object: 54df790ace3d418e49bc8475009adb23f9eb6739
+    last_write_checksum: sha1:8cb5e10783ed07a2fd934f31dd41a80af57a24cf
+    pristine_git_object: 56e2dc7aa0fcd5f534e562acf26a93432d45c0a7
   src/funcs/subscriptionsReconcileSubscriptionFeatures.ts:
     id: 7bd93bdb2993
     last_write_checksum: sha1:95e4c48de9d5c976d849426e8ae1cdb0e6c4cdd0
@@ -3760,8 +3972,8 @@ trackedFiles:
     pristine_git_object: 63eed7098829286e638a64443d6291e59eda473a
   src/funcs/subscriptionsUpdateSubscription.ts:
     id: 5d5a21b58b95
-    last_write_checksum: sha1:50984e8019365fa72db0760c6be8d760e0c15ac4
-    pristine_git_object: f081134a6f442f7e27082d8dc102713e2a7bd52f
+    last_write_checksum: sha1:25fe04824120fdd1965360075a63fec6177c5f3f
+    pristine_git_object: e6b54d550a15d078afd89b0cc2b0aa33eba3ccbf
   src/funcs/testClocksAdvance.ts:
     id: 57902f07bb1d
     last_write_checksum: sha1:19543f05d56a77285281387b7af28ee31e3e12c5
@@ -3832,8 +4044,8 @@ trackedFiles:
     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7
   src/lib/config.ts:
     id: 320761608fb3
-    last_write_checksum: sha1:6cc477bbf28ab979ab7eb0e426dccfc5a30062d1
-    pristine_git_object: 35b070ef76f514fd3e879857c0cdaa810ec5b139
+    last_write_checksum: sha1:18b654678a046fcf91ede33f5b5ab338e5c5aa01
+    pristine_git_object: d0dd7f5623ffefd82f7ecfa6a21599b84ef9bd35
   src/lib/dlv.ts:
     id: b1988214835a
     last_write_checksum: sha1:1dd3e3fbb4550c4bf31f5ef997faff355d6f3250
@@ -4002,6 +4214,46 @@ trackedFiles:
     id: f4f1b991359b
     last_write_checksum: sha1:eed7e4f29bdf12caa44e82ede7b9b92449d61527
     pristine_git_object: d9b1805ae4c54207175fd29080513b152320472f
+  src/models/creditpool.ts:
+    id: 8fd9a2fa5557
+    last_write_checksum: sha1:b0fb3cab8acff760bf8c12c590019e6f7fec6b66
+    pristine_git_object: 1420e729094494c711d34e9c95efdbda4067ca0c
+  src/models/creditpoolgrant.ts:
+    id: 0df78e647579
+    last_write_checksum: sha1:69db00f8aab65df788a4beb72da0515b104a7585
+    pristine_git_object: 438c1b95ce35b83a3d2bb05a40f7235fc67fd0a9
+  src/models/creditpoolgrantbalance.ts:
+    id: e5978cb9d455
+    last_write_checksum: sha1:ce13680f164788709e73eaf397ba0ae34afc7349
+    pristine_git_object: 6b443598ba0c016bf00c8973130d2c7643b1ecd2
+  src/models/creditpoolgrantlist.ts:
+    id: 6dad665f8722
+    last_write_checksum: sha1:c9a5c3b53fec12e5c1003dc11d60bf96d44e5245
+    pristine_git_object: 638dc7712bdbd721d2f1dae7dcf9659e48fcec4d
+  src/models/creditpoolgrantstatus.ts:
+    id: 8d0568eaf32d
+    last_write_checksum: sha1:120cc0b5142f12c9561d61e8910a4a11b755d23b
+    pristine_git_object: 49d9aeb9b2fa6a3d3936d7cbbe47406cc2f305ca
+  src/models/creditpoolledgerbucket.ts:
+    id: 6a208bf5fb2d
+    last_write_checksum: sha1:388d688e6a2690cdc9625be358e63a8ce4064890
+    pristine_git_object: 84fae7f84d1418f9a8782804d10c514d4fdac826
+  src/models/creditpoolledgerbucketedresponse.ts:
+    id: 7b89cd5991d0
+    last_write_checksum: sha1:22fda0affa41ab40d401358a6648066d1d196fec
+    pristine_git_object: 596026808111cc7fd496ea240324f6f24d6fd372
+  src/models/creditpoolledgerentry.ts:
+    id: 9bc7599052a4
+    last_write_checksum: sha1:8c18fdf626da345c36814ea6b59e05bc81d617ca
+    pristine_git_object: 56a69acad70f93561b4dfbd1f6efbe767aca8145
+  src/models/creditpoolledgeritemizedresponse.ts:
+    id: f4e836b8ef00
+    last_write_checksum: sha1:c286397df6187444fd042a96c1a972de27f3ff84
+    pristine_git_object: 06b05400782833de47843c995587c396764afbd9
+  src/models/creditpoolledgerperiod.ts:
+    id: 4eeacf3946e6
+    last_write_checksum: sha1:53d1694023995c18379b8fe02d0307c69e0bb225
+    pristine_git_object: 4a01fcd8e83c79dfcb64c027b2387d49f4f59ff0
   src/models/currencybreakdownentry.ts:
     id: d3b665098580
     last_write_checksum: sha1:8a3eef228ba98e42625dbd35d442f7c4b8610f3c
@@ -4044,8 +4296,8 @@ trackedFiles:
     pristine_git_object: 93d2aa0e106f88c68f128b836daf0037076d8aad
   src/models/entitytype.ts:
     id: 0e43aa5caaa4
-    last_write_checksum: sha1:afbc233f32a68105162f604ae7113d88d6dd2709
-    pristine_git_object: ed1b7d700057dd778004c75521821996ec165d18
+    last_write_checksum: sha1:d0b514c7583a58078228b467da5c9589cb876892
+    pristine_git_object: be6c983c4783d143a40df13adddff2352df17665
   src/models/entitytypeinput.ts:
     id: 3b1c786b6e38
     last_write_checksum: sha1:3b83ff9547803a745ed1824299da0a3b53fd5f4e
@@ -4120,8 +4372,8 @@ trackedFiles:
     pristine_git_object: 45d19c626dbfef2f4094983ce4f221fdce49b4b0
   src/models/externalreference.ts:
     id: 6f76feaccb24
-    last_write_checksum: sha1:536f35e511578d65fe672c796f3df201f4c47423
-    pristine_git_object: b978878a8db43d3208b30166f3305e950f970645
+    last_write_checksum: sha1:782e62220c6a6e5569c4ec90257cb787b41e8e92
+    pristine_git_object: d057c5365b55fa6bf5e6d14d2b81814de009af75
   src/models/feature.ts:
     id: 31d7acca0a1e
     last_write_checksum: sha1:28f68e397b5661afe8e540b7e189b9a186f1d225
@@ -4148,8 +4400,8 @@ trackedFiles:
     pristine_git_object: 0487795c7604b4cc055ff78a21f6930f3e7d5bbe
   src/models/index.ts:
     id: f93644b0f37e
-    last_write_checksum: sha1:1ca29d61a85003d99e53451637d5711f75c267b0
-    pristine_git_object: 4484ad95605150526102cc85c52c5a9295649320
+    last_write_checksum: sha1:c21d7b231b5657d74a4165a492d054bb3359d885
+    pristine_git_object: 86dfeddc4c008ffd35325391f2662ade063fd929
   src/models/intervalchangemetadata.ts:
     id: 3545600965fe
     last_write_checksum: sha1:d7dc8f69c5254a80c5a5806ad0b6d3ccfc90a284
@@ -4362,6 +4614,18 @@ trackedFiles:
     id: 16c5c6600672
     last_write_checksum: sha1:0e09c87f5fa044d1d7386c1b1f1bdc68f7690fed
     pristine_git_object: 20d6de54204d03fe0d94dd8a58863fac590a789a
+  src/models/operations/createcreditpool.ts:
+    id: e5e5f05aa0a4
+    last_write_checksum: sha1:680d9813109af4e7c66d69b0719f7323ebf1d827
+    pristine_git_object: a86bbaa8cfa2bf12f3b8776f4da4c5e4c8a043b8
+  src/models/operations/createcreditpoolgrant.ts:
+    id: f59a65d8537c
+    last_write_checksum: sha1:110235bbae85e7b32f0d64a6cebda1c51ae5c9e7
+    pristine_git_object: fcf2038a80ec3270a6a580d82bfe1a15be1d2bd0
+  src/models/operations/createcreditpoolpurchase.ts:
+    id: c3fdb0027446
+    last_write_checksum: sha1:316acc01f57aabfedce3a30a0e3513b195755070
+    pristine_git_object: a28959cdcd8c32170cf291d58beeb53129dc299c
   src/models/operations/createcustomer.ts:
     id: 614cfb2079e0
     last_write_checksum: sha1:c5442e8294a3064206e306267a25cc0284c95ed9
@@ -4418,6 +4682,10 @@ trackedFiles:
     id: 4059ac2ea9ee
     last_write_checksum: sha1:173afe32cf0872dc1244c6f44546839993bb2810
     pristine_git_object: 0e305076400b835bd1231daccaa4fcfb67eb94e1
+  src/models/operations/createpricingunit.ts:
+    id: 3f9589be9073
+    last_write_checksum: sha1:acda82a1bd3a545f81efcd78bbff68f61e217489
+    pristine_git_object: 49afde1a801218ec195864c6bbbab6e5115b8238
   src/models/operations/createproduct.ts:
     id: db73a40d37d8
     last_write_checksum: sha1:d307071ea0c934f0bc92d64fcdb663209b0d6948
@@ -4550,6 +4818,14 @@ trackedFiles:
     id: d82851dc04c3
     last_write_checksum: sha1:a7fa879172f3da96ae10b4b8187288efd72fe819
     pristine_git_object: a3f2d6db84948d09b062ed8b2866167155574c3f
+  src/models/operations/getcreditpool.ts:
+    id: f31ab9414d76
+    last_write_checksum: sha1:8c460e3fc0e2cf85dc73c7b3fc0e496911ab9d68
+    pristine_git_object: 8073aae53d6a137d5bf26a12769d95af10757190
+  src/models/operations/getcreditpoolledger.ts:
+    id: 66dbbea3e943
+    last_write_checksum: sha1:31c1974cb3143df7a0c72a60a7070b1e73055d0a
+    pristine_git_object: 458dcdfd3a9660f5edd9ba25ab8afc1f550fd8c5
   src/models/operations/getcustomer.ts:
     id: c09114ee8995
     last_write_checksum: sha1:f09ce2a65f4e80308fe5409a14738806cb7f901e
@@ -4610,6 +4886,10 @@ trackedFiles:
     id: 00c541bf0d87
     last_write_checksum: sha1:9a3a046b34ff5e2c34a7799cb51a8e0a45174239
     pristine_git_object: 89d91121d511229bfd48ade55278d47682a67453
+  src/models/operations/getpricingunit.ts:
+    id: 3bf15dc3feae
+    last_write_checksum: sha1:356d0b4a95c3a7aa5c5e3d5c5e74333e89d256cd
+    pristine_git_object: 0ac34ca7c19b174a4e7516c1a1457b23781ae868
   src/models/operations/getproduct.ts:
     id: 1e870cb67ae3
     last_write_checksum: sha1:c71e62a002cc90550426c245d39e134c23f90538
@@ -4664,8 +4944,8 @@ trackedFiles:
     pristine_git_object: 10b6bcd58d69ff490f1a60d3d7b0d7e186fac7a4
   src/models/operations/index.ts:
     id: 0d9ffaf774d2
-    last_write_checksum: sha1:36ebf08e7d8e9c61aea8e3efb4590263e2be9370
-    pristine_git_object: 25b9d792983b1b216d06f51ba9729b4ad9c4ce90
+    last_write_checksum: sha1:1e4412fe2f88295402954afaef8bcefcd2bfcc9d
+    pristine_git_object: baa0e735a9d0e1f04739e6a09882122546e21a66
   src/models/operations/ingestevent.ts:
     id: 81cd5f49f1f5
     last_write_checksum: sha1:b13daf3e39f169de711a1e3134cae0ee55f0f817
@@ -4694,6 +4974,14 @@ trackedFiles:
     id: e86006e754cf
     last_write_checksum: sha1:bd0f9966a0187b20e249ddbb5a21c3401d0025b5
     pristine_git_object: f47c51887ebb43181542b3618000d1ec117e972c
+  src/models/operations/listcreditpoolgrants.ts:
+    id: de28b480ef60
+    last_write_checksum: sha1:a78dab3e661b276d2344bdf4ba4e3a83320cd24b
+    pristine_git_object: ae24848d12cfa8c80f38071817a48aec857e9d5c
+  src/models/operations/listcreditpools.ts:
+    id: fec58331d5b6
+    last_write_checksum: sha1:35ea99a623d2a6b76b5febe5b4e8955db40bbf7c
+    pristine_git_object: 0360475ecdb9686c12e1f415ddead7f35ed569f6
   src/models/operations/listcustomerpaymentmethods.ts:
     id: 45b97dd94b2c
     last_write_checksum: sha1:02c8fdcd0d4361886dff30a9325c524782a64aaa
@@ -4770,6 +5058,10 @@ trackedFiles:
     id: bbe097e29498
     last_write_checksum: sha1:ce918da95f2ec5796d9a2a2328b424489a455d5c
     pristine_git_object: fc2fe7ed936b946b9473c3ff79ca04f8ac58f6f7
+  src/models/operations/listpricingunits.ts:
+    id: 3f13f6587058
+    last_write_checksum: sha1:1cf645e3d392148fe1a4b5b37a74eb382fbc815f
+    pristine_git_object: 311cf2f2ee7b398f5962380132db3d25bd79c6bf
   src/models/operations/listproducts.ts:
     id: d9413fb1bf61
     last_write_checksum: sha1:836afdffdc6bf0e8721096568530790b1b3c6bce
@@ -5008,8 +5300,8 @@ trackedFiles:
     pristine_git_object: f06f5b1c5b2b8755fc3470a7b5194032873323c1
   src/models/permission.ts:
     id: e469b84482ac
-    last_write_checksum: sha1:eecd6d542811f77a4319a62fd34c4b2bca4ff96e
-    pristine_git_object: 15997415e73365be1d4b001652b29df4419e8f9e
+    last_write_checksum: sha1:33de7088a60d1766c1eb61b86f277869d5c5b561
+    pristine_git_object: bbbb8b5266d4a4ceb5a5aa900dd7a668cad834f0
   src/models/plan.ts:
     id: 9e9698a64fe7
     last_write_checksum: sha1:1d4dd259fccb9400263a061b94b65c49c2148bb5
@@ -5042,6 +5334,18 @@ trackedFiles:
     id: 52148eecb937
     last_write_checksum: sha1:1ca47bcc99d10af31fb9e2e238724b33e7354d1f
     pristine_git_object: 3681cfb18432bceeac6e25baded5b4b64ef762c3
+  src/models/poolgrantpurchaseaccepted.ts:
+    id: 015f811c94a1
+    last_write_checksum: sha1:1a67a03305eb8ceba014a885b7a8cd872dab0caf
+    pristine_git_object: 1e9fe0c635c183532f5ac6db2b761b8520bc9f07
+  src/models/poolgrantpurchaserequest.ts:
+    id: 891c9011a0a5
+    last_write_checksum: sha1:fd780ec818c5cfcf22ffef178d7e5ef702b50400
+    pristine_git_object: 69883b67f2a153c14f9414c6a2cab1a9d27d94cb
+  src/models/poolgrantpurchaseresponse.ts:
+    id: e11f2a858b6c
+    last_write_checksum: sha1:df8c7fba34b4185f3b53da85dbfa28020074a11e
+    pristine_git_object: 613b8d5f42e1cbe18c9ee8724211985916da936b
   src/models/price.ts:
     id: af1018aecba2
     last_write_checksum: sha1:b424c64872917615bd3c32494b3a799004c6b432
@@ -5070,6 +5374,10 @@ trackedFiles:
     id: 56bbb21b7dfc
     last_write_checksum: sha1:1846cc3872e67029f1245b5a999a6788d0b38915
     pristine_git_object: 47c14461e78e2b07a183c1a020251b09dc8c7ada
+  src/models/pricingunit.ts:
+    id: 8acfca3f9033
+    last_write_checksum: sha1:1363142a7c114c374c13acbdee17936c8bbfad99
+    pristine_git_object: b072cf11caaddb4144275618a75201810d9dcfa6
   src/models/product.ts:
     id: 9600483cfd82
     last_write_checksum: sha1:91a18b5b49c9d669f3f6231fda4e6f1a5a865448
@@ -5378,6 +5686,10 @@ trackedFiles:
     id: 3ed8449e56ea
     last_write_checksum: sha1:7564df6c219b32ed2c82ccfb6b1d1b1235114ec7
     pristine_git_object: ec52b07ec933cf63a8532d40f23e583c9718f11a
+  src/sdk/creditpools.ts:
+    id: bd26ca584840
+    last_write_checksum: sha1:d99f5147fa0ad01d03276f2d602d6a3229e8420d
+    pristine_git_object: 3921a2b3740e13384824ea52f9378aaee04d6bc4
   src/sdk/customers.ts:
     id: d33e193e0c00
     last_write_checksum: sha1:73d85fc071fe1e22042bbb0018eb7fa2c5d575f4
@@ -5450,6 +5762,10 @@ trackedFiles:
     id: bf7c19ced3ea
     last_write_checksum: sha1:bdc47d9f9e59128e0590e8029007baa189b801f0
     pristine_git_object: 5bea10e11a23398ae6ec652e448d64839aab4811
+  src/sdk/pricingunits.ts:
+    id: 25a1d914f0fb
+    last_write_checksum: sha1:bc91014c578c5d109563737ae0176767062ab668
+    pristine_git_object: e885f9a5491901d5415f092c6182b35ce0db4893
   src/sdk/products.ts:
     id: b199702e5352
     last_write_checksum: sha1:64aefdd2f584b6dd5dd781df18a021cf0e3f41ae
@@ -5472,8 +5788,8 @@ trackedFiles:
     pristine_git_object: 8f14dfaef6cdd15ed75b6a22e4f5e3854f067cf0
   src/sdk/sdk.ts:
     id: 784571af2f69
-    last_write_checksum: sha1:333acf5e45c2e5011a2b924b2035b5bc63d5ccdd
-    pristine_git_object: 1c39352ae8080134e2b4c846be83347aa95d1fbd
+    last_write_checksum: sha1:983f72e30adff0f5b261b21de421c9accb927da9
+    pristine_git_object: 925593308c07094e62f673a2dd425ef90862cb4d
   src/sdk/sources.ts:
     id: 4714456b8487
     last_write_checksum: sha1:5c39b317c5e34156fa244c4864887a3bafa76c29
@@ -5484,12 +5800,12 @@ trackedFiles:
     pristine_git_object: a0612e44f2f531111ebbba5409cf76ba1dd3c2fc
   src/sdk/subscriptionproposals.ts:
     id: df22b19d4735
-    last_write_checksum: sha1:c1d45d145891a50feb71fc257ef7739f3a57a8ca
-    pristine_git_object: 4c167854928248dad4c6134511f70f0a91255ab7
+    last_write_checksum: sha1:aee2bb1163abaf332065b14ec24aeed0c8a90f92
+    pristine_git_object: 0eb3ca215f1df13864ebd46c4f2f4578663594a4
   src/sdk/subscriptions.ts:
     id: fb904d08fb20
-    last_write_checksum: sha1:67034e7c9deafac7f0fd3c77b14c5af4ff2ff26f
-    pristine_git_object: 1f05c3212a0b29fcf0d77013f9c1393a5c65df62
+    last_write_checksum: sha1:e2e01afd4c94895dbd1aaea162a8e544c0f213ba
+    pristine_git_object: c6825a4e943644d5a9b64a4105c246902a78e325
   src/sdk/testclocks.ts:
     id: 5bdde53c2000
     last_write_checksum: sha1:f6a9325e2956609b7054d8cfad2f23ae87ff43e6
@@ -8203,6 +8519,156 @@ examples:
           application/json: {"error": "not_found", "message": "The requested resource was not found"}
         "500":
           application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  createPricingUnit:
+    speakeasy-default-create-pricing-unit:
+      requestBody:
+        application/json: {"merchantId": "<id>", "identifier": "<value>", "displayName": "Jay.Kerluke70", "shortName": "<value>", "conversionRate": "<value>", "currency": "Seychelles Rupee"}
+      responses:
+        "201":
+          application/json: {"id": "<id>", "object": "pricingUnit", "merchantId": "<id>", "identifier": "<value>", "displayName": "Donna_McDermott", "shortName": "<value>", "conversionRate": "<value>", "currency": "Australian Dollar", "createdAt": "2026-04-05T18:49:20.481Z", "updatedAt": "2024-09-02T14:15:34.408Z"}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  listPricingUnits:
+    speakeasy-default-list-pricing-units:
+      parameters:
+        query:
+          limit: 50
+          offset: 0
+      responses:
+        "200":
+          application/json: {"data": [{"id": "<id>", "object": "pricingUnit", "merchantId": "<id>", "identifier": "<value>", "displayName": "Gage39", "shortName": "<value>", "conversionRate": "<value>", "currency": "Rial Omani", "createdAt": "2024-11-05T12:38:58.971Z", "updatedAt": "2026-05-30T10:11:14.677Z"}], "pagination": {"limit": 407161, "offset": 747382, "total": 486600}}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  getPricingUnit:
+    speakeasy-default-get-pricing-unit:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "object": "pricingUnit", "merchantId": "<id>", "identifier": "<value>", "displayName": "Jermaine_Price", "shortName": "<value>", "conversionRate": "<value>", "currency": "Cedi", "createdAt": "2024-10-01T18:20:07.851Z", "updatedAt": "2024-06-25T05:41:34.611Z"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  createCreditPool:
+    speakeasy-default-create-credit-pool:
+      requestBody:
+        application/json: {"customerId": "<id>", "pricingUnitId": "<id>"}
+      responses:
+        "200":
+          application/json: {"id": "<id>", "object": "creditPool", "customerId": "<id>", "pricingUnitId": "<id>", "createdAt": "2024-09-20T04:33:04.208Z", "updatedAt": "2026-08-17T02:46:07.626Z"}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  listCreditPools:
+    speakeasy-default-list-credit-pools:
+      parameters:
+        query:
+          limit: 50
+          offset: 0
+      responses:
+        "200":
+          application/json: {"data": [], "pagination": {"limit": 78874, "offset": 448161, "total": 650611}}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  getCreditPool:
+    speakeasy-default-get-credit-pool:
+      parameters:
+        path:
+          id: "<id>"
+      responses:
+        "200":
+          application/json: {"id": "<id>", "object": "creditPool", "customerId": "<id>", "pricingUnitId": "<id>", "createdAt": "2024-07-07T18:26:17.469Z", "updatedAt": "2026-08-29T23:58:24.464Z"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  listCreditPoolGrants:
+    speakeasy-default-list-credit-pool-grants:
+      parameters:
+        path:
+          id: "<id>"
+        query:
+          limit: 50
+          offset: 0
+      responses:
+        "200":
+          application/json: {"object": "list", "data": [], "pagination": {"limit": 965677, "offset": 546899, "total": 917186}, "asOf": "2025-06-20T20:55:05.767Z"}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  createCreditPoolGrant:
+    speakeasy-default-create-credit-pool-grant:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"amount": 5717.01}
+      responses:
+        "201":
+          application/json: {"id": "<id>", "object": "grant", "creditPoolId": "<id>", "amount": 3391.14, "priority": 180700, "recurrencePeriod": "<value>", "recurrenceAnchor": "2026-10-12T20:43:26.814Z", "effectiveAt": "2024-03-21T00:05:33.694Z", "expiresAt": "2024-11-09T00:27:48.726Z", "createdAt": "2026-11-15T21:01:52.875Z", "voidedAt": "2025-03-29T12:12:26.962Z"}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  getCreditPoolLedger:
+    speakeasy-default-get-credit-pool-ledger:
+      parameters:
+        path:
+          id: "<id>"
+        query:
+          from: "2025-01-03T19:47:34.571Z"
+          to: "2025-06-15T09:32:08.085Z"
+          limit: 50
+          offset: 0
+      responses:
+        "200":
+          application/json: {"startingBalance": 7380.75, "endingBalance": 2251.8, "entries": [{"id": "<id>", "object": "ledgerEntry", "entryType": "void", "ledgerSequenceNumber": 591942, "at": "2026-10-15T13:19:43.778Z", "amount": 7166.8, "startingBalance": 6330.37, "endingBalance": 9839.95, "grant": {"id": "<id>", "expiresAt": "2025-03-07T19:20:33.105Z", "conversionRate": "<value>"}}], "pagination": {"limit": 324810, "offset": 516218, "total": 5417}}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+  createCreditPoolPurchase:
+    speakeasy-default-create-credit-pool-purchase:
+      parameters:
+        path:
+          id: "<id>"
+      requestBody:
+        application/json: {"grantAmount": 5185.68, "idempotencyKey": "<value>"}
+      responses:
+        "201":
+          application/json: {"object": "grant_purchase", "invoiceId": "<id>", "poolId": "<id>", "grantAmount": 3809.03, "price": "139.89", "currency": "CFP Franc", "paymentSessions": [{"url": "https://smug-receptor.com"}]}
+        "202":
+          application/json: {"processing": false, "invoiceId": "<id>"}
+        "400":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "401":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
+        "500":
+          application/json: {"error": "not_found", "message": "The requested resource was not found"}
 examplesVersion: 1.0.2
 generatedTests:
   getMerchant: "2026-04-17T16:13:08Z"
@@ -8409,4 +8875,14 @@ generatedTests:
   updateSubscriptionProposal: "2026-11-19T12:31:43Z"
   decideSubscriptionProposal: "2026-11-19T12:31:43Z"
   listSubscriptionProposalProjectedInvoices: "2026-11-19T12:31:43Z"
-releaseNotes: "## Typescript SDK Changes:\n* `paygentic.prices.list()`: \n  *  `request.includeSuperseded` **Added**\n* `paygentic.subscriptionProposals.listSubscriptionProposals()`: \n  *  `request.subscriptionId` **Added**\n"
+  createPricingUnit: "2026-11-25T23:46:43Z"
+  listPricingUnits: "2026-11-25T23:46:43Z"
+  getPricingUnit: "2026-11-25T23:46:43Z"
+  createCreditPool: "2026-11-25T23:46:43Z"
+  listCreditPools: "2026-11-25T23:46:43Z"
+  getCreditPool: "2026-11-25T23:46:43Z"
+  listCreditPoolGrants: "2026-11-25T23:46:43Z"
+  createCreditPoolGrant: "2026-11-25T23:46:43Z"
+  getCreditPoolLedger: "2026-11-25T23:46:43Z"
+  createCreditPoolPurchase: "2026-11-25T23:46:43Z"
+releaseNotes: "## Typescript SDK Changes:\n* `paygentic.pricingUnits.createPricingUnit()`: **Added**\n* `paygentic.pricingUnits.listPricingUnits()`: **Added**\n* `paygentic.pricingUnits.getPricingUnit()`: **Added**\n* `paygentic.creditPools.createCreditPool()`: **Added**\n* `paygentic.creditPools.listCreditPools()`: **Added**\n* `paygentic.creditPools.getCreditPool()`: **Added**\n* `paygentic.creditPools.listCreditPoolGrants()`: **Added**\n* `paygentic.creditPools.createCreditPoolGrant()`: **Added**\n* `paygentic.creditPools.getCreditPoolLedger()`: **Added**\n* `paygentic.creditPools.createCreditPoolPurchase()`: **Added**\n* `paygentic.me.getMe()`:  `response.permissions[]` **Changed**\n* `paygentic.subscriptions.updateSubscription()`:  `error.status[429]` **Added**\n* `paygentic.subscriptionProposals.listSubscriptionProposalProjectedInvoices()`:  `response.data[].lineItems.items[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.invoicesV2.list()`:  `response.data[].lineItems.items[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.invoicesV2.listLineItems()`:  `response.items[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.invoicesV2.listProjectedInvoices()`:  `response.data[].lineItems.items[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.invoicesV2.get()`:  `response.lineItems.items[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.invoicesV2.getLineItems()`:  `response.items[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.invoicesV2.recordInvoicePayment()`:  `response.union(out_of_band).invoice.lineItems.items[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.externalReferences.createExternalReference()`:  `response.entityType.enum(contract)` **Added**\n* `paygentic.externalReferences.listExternalReferences()`: \n  *  `request.entityType` **Changed**\n  *  `response.data[].entityType.enum(contract)` **Added**\n* `paygentic.externalReferences.getExternalReference()`:  `response.entityType.enum(contract)` **Added**\n* `paygentic.externalReferences.updateExternalReference()`:  `response.entityType.enum(contract)` **Added**\n* `paygentic.items.createItem()`:  `response.externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.items.listItems()`:  `response.data[].externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.items.getItem()`:  `response.externalReferences[].entityType.enum(contract)` **Added**\n* `paygentic.items.updateItem()`:  `response.externalReferences[].entityType.enum(contract)` **Added**\n"

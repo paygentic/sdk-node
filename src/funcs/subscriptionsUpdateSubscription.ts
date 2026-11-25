@@ -28,6 +28,9 @@ import { Result } from "../types/fp.js";
 
 /**
  * Update
+ *
+ * @remarks
+ * Updates the subscription's settings. Switching `versionPolicy` to `floating` is refused with 400 when following the plan's default version would credit unused balance on a reset cycle that is not the subscription's billing period: a feature the default starts must reset from the subscription's billing anchor, and a feature the subscription keeps goes on resetting on its current cycle.
  */
 export function subscriptionsUpdateSubscription(
   client: PaygenticCore,
@@ -137,7 +140,7 @@ async function $do(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "401", "403", "404", "4XX", "500", "5XX"],
+    errorCodes: ["400", "401", "403", "404", "429", "4XX", "500", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -165,7 +168,7 @@ async function $do(
   >(
     M.json(200, models.Subscription$inboundSchema),
     M.jsonErr(400, errors.BadRequest$inboundSchema),
-    M.jsonErr([401, 403, 404], errors.ErrorT$inboundSchema),
+    M.jsonErr([401, 403, 404, 429], errors.ErrorT$inboundSchema),
     M.jsonErr(500, errors.ErrorT$inboundSchema),
     M.fail("4XX"),
     M.fail("5XX"),

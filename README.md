@@ -244,6 +244,16 @@ run();
 * [getCostSummary](docs/sdks/costs/README.md#getcostsummary) - Query Summary
 * [getCostReport](docs/sdks/costs/README.md#getcostreport) - Report
 
+### [CreditPools](docs/sdks/creditpools/README.md)
+
+* [createCreditPool](docs/sdks/creditpools/README.md#createcreditpool) - Create or resolve
+* [listCreditPools](docs/sdks/creditpools/README.md#listcreditpools) - List
+* [getCreditPool](docs/sdks/creditpools/README.md#getcreditpool) - Get
+* [listCreditPoolGrants](docs/sdks/creditpools/README.md#listcreditpoolgrants) - List grants
+* [createCreditPoolGrant](docs/sdks/creditpools/README.md#createcreditpoolgrant) - Grant credits
+* [getCreditPoolLedger](docs/sdks/creditpools/README.md#getcreditpoolledger) - Get ledger
+* [createCreditPoolPurchase](docs/sdks/creditpools/README.md#createcreditpoolpurchase) - Purchase credits
+
 ### [Customers](docs/sdks/customers/README.md)
 
 * [list](docs/sdks/customers/README.md#list) - List by Merchant
@@ -374,6 +384,12 @@ run();
 * [get](docs/sdks/prices/README.md#get) - Get
 * [update](docs/sdks/prices/README.md#update) - Update
 * [delete](docs/sdks/prices/README.md#delete) - Delete
+
+### [PricingUnits](docs/sdks/pricingunits/README.md)
+
+* [createPricingUnit](docs/sdks/pricingunits/README.md#createpricingunit) - Create
+* [listPricingUnits](docs/sdks/pricingunits/README.md#listpricingunits) - List
+* [getPricingUnit](docs/sdks/pricingunits/README.md#getpricingunit) - Get
 
 ### [Products](docs/sdks/products/README.md)
 
@@ -510,6 +526,13 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`costsGetCostSummary`](docs/sdks/costs/README.md#getcostsummary) - Query Summary
 - [`costsListCosts`](docs/sdks/costs/README.md#listcosts) - List
 - [`costsUpdateCost`](docs/sdks/costs/README.md#updatecost) - Update
+- [`creditPoolsCreateCreditPool`](docs/sdks/creditpools/README.md#createcreditpool) - Create or resolve
+- [`creditPoolsCreateCreditPoolGrant`](docs/sdks/creditpools/README.md#createcreditpoolgrant) - Grant credits
+- [`creditPoolsCreateCreditPoolPurchase`](docs/sdks/creditpools/README.md#createcreditpoolpurchase) - Purchase credits
+- [`creditPoolsGetCreditPool`](docs/sdks/creditpools/README.md#getcreditpool) - Get
+- [`creditPoolsGetCreditPoolLedger`](docs/sdks/creditpools/README.md#getcreditpoolledger) - Get ledger
+- [`creditPoolsListCreditPoolGrants`](docs/sdks/creditpools/README.md#listcreditpoolgrants) - List grants
+- [`creditPoolsListCreditPools`](docs/sdks/creditpools/README.md#listcreditpools) - List
 - [`customersCreate`](docs/sdks/customers/README.md#create) - Create
 - [`customersCreateCustomerPaymentMethod`](docs/sdks/customers/README.md#createcustomerpaymentmethod) - Set up a payment method
 - [`customersDelete`](docs/sdks/customers/README.md#delete) - Delete
@@ -590,6 +613,9 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`pricesGet`](docs/sdks/prices/README.md#get) - Get
 - [`pricesList`](docs/sdks/prices/README.md#list) - List
 - [`pricesUpdate`](docs/sdks/prices/README.md#update) - Update
+- [`pricingUnitsCreatePricingUnit`](docs/sdks/pricingunits/README.md#createpricingunit) - Create
+- [`pricingUnitsGetPricingUnit`](docs/sdks/pricingunits/README.md#getpricingunit) - Get
+- [`pricingUnitsListPricingUnits`](docs/sdks/pricingunits/README.md#listpricingunits) - List
 - [`productsCreate`](docs/sdks/products/README.md#create) - Create
 - [`productsGet`](docs/sdks/products/README.md#get) - Get
 - [`productsList`](docs/sdks/products/README.md#list) - List
@@ -782,14 +808,14 @@ run();
 
 
 **Inherit from [`PaygenticError`](./src/models/errors/paygenticerror.ts)**:
-* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 106 of 161 methods.*
-* [`SubscriptionProposalConflictError`](./src/models/errors/subscriptionproposalconflicterror.ts): A 409 of a proposal route. Branch on `code`, never on `message`. Status code `409`. Applicable to 4 of 161 methods.*
-* [`RetryPaymentResponseError`](./src/models/errors/retrypaymentresponseerror.ts): The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape. Applicable to 1 of 161 methods.*
-* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 161 methods.*
-* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 161 methods.*
-* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be changed: a subscription still bills it directly, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 161 methods.*
-* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted: a live plan or subscription still references it, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 161 methods.*
-* [`UnprocessableEntityError`](./src/models/errors/unprocessableentityerror.ts): `hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete). Status code `422`. Applicable to 1 of 161 methods.*
+* [`ValidationError`](./src/models/errors/validationerror.ts): Bad Request - The request could not be understood or was missing required parameters. Status code `400`. Applicable to 114 of 171 methods.*
+* [`SubscriptionProposalConflictError`](./src/models/errors/subscriptionproposalconflicterror.ts): A 409 of a proposal route. Branch on `code`, never on `message`. Status code `409`. Applicable to 4 of 171 methods.*
+* [`RetryPaymentResponseError`](./src/models/errors/retrypaymentresponseerror.ts): The result of a payment retry. Every response status of the retry operation that is not an error envelope uses this shape. Applicable to 1 of 171 methods.*
+* [`DeleteCustomerConflictError`](./src/models/errors/deletecustomerconflicterror.ts): Customer cannot be deleted due to active dependencies. Status code `409`. Applicable to 1 of 171 methods.*
+* [`DeleteFeeConflictError`](./src/models/errors/deletefeeconflicterror.ts): Fee cannot be deleted because it has associated prices. Status code `409`. Applicable to 1 of 171 methods.*
+* [`UpdatePriceConflictError`](./src/models/errors/updatepriceconflicterror.ts): Price cannot be changed: a subscription still bills it directly, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 171 methods.*
+* [`DeletePriceConflictError`](./src/models/errors/deletepriceconflicterror.ts): Price cannot be deleted: a live plan or subscription still references it, or a pending subscription proposal names it. Status code `409`. Applicable to 1 of 171 methods.*
+* [`UnprocessableEntityError`](./src/models/errors/unprocessableentityerror.ts): `hosted_link` only: Paygentic cannot create a payment link. The `code` field gives the cause: `INVOICE_NOT_LINKABLE_STATUS` (the invoice is not `ISSUED` or `PAYMENT_FAILED`; do not retry), `INVOICE_NO_BALANCE` (no amount is unpaid; treat the invoice as paid), or `MERCHANT_NO_PAYMENT_ACCOUNT` (the merchant has no connected payment account; retry after onboarding is complete). Status code `422`. Applicable to 1 of 171 methods.*
 * [`ResponseValidationError`](./src/models/errors/responsevalidationerror.ts): Type mismatch between the data returned from the server and the structure expected by the SDK. See `error.rawValue` for the raw value and `error.pretty()` for a nicely formatted multi-line string.
 
 </details>

@@ -1,0 +1,36 @@
+# CreditPoolGrant
+
+## Example Usage
+
+```typescript
+import { CreditPoolGrant } from "@paygentic/sdk/models";
+
+let value: CreditPoolGrant = {
+  id: "<id>",
+  creditPoolId: "<id>",
+  amount: 6972.76,
+  priority: 267755,
+  recurrencePeriod: "<value>",
+  recurrenceAnchor: new Date("2026-01-25T07:06:52.318Z"),
+  effectiveAt: new Date("2026-04-10T19:13:58.000Z"),
+  expiresAt: new Date("2025-12-07T10:21:08.595Z"),
+  createdAt: new Date("2024-05-27T19:26:45.115Z"),
+  voidedAt: new Date("2025-12-16T00:41:30.638Z"),
+};
+```
+
+## Fields
+
+| Field                                                                                                                          | Type                                                                                                                           | Required                                                                                                                       | Description                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `id`                                                                                                                           | *string*                                                                                                                       | :heavy_check_mark:                                                                                                             | N/A                                                                                                                            |
+| `object`                                                                                                                       | [models.CreditPoolGrantObject](../models/creditpoolgrantobject.md)                                                             | :heavy_minus_sign:                                                                                                             | N/A                                                                                                                            |
+| `creditPoolId`                                                                                                                 | *string*                                                                                                                       | :heavy_check_mark:                                                                                                             | N/A                                                                                                                            |
+| `amount`                                                                                                                       | *number*                                                                                                                       | :heavy_check_mark:                                                                                                             | Credits allocated in this block.                                                                                               |
+| `priority`                                                                                                                     | *number*                                                                                                                       | :heavy_check_mark:                                                                                                             | Drawdown priority (lower = consumed first). Defaults to 0.                                                                     |
+| `recurrencePeriod`                                                                                                             | *string*                                                                                                                       | :heavy_check_mark:                                                                                                             | ISO-8601 recurrence duration, or null for a one-off block.                                                                     |
+| `recurrenceAnchor`                                                                                                             | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                  | :heavy_check_mark:                                                                                                             | Recurrence phase anchor, or null for a one-off block.                                                                          |
+| `effectiveAt`                                                                                                                  | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                  | :heavy_check_mark:                                                                                                             | N/A                                                                                                                            |
+| `expiresAt`                                                                                                                    | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                  | :heavy_check_mark:                                                                                                             | N/A                                                                                                                            |
+| `createdAt`                                                                                                                    | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                  | :heavy_check_mark:                                                                                                             | N/A                                                                                                                            |
+| `voidedAt`                                                                                                                     | [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)                                  | :heavy_check_mark:                                                                                                             | When this allocation was voided, or null if it is still live. A voided allocation no longer contributes to the pool's balance. |
